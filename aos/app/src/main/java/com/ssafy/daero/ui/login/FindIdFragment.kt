@@ -1,5 +1,7 @@
 package com.ssafy.daero.ui.login
 
+import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
@@ -37,7 +39,6 @@ class FindIdFragment : BaseFragment<FragmentFindIdBinding>(R.layout.fragment_fin
                     toast("가입한 적이 없는 이메일입니다.")
                 }
             }
-            findIdViewModel.responseState.value = DEFAULT
         }
     }
 }

@@ -13,6 +13,6 @@ interface LoginApi {
     @POST("login")
     fun emailLogin(@Body loginRequestDto: LoginRequestDto) : Single<LoginResponseDto>
 
-    @GET("/{email_address}")
+    @GET("users/{email_address}")
     fun findID(@Path("email_address") email: String): Single<FindIDResponseDto>
 }
