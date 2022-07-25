@@ -7,6 +7,7 @@
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.26875" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_login.xml" value="0.22" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/overlay_gradient_login.xml" value="0.181" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_Terms.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_Thumbnail.xml" value="0.36614583333333334" />
@@ -14,12 +15,14 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_expense.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_collection.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_comment.xml" value="0.36614583333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.20820863616930313" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_faq.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_find_id.xml" value="0.36633663366336633" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_find_password.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_find_password_confirm.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_home.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_like.xml" value="0.36614583333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_login.xml" value="0.2" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_re_comment.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_root.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_search.xml" value="0.36614583333333334" />
