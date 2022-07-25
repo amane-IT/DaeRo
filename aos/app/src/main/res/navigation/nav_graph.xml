@@ -40,6 +40,20 @@
         <action
             android:id="@+id/action_emailLoginFragment_to_rootFragment"
             app:destination="@id/rootFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_findIdFragment"
+            app:destination="@id/findIdFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_findPasswordFragment"
+            app:destination="@id/findPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"
@@ -133,4 +147,12 @@
         android:name="com.ssafy.daero.ui.setting.InquiryFragment"
         android:label="InquiryFragment"
         tools:layout="@layout/fragment_inquiry" />
+    <fragment
+        android:id="@+id/findIdFragment"
+        android:name="com.ssafy.daero.ui.login.FindIdFragment"
+        android:label="FindIdFragment" />
+    <fragment
+        android:id="@+id/findPasswordFragment"
+        android:name="com.ssafy.daero.ui.login.FindPasswordFragment"
+        android:label="FindPasswordFragment" />
 </navigation>
