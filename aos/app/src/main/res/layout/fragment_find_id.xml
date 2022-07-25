@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_login"
+            android:id="@+id/toolbar_findID"
             android:layout_width="0dp"
             android:layout_height="48dp"
             app:contentInsetStart="0dp"
@@ -45,13 +45,14 @@
             android:background="@color/lightGray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_login"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_findID"
             />
 
 
         <ProgressBar
             android:id="@+id/progressBar_findID_loading"
             style="?android:attr/progressBarStyle"
+            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -68,7 +69,7 @@
             android:layout_marginTop="64dp"
             android:text="이메일 아이디"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_login"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_findID"
 
             />
 
@@ -88,18 +89,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_findID_id"
             />
-
-        <TextView
-            android:id="@+id/text_emailLogin_findID"
-            style="@style/SubHeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="가입한 적이 없는 이메일입니다."
-            android:textColor="@color/primaryTextColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editText_findID_id" />
 
         <Button
             android:id="@+id/button_findID_login"

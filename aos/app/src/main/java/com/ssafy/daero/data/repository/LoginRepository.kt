@@ -1,6 +1,7 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import com.ssafy.daero.data.dto.login.FindIDResponseDto
 import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.data.dto.login.LoginResponseDto
 import com.ssafy.daero.data.remote.LoginApi
@@ -17,6 +18,12 @@ class LoginRepository private constructor(context : Context) {
 
     fun emailLogin(loginRequestDto: LoginRequestDto) : Single<LoginResponseDto> {
         return loginApi.emailLogin(loginRequestDto)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun findID(email: String) : Single<FindIDResponseDto> {
+        return loginApi.findID(email)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
