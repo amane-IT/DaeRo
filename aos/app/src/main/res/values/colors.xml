@@ -10,7 +10,6 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red">#9B1112</color>
 
     <color name="primaryTextColor">#1A3045</color>
     <color name="secondaryTextColor">#ffffff</color>
@@ -21,6 +20,4 @@
     <color name="divider">#EFEFEF</color>
     <color name="gray">#8c8c8c</color>
     <color name="lightGray">#E0E0E0</color>
-    <color name="edtGray">#FAFAFA</color>
-    <color name="hintGray">#CBD7E2</color>
 </resources>
