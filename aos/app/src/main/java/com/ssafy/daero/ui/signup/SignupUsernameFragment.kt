@@ -4,7 +4,6 @@ import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.nickname.SignupNicknameRequestDto
-import com.ssafy.daero.databinding.FragmentSignupEmailBinding
 import com.ssafy.daero.databinding.FragmentSignupUsernameBinding
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -24,8 +23,6 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                 val dto = SignupNicknameRequestDto(editTextSignupUsernameUserName.text.toString())
                 signupUsernameViewModel.verifyNickname(dto)
             }
-
-
         }
     }
 

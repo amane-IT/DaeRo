@@ -1,8 +1,8 @@
 package com.ssafy.daero.data.remote
 
-import com.ssafy.daero.data.dto.email.SignupEmailRequestDto
-import com.ssafy.daero.data.dto.email.SignupEmailResponseDto
-import com.ssafy.daero.data.dto.email.VerifyUserEmailResponseDto
+import com.ssafy.daero.data.dto.signup.email.SignupEmailRequestDto
+import com.ssafy.daero.data.dto.signup.email.SignupEmailResponseDto
+import com.ssafy.daero.data.dto.signup.email.VerifyUserEmailResponseDto
 import com.ssafy.daero.data.dto.nickname.SignupNicknameRequestDto
 import com.ssafy.daero.data.dto.nickname.SignupNicknameResponseDto
 import io.reactivex.rxjava3.core.Single
