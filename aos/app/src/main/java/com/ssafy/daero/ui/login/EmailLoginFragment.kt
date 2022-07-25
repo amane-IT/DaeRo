@@ -81,7 +81,7 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
                     toast("이메일 또는 비밀번호가 틀립니다.")
                 }
             }
-            emailLoginViewModel.responseState.value = DEFAULT
+            //emailLoginViewModel.responseState.value = DEFAULT
         }
     }
 }

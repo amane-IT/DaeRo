@@ -48,18 +48,6 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar_emailLogin"
             />
 
-
-        <ProgressBar
-            android:id="@+id/progressBar_emailLogin_loading"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
         <TextView
             android:id="@+id/text_emailLogin_id"
             style="@style/SubHeadSemiBold"
@@ -143,6 +131,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_emailLogin_findID"
             />
+
+        <ProgressBar
+            android:id="@+id/progressBar_emailLogin_loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+        
 
         <Button
             android:id="@+id/button_emailLogin_login"
