@@ -67,6 +67,7 @@
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1645" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable/Image Pasted at 2022-7-25 11-22.xml" value="0.1645" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.1645" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml" value="0.1415" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1645" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/drawable/ripple_effect.xml" value="0.1645" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.36614583333333334" />
@@ -81,8 +82,8 @@
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_login.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_my_page_map.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_notice.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password.xml" value="0.36614583333333334" />
-        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password_confirm.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password.xml" value="0.25" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password_confirm.xml" value="0.25" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_root.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_search.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_search_content_more.xml" value="0.36614583333333334" />
@@ -91,6 +92,7 @@
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_signup_password.xml" value="0.2" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_signup_username.xml" value="0.33" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_stamp.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/S07P12D110/aos/app/src/main/res/layout/fragment_terms.xml" value="0.25" />
       </map>
     </option>
   </component>
