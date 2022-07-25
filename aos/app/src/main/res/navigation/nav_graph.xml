@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/signupEmailFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.ssafy.daero.ui.login.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_emailLoginFragment"
+            app:destination="@id/emailLoginFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/emailLoginFragment"
+        android:name="com.ssafy.daero.ui.login.EmailLoginFragment"
+        android:label="EmailLoginFragment"
+        tools:layout="@layout/fragment_email_login"/>
+
+    <fragment
+        android:id="@+id/signupEmailFragment"
+        android:name="com.ssafy.daero.ui.signup.SignupEmailFragment"
+        android:label="SignupEmailFragment" >
+        <action
+            android:id="@+id/action_signupEmailFragment_to_signupPasswordFragment"
+            app:destination="@id/signupPasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupPasswordFragment"
+        android:name="com.ssafy.daero.ui.signup.SignupPasswordFragment"
+        android:label="SignupPasswordFragment" >
+        <action
+            android:id="@+id/action_signupPasswordFragment_to_signupUsernameFragment"
+            app:destination="@id/signupUsernameFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+    <fragment
+        android:id="@+id/signupUsernameFragment"
+        android:name="com.ssafy.daero.ui.signup.SignupUsernameFragment"
+        android:label="SignupUsernameFragment" />
+</navigation>
