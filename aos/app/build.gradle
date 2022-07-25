@@ -100,7 +100,4 @@ dependencies {
 
     // ViewPager2
     implementation "androidx.viewpager2:viewpager2:1.0.0"
-
-    //StyleableToast
-    implementation 'io.github.muddz:styleabletoast:2.4.0'
 }

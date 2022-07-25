@@ -1,6 +1,7 @@
 package com.ssafy.daero.application
 
 import android.app.Application
+import com.ssafy.daero.data.repository.SignupRepository
 import com.ssafy.daero.data.repository.LoginRepository
 
 class App : Application() {
@@ -11,6 +12,7 @@ class App : Application() {
     }
 
     private fun initRepository() {
+        SignupRepository.initialize(this)
         LoginRepository.initialize(this)
     }
 }
