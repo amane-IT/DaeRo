@@ -36,7 +36,15 @@
         android:id="@+id/emailLoginFragment"
         android:name="com.ssafy.daero.ui.login.EmailLoginFragment"
         android:label="EmailLoginFragment"
-        tools:layout="@layout/fragment_email_login"/>
+        tools:layout="@layout/fragment_email_login">
+        <action
+            android:id="@+id/action_emailLoginFragment_to_rootFragment"
+            app:destination="@id/rootFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/signupEmailFragment"
         android:name="com.ssafy.daero.ui.signup.SignupEmailFragment"

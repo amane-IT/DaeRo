@@ -66,6 +66,13 @@
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_bottom_sheet.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.358695652173913" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.173" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.2465" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml.xml" value="0.2465" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.2" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_root.xml" value="0.25364583333333335" />
       </map>
     </option>
   </component>
