@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.databinding.FragmentEmailLoginBinding
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
@@ -17,17 +18,38 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
     private val emailLoginViewModel : EmailLoginViewModel by viewModels()
 
     override fun init() {
-        binding.textEmailLoginId.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
         initViews()
-        binding.progressBarEmailLoginLoading.visibility = View.GONE
+        observeData()
+        setOnClickListeners()
+    }
+
+    private fun setOnClickListeners() {
         binding.buttonEmailLoginLogin.setOnClickListener {
-            binding.progressBarEmailLoginLoading.visibility = View.VISIBLE
-            observeData()
+            if(binding.editTextEmailLoginId.text==null||binding.editTextEmailLoginPw.text==null){
+                //todo : 토스트
+            }else{
+                emailLoginViewModel.emailLogin(
+                    LoginRequestDto(
+                        binding.editTextEmailLoginId.text.toString(),
+                        binding.editTextEmailLoginPw.text.toString()
+                    )
+                )
+            }
+        }
+        binding.imgEmailLoginBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        binding.textEmailLoginFindID.setOnClickListener {
+            findNavController().navigate(R.id.action_emailLoginFragment_to_findIdFragment)
+        }
+        binding.textEmailLoginFindID.setOnClickListener {
+            findNavController().navigate(R.id.action_emailLoginFragment_to_findPasswordFragment)
         }
     }
 
     private fun initViews() {
-
+        binding.textEmailLoginFindID.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.textEmailLoginFindPW.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun observeData() {
@@ -37,7 +59,6 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
         emailLoginViewModel.responseState.observe(viewLifecycleOwner) { state ->
             when(state) {
                 SUCCESS -> {
-                    //todo : 홈 화면으로 전환
                     findNavController().navigate(R.id.action_emailLoginFragment_to_rootFragment)
                 }
                 FAIL -> {

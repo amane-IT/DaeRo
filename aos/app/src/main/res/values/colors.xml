@@ -20,4 +20,6 @@
     <color name="divider">#EFEFEF</color>
     <color name="gray">#8c8c8c</color>
     <color name="lightGray">#E0E0E0</color>
+    <color name="edtGray">#FAFAFA</color>
+    <color name="hintGray">#CBD7E2</color>
 </resources>
