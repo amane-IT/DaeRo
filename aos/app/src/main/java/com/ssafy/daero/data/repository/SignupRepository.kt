@@ -1,6 +1,7 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import android.util.Log
 import com.ssafy.daero.data.dto.signup.email.SignupEmailRequestDto
 import com.ssafy.daero.data.dto.signup.email.SignupEmailResponseDto
 import com.ssafy.daero.data.dto.signup.email.VerifyUserEmailResponseDto
@@ -41,11 +42,12 @@ class SignupRepository private constructor(context: Context){
         fun initialize(context: Context){
             if(instance == null){
                 instance = SignupRepository(context)
+                Log.d("", "initialize: 수행")
             }
         }
 
         fun get(): SignupRepository{
-            return instance ?: throw IllegalStateException("Respository must be initialize")
+            return instance ?: throw IllegalStateException("Repository must be initialized")
         }
     }
 }
