@@ -1,5 +1,7 @@
 package com.ssafy.daero.ui.login
 
+import android.graphics.Paint
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
@@ -14,8 +16,13 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
     private val emailLoginViewModel : EmailLoginViewModel by viewModels()
 
     override fun init() {
+        binding.textEmailLoginId.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
         initViews()
-        observeData()
+        binding.progressBarEmailLoginLoading.visibility = View.GONE
+        binding.buttonEmailLoginLogin.setOnClickListener {
+            binding.progressBarEmailLoginLoading.visibility = View.VISIBLE
+            observeData()
+        }
     }
 
     private fun initViews() {
