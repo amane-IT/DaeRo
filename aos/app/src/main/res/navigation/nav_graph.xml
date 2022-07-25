@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signupEmailFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -17,6 +17,20 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_signupEmailFragment"
+            app:destination="@id/signupEmailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_loginFragment_to_rootFragment"
+            app:destination="@id/rootFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/emailLoginFragment"
@@ -52,4 +66,123 @@
         android:id="@+id/signupUsernameFragment"
         android:name="com.ssafy.daero.ui.signup.SignupUsernameFragment"
         android:label="SignupUsernameFragment" />
+        tools:layout="@layout/fragment_email_login">
+        <action
+            android:id="@+id/action_emailLoginFragment_to_rootFragment"
+            app:destination="@id/rootFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_findIdFragment"
+            app:destination="@id/findIdFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_findPasswordFragment"
+            app:destination="@id/findPasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupEmailFragment"
+        android:name="com.ssafy.daero.ui.signup.SignupEmailFragment"
+        android:label="SignupEmailFragment"
+        tools:layout="@layout/fragment_signup_email" />
+    <fragment
+        android:id="@+id/rootFragment"
+        android:name="com.ssafy.daero.ui.root.RootFragment"
+        android:label="RootFragment"
+        tools:layout="@layout/fragment_root" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.ssafy.daero.ui.setting.SettingFragment"
+        android:label="SettingFragment"
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_settingFragment_to_noticeFragment"
+            app:destination="@id/noticeFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_FAQFragment"
+            app:destination="@id/FAQFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_profileSettingFragment"
+            app:destination="@id/profileSettingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_blockUserFragment"
+            app:destination="@id/blockUserFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_inquiryFragment"
+            app:destination="@id/inquiryFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_settingFragment_to_resetPasswordConfirmFragment"
+            app:destination="@id/resetPasswordConfirmFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/profileSettingFragment"
+        android:name="com.ssafy.daero.ui.setting.ProfileSettingFragment"
+        android:label="ProfileSettingFragment"
+        tools:layout="@layout/fragment_profile_setting" />
+    <fragment
+        android:id="@+id/resetPasswordConfirmFragment"
+        android:name="com.ssafy.daero.ui.setting.ResetPasswordConfirmFragment"
+        android:label="ResetPasswordConfirmFragment"
+        tools:layout="@layout/fragment_reset_password_confirm" />
+    <fragment
+        android:id="@+id/blockUserFragment"
+        android:name="com.ssafy.daero.ui.setting.BlockUserFragment"
+        android:label="BlockUserFragment"
+        tools:layout="@layout/fragment_block_user" />
+    <fragment
+        android:id="@+id/noticeFragment"
+        android:name="com.ssafy.daero.ui.setting.NoticeFragment"
+        android:label="NoticeFragment"
+        tools:layout="@layout/fragment_notice" />
+    <fragment
+        android:id="@+id/FAQFragment"
+        android:name="com.ssafy.daero.ui.setting.FAQFragment"
+        android:label="FAQFragment"
+        tools:layout="@layout/fragment_faq" />
+    <fragment
+        android:id="@+id/inquiryFragment"
+        android:name="com.ssafy.daero.ui.setting.InquiryFragment"
+        android:label="InquiryFragment"
+        tools:layout="@layout/fragment_inquiry" />
+    <fragment
+        android:id="@+id/findIdFragment"
+        android:name="com.ssafy.daero.ui.login.FindIdFragment"
+        android:label="FindIdFragment" />
+    <fragment
+        android:id="@+id/findPasswordFragment"
+        android:name="com.ssafy.daero.ui.login.FindPasswordFragment"
+        android:label="FindPasswordFragment" />
 </navigation>
