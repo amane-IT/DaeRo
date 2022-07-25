@@ -26,19 +26,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <TextView
                 android:id="@+id/text_login_title"
                 style="@style/HeadBoldWhite"
                 android:layout_width="wrap_content"
+                android:letterSpacing="0.05"
                 android:layout_height="wrap_content"
                 android:text="DaeRo"
-                android:textSize="50sp"
+                android:textSize="64sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.23" />
+                app:layout_constraintVertical_bias="0.13" />
 
             <TextView
                 android:id="@+id/text_login_slogan"
@@ -51,12 +51,42 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_login_title" />
 
+            <ImageView
+                android:id="@+id/image_login_kakao"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginBottom="32dp"
+                android:src="@drawable/ic_kakao"
+                app:layout_constraintBottom_toTopOf="@id/button_login_emailLogin"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/image_login_naver"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/ic_naver"
+                app:layout_constraintBottom_toBottomOf="@id/image_login_kakao"
+                app:layout_constraintEnd_toStartOf="@id/image_login_google"
+                app:layout_constraintStart_toEndOf="@id/image_login_kakao"
+                app:layout_constraintTop_toTopOf="@id/image_login_kakao" />
+
+            <ImageView
+                android:id="@+id/image_login_google"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="64dp"
+                android:src="@drawable/ic_google"
+                app:layout_constraintBottom_toBottomOf="@id/image_login_kakao"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/image_login_kakao" />
+
             <Button
                 android:id="@+id/button_login_emailLogin"
                 style="@style/BodyWhite"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_marginHorizontal="16dp"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginBottom="32dp"
                 android:background="@drawable/button_regular"
                 android:text="이메일 로그인"
@@ -70,7 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginBottom="72dp"
                 android:text="계정이 없으신가요?"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/text_login_signup"
@@ -80,10 +110,10 @@
             <TextView
                 android:id="@+id/text_login_signup"
                 style="@style/BodyWhite"
-                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="가입하기"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@id/text_login_label_signup"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_login_label_signup"
