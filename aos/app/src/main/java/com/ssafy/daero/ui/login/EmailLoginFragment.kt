@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentEmailLoginBinding
@@ -37,6 +38,7 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
             when(state) {
                 SUCCESS -> {
                     //todo : 홈 화면으로 전환
+                    findNavController().navigate(R.id.action_emailLoginFragment_to_rootFragment)
                 }
                 FAIL -> {
                     //todo : 로그인에 실패하였습니다 토스트
