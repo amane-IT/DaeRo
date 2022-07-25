@@ -7,7 +7,7 @@
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_signupEmail"
+            android:id="@+id/toolbar_signupUsername"
             android:layout_width="0dp"
             android:layout_height="48dp"
             app:contentInsetStart="0dp"
@@ -24,10 +24,12 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
-                android:background="@drawable/ripple_effect"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="3dp" />
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black"
+                />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -50,7 +52,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/editText_signupUsername_userName"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_signupEmail" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_signupUsername" />
 
         <EditText
             style="@style/Body"
@@ -98,12 +100,10 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_regular"
-            android:text="다음"
+            android:text="가입하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

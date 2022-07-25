@@ -24,10 +24,12 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
-                android:background="@drawable/ripple_effect"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="3dp" />
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black"
+                />
 
             <TextView
                 android:id="@+id/toolbar_title"
