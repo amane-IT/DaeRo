@@ -7,24 +7,68 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/text_id_email_login"
             style="@style/Head"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email Login Fragment"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="이메일 아이디"
+            app:layout_constraintBottom_toTopOf="@id/editText_id_email_login"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
-        <ProgressBar
-            android:id="@+id/progressBar_emailLogin_loading"
-            android:visibility="invisible"
+        <EditText
+            android:id="@+id/editText_id_email_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_margin="16dp"
+            android:hint="이메일을 입력하세요"
+            android:background="@drawable/edittext_regular"
+            android:inputType="textEmailAddress"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/text_pw_email_login"
+            />
+
+        <TextView
+            style="@style/Head"
+            android:id="@+id/text_pw_email_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="비밀번호"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@id/button_login_email_login"
+            />
+
+        <EditText
+            android:id="@+id/editText_pw_email_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_margin="16dp"
+            android:hint="비밀번호를 입력하세요"
+            android:background="@drawable/edittext_regular"
+            android:inputType="textEmailAddress"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_pw_email_login"
+            />
+
+        <Button
+            android:id="@+id/button_login_email_login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
