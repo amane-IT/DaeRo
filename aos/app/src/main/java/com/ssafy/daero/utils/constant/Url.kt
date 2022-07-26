@@ -1,4 +1,3 @@
 package com.ssafy.daero.utils.constant
 
-const val BASE_URL = // "http://192.168.100.208:8080/"
-    "http://ssafydaero.iptime.org/"
+const val BASE_URL = "http://ssafydaero.iptime.org/"
