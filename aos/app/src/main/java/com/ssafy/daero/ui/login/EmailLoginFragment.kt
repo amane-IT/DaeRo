@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -19,6 +20,7 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 import io.github.muddz.styleabletoast.StyleableToast
+import java.util.regex.Pattern
 
 class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.fragment_email_login) {
 
@@ -44,12 +46,17 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
 
                 toast("이메일 또는 비밀번호를 입력하세요.")
             }else{
-                emailLoginViewModel.emailLogin(
-                    LoginRequestDto(
-                        binding.editTextEmailLoginId.text.toString(),
-                        binding.editTextEmailLoginPw.text.toString()
+                val pattern: Pattern = Patterns.EMAIL_ADDRESS
+                if(pattern.matcher(binding.editTextEmailLoginId.text.toString()).matches()) {
+                    emailLoginViewModel.emailLogin(
+                        LoginRequestDto(
+                            binding.editTextEmailLoginId.text.toString(),
+                            binding.editTextEmailLoginPw.text.toString()
+                        )
                     )
-                )
+                }else{
+                    toast("이메일 양식에 따라 입력해주세요.")
+                }
             }
         }
         binding.imgEmailLoginBack.setOnClickListener {

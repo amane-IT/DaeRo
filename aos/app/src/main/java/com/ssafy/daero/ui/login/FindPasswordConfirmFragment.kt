@@ -1,18 +1,17 @@
 package com.ssafy.daero.ui.login
 
-import android.app.ProgressDialog.show
 import android.os.Bundle
+import android.util.Patterns
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.login.FindIDResponseDto
 import com.ssafy.daero.data.dto.login.FindPasswordRequestDto
 import com.ssafy.daero.databinding.FragmentFindPasswordConfirmBinding
-import com.ssafy.daero.ui.setting.LogoutDialogFragment
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
+import java.util.regex.Pattern
 
 class FindPasswordConfirmFragment : BaseFragment<FragmentFindPasswordConfirmBinding>(R.layout.fragment_find_password_confirm){
 
@@ -24,7 +23,12 @@ class FindPasswordConfirmFragment : BaseFragment<FragmentFindPasswordConfirmBind
     }
     private fun setOnClickListeners() {
         binding.buttonFindPwConfirmFind.setOnClickListener {
-            findPasswordConfirmViewModel.findPassword(FindPasswordRequestDto(binding.editTextFindPwConfirmEmail.text.toString()))
+            val pattern: Pattern = Patterns.EMAIL_ADDRESS
+            if(pattern.matcher(binding.editTextFindPwConfirmEmail.text.toString()).matches()) {
+                findPasswordConfirmViewModel.findPassword(FindPasswordRequestDto(binding.editTextFindPwConfirmEmail.text.toString()))
+            }else{
+                toast("이메일 양식에 따라 입력해주세요.")
+            }
         }
         binding.imgFindPwConfirmBack.setOnClickListener {
             requireActivity().onBackPressed()
