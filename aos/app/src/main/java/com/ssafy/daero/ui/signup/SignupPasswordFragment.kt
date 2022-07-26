@@ -8,6 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSignupPasswordBinding
 import java.util.regex.Pattern
@@ -25,6 +26,7 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
 
     private fun setOnClickListeners(){
         binding.buttonSignupPasswordNextStep.setOnClickListener {
+            App.password = binding.editTextSignupPasswordPassword.text.toString()
             findNavController().navigate(R.id.action_signupPasswordFragment_to_signupUsernameFragment)
         }
     }

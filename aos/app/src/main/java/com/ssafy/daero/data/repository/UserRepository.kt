@@ -69,6 +69,16 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun signup(signupRequestDto: SignupRequestDto) : Single<Void>{
+        return userApi.signup(signupRequestDto)
+    }
+
+    fun getPreference(userSeq: Int): Single<MutableList<TripPreferenceResponseDto>> {
+        return userApi.getPreferences(userSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     companion object {
         private var instance: UserRepository? = null
 

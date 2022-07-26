@@ -5,9 +5,11 @@ import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.data.repository.UserRepository
+import com.ssafy.daero.utils.constant.UserSharedPreferences
 
 class App : Application() {
     override fun onCreate() {
+        prefs = UserSharedPreferences(applicationContext)
         super.onCreate()
 
         initRepository()
@@ -18,5 +20,13 @@ class App : Application() {
         ServiceRepository.initialize(this)
         SnsRepository.initialize(this)
         TripRepository.initialize(this)
+    }
+
+    companion object {
+        lateinit var userId : String
+        lateinit var password : String
+        var userName : String = ""
+        var userSeq : Int = 0
+        lateinit var prefs : UserSharedPreferences
     }
 }

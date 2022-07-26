@@ -5,6 +5,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.signup.SignupEmailRequestDto
 import com.ssafy.daero.databinding.FragmentSignupEmailBinding
@@ -32,6 +33,7 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
             }
         }
     }
+
     private fun observeData(){
         signupEmailViewModel.showProgress.observe(viewLifecycleOwner) {
             binding.progressBarSignupEmailLoading.isVisible = it
@@ -52,6 +54,7 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
         signupEmailViewModel.responseState_verifyUserEmail.observe(viewLifecycleOwner) { state ->
             when(state){
                 SUCCESS -> {
+                    App.userId = binding.editTextSignupEmailEmailId.text.toString()
                     findNavController().navigate(R.id.action_signupEmailFragment_to_signupPasswordFragment)
                 }
                 FAIL -> {

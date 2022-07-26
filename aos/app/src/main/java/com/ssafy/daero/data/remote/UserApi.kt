@@ -3,6 +3,7 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.signup.*
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.*
 
@@ -31,12 +32,28 @@ interface UserApi {
         @Path("password_reset_seq") reset_seq: String
     ): Single<FindPasswordModifyResponseDto>
 
-    @POST("/users/email")
+    @POST("users/email")
     fun verifyEmail(@Body signupEmailRequestDto: SignupEmailRequestDto): Single<SignupEmailResponseDto>
 
-    @GET("/users/{user_seq}/verified")
+    @GET("users/{user_seq}/verified")
     fun verifyUserEmail(@Path("user_seq") user_seq: Int): Single<VerifyUserEmailResponseDto>
 
-    @POST("/users/nickname")
+    @POST("users/nickname")
     fun verifyNickname(@Body signupNicknameRequestDto: SignupNicknameRequestDto): Single<SignupNicknameResponseDto>
+
+    @POST("users/signup")
+    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Void>
+
+    @GET("users/{user_seq}/preference")
+    fun getPreferences(@Path("user_seq") userSeq: Int): Single<MutableList<TripPreferenceResponseDto>>
+
+    /**
+      선호도 조사 결과 전송
+     * */
+    @POST("users/{user_seq}/preference")
+    fun postPreferencse(
+        @Path("user_seq") userSeq: Int,
+        @Body preferenceList: List<Int>
+    ): Single<Void>
+
 }
