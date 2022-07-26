@@ -80,7 +80,11 @@
         android:id="@+id/rootFragment"
         android:name="com.ssafy.daero.ui.root.RootFragment"
         android:label="RootFragment"
-        tools:layout="@layout/fragment_root" />
+        tools:layout="@layout/fragment_root" >
+        <action
+            android:id="@+id/action_rootFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingFragment"
         android:name="com.ssafy.daero.ui.setting.SettingFragment"

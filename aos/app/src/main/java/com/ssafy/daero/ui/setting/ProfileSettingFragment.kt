@@ -3,6 +3,7 @@ package com.ssafy.daero.ui.setting
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
@@ -61,7 +62,7 @@ class ProfileSettingFragment :
     private fun displayUserProfile(userProfile: UserProfileResponseDto) {
         binding.editTextProfileSettingNickname.setText(userProfile.nickname)
         Glide.with(requireContext()).load(userProfile.profile_url)
-            .apply(RequestOptions().circleCrop().centerCrop())
+            .apply(RequestOptions().centerCrop().circleCrop())
             .into(binding.imageProfileSettingProfileImage)
     }
 
