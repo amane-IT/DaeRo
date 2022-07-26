@@ -28,10 +28,10 @@ class SignupEmailViewModel : BaseViewModel() {
 
         addDisposable(
             userRepository.verifyEmail(signupEmailRequestDto)
-                .subscribe({ signupEmailResponseDto ->
-                    if (signupEmailResponseDto.userSeq > 0) {
+                .subscribe({ response ->
+                    if (response.body()!!.userSeq > 0) {
                         responseState_verifyEmail.postValue(SUCCESS)
-                        userSeq = signupEmailResponseDto.userSeq
+                        userSeq = response.body()!!.userSeq
 
                     } else {
                         responseState_verifyEmail.postValue(FAIL)
@@ -49,8 +49,8 @@ class SignupEmailViewModel : BaseViewModel() {
         _showProgress.postValue(true)
 
         userRepository.verifyUserEmail(SignupEmailResponseDto(userSeq))
-            .subscribe({ verifyUserEmailResponseDto ->
-                if (verifyUserEmailResponseDto.result == 'Y') {
+            .subscribe({ response ->
+                if (response.body()!!.result == 'Y') {
                     responseState_verifyUserEmail.postValue(SUCCESS)
                     userSeq = 0
                 } else {

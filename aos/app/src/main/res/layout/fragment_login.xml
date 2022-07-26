@@ -30,8 +30,8 @@
                 android:id="@+id/text_login_title"
                 style="@style/HeadBoldWhite"
                 android:layout_width="wrap_content"
-                android:letterSpacing="0.05"
                 android:layout_height="wrap_content"
+                android:letterSpacing="0.05"
                 android:text="DaeRo"
                 android:textSize="64sp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -118,6 +118,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/text_login_label_signup"
                 app:layout_constraintTop_toTopOf="@id/text_login_label_signup" />
+
+            <ProgressBar
+                android:id="@+id/progressBar_login_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
