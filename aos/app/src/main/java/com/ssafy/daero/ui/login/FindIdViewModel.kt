@@ -7,6 +7,7 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import retrofit2.HttpException
 
 class FindIdViewModel : BaseViewModel() {
     private val findIDRepository = UserRepository.get()
@@ -22,8 +23,8 @@ class FindIdViewModel : BaseViewModel() {
 
         addDisposable(
             findIDRepository.findID(email)
-                .subscribe({ findIDResponseDto ->
-                    if (findIDResponseDto.result) {
+                .subscribe({ response ->
+                    if (response.body()!!.result) {
                         responseState.postValue(SUCCESS)
                     } else {
                         responseState.postValue(FAIL)
