@@ -28,8 +28,7 @@
                 android:focusable="true"
                 android:padding="3dp"
                 android:src="@drawable/ic_back"
-                app:tint="@color/black"
-                />
+                app:tint="@color/black" />
 
             <TextView
                 android:id="@+id/toolbar_title"
@@ -79,18 +78,35 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <CheckedTextView
-            style="@style/SubHeadBold"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout_signupUsername_checkBox"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/term_of_service"
-            android:gravity="center"
             android:layout_margin="16dp"
-            android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@id/button_signupUsername_nextStep"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/button_signupUsername_nextStep"/>
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <CheckBox
+                style="@style/SubHeadBold"
+                android:id="@+id/checkbox_signupUsername_termCheck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <TextView
+                style="@style/Body"
+                android:id="@+id/text_signupUsername_enterTerm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/term_of_service"/>
+            />
+
+        </LinearLayout>
+
+
 
         <Button
             android:id="@+id/button_signupUsername_nextStep"
@@ -100,7 +116,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_regular"
-            android:text="가입하기"
+            android:text="닉네임 중복 검사"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
