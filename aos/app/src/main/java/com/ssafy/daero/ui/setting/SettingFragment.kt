@@ -25,6 +25,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private fun setOnClickListeners() {
+        binding.imgSettingBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
         binding.textSettingLabelProfile.setOnClickListener {
             findNavController().navigate(R.id.action_settingFragment_to_profileSettingFragment)
         }

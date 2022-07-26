@@ -3,6 +3,7 @@ package com.ssafy.daero.ui.setting
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils.centerCrop
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
@@ -49,7 +50,7 @@ class ProfileSettingFragment :
             when (it) {
                 FAIL -> {
                     toast("프로필정보를 가져오는데 실패했습니다.")
-                    profileSettingViewModel.editState.value = DEFAULT
+                    profileSettingViewModel.getProfileState.value = DEFAULT
                 }
             }
         }
@@ -60,8 +61,10 @@ class ProfileSettingFragment :
 
     private fun displayUserProfile(userProfile: UserProfileResponseDto) {
         binding.editTextProfileSettingNickname.setText(userProfile.nickname)
-        Glide.with(requireContext()).load(userProfile.profile_url)
-            .apply(RequestOptions().circleCrop().centerCrop())
+        Glide.with(requireContext())
+            .load(userProfile.profile_url)
+            .apply(RequestOptions().centerCrop().circleCrop())
+            .error(R.drawable.img_user)
             .into(binding.imageProfileSettingProfileImage)
     }
 
@@ -78,6 +81,9 @@ class ProfileSettingFragment :
             profileSettingViewModel.editProfile(
                 ProfileEditRequestDto(binding.editTextProfileSettingNickname.text.toString())
             )
+        }
+        binding.imageProfileSettingProfileImage.setOnClickListener {
+            //todo: 갤러리에서 이미지 가져오기 구현
         }
     }
 }
