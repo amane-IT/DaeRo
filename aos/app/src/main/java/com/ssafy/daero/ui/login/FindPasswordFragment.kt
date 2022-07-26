@@ -28,7 +28,7 @@ class FindPasswordFragment : BaseFragment<FragmentFindPasswordBinding>(R.layout.
             if (arguments != null)
             {
                 passwordSeq = arguments!!.getString("reset_seq").toString().toInt()
-                if(binding.editTextFindPwPw.text.toString().equals(binding.editTextFindPwPwCheck.text.toString())) {
+                if(binding.editTextFindPwPw.text.toString() == binding.editTextFindPwPwCheck.text.toString()) {
                     findPasswordViewModel.findPasswordModify(FindPasswordModifyRequestDto(binding.editTextFindPwPwCheck.text.toString())
                         ,passwordSeq.toString())
                 }else{

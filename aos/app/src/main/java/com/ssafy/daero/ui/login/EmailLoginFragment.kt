@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.application.MainActivity
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.login.LoginRequestDto
@@ -75,12 +76,13 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
             when(state) {
                 SUCCESS -> {
                     findNavController().navigate(R.id.action_emailLoginFragment_to_rootFragment)
+                    emailLoginViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {
                     toast("이메일 또는 비밀번호가 틀립니다.")
+                    emailLoginViewModel.responseState.value = DEFAULT
                 }
             }
-            //emailLoginViewModel.responseState.value = DEFAULT
         }
     }
 }

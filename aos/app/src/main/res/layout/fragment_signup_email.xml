@@ -19,7 +19,7 @@
             >
 
             <ImageView
-                android:id="@+id/img_login_back"
+                android:id="@+id/img_signupEmail_back"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"

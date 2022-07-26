@@ -27,9 +27,9 @@ class SignupUsernameViewModel : BaseViewModel() {
 
         addDisposable(
             userRepository.verifyNickname(nickname)
-                .subscribe({ signupNicknameResponseDto ->
-                    if (signupNicknameResponseDto.availableYn == 'Y') {
-                        responseState_nickname.postValue(SUCCESS)
+                .subscribe({ response ->
+                    if (response.body()!!.availableYn == 'Y') {
+                        responseState.postValue(SUCCESS)
                     } else {
                         responseState_nickname.postValue(FAIL)
                     }

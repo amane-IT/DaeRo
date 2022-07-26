@@ -31,6 +31,10 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
             buttonSignupEmailVerification.setOnClickListener { 
                 signupEmailViewModel.verifyUserEmail()
             }
+
+            imgSignupEmailBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
     }
 

@@ -27,10 +27,10 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
 
         addDisposable(
             findIDRepository.emailCheck(email)
-                .subscribe({ findPasswordCheckEmailResponseDto ->
-                    if (findPasswordCheckEmailResponseDto.password_reset_seq != 0) {
+                .subscribe({ response ->
+                    if (response.body()!!.password_reset_seq != 0) {
                         checkEmailResponseState.postValue(SUCCESS)
-                        password_reset_seq = findPasswordCheckEmailResponseDto.password_reset_seq
+                        password_reset_seq = response.body()!!.password_reset_seq
                     } else {
                         checkEmailResponseState.postValue(FAIL)
                     }
@@ -47,8 +47,8 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
 
         addDisposable(
             findIDRepository.findPassword(findPasswordRequestDto)
-                .subscribe({ findPasswordResponseDto ->
-                    if (findPasswordResponseDto.result == 'Y') {
+                .subscribe({ response ->
+                    if (response.body()!!.result == 'Y') {
                         confirmResponseState.postValue(SUCCESS)
                     } else {
                         confirmResponseState.postValue(FAIL)
