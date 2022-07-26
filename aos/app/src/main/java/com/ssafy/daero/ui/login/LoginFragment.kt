@@ -36,6 +36,10 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         binding.textLoginSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signupEmailFragment)
         }
+        // 임시로 카카오 버튼 클릭시 RootFragment로 이동
+        binding.imageLoginKakao.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_rootFragment)
+        }
     }
 
     private fun jwtLogin() {
