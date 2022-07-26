@@ -138,7 +138,15 @@
         android:id="@+id/resetPasswordConfirmFragment"
         android:name="com.ssafy.daero.ui.setting.ResetPasswordConfirmFragment"
         android:label="ResetPasswordConfirmFragment"
-        tools:layout="@layout/fragment_reset_password_confirm" />
+        tools:layout="@layout/fragment_reset_password_confirm" >
+        <action
+            android:id="@+id/action_resetPasswordConfirmFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
     <fragment
         android:id="@+id/blockUserFragment"
         android:name="com.ssafy.daero.ui.setting.BlockUserFragment"
@@ -233,4 +241,10 @@
         android:name="com.ssafy.daero.ui.signup.TripPreferenceFragment"
         android:label="TripPreferenceFragment"
         tools:layout="@layout/fragment_trip_preference" />
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="com.ssafy.daero.ui.setting.ResetPasswordFragment"
+        android:label="ResetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password" />
+
 </navigation>

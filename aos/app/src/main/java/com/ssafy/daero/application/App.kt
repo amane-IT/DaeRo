@@ -11,6 +11,7 @@ import com.ssafy.daero.utils.preference.PreferenceUtil
 class App : Application() {
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)
+
         super.onCreate()
         initRepository()
     }
@@ -23,6 +24,11 @@ class App : Application() {
     }
 
     companion object {
+        lateinit var userId : String
+        lateinit var password : String
+        var userName : String = ""
+        var userSeq : Int = 0
+        
         lateinit var prefs: PreferenceUtil
     }
 }
