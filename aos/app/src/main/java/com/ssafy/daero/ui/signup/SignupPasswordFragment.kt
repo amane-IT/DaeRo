@@ -20,7 +20,7 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
     }
 
     private fun initView(){
-        binding.textSignupPasswordPassword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+
     }
 
     private fun setOnClickListeners(){
