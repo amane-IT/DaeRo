@@ -178,5 +178,28 @@
     <fragment
         android:id="@+id/signupUsernameFragment"
         android:name="com.ssafy.daero.ui.signup.SignupUsernameFragment"
-        android:label="SignupUsernameFragment" />
+        android:label="SignupUsernameFragment" >
+        <action
+            android:id="@+id/action_signupUsernameFragment_to_termsFragment"
+            app:destination="@id/termsFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_signupUsernameFragment_to_tripPreferenceFragment"
+            app:destination="@id/tripPreferenceFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/termsFragment"
+        android:name="com.ssafy.daero.ui.signup.TermsFragment"
+        android:label="TermsFragment" />
+    <fragment
+        android:id="@+id/tripPreferenceFragment"
+        android:name="com.ssafy.daero.ui.signup.TripPreferenceFragment"
+        android:label="TripPreferenceFragment" />
 </navigation>
