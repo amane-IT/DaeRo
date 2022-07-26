@@ -3,6 +3,8 @@ package com.ssafy.daero.ui.signup
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.signup.SignupEmailRequestDto
 import com.ssafy.daero.data.dto.signup.SignupEmailResponseDto
@@ -20,8 +22,6 @@ class SignupEmailViewModel : BaseViewModel() {
 
     val responseState_verifyEmail = MutableLiveData<Int>()
     val responseState_verifyUserEmail = MutableLiveData<Int>()
-
-    private var userSeq = 0
 
     fun verifyEmail(signupEmailRequestDto: SignupEmailRequestDto) {
         _showProgress.postValue(true)
@@ -58,9 +58,10 @@ class SignupEmailViewModel : BaseViewModel() {
                 }
                 _showProgress.postValue(false)
 
-            }, { throwable ->
-                _showProgress.postValue(false)
-                responseState_verifyUserEmail.postValue(FAIL)
-            })
+                }, { throwable ->
+                    _showProgress.postValue(false)
+                    responseState_verifyUserEmail.postValue(FAIL)
+                })
+        )
     }
 }

@@ -1,10 +1,13 @@
 package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import io.reactivex.rxjava3.core.Completable
+>>>>>>> aos/app/src/main/java/com/ssafy/daero/data/remote/UserApi.kt
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.*
@@ -64,6 +67,7 @@ interface UserApi {
         @Path("password_reset_seq") reset_seq: String
     ): Single<Response<FindPasswordModifyResponseDto>>
 
+
     /**
      * 이메일 인증 요청
      */
@@ -81,4 +85,44 @@ interface UserApi {
      */
     @POST("/users/nickname")
     fun verifyNickname(@Body signupNicknameRequestDto: SignupNicknameRequestDto): Single<Response<SignupNicknameResponseDto>>
+
+    /**
+     * 회원가입
+     */
+    @POST("users/signup")
+    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Void>
+
+    /**
+     * 선호도 조사 정보 요청
+     */
+    @GET("users/{user_seq}/preference")
+    fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>>
+
+    /**
+      선호도 조사 결과 전송
+     * */
+    @POST("users/{user_seq}/preference")
+    fun postPreferencse(
+        @Path("user_seq") userSeq: Int,
+        @Body preferenceList: List<Int>
+    ): Single<Void>
+
+    /**
+     * 비밀번호 확인 요청
+     */
+    @POST("users/{user_seq}/password")
+    fun confirmPassword(
+        @Path("user_seq") userSeq: Int,
+        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>>
+
+    /**
+     * 비밀번호 변경 요청
+     */
+    @PUT("users/{user_seq}/password")
+    fun updatePassword(
+        @Path("user_seq") userSeq: Int,
+        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>>
+
 }
