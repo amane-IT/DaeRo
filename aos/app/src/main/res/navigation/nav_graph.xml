@@ -118,7 +118,7 @@
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_settingFragment_to_resetPasswordFragment"
+            android:id="@+id/action_settingFragment_to_resetPasswordConfirmFragment"
             app:destination="@id/resetPasswordConfirmFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
