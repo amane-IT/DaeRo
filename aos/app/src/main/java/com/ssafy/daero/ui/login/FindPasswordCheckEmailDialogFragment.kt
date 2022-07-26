@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.login
 
 import android.graphics.Color
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,13 +11,16 @@ import android.view.Window
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.Target
+import com.ssafy.daero.R
 import com.ssafy.daero.databinding.DlgFindPasswordBinding
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
-class FindPasswordCheckEmailFragment(val confirm : () -> Unit) : DialogFragment() {
+class FindPasswordCheckEmailDialogFragment(val confirm : (reset_seq: Int) -> Unit) : DialogFragment() {
 
-    private val findPasswordCheckEmailViewModel : FindPasswordCheckEmailViewModel by viewModels()
+    private val findPasswordConfirmViewModel : FindPasswordConfirmViewModel by viewModels({ requireParentFragment() })
     private var _binding: DlgFindPasswordBinding? = null
     private val binding get() = _binding!!
     private var email: String = ""
@@ -34,9 +38,16 @@ class FindPasswordCheckEmailFragment(val confirm : () -> Unit) : DialogFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        initViews()
         setOnClickListeners()
         observeData()
+    }
+
+    private fun initViews() {
+        Glide.with(this).load(R.drawable.find_pw_mail)
+            .fitCenter()
+            .override(Target.SIZE_ORIGINAL)
+            .into(binding.imageDlgFindPasswordEmail)
     }
 
     private fun setOnClickListeners() {
@@ -44,8 +55,8 @@ class FindPasswordCheckEmailFragment(val confirm : () -> Unit) : DialogFragment(
             if (arguments != null)
             {
                 email = arguments!!.getString("email").toString()
+                findPasswordConfirmViewModel.emailCheck(email)
             }
-            findPasswordCheckEmailViewModel.emailCheck(email)
         }
         binding.buttonDlgFindPasswordCancel.setOnClickListener { dismiss() }
     }
@@ -56,13 +67,13 @@ class FindPasswordCheckEmailFragment(val confirm : () -> Unit) : DialogFragment(
     }
 
     private fun observeData() {
-        findPasswordCheckEmailViewModel.showProgress.observe(viewLifecycleOwner) {
+        findPasswordConfirmViewModel.showProgress.observe(viewLifecycleOwner) {
             binding.progressBarFindPasswordLoading.isVisible = it
         }
-        findPasswordCheckEmailViewModel.responseState.observe(viewLifecycleOwner) { state ->
+        findPasswordConfirmViewModel.checkEmailResponseState.observe(viewLifecycleOwner) { state ->
             when(state) {
                 SUCCESS -> {
-                    confirm()
+                    confirm(findPasswordConfirmViewModel.password_reset_seq)
                     dismiss()
                 }
                 FAIL -> {

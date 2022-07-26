@@ -19,4 +19,7 @@ interface LoginApi {
 
     @GET("users/{user_email}/reset-password")
     fun emailCheck(@Path("user_email") email: String): Single<FindPasswordCheckEmailResponseDto>
+
+    @POST("users/{password_reset_seq}/reset-password")
+    fun findPasswordModify(@Body findPasswordModifyRequestDto: FindPasswordModifyRequestDto, @Path("password_reset_seq") reset_seq: String) : Single<FindPasswordModifyResponseDto>
 }

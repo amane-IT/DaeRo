@@ -15,7 +15,29 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
     val showProgress : LiveData<Boolean>
         get() = _showProgress
 
-    val responseState = MutableLiveData<Int>()
+    val checkEmailResponseState = MutableLiveData<Int>()
+
+    val confirmResponseState = MutableLiveData<Int>()
+
+    var password_reset_seq: Int = 0
+
+    fun emailCheck(email: String) {
+        _showProgress.postValue(true)
+
+        findIDRepository.emailCheck(email)
+            .subscribe({ findPasswordCheckEmailResponseDto ->
+                if(findPasswordCheckEmailResponseDto.password_reset_seq!=0) {
+                    checkEmailResponseState.postValue(SUCCESS)
+                    password_reset_seq = findPasswordCheckEmailResponseDto.password_reset_seq
+                } else {
+                    checkEmailResponseState.postValue(FAIL)
+                }
+                _showProgress.postValue(false)
+            }, { throwable ->
+                _showProgress.postValue(false)
+                checkEmailResponseState.postValue(FAIL)
+            })
+    }
 
     fun findPassword(findPasswordRequestDto: FindPasswordRequestDto) {
         _showProgress.postValue(true)
@@ -23,14 +45,14 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
         findIDRepository.findPassword(findPasswordRequestDto)
             .subscribe({ findPasswordResponseDto ->
                 if(findPasswordResponseDto.result=='Y') {
-                    responseState.postValue(SUCCESS)
+                    confirmResponseState.postValue(SUCCESS)
                 } else {
-                    responseState.postValue(FAIL)
+                    confirmResponseState.postValue(FAIL)
                 }
                 _showProgress.postValue(false)
             }, { throwable ->
                 _showProgress.postValue(false)
-                responseState.postValue(FAIL)
+                confirmResponseState.postValue(FAIL)
             })
     }
 }

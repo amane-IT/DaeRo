@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/settingFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -52,8 +52,8 @@
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_emailLoginFragment_to_findPasswordFragment"
-            app:destination="@id/findPasswordFragment"
+            android:id="@+id/action_emailLoginFragment_to_findPasswordConfirmFragment"
+            app:destination="@id/findPasswordConfirmFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"
@@ -152,7 +152,28 @@
         android:name="com.ssafy.daero.ui.login.FindIdFragment"
         android:label="FindIdFragment" />
     <fragment
+        android:id="@+id/findPasswordConfirmFragment"
+        android:name="com.ssafy.daero.ui.login.FindPasswordConfirmFragment"
+        android:label="FindPasswordConfirmFragment" >
+        <action
+            android:id="@+id/action_findPasswordConfirmFragment_to_findPasswordFragment"
+            app:destination="@id/findPasswordFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"/>
+    </fragment>
+    <fragment
         android:id="@+id/findPasswordFragment"
         android:name="com.ssafy.daero.ui.login.FindPasswordFragment"
-        android:label="FindPasswordFragment" />
+        android:label="FindPasswordFragment" >
+        <action
+            android:id="@+id/action_findPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"
+            />
+    </fragment>
 </navigation>

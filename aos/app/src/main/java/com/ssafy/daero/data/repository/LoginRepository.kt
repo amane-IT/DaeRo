@@ -39,6 +39,12 @@ class LoginRepository private constructor(context : Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun findPasswordModify(findPasswordModifyRequestDto: FindPasswordModifyRequestDto,reset_seq: String) : Single<FindPasswordModifyResponseDto> {
+        return loginApi.findPasswordModify(findPasswordModifyRequestDto, reset_seq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     companion object {
         private var instance : LoginRepository? = null
 

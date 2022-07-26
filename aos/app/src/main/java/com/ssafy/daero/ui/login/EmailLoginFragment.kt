@@ -25,14 +25,6 @@ import java.util.regex.Pattern
 class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.fragment_email_login) {
 
     private val emailLoginViewModel : EmailLoginViewModel by viewModels()
-    private lateinit var ctx: Context
-    private lateinit var activity: MainActivity
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        ctx = context
-        activity = ctx as MainActivity
-    }
 
     override fun init() {
         initViews()
@@ -66,7 +58,7 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
             findNavController().navigate(R.id.action_emailLoginFragment_to_findIdFragment)
         }
         binding.textEmailLoginFindPW.setOnClickListener {
-            findNavController().navigate(R.id.action_emailLoginFragment_to_findPasswordFragment)
+            findNavController().navigate(R.id.action_emailLoginFragment_to_findPasswordConfirmFragment)
         }
     }
 
