@@ -38,7 +38,7 @@ class TripPreferenceAdapter(
     }
 
     override fun getItemCount(): Int {
-        return 20 //dataList.size
+        return dataList.size
     }
 
     inner class ItemViewHolder(imageView: View): RecyclerView.ViewHolder(imageView){
