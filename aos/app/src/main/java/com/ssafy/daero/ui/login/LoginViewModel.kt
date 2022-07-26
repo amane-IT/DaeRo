@@ -1,16 +1,15 @@
 package com.ssafy.daero.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import retrofit2.HttpException
 
-class FindIdViewModel : BaseViewModel() {
-    private val findIDRepository = UserRepository.get()
+class LoginViewModel : BaseViewModel() {
+    private val userRepository = UserRepository.get()
 
     private val _showProgress = MutableLiveData<Boolean>()
     val showProgress: LiveData<Boolean>
@@ -18,23 +17,23 @@ class FindIdViewModel : BaseViewModel() {
 
     val responseState = MutableLiveData<Int>()
 
-    fun findID(email: String) {
+    fun jwtLogin() {
         _showProgress.postValue(true)
 
         addDisposable(
-            findIDRepository.findID(email)
-                .subscribe({ response ->
-                    if (response.body()!!.result) {
+            userRepository.jwtLogin()
+                .subscribe(
+                    { response ->
+                        // userSeq 저장
+                        App.prefs.userSeq = response.body()?.user_seq ?: 0
+
+                        _showProgress.postValue(false)
                         responseState.postValue(SUCCESS)
-                    } else {
+                    },
+                    {throwable ->
+                        _showProgress.postValue(false)
                         responseState.postValue(FAIL)
-                    }
-                    _showProgress.postValue(false)
-                }, { throwable ->
-                    Log.d("FindIdVM_DaeRo", throwable.toString())
-                    _showProgress.postValue(false)
-                    responseState.postValue(FAIL)
-                })
+                    })
         )
     }
 }
