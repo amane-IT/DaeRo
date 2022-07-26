@@ -9,6 +9,8 @@ import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.view.toast
+import retrofit2.HttpException
 
 class EmailLoginViewModel : BaseViewModel() {
     private val userRepository = UserRepository.get()
@@ -24,16 +26,26 @@ class EmailLoginViewModel : BaseViewModel() {
 
         addDisposable(
             userRepository.emailLogin(loginRequestDto)
-                .subscribe({ loginResponseDto ->
-                    // Todo : userSeq, jwt 를 sharedPreference 에 저장하기
+                .subscribe({ response ->
                     // jwt 토큰 저장
-                    Log.d("EmailLoginVM_DaeRo", loginResponseDto.toString())
-                    App.prefs.jwt = loginResponseDto.jwt
+                    App.prefs.jwt = response.body()?.jwt ?: ""
+
+                    // userSeq 저장
+                    App.prefs.userSeq = response.body()?.user_seq ?: 0
 
                     _showProgress.postValue(false)
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("EmailLoginVM_DaeRo", throwable.toString())
+                    if(throwable is HttpException) {
+                        // http error code
+                        Log.d("EmailLoginVM_DaeRo", throwable.code().toString())
+                    }
+
+                    // jwt 토큰, user_seq 삭제
+                    App.prefs.jwt = null
+                    App.prefs.userSeq = 0
+
                     _showProgress.postValue(false)
                     responseState.postValue(FAIL)
                 })

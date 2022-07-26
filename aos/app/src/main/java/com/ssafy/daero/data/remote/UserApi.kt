@@ -3,11 +3,21 @@ package com.ssafy.daero.data.remote
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.signup.*
 import io.reactivex.rxjava3.core.Single
+import retrofit2.Response
 import retrofit2.http.*
 
 interface UserApi {
+    /**
+     * 로그인
+     */
     @POST("users/login")
-    fun emailLogin(@Body loginRequestDto: LoginRequestDto): Single<LoginResponseDto>
+    fun emailLogin(@Body loginRequestDto: LoginRequestDto): Single<Response<LoginResponseDto>>
+
+    /**
+     * jwt 로그인
+     */
+    @POST("users/login-jwt")
+    fun jwtLogin() : Single<Response<JwtLoginResponseDto>>
 
     @GET("users/{email_address}")
     fun findID(@Path("email_address") email: String): Single<FindIDResponseDto>

@@ -8,15 +8,25 @@ import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.HttpException
+import retrofit2.Response
 
 class UserRepository private constructor(context: Context) {
 
     // User API
     private val userApi = RetrofitBuilder.retrofit.create(UserApi::class.java)
 
-    fun emailLogin(loginRequestDto: LoginRequestDto): Single<LoginResponseDto> {
+    fun emailLogin(loginRequestDto: LoginRequestDto): Single<Response<LoginResponseDto>> {
         return userApi.emailLogin(loginRequestDto)
             .subscribeOn(Schedulers.io())
+            .map { t -> if(t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun jwtLogin() : Single<Response<JwtLoginResponseDto>> {
+        return userApi.jwtLogin()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if(t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
