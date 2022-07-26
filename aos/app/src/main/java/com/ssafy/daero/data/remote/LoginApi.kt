@@ -10,7 +10,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface LoginApi {
-    @POST("login")
+    @POST("users/login")
     fun emailLogin(@Body loginRequestDto: LoginRequestDto) : Single<LoginResponseDto>
 
     @GET("users/{email_address}")

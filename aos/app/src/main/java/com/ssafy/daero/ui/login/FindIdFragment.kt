@@ -24,6 +24,9 @@ class FindIdFragment : BaseFragment<FragmentFindIdBinding>(R.layout.fragment_fin
         binding.buttonFindIDLogin.setOnClickListener {
             findIdViewModel.findID(binding.editTextFindIDId.text.toString())
         }
+        binding.imgFindIDBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun observeData() {
