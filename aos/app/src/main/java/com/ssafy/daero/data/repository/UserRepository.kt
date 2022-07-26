@@ -26,7 +26,7 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun editProfile(userSeq: Int, profileEditRequest: ProfileEditRequest): Single<Void> {
+    fun editProfile(userSeq: Int, profileEditRequest: ProfileEditRequest): Single<Unit> {
         return userApi.editProfile(userSeq, profileEditRequest)
     }
 

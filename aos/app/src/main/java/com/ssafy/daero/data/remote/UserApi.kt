@@ -1,6 +1,5 @@
 package com.ssafy.daero.data.remote
 
-
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.signup.*
 import io.reactivex.rxjava3.core.Single
@@ -17,7 +16,7 @@ interface UserApi {
     fun editProfile(
         @Path("user_seq") userSeq: Int,
         @Body profileEditRequest: ProfileEditRequest
-    ): Single<Void>
+    ): Single<Unit>
 
     @POST("users/reset-password")
     fun findPassword(@Body loginRequestDto: FindPasswordRequestDto): Single<FindPasswordResponseDto>
