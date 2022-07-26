@@ -5,6 +5,7 @@ import android.util.Log
 import com.ssafy.daero.data.dto.login.FindIDResponseDto
 import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.data.dto.login.LoginResponseDto
+import com.ssafy.daero.data.dto.login.ProfileEditRequest
 import com.ssafy.daero.data.remote.LoginApi
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -25,6 +26,12 @@ class LoginRepository private constructor(context : Context) {
 
     fun findID(email: String) : Single<FindIDResponseDto> {
         return loginApi.findID(email)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun editProfile(userSeq : Int, profileEditRequest: ProfileEditRequest) : Single<Void> {
+        return loginApi.editProfile(userSeq, profileEditRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

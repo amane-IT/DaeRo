@@ -3,11 +3,9 @@ package com.ssafy.daero.data.remote
 import com.ssafy.daero.data.dto.login.FindIDResponseDto
 import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.data.dto.login.LoginResponseDto
+import com.ssafy.daero.data.dto.login.ProfileEditRequest
 import io.reactivex.rxjava3.core.Single
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface LoginApi {
     @POST("login")
@@ -15,4 +13,7 @@ interface LoginApi {
 
     @GET("users/{email_address}")
     fun findID(@Path("email_address") email: String): Single<FindIDResponseDto>
+
+    @PUT("users/{user_seq}/profile")
+    fun editProfile(@Path("user_seq") userSeq : Int, @Body profileEditRequest: ProfileEditRequest) : Single<Void>
 }
