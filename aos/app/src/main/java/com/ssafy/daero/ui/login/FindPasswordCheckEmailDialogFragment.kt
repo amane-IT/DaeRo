@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.login
 
 import android.graphics.Color
-import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -44,7 +43,7 @@ class FindPasswordCheckEmailDialogFragment(val confirm : (reset_seq: Int) -> Uni
     }
 
     private fun initViews() {
-        Glide.with(this).load(R.drawable.find_pw_mail)
+        Glide.with(this).load(R.drawable.ic_find_pw)
             .fitCenter()
             .override(Target.SIZE_ORIGINAL)
             .into(binding.imageDlgFindPasswordEmail)
