@@ -24,9 +24,9 @@ class ResetPasswordViewModel : BaseViewModel() {
         _showProgress.postValue(true)
 
         addDisposable(
-            userRepository.updatePassword(App.prefs.getUserSeq(-1), passwordRequestDto)
-                .subscribe({ resetPasswordResponseDto ->
-                    if(resetPasswordResponseDto.result == 'Y'){
+            userRepository.updatePassword(App.prefs.userSeq, passwordRequestDto)
+                .subscribe({ response ->
+                    if(response.body()!!.result == 'Y'){
                         responseState.postValue(SUCCESS)
                     } else{
                         responseState.postValue(FAIL)

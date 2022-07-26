@@ -6,11 +6,13 @@ import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.data.repository.UserRepository
+import com.ssafy.daero.utils.constant.UserSharedPreferences
 import com.ssafy.daero.utils.preference.PreferenceUtil
 
 class App : Application() {
     override fun onCreate() {
         prefs = PreferenceUtil(applicationContext)
+        //prefs = UserSharedPreferences(applicationContext)
 
         super.onCreate()
         initRepository()

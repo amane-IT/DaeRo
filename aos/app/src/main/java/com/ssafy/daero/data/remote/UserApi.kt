@@ -7,7 +7,6 @@ import com.ssafy.daero.data.dto.signup.*
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import io.reactivex.rxjava3.core.Completable
->>>>>>> aos/app/src/main/java/com/ssafy/daero/data/remote/UserApi.kt
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.*
@@ -23,7 +22,7 @@ interface UserApi {
      * jwt 로그인
      */
     @POST("users/login-jwt")
-    fun jwtLogin() : Single<Response<JwtLoginResponseDto>>
+    fun jwtLogin(): Single<Response<JwtLoginResponseDto>>
 
     /**
      * 가입 여부 확인
@@ -35,7 +34,7 @@ interface UserApi {
      * 유저 프로필 조회
      */
     @GET("users/{user_seq}/profile")
-    fun getUserProfile(@Path("user_seq") userSeq: Int) : Single<Response<UserProfileResponseDto>>
+    fun getUserProfile(@Path("user_seq") userSeq: Int): Single<Response<UserProfileResponseDto>>
 
     /**
      * 유저 프로필 수정
@@ -99,7 +98,7 @@ interface UserApi {
     fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>>
 
     /**
-      선호도 조사 결과 전송
+    선호도 조사 결과 전송
      * */
     @POST("users/{user_seq}/preference")
     fun postPreferencse(

@@ -29,7 +29,7 @@ class SignupUsernameViewModel : BaseViewModel() {
             userRepository.verifyNickname(nickname)
                 .subscribe({ response ->
                     if (response.body()!!.availableYn == 'Y') {
-                        responseState.postValue(SUCCESS)
+                        responseState_nickname.postValue(SUCCESS)
                     } else {
                         responseState_nickname.postValue(FAIL)
                     }

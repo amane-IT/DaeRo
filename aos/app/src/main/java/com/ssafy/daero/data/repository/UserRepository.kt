@@ -102,19 +102,19 @@ class UserRepository private constructor(context: Context) {
         return userApi.signup(signupRequestDto)
     }
 
-    fun getPreference(userSeq: Int): Single<MutableList<TripPreferenceResponseDto>> {
+    fun getPreference(userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>> {
         return userApi.getPreferences(userSeq)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun confirmPassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<ResetPasswordResponseDto>{
+    fun confirmPassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>> {
         return userApi.confirmPassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updatePassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<ResetPasswordResponseDto>{
+    fun updatePassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>>{
         return userApi.updatePassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

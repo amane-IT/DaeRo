@@ -47,16 +47,16 @@ class SignupEmailViewModel : BaseViewModel() {
 
     fun verifyUserEmail() {
         _showProgress.postValue(true)
-
-        userRepository.verifyUserEmail(SignupEmailResponseDto(userSeq))
-            .subscribe({ response ->
-                if (response.body()!!.result == 'Y') {
-                    responseState_verifyUserEmail.postValue(SUCCESS)
-                    userSeq = 0
-                } else {
-                    responseState_verifyUserEmail.postValue(FAIL)
-                }
-                _showProgress.postValue(false)
+        addDisposable(
+            userRepository.verifyUserEmail(SignupEmailResponseDto(userSeq))
+                .subscribe({ response ->
+                    if (response.body()!!.result == 'Y') {
+                        responseState_verifyUserEmail.postValue(SUCCESS)
+                        userSeq = 0
+                    } else {
+                        responseState_verifyUserEmail.postValue(FAIL)
+                    }
+                    _showProgress.postValue(false)
 
                 }, { throwable ->
                     _showProgress.postValue(false)
