@@ -2,6 +2,8 @@ package com.ssafy.daero.data.remote
 
 
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
@@ -55,5 +57,17 @@ interface UserApi {
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
     ): Single<Void>
+
+    @POST("users/{user_seq}/password")
+    fun confirmPassword(
+        @Path("user_seq") userSeq: Int,
+        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+    ): Single<ResetPasswordResponseDto>
+
+    @PUT("users/{user_seq}/password")
+    fun updatePassword(
+        @Path("user_seq") userSeq: Int,
+        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+    ): Single<ResetPasswordResponseDto>
 
 }

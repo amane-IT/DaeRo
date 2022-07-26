@@ -14,11 +14,11 @@ class UserSharedPreferences(context: Context) {
         prefs.edit().putString(key, value).apply()
     }
 
-    fun getUserSeq(key: String, value: Int): Int{
-        return prefs.getInt(key, value)
+    fun getUserSeq(value: Int): Int{
+        return prefs.getInt("userSeq", value)
     }
 
-    fun setUserSeq(key: String, value: Int) {
-        prefs.edit().putInt(key, value)
+    fun setUserSeq(value: Int) {
+        prefs.edit().putInt("userSeq", value)
     }
 }

@@ -100,7 +100,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                     App.prefs.setString("emailId", App.userId)
                     App.prefs.setString("password", App.password)
                     App.prefs.setString("userName", App.userName)
-                    App.prefs.setUserSeq("userSeq", App.userSeq)
+                    App.prefs.setUserSeq(App.userSeq)
                     App.userId = ""
                     App.password = ""
                     App.userName = ""
