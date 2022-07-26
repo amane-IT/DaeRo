@@ -1,18 +1,19 @@
 package com.ssafy.daero.ui.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.login.FindPasswordRequestDto
-import com.ssafy.daero.data.repository.LoginRepository
+import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
 class FindPasswordConfirmViewModel : BaseViewModel() {
-    private val findIDRepository = LoginRepository.get()
+    private val findIDRepository = UserRepository.get()
 
     private val _showProgress = MutableLiveData<Boolean>()
-    val showProgress : LiveData<Boolean>
+    val showProgress: LiveData<Boolean>
         get() = _showProgress
 
     val checkEmailResponseState = MutableLiveData<Int>()
@@ -24,35 +25,40 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
     fun emailCheck(email: String) {
         _showProgress.postValue(true)
 
-        findIDRepository.emailCheck(email)
-            .subscribe({ findPasswordCheckEmailResponseDto ->
-                if(findPasswordCheckEmailResponseDto.password_reset_seq!=0) {
-                    checkEmailResponseState.postValue(SUCCESS)
-                    password_reset_seq = findPasswordCheckEmailResponseDto.password_reset_seq
-                } else {
+        addDisposable(
+            findIDRepository.emailCheck(email)
+                .subscribe({ findPasswordCheckEmailResponseDto ->
+                    if (findPasswordCheckEmailResponseDto.password_reset_seq != 0) {
+                        checkEmailResponseState.postValue(SUCCESS)
+                        password_reset_seq = findPasswordCheckEmailResponseDto.password_reset_seq
+                    } else {
+                        checkEmailResponseState.postValue(FAIL)
+                    }
+                    _showProgress.postValue(false)
+                }, { throwable ->
+                    _showProgress.postValue(false)
                     checkEmailResponseState.postValue(FAIL)
-                }
-                _showProgress.postValue(false)
-            }, { throwable ->
-                _showProgress.postValue(false)
-                checkEmailResponseState.postValue(FAIL)
-            })
+                })
+        )
     }
 
     fun findPassword(findPasswordRequestDto: FindPasswordRequestDto) {
         _showProgress.postValue(true)
 
-        findIDRepository.findPassword(findPasswordRequestDto)
-            .subscribe({ findPasswordResponseDto ->
-                if(findPasswordResponseDto.result=='Y') {
-                    confirmResponseState.postValue(SUCCESS)
-                } else {
+        addDisposable(
+            findIDRepository.findPassword(findPasswordRequestDto)
+                .subscribe({ findPasswordResponseDto ->
+                    if (findPasswordResponseDto.result == 'Y') {
+                        confirmResponseState.postValue(SUCCESS)
+                    } else {
+                        confirmResponseState.postValue(FAIL)
+                    }
+                    _showProgress.postValue(false)
+                }, { throwable ->
+                    Log.d("FindPasswordConfirmVM_DaeRo", throwable.toString())
+                    _showProgress.postValue(false)
                     confirmResponseState.postValue(FAIL)
-                }
-                _showProgress.postValue(false)
-            }, { throwable ->
-                _showProgress.postValue(false)
-                confirmResponseState.postValue(FAIL)
-            })
+                })
+        )
     }
 }

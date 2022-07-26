@@ -63,7 +63,7 @@
         android:id="@+id/signupEmailFragment"
         android:name="com.ssafy.daero.ui.signup.SignupEmailFragment"
         android:label="SignupEmailFragment"
-        tools:layout="@layout/fragment_signup_email" >
+        tools:layout="@layout/fragment_signup_email">
         <action
             android:id="@+id/action_signupEmailFragment_to_signupPasswordFragment"
             app:destination="@id/signupPasswordFragment"
@@ -158,28 +158,39 @@
     <fragment
         android:id="@+id/findIdFragment"
         android:name="com.ssafy.daero.ui.login.FindIdFragment"
-        android:label="FindIdFragment" />
+        android:label="FindIdFragment"
+        tools:layout="@layout/fragment_find_id" />
     <fragment
         android:id="@+id/findPasswordConfirmFragment"
         android:name="com.ssafy.daero.ui.login.FindPasswordConfirmFragment"
-        android:label="FindPasswordConfirmFragment" >
+        android:label="FindPasswordConfirmFragment"
+        tools:layout="@layout/fragment_find_password_confirm">
         <action
             android:id="@+id/action_findPasswordConfirmFragment_to_findPasswordFragment"
             app:destination="@id/findPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/findPasswordFragment"
         android:name="com.ssafy.daero.ui.login.FindPasswordFragment"
-<<<<<<< HEAD
-        android:label="FindPasswordFragment" />
+        android:label="FindPasswordFragment"
+        tools:layout="@layout/fragment_find_password">
+        <action
+            android:id="@+id/action_findPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/signupPasswordFragment"
         android:name="com.ssafy.daero.ui.signup.SignupPasswordFragment"
-        android:label="SignupPasswordFragment" >
+        android:label="SignupPasswordFragment"
+        tools:layout="@layout/fragment_signup_password">
         <action
             android:id="@+id/action_signupPasswordFragment_to_signupUsernameFragment"
             app:destination="@id/signupUsernameFragment"
@@ -191,7 +202,8 @@
     <fragment
         android:id="@+id/signupUsernameFragment"
         android:name="com.ssafy.daero.ui.signup.SignupUsernameFragment"
-        android:label="SignupUsernameFragment" >
+        android:label="SignupUsernameFragment"
+        tools:layout="@layout/fragment_signup_username">
         <action
             android:id="@+id/action_signupUsernameFragment_to_termsFragment"
             app:destination="@id/termsFragment"
@@ -210,21 +222,11 @@
     <fragment
         android:id="@+id/termsFragment"
         android:name="com.ssafy.daero.ui.signup.TermsFragment"
-        android:label="TermsFragment" />
+        android:label="TermsFragment"
+        tools:layout="@layout/fragment_terms" />
     <fragment
         android:id="@+id/tripPreferenceFragment"
         android:name="com.ssafy.daero.ui.signup.TripPreferenceFragment"
-        android:label="TripPreferenceFragment" />
-=======
-        android:label="FindPasswordFragment" >
-        <action
-            android:id="@+id/action_findPasswordFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
-            app:popExitAnim="@anim/to_right"
-            />
-    </fragment>
->>>>>>> feature-aos/findPassword
+        android:label="TripPreferenceFragment"
+        tools:layout="@layout/fragment_trip_preference" />
 </navigation>
