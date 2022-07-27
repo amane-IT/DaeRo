@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.ssafy.daero.R
 import com.ssafy.daero.ui.login.LoginFragment
 import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.utils.constant.FragmentType
 import com.ssafy.daero.utils.view.toast
 
 
@@ -15,6 +16,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        RootFragment.curFragmentType = FragmentType.HomeFragment
     }
 
     override fun onBackPressed() {
