@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.daero.trip.mapper.TripMapper">
+    <select id="selectByStampSeq" parameterType="_int" resultMap="mappingTripStampDto">
+        SELECT * FROM trip_stamps WHERE `trip_stamps_seq`=#{tripStampSeq};
+    </select>
+
+    <select id="selectPlaceNameByPlaceSeq" parameterType="_int" resultType="String">
+        SELECT `place_name` FROM trip_places WHERE `trip_places_seq`=#{tripPlaceSeq};
+    </select>
+
+    <select id="selectDateByDaySeq" parameterType="_int" resultType="String">
+        SELECT `date` FROM trip_days WHERE `trip_days_seq`=#{tripDaySeq};
+    </select>
+
+
+
+    <resultMap id="mappingTripStampDto" type="com.ssafy.daero.trip.dto.TripStampDto">
+        <result property="tripStampSeq" column="trip_stamps_seq" />
+        <result property="tripDaySeq" column="trip_days_seq" />
+        <result property="tripPlaceSeq" column="trip_places_seq" />
+        <result property="imageUrl" column="image_url" />
+        <result property="placeSatisfactionYn" column="place_satisfaction_YN" />
+    </resultMap>
+
+
+</mapper>
