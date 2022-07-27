@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TripStampDto {
+public class JourneyDto {
     private int tripSeq;
+    private char openYn;
+    private String createdAt;
     private int tripStampSeq;
-    private int tripDaySeq;
-    private int tripPlaceSeq;
-    private String imageUrl;
-    private char placeSatisfactionYn;
+    private Double latitude;
+    private Double longitude;
 }
