@@ -7,17 +7,55 @@
         SELECT * FROM trip_stamps WHERE `trip_stamps_seq`=#{tripStampSeq};
     </select>
 
-    <select id="selectPlaceNameByPlaceSeq" parameterType="_int" resultType="String">
-        SELECT `place_name` FROM trip_places WHERE `trip_places_seq`=#{tripPlaceSeq};
+    <select id="selectPlaceByPlaceSeq" parameterType="_int" resultMap="mappingTripPlaceDto">
+        SELECT * FROM trip_places WHERE `trip_places_seq`=#{tripPlaceSeq};
     </select>
 
     <select id="selectDateByDaySeq" parameterType="_int" resultType="String">
         SELECT `date` FROM trip_days WHERE `trip_days_seq`=#{tripDaySeq};
     </select>
 
+    <select id="selectTripSeqListByUserSeq" parameterType="_int" resultType="_int">
+        SELECT `trips_seq` FROM trips WHERE `users_seq`=#{userSeq};
+    </select>
+
+<!--    <select id="selectDayListByTripSeq" parameterType="_int" resultMap="mappingTripDayDto">-->
+<!--        SELECT * FROM trip_days WHERE `trip`=#{tripSeq};-->
+<!--    </select>-->
+
+<!--    <select id="selectStampListByDaySeq" parameterType="_int" resultMap="mappingTripStampDto">-->
+<!--        SELECT * FROM trip_stamps WHERE `trip_days_seq`=#{tripDaySeq};-->
+<!--    </select>-->
+
+    <select id="selectOtherJourneyListByUserSeq" resultMap="mappingJourneyDto">
+        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, a.open_yn, tp.latitude, tp.longitude
+        FROM articles a
+        LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+        LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
+        WHERE a.open_yn='y'
+        AND str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
+        AND str_to_date(#{startDate},'%Y-%m-%d') &lt;= str_to_date(a.created_at,'%Y-%m-%d')
+        AND a.trips_seq IN (SELECT t.trips_seq
+                            FROM trips t
+                            WHERE users_seq=#{userSeq});
+    </select>
+
+    <select id="selectMyJourneyListByUserSeq" resultMap="mappingJourneyDto">
+        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, a.open_yn, tp.latitude, tp.longitude
+        FROM articles a
+                 LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+                 LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
+        WHERE str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
+          AND str_to_date(#{startDate},'%Y-%m-%d') &lt;= str_to_date(a.created_at,'%Y-%m-%d')
+          AND a.trips_seq IN (SELECT t.trips_seq
+                              FROM trips t
+                              WHERE users_seq=#{userSeq});
+    </select>
+
 
 
     <resultMap id="mappingTripStampDto" type="com.ssafy.daero.trip.dto.TripStampDto">
+        <result property="tripSeq" column="trips_seq" />
         <result property="tripStampSeq" column="trip_stamps_seq" />
         <result property="tripDaySeq" column="trip_days_seq" />
         <result property="tripPlaceSeq" column="trip_places_seq" />
@@ -25,5 +63,31 @@
         <result property="placeSatisfactionYn" column="place_satisfaction_YN" />
     </resultMap>
 
+    <resultMap id="mappingTripDayDto" type="com.ssafy.daero.trip.dto.TripDayDto">
+        <result property="tripDaySeq" column="trip_days_seq" />
+        <result property="tripSeq" column="trip" />
+        <result property="date" column="date" />
+        <result property="dayComment" column="day_comment" />
+    </resultMap>
+
+    <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
+        <result property="tripPlaceSeq" column="trip_places_seq" />
+        <result property="placeName" column="place_name" />
+        <result property="latitude" column="latitude" />
+        <result property="longitude" column="longitude" />
+        <result property="placeName" column="place_name" />
+        <result property="description" column="description" />
+        <result property="regionSeq" column="region_seq" />
+        <result property="imageUrl" column="image_url" />
+    </resultMap>
+
+    <resultMap id="mappingJourneyDto" type="com.ssafy.daero.trip.dto.JourneyDto">
+        <result property="tripSeq" column="trips_seq" />
+        <result property="openYn" column="open_yn" />
+        <result property="createdAt" column="created_at" />
+        <result property="tripStampSeq" column="trip_stamps_seq" />
+        <result property="latitude" column="latitude" />
+        <result property="longitude" column="longitude" />
+    </resultMap>
 
 </mapper>
