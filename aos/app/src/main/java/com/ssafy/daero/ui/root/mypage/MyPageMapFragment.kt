@@ -1,24 +1,35 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
-import com.naver.maps.map.UiSettings
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.overlay.PathOverlay
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.databinding.FragmentMyPageMapBinding
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.view.getPxFromDp
+import com.ssafy.daero.utils.view.toast
 
-class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragment_my_page_map), OnMapReadyCallback {
-    private val myPageViewModel : MyPageViewModel by viewModels ({ requireParentFragment() })
+class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragment_my_page_map),
+    OnMapReadyCallback {
+    private val myPageViewModel: MyPageViewModel by viewModels({ requireParentFragment() })
 
     private var naverMap: NaverMap? = null
     private var uiSettings: UiSettings? = null
+    private var markers = mutableListOf<MutableList<Marker>>()
+    private var paths = mutableListOf<PathOverlay>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,11 +42,85 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
 
     override fun init() {
         setOnClickListeners()
+        observeData()
+    }
+
+    private fun observeData() {
+        myPageViewModel.getJourneyState.observe(viewLifecycleOwner) {
+            when (it) {
+                FAIL -> {
+                    toast("내 여정 조회를 가져오는데 실패했습니다.")
+                    myPageViewModel.getJourneyState.value = DEFAULT
+                }
+                SUCCESS -> {
+                    toast("내 여정이 없습니다.")
+                    myPageViewModel.getJourneyState.value = DEFAULT
+                }
+            }
+        }
+        myPageViewModel.myJourney.observe(viewLifecycleOwner) {
+            Log.d("MyPageMap_싸피", it.toString())
+            drawMarkers(it)
+            drawPolyline(it)
+        }
+    }
+
+    private fun drawMarkers(journey: List<List<MyJourneyResponseDto>>) {
+        if (journey.isNotEmpty()) {
+            journey.forEachIndexed { idx, trips ->
+                markers.add(mutableListOf())
+                markers[idx] = trips.map { trip ->
+                    createMarker(trip)
+                }.toMutableList()
+            }
+            naverMap?.moveCamera(
+                CameraUpdate.scrollTo(
+                    LatLng(
+                        journey.last().last().latitude,
+                        journey.last().last().longitude
+                    )
+                )
+            )
+            naverMap?.moveCamera(CameraUpdate.zoomTo(10.0))
+        }
+    }
+
+    private fun createMarker(trip: MyJourneyResponseDto): Marker {
+        return Marker().apply {
+            position = LatLng(trip.latitude, trip.longitude)    // 마커 좌표
+            icon = OverlayImage.fromResource(R.drawable.ic_marker)
+            iconTintColor = requireActivity().getColor(R.color.primaryDarkColor)// 마커 색깔
+            width = requireContext().getPxFromDp(40f)   // 마커 가로 크기
+            height = requireContext().getPxFromDp(40f)  // 마커 세로 크기
+            zIndex = 0  // 마커 높이
+            onClickListener = Overlay.OnClickListener {     // 마커 클릭 리스너
+                // todo: trip_seq 이용해서 트립스탬프 상세화면으로 이동
+                return@OnClickListener true
+            }
+            isHideCollidedMarkers = true    // 겹치면 다른 마커 숨기기
+            map = naverMap  // 지도에 마커 표시
+        }
+    }
+
+    private fun drawPolyline(journey: List<List<MyJourneyResponseDto>>) {
+        if (journey.isNotEmpty()) {
+            journey.forEachIndexed { idx, trips ->
+                if (trips.size >= 2) {  // 한 여행에서 두 개 이상 여행지 방문했을 때만 경로 그리기
+                    paths.add(PathOverlay().apply {
+                        color = requireActivity().getColor(R.color.red) // 경로 색깔
+                        outlineColor = requireActivity().getColor(R.color.red) // 경로 색깔
+                        outlineWidth = requireContext().getPxFromDp(1.5f) // 경로 두께
+                        coords =
+                            trips.map { trip -> LatLng(trip.latitude, trip.longitude) }    // 경로 좌표
+                        map = naverMap
+                    })
+                }
+            }
+        }
     }
 
     private fun setOnClickListeners() {
         binding.fabMyPageMapFilter.setOnClickListener {
-            // todo: FilterBottomSheet 띄우기
             MapFilterBottomSheetFragment().show(
                 childFragmentManager,
                 "MapFilterBottomSheetFragment"
@@ -45,7 +130,7 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
 
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
-        if(menuVisible) {
+        if (menuVisible) {
             (requireParentFragment() as MyPageFragment).disableSlide()
         }
     }
@@ -65,6 +150,7 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
         naverMap = _naverMap
 
         setNaverMapUI()
+        getMyJourney()
     }
 
     private fun setNaverMapUI() {
@@ -78,5 +164,9 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
                 isLocationButtonEnabled = false // 기본 내 위치 버튼 비활성화
             }
         }
+    }
+
+    private fun getMyJourney() {
+        myPageViewModel.getMyJourney("", "")
     }
 }
