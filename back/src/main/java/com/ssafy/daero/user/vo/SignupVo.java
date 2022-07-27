@@ -1,4 +1,4 @@
-package com.ssafy.daero.vo;
+package com.ssafy.daero.user.vo;
 
 import lombok.Getter;
 import lombok.Setter;
