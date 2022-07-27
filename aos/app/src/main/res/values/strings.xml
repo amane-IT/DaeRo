@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">DaeRo</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="term_of_service"><u><b>이용약관</b></u>에 동의합니다.</string>
 </resources>
