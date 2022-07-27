@@ -40,7 +40,10 @@ public class TripController {
     @GetMapping("/user/{user_seq}/journey")
     public ResponseEntity<ArrayList<ArrayList>> journeyList(@PathVariable int user_seq, @RequestParam(required = false, defaultValue = "null") String start_date, @RequestParam(required = false, defaultValue = "null") String end_date) {
         ArrayList<ArrayList> res = tripService.journeyList(user_seq, 'n', start_date, end_date);
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        if (res != null) {
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        else { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
     }
 
     @GetMapping("/my/{user_seq}/journey")
