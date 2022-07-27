@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/articleFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -109,6 +109,14 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_rootFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -285,4 +293,24 @@
         android:name="com.ssafy.daero.ui.setting.ResetPasswordFragment"
         android:label="ResetPasswordFragment"
         tools:layout="@layout/fragment_reset_password" />
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.ssafy.daero.ui.root.sns.ArticleFragment"
+        android:label="ArticleFragment"
+        tools:layout="@layout/fragment_article">
+        <action
+            android:id="@+id/action_articleFragment_to_tripStampDetailFragment"
+            app:destination="@id/tripStampDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/tripStampDetailFragment"
+        android:name="com.ssafy.daero.ui.root.sns.TripStampDetailFragment"
+        android:label="TripStampDetailFragment"
+        tools:layout="@layout/fragment_trip_stamp_detail"
+        />
 </navigation>
