@@ -11,6 +11,7 @@ public class UserDto {
     private String password;
     private String nickname;
     private char emailVerifiedYn;
+    private char suspendedYn;
     private String profileImageLink;
     private int reportedCount;
     private String createdAt;
