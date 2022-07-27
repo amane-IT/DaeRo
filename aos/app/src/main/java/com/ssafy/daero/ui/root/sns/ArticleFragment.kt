@@ -5,6 +5,8 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -107,7 +109,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             //todo 댓글 바텀싯
         }
         binding.imgArticleMenu.setOnClickListener {
-
+            val articleMenuBottomSheetFragment = ArticleMenuBottomSheetFragment()
         }
     }
 
