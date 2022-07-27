@@ -93,7 +93,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleLike.setOnClickListener {
             //todo 좋아요 상태 변경 API 연동(좋아요 상태에 따라 변경)
-//            binding.imgArticleLike.setImageResource(R.drawable.ic_like)
+            //binding.imgArticleLike.setImageResource(R.drawable.ic_like)
 
             binding.imgArticleLike.setImageResource(R.drawable.ic_like_full)
             var fadeScale: Animation  = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
@@ -110,6 +110,10 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleMenu.setOnClickListener {
             val articleMenuBottomSheetFragment = ArticleMenuBottomSheetFragment()
+            articleMenuBottomSheetFragment.show(childFragmentManager,articleMenuBottomSheetFragment.tag)
+        }
+        binding.imgArticleBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 
