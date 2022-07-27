@@ -25,7 +25,8 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        holder.bind(articleData[position])
+        holder.bind(articleData[position]!!)
+        Log.d("데이터",position.toString())
     }
 
     override fun getItemCount() = articleData.size
@@ -44,12 +45,10 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
         }
 
         fun bind(data: Record) {
+            binding.record = data
             binding.textArticleDay.text = "Day"+(bindingAdapterPosition+1).toString()
-            binding.textArticleDate.text = data.datetime
-            binding.textArticleContent.text = data.day_comment
             (binding.recyclerArticleTripStamp.adapter as TripStampAdapter).apply {
                 addTripStamp(data.trip_stamps)
-                notifyDataSetChanged()
             }
         }
     }

@@ -109,7 +109,7 @@
                 <View
                     android:id="@+id/view_article_start_line"
                     android:layout_width="1dp"
-                    android:layout_height="64dp"
+                    android:layout_height="32dp"
                     android:background="@color/gray"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="72dp"

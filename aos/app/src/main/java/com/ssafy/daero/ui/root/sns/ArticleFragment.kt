@@ -55,7 +55,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.recyclerArticleTrip.apply {
             adapter = articleAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
         //articleViewModel.article("1")
     }
@@ -90,7 +90,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                     }
                     binding.recyclerArticleTrip.apply {
                         adapter = articleAdapter
-                        layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+                        layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
                     }
                     articleViewModel.responseState.value = DEFAULT
                 }
