@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.root.mypage
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -50,19 +49,44 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
             when (it) {
                 FAIL -> {
                     toast("내 여정 조회를 가져오는데 실패했습니다.")
+                    deleteMarkers()
+                    deletePaths()
                     myPageViewModel.getJourneyState.value = DEFAULT
                 }
                 SUCCESS -> {
                     toast("내 여정이 없습니다.")
+                    deleteMarkers()
+                    deletePaths()
                     myPageViewModel.getJourneyState.value = DEFAULT
                 }
             }
         }
         myPageViewModel.myJourney.observe(viewLifecycleOwner) {
-            Log.d("MyPageMap_싸피", it.toString())
+            deleteMarkers()
+            deletePaths()
             drawMarkers(it)
             drawPolyline(it)
         }
+    }
+
+    private fun deleteMarkers() {
+        if (markers.isNotEmpty()) {
+            markers.forEach { list ->
+                list.forEach {
+                    it.map = null
+                }
+            }
+        }
+        markers = mutableListOf()
+    }
+
+    private fun deletePaths() {
+        if (paths.isNotEmpty()) {
+            paths.forEach {
+                it.map = null
+            }
+        }
+        paths = mutableListOf()
     }
 
     private fun drawMarkers(journey: List<List<MyJourneyResponseDto>>) {
@@ -119,9 +143,13 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
         }
     }
 
+    private val applyFilter: (String, String) -> Unit = { startDate, endDate ->
+        getMyJourney(startDate, endDate)
+    }
+
     private fun setOnClickListeners() {
         binding.fabMyPageMapFilter.setOnClickListener {
-            MapFilterBottomSheetFragment().show(
+            MapFilterBottomSheetFragment(applyFilter).show(
                 childFragmentManager,
                 "MapFilterBottomSheetFragment"
             )
@@ -150,7 +178,7 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
         naverMap = _naverMap
 
         setNaverMapUI()
-        getMyJourney()
+        getMyJourney("", "")
     }
 
     private fun setNaverMapUI() {
@@ -166,7 +194,7 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
         }
     }
 
-    private fun getMyJourney() {
-        myPageViewModel.getMyJourney("", "")
+    private fun getMyJourney(startDate: String, endDate: String) {
+        myPageViewModel.getMyJourney(startDate, endDate)
     }
 }

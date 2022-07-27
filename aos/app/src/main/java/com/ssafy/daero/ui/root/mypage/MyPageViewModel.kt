@@ -47,7 +47,7 @@ class MyPageViewModel : BaseViewModel() {
         addDisposable(
             tripRepository.getMyJourney(App.prefs.userSeq, startDate, endDate).subscribe(
                 { response ->
-                    when(response.code()) {
+                    when (response.code()) {
                         204 -> {
                             // 아무 여행도 안했을 때
                             getJourneyState.postValue(SUCCESS)
@@ -67,5 +67,4 @@ class MyPageViewModel : BaseViewModel() {
             )
         )
     }
-
 }
