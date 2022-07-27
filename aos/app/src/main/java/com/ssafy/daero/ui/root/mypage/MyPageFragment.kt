@@ -78,4 +78,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             .error(R.drawable.img_user)
             .into(binding.imageMyPageProfile)
     }
+
+    fun disableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = false
+    }
+
+    fun enableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = true
+    }
 }
