@@ -48,16 +48,30 @@
                 android:layout_marginStart="12dp"
                 android:text="ssafy_kim" />
 
+            <ImageView
+                android:id="@+id/img_article_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_menu"
+                app:tint="@color/black" />
+
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_article"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintVertical_bias="1.0">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -80,6 +94,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="24dp"
+                    android:textSize="28dp"
                     android:text="강릉 ~ 속초 여행"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_article" />
@@ -103,41 +118,38 @@
                     android:background="@color/primaryTextColor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_article_date"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_date" />
 
                 <View
                     android:id="@+id/view_article_start_line"
                     android:layout_width="1dp"
                     android:layout_height="32dp"
-                    android:background="@color/gray"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="72dp"
+                    android:background="@color/gray"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_article_map"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/fragment_article_map" />
 
                 <View
                     android:id="@+id/view_article_start_circle"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:background="@drawable/circle_article"
                     android:layout_marginStart="25dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/view_article_start_line" />
+                    android:background="@drawable/circle_article"
+                    app:layout_constraintBottom_toTopOf="@id/view_article_start_line"
+                    app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView
                     android:id="@+id/tv_article_start"
                     style="@style/HeadBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="48dp"
                     android:layout_marginLeft="12dp"
+                    android:layout_marginTop="48dp"
                     android:text="여행시작"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintStart_toEndOf="@id/view_article_start_circle"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_article_map"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/fragment_article_map" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_article_trip"
@@ -151,8 +163,8 @@
                     android:id="@+id/view_article_end_line"
                     android:layout_width="1dp"
                     android:layout_height="64dp"
-                    android:background="@color/gray"
                     android:layout_marginStart="32dp"
+                    android:background="@color/gray"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycler_article_trip" />
 
@@ -160,8 +172,8 @@
                     android:id="@+id/view_article_end_circle"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:background="@drawable/circle_article"
                     android:layout_marginStart="25dp"
+                    android:background="@drawable/circle_article"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_article_end_line" />
 
@@ -175,8 +187,7 @@
                     android:text="여행끝"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintStart_toEndOf="@id/view_article_end_circle"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_article_trip"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/recycler_article_trip" />
 
                 <TextView
                     android:id="@+id/tv_article_expense"
@@ -218,13 +229,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
                     android:text="이번 여행은 어쩌구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_article_content_title"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_content_title" />
 
                 <TextView
                     android:id="@+id/tv_article_satisfaction"
@@ -235,18 +245,19 @@
                     android:layout_marginTop="32dp"
                     android:text="여행만족도"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_article_content"
-                    />
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_content" />
 
                 <RatingBar
                     android:id="@+id/rating_article_satisfaction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_article_satisfaction"
+                    android:isIndicator="true"
+                    android:numStars="5"
+                    android:stepSize="1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_satisfaction" />
 
                 <com.google.android.material.chip.ChipGroup
                     android:id="@+id/chip_article_tag"
@@ -255,10 +266,10 @@
                     android:layout_marginHorizontal="24dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="24dp"
-                    app:singleSelection="true"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/rating_article_satisfaction"
-                    app:layout_constraintEnd_toEndOf="parent">
+                    app:singleSelection="true">
 
                 </com.google.android.material.chip.ChipGroup>
 
@@ -267,10 +278,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    >
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag">
 
                     <ImageView
                         android:id="@+id/img_article_like"
@@ -281,7 +291,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="3dp"
-                        android:src="@drawable/ic_like"
+                        app:srcCompat="@drawable/ic_like"
                         app:tint="@color/black" />
 
                 </LinearLayout>
@@ -291,10 +301,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
-                    app:layout_constraintStart_toEndOf="@id/Linear_article_likeImg"
-                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    >
+                    app:layout_constraintStart_toEndOf="@id/Linear_article_likeImg"
+                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag">
 
                     <TextView
                         android:id="@+id/tv_article_like"
@@ -302,8 +311,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="1k"
-                        />
+                        android:text="1k" />
 
                 </LinearLayout>
 
@@ -313,10 +321,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
 
-                    app:layout_constraintStart_toEndOf="@id/Linear_article_like"
-                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    >
+                    app:layout_constraintStart_toEndOf="@id/Linear_article_like"
+                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag">
 
                     <ImageView
                         android:id="@+id/img_article_comment"
@@ -337,10 +344,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="16dp"
-                    app:layout_constraintStart_toEndOf="@id/Linear_article_commentImg"
-                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    >
+                    app:layout_constraintStart_toEndOf="@id/Linear_article_commentImg"
+                    app:layout_constraintTop_toBottomOf="@id/chip_article_tag">
 
                     <TextView
                         android:id="@+id/tv_article_Comment"
@@ -348,8 +354,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="1k"
-                        />
+                        android:text="1k" />
 
                 </LinearLayout>
 

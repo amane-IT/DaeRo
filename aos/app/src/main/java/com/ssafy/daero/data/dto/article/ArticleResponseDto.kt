@@ -6,7 +6,7 @@ data class ArticleResponseDto(
     val profile_url: String,
     val title: String,
     val trip_comment: String,
-    val trip_expenses: String,
+    val trip_expenses: List<Expense>,
     val rating: Int,
     val likes: Int,
     val comments: Int,
