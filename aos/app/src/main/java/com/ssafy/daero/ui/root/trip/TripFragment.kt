@@ -7,14 +7,11 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTripBinding
 import com.ssafy.daero.ui.adapter.TripHotAdapter
 import com.ssafy.daero.ui.adapter.TripPopularAdapter
 import com.ssafy.daero.utils.hotArticles
 import com.ssafy.daero.utils.popularTripPlaces
-import com.ssafy.daero.utils.view.getScreenHeight
-import com.ssafy.daero.utils.view.toast
 
 class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private val tripViewModel: TripViewModel by viewModels()
@@ -22,9 +19,11 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private lateinit var tripHotAdapter: TripHotAdapter
 
     lateinit var loadingDialog: LoadingDialogFragment
-    private lateinit var bottomSheet : BottomSheetBehavior<CardView>
-    private var cornerRadius : Float = 0f
+    private lateinit var bottomSheet: BottomSheetBehavior<CardView>
+    private var cornerRadius: Float = 0f
 
+    private var categoryTags = listOf<Int>()
+    private var regionTags = listOf<Int>()
 
     override fun init() {
         initView()
@@ -64,18 +63,25 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private fun setOnClickListeners() {
         binding.textTripKeyword.setOnClickListener {
-            // todo: 키워드 선택 바텀싯 띄우기
-            TagBottomSheetFragment().show(childFragmentManager, "TagBottomSheetFragment")
+            TagBottomSheetFragment(categoryTags, regionTags, applyFilter).show(
+                childFragmentManager,
+                "TagBottomSheetFragment"
+            )
         }
         binding.imageTripNotification.setOnClickListener {
             // todo: 알림 페이지로 이동
         }
     }
 
+    private val applyFilter: (List<Int>, List<Int>) -> Unit = { categoryTags, regionTags ->
+        this.categoryTags = categoryTags
+        this.regionTags = regionTags
+    }
+
     private fun otherListeners() {
-        bottomSheet.addBottomSheetCallback(object: BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheet.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when(newState) {
+                when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
                         // todo: 여행지 추천 받기 기능
                         tripViewModel.getRecommendTripPlace()
@@ -105,7 +111,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         tripHotAdapter.tripHots = hotArticles
 
         tripViewModel.showProgress.observe(viewLifecycleOwner) {
-            if(it) {
+            if (it) {
                 showProgressDialog()
             } else {
                 hideProgressDialog()

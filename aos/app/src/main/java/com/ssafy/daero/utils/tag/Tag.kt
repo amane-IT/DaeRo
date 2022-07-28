@@ -5,7 +5,7 @@ data class Tag(
     val tag: String
 )
 
-val keywordTags = listOf(
+val categoryTags = listOf(
     Tag(1, "바다"), Tag(2, "산"), Tag(3, "강"),
     Tag(4, "수목원"), Tag(5, "역사"), Tag(6, "공원"),
     Tag(7, "전망대"), Tag(8, "체험"), Tag(9, "먹거리"),

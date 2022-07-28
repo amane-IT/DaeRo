@@ -16,16 +16,91 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/image_tag_close"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginEnd="24dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintBottom_toBottomOf="@id/text_tag_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_tag_title" />
+
+    <TextView
+        android:id="@+id/text_tag_label_category"
+        style="@style/SubHeadBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="카테고리"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_tag_title" />
+
+    <TextView
+        android:id="@+id/text_tag_categoryInit"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+        android:text="초기화"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/text_tag_label_category"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_tag_label_category" />
+
     <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup_tag_keyword"
+        android:id="@+id/chipGroup_tag_category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="24dp"
-        app:singleSelection="false"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_tag_title"/>
+        app:layout_constraintTop_toBottomOf="@id/text_tag_label_category"
+        app:singleSelection="false" />
+
+    <TextView
+        android:id="@+id/text_tag_label_region"
+        style="@style/SubHeadBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="지역"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipGroup_tag_category" />
+
+    <TextView
+        android:id="@+id/text_tag_regionInit"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="4dp"
+        android:text="초기화"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/text_tag_label_region"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_tag_label_region" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup_tag_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_tag_label_region"
+        app:singleSelection="false" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_tag_apply"
@@ -40,6 +115,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chipGroup_tag_keyword" />
+        app:layout_constraintTop_toBottomOf="@id/chipGroup_tag_region" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

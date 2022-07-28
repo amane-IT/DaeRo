@@ -1,23 +1,25 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.MutableLiveData
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
 import com.ssafy.daero.R
 import com.ssafy.daero.databinding.BottomsheetTagBinding
-import com.ssafy.daero.utils.tag.keywordTags
+import com.ssafy.daero.utils.tag.categoryTags
+import com.ssafy.daero.utils.tag.regionTags
 
-class TagBottomSheetFragment() : BottomSheetDialogFragment() {
+class TagBottomSheetFragment(
+    private val _categoryTags: List<Int>,
+    private val _regionTags: List<Int>,
+    private val applyFilter: (List<Int>, List<Int>) -> Unit
+) : BottomSheetDialogFragment() {
     private var _binding: BottomsheetTagBinding? = null
     private val binding get() = _binding!!
-
-    private val startDate = MutableLiveData<String>()
-    private val endDate = MutableLiveData<String>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,20 +39,49 @@ class TagBottomSheetFragment() : BottomSheetDialogFragment() {
     }
 
     private fun initViews() {
-        addKeywordChip()
+        binding.textTagCategoryInit.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
+        binding.textTagRegionInit.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
+        addCategoryChip()
+        addRegionChip()
     }
 
-    private fun addKeywordChip() {
-        keywordTags.forEach { tag ->
-            binding.chipGroupTagKeyword.addView(
+    private fun addCategoryChip() {
+        categoryTags.forEach { tag ->
+            binding.chipGroupTagCategory.addView(
                 Chip(requireContext()).apply {
                     text = tag.tag
                     id = tag.seq
                     isCheckable = true
-                    setTextAppearanceResource(R.style.BodyWhite)
-                    setChipBackgroundColorResource(R.drawable.selector_chip_color)
+                    setTextAppearanceResource(R.style.ChipText)
+                    setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
+                    setChipBackgroundColorResource(R.color.selector_chip_color)
                 }
             )
+        }
+        if (_categoryTags.isNotEmpty()) {
+            _categoryTags.forEach {
+                (binding.chipGroupTagCategory.getChildAt(it - 1) as Chip).isChecked = true
+            }
+        }
+    }
+
+    private fun addRegionChip() {
+        regionTags.forEach { tag ->
+            binding.chipGroupTagRegion.addView(
+                Chip(requireContext()).apply {
+                    text = tag.tag
+                    id = tag.seq
+                    isCheckable = true
+                    setTextAppearanceResource(R.style.ChipText)
+                    setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
+                    setChipBackgroundColorResource(R.color.selector_chip_color)
+                }
+            )
+        }
+        if (_regionTags.isNotEmpty()) {
+            _regionTags.forEach {
+                (binding.chipGroupTagRegion.getChildAt(it - 1) as Chip).isChecked = true
+            }
         }
     }
 
@@ -63,7 +94,19 @@ class TagBottomSheetFragment() : BottomSheetDialogFragment() {
 
     private fun setOnClickListeners() {
         binding.buttonTagApply.setOnClickListener {
+            val categoryTags = binding.chipGroupTagCategory.checkedChipIds
+            val regionTags = binding.chipGroupTagRegion.checkedChipIds
+            applyFilter(categoryTags, regionTags)
             dismiss()
+        }
+        binding.imageTagClose.setOnClickListener {
+            dismiss()
+        }
+        binding.textTagCategoryInit.setOnClickListener {
+            binding.chipGroupTagCategory.clearCheck()
+        }
+        binding.textTagRegionInit.setOnClickListener {
+            binding.chipGroupTagRegion.clearCheck()
         }
     }
 
