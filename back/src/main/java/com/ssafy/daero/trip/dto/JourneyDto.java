@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class JourneyDto {
     private int tripSeq;
-    private char openYn;
     private String createdAt;
     private int tripStampSeq;
     private Double latitude;
