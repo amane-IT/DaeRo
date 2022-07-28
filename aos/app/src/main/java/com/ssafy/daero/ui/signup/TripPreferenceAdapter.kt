@@ -1,59 +1,46 @@
 package com.ssafy.daero.ui.signup
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.signup.TripPreferenceResponseDto
+import com.ssafy.daero.databinding.ItemTripPreferenceBinding
 
-class TripPreferenceAdapter(
-    private val context: Context, private val dataList: List<TripPreferenceResponseDto>
-): RecyclerView.Adapter<TripPreferenceAdapter.ItemViewHolder>() {
-    var preferenceList = mutableListOf<Int>()
+class TripPreferenceAdapter: RecyclerView.Adapter<TripPreferenceAdapter.ItemViewHolder>() {
+    var dataList: List<TripPreferenceResponseDto> = emptyList()
+    lateinit var onItemClickListener : (View, Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.view_item_trip_preference, parent, false)
-        return ItemViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) :ItemViewHolder {
+        return ItemViewHolder(
+            ItemTripPreferenceBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            bindOnItemClickListener(onItemClickListener)
+        }
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(dataList[position], context)
-
-        holder.itemView.setOnClickListener{ view ->
-            if(preferenceList.contains(dataList[position].place_seq)){
-                holder.itemView.setBackgroundResource(R.drawable.imagebutton_regular)
-                preferenceList.remove(dataList[position].place_seq)
-            } else{
-                if(preferenceList.size < 5){
-                    holder.itemView.setBackgroundResource(R.drawable.imagebutton_selected)
-                    preferenceList.add(dataList[position].place_seq)
-                }
-            }
-        }
-
+        holder.bind(dataList[position])
     }
 
-    override fun getItemCount(): Int {
-        return dataList.size
-    }
+    override fun getItemCount() = dataList.size
 
-    inner class ItemViewHolder(imageView: View): RecyclerView.ViewHolder(imageView){
-        private val placePhoto = itemView.findViewById<ImageView>(R.id.imageView_itemTripPreference_place)
+    class ItemViewHolder(
+        private val binding: ItemTripPreferenceBinding
+    ): RecyclerView.ViewHolder(binding.root){
 
-        fun bind(tripPreferenceResponseDto: TripPreferenceResponseDto, context: Context) {
-            if(tripPreferenceResponseDto.image_url.isNotEmpty()){
-                Glide.with(context)
-                    .load(tripPreferenceResponseDto.image_url)
-                    .placeholder(R.drawable.ic_downloading)
-                    .into(placePhoto)
-            } else {
-                placePhoto.setImageResource(R.drawable.ic_downloading)
-            }
+        fun bind(tripPreferenceResponseDto: TripPreferenceResponseDto) {
+            binding.tripPreference = tripPreferenceResponseDto
         }
 
+        fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit) {
+            binding.root.setOnClickListener{
+                onItemClickListener(it, binding.tripPreference!!.place_seq)
+            }
+        }
     }
 }
