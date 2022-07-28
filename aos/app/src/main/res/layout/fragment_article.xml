@@ -110,12 +110,12 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_title" />
 
-                <View
+                <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/fragment_article_map"
                     android:layout_width="360dp"
                     android:layout_height="180dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/primaryTextColor"
+                    android:name="com.naver.maps.map.MapFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_date" />
