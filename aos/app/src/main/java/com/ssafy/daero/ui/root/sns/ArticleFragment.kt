@@ -1,11 +1,11 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.annotation.Nullable
+import androidx.core.view.ViewCompat.setLayerType
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +31,7 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.getPxFromDp
 
+
 class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article),
     OnMapReadyCallback {
 
@@ -45,6 +46,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private var uiSettings: UiSettings? = null
     private var marker = mutableListOf<Marker>()
     private var path: PathOverlay? = null
+
+    private lateinit var mapView: ArticleMapView
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
         //todo 트립스탬프, trip_stamp_seq 번들로 전달
@@ -62,6 +65,49 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mapView = view.findViewById(R.id.fragment_article_map)
+        mapView.onCreate(savedInstanceState)
+        binding.scrollArticle.overScrollMode = View.OVER_SCROLL_NEVER
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
+    }
+
+
     override fun init() {
         initData()
         setOnClickListeners()
@@ -69,6 +115,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     private fun initData() {
+        //binding.fragmentArticleMap.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         articleAdapter = ArticleAdapter().apply {
             this.onItemClickListener = this@ArticleFragment.onItemClickListener
             stampList.add(TripStamp("https://unsplash.com/photos/qyAka7W5uMY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU4OTA1NDIx&force=true&w=1920",
@@ -149,6 +196,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         binding.imgArticleBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
+
     }
 
     private fun observeData() {
@@ -285,6 +333,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 }
         _naverMap.getMapAsync(this)
     }
+
 
     override fun onMapReady(_naverMap: NaverMap) {
         naverMap = _naverMap

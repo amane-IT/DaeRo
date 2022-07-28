@@ -63,12 +63,12 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_article"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_article"
             app:layout_constraintVertical_bias="1.0">
@@ -110,15 +110,15 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_title" />
 
-                <androidx.fragment.app.FragmentContainerView
+                <com.ssafy.daero.ui.root.sns.ArticleMapView
                     android:id="@+id/fragment_article_map"
                     android:layout_width="360dp"
-                    android:layout_height="180dp"
+                    android:layout_height="240dp"
                     android:layout_marginTop="16dp"
                     android:name="com.naver.maps.map.MapFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_article_date" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_date"/>
 
                 <View
                     android:id="@+id/view_article_start_line"
