@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.daero.user.mapper.MailMapper">
+    <select id="selectEmailVerificationByKey" resultType="com.ssafy.daero.user.dto.EmailVerificationDto">
+        select `email_verification_seq` as `emailVerificationSeq`,
+               `user_seq`               as `userSeq`,
+               `verification_key`       as `verificationKey`,
+               `expiration`             as `expiration`,
+               `expired_yn`             as `expiredYn`
+        from `daero`.`email_verification_keys`
+        where `verification_key` = #{emailVerificationKey}
+    </select>
+
+    <select id="selectPasswordResetByKey" resultType="com.ssafy.daero.user.dto.PasswordResetDto">
+        select `password_reset_seq` as `passwordResetSeq`,
+               `user_seq`           as `userSeq`,
+               `reset_key`          as `resetKey`,
+               `expiration`         as `expiration`,
+               `expired_yn`         as `expiredYn`
+        from `daero`.`password_reset_keys`
+        where `reset_key` = #{passwordResetKey}
+    </select>
+
+    <update id="updateUserEmailVerified">
+        update `users`
+        set `email_verified_yn` = 'y'
+        where `users_seq` = #{userSeq};
+    </update>
+
+    <update id="updateUserEmailVerificationKeyExpired">
+        update `email_verification_keys`
+        set `expired_yn` = 'y'
+        where `email_verification_seq` = 'y';
+    </update>
+
+    <update id="updatePasswordResetCompleted">
+        update `users`
+        set `password_reset_yn` = 'y'
+        where `users_seq` = #{userSeq};
+    </update>
+
+    <update id="updatePasswordResetKeyExpired">
+        update `password_reset_keys`
+        set `expired_yn` = 'y'
+        where `password_reset_seq` = 'y';
+    </update>
+</mapper>

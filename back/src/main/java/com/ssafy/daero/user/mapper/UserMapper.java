@@ -1,12 +1,20 @@
 package com.ssafy.daero.user.mapper;
 
+import com.ssafy.daero.user.dto.EmailVerificationDto;
+import com.ssafy.daero.user.dto.PasswordResetDto;
 import com.ssafy.daero.user.dto.UserDto;
+import com.ssafy.daero.user.vo.ChangePasswordVo;
 import com.ssafy.daero.user.vo.SignupVo;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface UserMapper {
-    int insertUser(SignupVo signupVo);
+    int insertUser(String userEmail);
+
+    int insertPasswordResetKey(PasswordResetDto passwordResetDto);
+
+    int insertEmailVerificationKey(EmailVerificationDto emailVerificationDto);
 
     UserDto selectById(String id);
 
@@ -20,6 +28,18 @@ public interface UserMapper {
 
     // badge 개수
     int selectAllBadgeById(int user_seq);
+
+    UserDto selectEmailVerified(int userSeq);
+
+    int selectNicknameCount(String nickname);
+
+    UserDto selectUserByUserEmail(String userEmail);
+
+    UserDto selectUserByUserSeq(int userSeq);
+
+    int updateUser(SignupVo signupVo);
+
+    int updateUserPassword(ChangePasswordVo changePasswordVo);
 
     // 유저 프로필 수정
     int updateProfile(@Param("user_seq") int user_seq, @Param("nickname") String nickname);
