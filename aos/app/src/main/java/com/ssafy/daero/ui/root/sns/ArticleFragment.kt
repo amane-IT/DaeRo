@@ -1,6 +1,9 @@
 package com.ssafy.daero.ui.root.sns
 
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.viewModels
@@ -23,7 +26,6 @@ import com.ssafy.daero.data.dto.article.TripStamp
 import com.ssafy.daero.databinding.FragmentArticleBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleAdapter
 import com.ssafy.daero.ui.adapter.sns.ExpenseAdapter
-import com.ssafy.daero.ui.root.mypage.MyPageFragment
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -41,14 +43,23 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     private var naverMap: NaverMap? = null
     private var uiSettings: UiSettings? = null
-    private var markers = mutableListOf<MutableList<Marker>>()
-    private var paths = mutableListOf<PathOverlay>()
+    private var marker = mutableListOf<Marker>()
+    private var path: PathOverlay? = null
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
         //todo 트립스탬프, trip_stamp_seq 번들로 전달
         requireParentFragment().findNavController().navigate(
             R.id.action_articleFragment_to_tripStampDetailFragment
         )
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        initNaverMap()
+        return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun init() {
@@ -188,47 +199,39 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
         deleteMarkers()
         deletePaths()
-        var list = mutableListOf<Record>()
+        var list = mutableListOf<TripStamp>()
         for(i in 0..articleViewModel.articleData.records.size){
-            list.add(articleViewModel.articleData.records[i])
+            for(j in 0..articleViewModel.articleData.records[i].trip_stamps.size){
+                list.add(articleViewModel.articleData.records[i].trip_stamps[j])
+            }
         }
         drawMarkers(list)
-        drawPolyline(it)
+        drawPolyline(list)
     }
 
     private fun deleteMarkers() {
-        if (markers.isNotEmpty()) {
-            markers.forEach { list ->
-                list.forEach {
-                    it.map = null
-                }
-            }
-        }
-        markers = mutableListOf()
-    }
-
-    private fun deletePaths() {
-        if (paths.isNotEmpty()) {
-            paths.forEach {
+        if (marker.isNotEmpty()) {
+            marker.forEach {
                 it.map = null
             }
         }
-        paths = mutableListOf()
+        marker = mutableListOf()
     }
 
-    private fun drawMarkers(journey: List<Record>) {
+    private fun deletePaths() {
+        path = null
+    }
+
+    private fun drawMarkers(journey: List<TripStamp>) {
         if (journey.isNotEmpty()) {
-            journey.forEachIndexed { idx, trips ->
-                markers.add(mutableListOf())
-                markers[idx] = trips.map { trip ->
-                    createMarker(trip)
-                }.toMutableList()
+            journey.forEachIndexed { idx, trip ->
+                marker.add(createMarker(trip))
             }
             naverMap?.moveCamera(
                 CameraUpdate.scrollTo(
                     LatLng(
-                        journey.last().last().latitude,
-                        journey.last().last().longitude
+                        journey.last().latitude,
+                        journey.last().longitude
                     )
                 )
             )
@@ -253,27 +256,22 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    private fun drawPolyline(journey: List<List<MyJourneyResponseDto>>) {
+    private fun drawPolyline(journey: List<TripStamp>) {
         if (journey.isNotEmpty()) {
-            journey.forEachIndexed { idx, trips ->
-                if (trips.size >= 2) {  // 한 여행에서 두 개 이상 여행지 방문했을 때만 경로 그리기
-                    paths.add(PathOverlay().apply {
-                        color = requireActivity().getColor(R.color.red) // 경로 색깔
-                        outlineColor = requireActivity().getColor(R.color.red) // 경로 색깔
-                        outlineWidth = requireContext().getPxFromDp(1.5f) // 경로 두께
-                        coords =
-                            trips.map { trip -> LatLng(trip.latitude, trip.longitude) }    // 경로 좌표
-                        map = naverMap
-                    })
+            if (journey.size >= 2) {  // 한 여행에서 두 개 이상 여행지 방문했을 때만 경로 그리기
+
+                val coord = mutableListOf<LatLng>()
+                journey.forEachIndexed { idx, trip ->
+                    coord.add(LatLng(trip.latitude, trip.longitude))
+                }
+                path = PathOverlay().apply {
+                    color = requireActivity().getColor(R.color.red) // 경로 색깔
+                    outlineColor = requireActivity().getColor(R.color.red) // 경로 색깔
+                    outlineWidth = requireContext().getPxFromDp(1.5f) // 경로 두께
+                    coords = coord // 경로 좌표
+                    map = naverMap
                 }
             }
-        }
-    }
-
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-        if (menuVisible) {
-            (requireParentFragment() as ArticleFragment).disableSlide()
         }
     }
 
@@ -292,14 +290,14 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         naverMap = _naverMap
 
         setNaverMapUI()
-        getMyJourney("", "")
+        //getMyJourney("", "")
     }
 
     private fun setNaverMapUI() {
         naverMap?.apply {
             isLiteModeEnabled = true // 가벼운 지도 모드 (건물 내부 상세 표시 X)
 
-            this@ArticleFrgment.uiSettings = this.uiSettings.apply {
+            this@ArticleFragment.uiSettings = this.uiSettings.apply {
                 isCompassEnabled = false // 나침반 비활성화
                 isZoomControlEnabled = false // 확대 축소 버튼 비활성화
                 isScaleBarEnabled = false // 스케일 바 비활성화
