@@ -1,5 +1,6 @@
 package com.ssafy.daero.ui.root.mypage
 
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -68,13 +69,22 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.apply {
             textMyPageName.text = userProfile.nickname
             textMyPageFollower.text = userProfile.follower.toString()
-            textMyPageLabelFollowing.text = userProfile.following.toString()
+            textMyPageFollowing.text = userProfile.following.toString()
         }
 
         Glide.with(requireContext())
             .load(userProfile.profile_url)
+            .placeholder(R.drawable.img_user)
             .apply(RequestOptions().centerCrop().circleCrop())
             .error(R.drawable.img_user)
             .into(binding.imageMyPageProfile)
+    }
+
+    fun disableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = false
+    }
+
+    fun enableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = true
     }
 }
