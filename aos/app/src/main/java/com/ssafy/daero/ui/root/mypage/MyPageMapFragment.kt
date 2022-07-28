@@ -97,6 +97,7 @@ class MyPageMapFragment : BaseFragment<FragmentMyPageMapBinding>(R.layout.fragme
                     createMarker(trip)
                 }.toMutableList()
             }
+
             naverMap?.moveCamera(
                 CameraUpdate.scrollTo(
                     LatLng(
