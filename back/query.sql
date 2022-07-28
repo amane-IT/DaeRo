@@ -8,7 +8,7 @@ CREATE TABLE `users`
 (
     `users_seq`          int PRIMARY KEY AUTO_INCREMENT,
     `user_email`         nvarchar(50) UNIQUE,
-    `password`           nvarchar(50),
+    `password`           nvarchar(512),
     `nickname`           nvarchar(50) UNIQUE,
     `del_yn`             varchar(1) DEFAULT 'n',
     `email_verified_yn`  varchar(1) DEFAULT 'n',

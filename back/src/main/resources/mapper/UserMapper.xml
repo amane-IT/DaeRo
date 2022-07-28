@@ -17,27 +17,40 @@
     </insert>
 
     <select id="selectById" parameterType="String" resultMap="mappingUserDto">
-        SELECT * FROM users WHERE `user_email`=#{id};
+        SELECT *
+        FROM users
+        WHERE `user_email` = #{id};
     </select>
 
     <select id="selectByUserSeq" parameterType="_int" resultMap="mappingUserDto">
-        SELECT * FROM users WHERE `users_seq`=#{user_seq};
+        SELECT *
+        FROM users
+        WHERE `users_seq` = #{user_seq};
     </select>
 
     <select id="selectFollowerByUserSeq" resultType="_int">
-        SELECT COUNT(*) FROM follows WHERE `following_users_seq`=#{profile_user_seq} AND `follower_users_seq`=#{current_user_seq}
+        SELECT COUNT(*)
+        FROM follows
+        WHERE `following_users_seq` = #{profile_user_seq}
+          AND `follower_users_seq` = #{current_user_seq}
     </select>
 
     <select id="selectFollowerCountById" parameterType="_int" resultType="_int">
-        SELECT COUNT(*) FROM follows WHERE `following_users_seq`=#{user_seq};
+        SELECT COUNT(*)
+        FROM follows
+        WHERE `following_users_seq` = #{user_seq};
     </select>
 
     <select id="selectFollowingCountById" parameterType="_int" resultType="_int">
-        SELECT COUNT(*) FROM follows WHERE `follower_users_seq`=#{user_seq};
+        SELECT COUNT(*)
+        FROM follows
+        WHERE `follower_users_seq` = #{user_seq};
     </select>
 
     <select id="selectAllBadgeById" parameterType="_int" resultType="_int">
-        SELECT IFNULL(SUM(count),0) FROM user_achievements WHERE `users_seq`=#{user_seq};
+        SELECT IFNULL(SUM(count), 0)
+        FROM user_achievements
+        WHERE `users_seq` = #{user_seq};
     </select>
 
     <select id="selectEmailVerified" parameterType="_int" resultType="com.ssafy.daero.user.dto.UserDto">
@@ -98,42 +111,53 @@
     </select>
 
     <update id="updateProfile">
-        UPDATE users SET `nickname`=#{nickname} WHERE `users_seq`=#{user_seq};
+        UPDATE users
+        SET `nickname`=#{nickname}
+        WHERE `users_seq` = #{user_seq};
     </update>
 
     <update id="deleteUser" parameterType="_int">
-        UPDATE users SET `user_email`=NULL, `password`=NULL,
-            `nickname`=NULL, `email_verified_yn`=NULL, `suspended_yn`=NULL,
-            `profile_image_link`=NULL, `reported_count`=NULL, `created_at`=NULL, `del_yn`='y',
-            `fcm_token`=NULL, `password_reset_yn`=NULL WHERE `users_seq`=#{user_seq};
+        UPDATE users
+        SET `user_email`=NULL,
+            `password`=NULL,
+            `nickname`=NULL,
+            `email_verified_yn`=NULL,
+            `suspended_yn`=NULL,
+            `profile_image_link`=NULL,
+            `reported_count`=NULL,
+            `created_at`=NULL,
+            `del_yn`='y',
+            `fcm_token`=NULL,
+            `password_reset_yn`=NULL
+        WHERE `users_seq` = #{user_seq};
     </update>
 
     <update id="updateUser" parameterType="com.ssafy.daero.user.vo.SignupVo">
-        update users
+        update `daero`.`users`
         set `password`   = #{hashedPassword},
             `nickname`   = #{nickname},
-            `created_at` = #{createAt}
+            `created_at` = #{createdAt}
         where `user_email` = #{userEmail};
     </update>
 
     <update id="updateUserPassword" parameterType="com.ssafy.daero.user.vo.ChangePasswordVo">
-        update `users`
+        update `daero`.`users`
         set `password` = #{hashedPassword}
         where `users_seq` = #{userSeq}
     </update>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
-        <result property = "userSeq" column = "users_seq" />
-        <result property = "email" column = "user_email" />
-        <result property = "password" column = "password" />
-        <result property = "nickname" column = "nickname" />
-        <result property = "emailVerifiedYn" column = "email_verified_yn" />
-        <result property = "suspendedYn" column = "suspended_yn" />
-        <result property = "profileImageLink" column = "profile_image_link" />
-        <result property = "reportedCount" column = "reported_count" />
-        <result property = "createdAt" column = "created_at" />
-        <result property = "delYn" column = "del_yn" />
-        <result property = "fcmToken" column = "fcm_token" />
-        <result property = "passwordFindYn" column = "password_find_yn" />
+        <result property="userSeq" column="users_seq"/>
+        <result property="email" column="user_email"/>
+        <result property="password" column="password"/>
+        <result property="nickname" column="nickname"/>
+        <result property="emailVerifiedYn" column="email_verified_yn"/>
+        <result property="suspendedYn" column="suspended_yn"/>
+        <result property="profileImageLink" column="profile_image_link"/>
+        <result property="reportedCount" column="reported_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="delYn" column="del_yn"/>
+        <result property="fcmToken" column="fcm_token"/>
+        <result property="passwordFindYn" column="password_find_yn"/>
     </resultMap>
 </mapper>

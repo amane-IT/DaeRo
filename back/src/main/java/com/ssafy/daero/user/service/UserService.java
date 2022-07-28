@@ -22,6 +22,7 @@ import java.util.Objects;
 @Service
 public class UserService {
     private final String URL_PREFIX = "127.0.0.1";
+    private final String NO_REPLY = "no-reply@daero.com";
 
     private final UserMapper userMapper;
     private final JavaMailSender mailSender;
@@ -36,16 +37,21 @@ public class UserService {
         return userMapper.updateUser(signupVo) == 1;
     }
 
-    public int login(LoginVo loginVO) {
-        UserDto currentUser = userMapper.selectById(loginVO.getId());
+    public UserDto login(LoginVo loginVO) {
+        UserDto userDto = userMapper.selectById(loginVO.getId());
         // 존재하는 유저고, 비밀번호도 맞고, 이용정지당한 유저가 아니고, 이메일 인증을 완료한 유저
-        if (currentUser != null && Objects.equals(currentUser.getPassword(), loginVO.getHashedPassword())
-                && currentUser.getSuspendedYn() == 'n' && currentUser.getEmailVerifiedYn() == 'y') {
-            return currentUser.getUserSeq();
+        if (userDto != null && Objects.equals(userDto.getPassword(), loginVO.getHashedPassword())
+                && userDto.getSuspendedYn() == 'n' && userDto.getEmailVerifiedYn() == 'y') {
+            return userDto;
         } else {
-            return 0;
+            return null;
         }
     }
+
+    public UserDto loginJwt(int userSeq) {
+        return userMapper.selectByUserSeq(userSeq);
+    }
+
     public boolean findId(String email) {
         UserDto currentUser = userMapper.selectById(email);
         return currentUser != null;
@@ -57,17 +63,21 @@ public class UserService {
         // userJwt Decoder사용해 현재 로그인 중인 유저 seq 얻기 -> follow 여부 확인 (본인이면 무조건 n)
         // 1. 가입한 적 없는 유저
         // 2. 탈퇴한 유저
-        if (profileUser.getUserEmail() == null) { return null; }
+        if (profileUser.getUserEmail() == null) {
+            return null;
+        }
         profile.put("nickname", profileUser.getNickname());
         profile.put("profile_url", profileUser.getProfileImageLink());
         profile.put("follower", userMapper.selectFollowerCountById(userSeq));
         profile.put("following", userMapper.selectFollowingCountById(userSeq));
         profile.put("badge_count", userMapper.selectAllBadgeById(userSeq));
-        if (userSeq == currentUserSeq) { profile.put("followYn", "n"); }
-        else if (userMapper.selectFollowerByUserSeq(profileUser.getUserSeq(), currentUserSeq) == 1) {
+        if (userSeq == currentUserSeq) {
+            profile.put("followYn", "n");
+        } else if (userMapper.selectFollowerByUserSeq(profileUser.getUserSeq(), currentUserSeq) == 1) {
             profile.put("followYn", "y");
+        } else {
+            profile.put("followYn", "n");
         }
-        else { profile.put("followYn", "n"); }
         return profile;
     }
 
@@ -132,6 +142,7 @@ public class UserService {
 
         MimeMessage message = this.mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(NO_REPLY);
         helper.setTo(userDto.getUserEmail());
         helper.setSubject("[DaeRo] 비밀번호 재설정 링크");
         helper.setText(String.format("<a href=\"%s/users/email/%s\" target=\"_blank\">인증하기</a>", URL_PREFIX, resetKey), true);
@@ -161,6 +172,7 @@ public class UserService {
 
         MimeMessage message = this.mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
+        helper.setFrom(NO_REPLY);
         helper.setTo(userDto.getUserEmail());
         helper.setSubject("[DaeRo] 회원가입 이메일 인증");
         helper.setText(String.format("<a href=\"%s/users/email/%s\" target=\"_blank\">인증하기</a>", URL_PREFIX, verificationKey), true);

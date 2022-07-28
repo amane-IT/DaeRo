@@ -1,15 +1,19 @@
 package com.ssafy.daero.user.vo;
 
+import com.ssafy.daero.user.dto.UserDto;
+import com.ssafy.daero.util.CryptoUtil;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginVo {
+public class LoginVo extends UserDto {
     private String id;
-    private String password;
+    private String hashedPassword;
 
-    public String getHashedPassword() {
-        return password;
+    @Override
+    public void setPassword(String password) {
+        super.setPassword(password);
+        this.hashedPassword = CryptoUtil.Sha512.hash(password);
     }
 }

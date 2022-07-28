@@ -1,5 +1,6 @@
 package com.ssafy.daero.user.controller;
 
+import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.service.JwtService;
 import com.ssafy.daero.user.service.UserService;
 import com.ssafy.daero.user.vo.LoginVo;
@@ -30,6 +31,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> signupPost(@RequestBody SignupVo signupVo) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
+        System.out.println("hello");
         if (userService.signup(signupVo)) {
             String jwtToken = jwtService.create(signupVo.getUserSeq(), signupVo.getUserEmail());
             resultMap.put("jwt", jwtToken);
@@ -121,17 +123,39 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginPost(@RequestBody LoginVo loginVO) {
-        int userSeq = userService.login(loginVO);
-        String jwt = jwtService.create(userSeq, loginVO.getId());
+        UserDto userDto = userService.login(loginVO);
         Map<String, Object> response = new HashMap<>();
-        if (userSeq != 0) {
-            response.put("user_seq", userSeq);
+        if (userDto != null) {
+            response.put("user_seq", userDto.getUserSeq());
+            response.put("user_nickname", userDto.getNickname());
+            String jwt = jwtService.create(userDto.getUserSeq(), loginVO.getId());
             response.put("jwt", jwt);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/login-jwt")
+    public ResponseEntity<Map<String, Object>> loginJwtPost(@RequestHeader("jwt") String jwt) {
+        Map<String, Object> resultMap = new HashMap<>();
+        Map<String, String> user = jwtService.decodeJwt(jwt);
+        int userSeq;
+        try {
+            userSeq = Integer.parseInt(user.get("user_seq"));
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (userSeq <= 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        UserDto userDto = userService.loginJwt(userSeq);
+        if (userDto == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        resultMap.put("user_seq", userSeq);
+        resultMap.put("user_nickname", userDto.getNickname());
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/{email_address}")
@@ -141,49 +165,46 @@ public class UserController {
         response.put("result", res);
         if (res) {
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/{user_seq}/profile")
-    public ResponseEntity<Map<String, Object>> userProfile(@RequestHeader Map<String, String> header, @PathVariable int user_seq) {
-        String userJwt = header.get("jwt");
-        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
-//        System.out.println(currentUser.get("user_seq"));
-        if (currentUser.get("user_seq") == null) { return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
+    public ResponseEntity<Map<String, Object>> userProfile(@RequestHeader("jwt") String jwt, @PathVariable int user_seq) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (currentUser.get("user_seq") == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         Map<String, Object> res = userService.userProfile(user_seq, Integer.parseInt(currentUser.get("user_seq")));
         if (res != null) {
             return new ResponseEntity<>(res, HttpStatus.OK);
-        }
-        else {
+        } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{user_seq}/profile")
-    public ResponseEntity<String> userProfileUpdate(@RequestHeader Map<String, String> header, @PathVariable int user_seq, @RequestBody Map<String, String> req) {
-        String userJwt = header.get("jwt");
-        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
-        if (Integer.parseInt(currentUser.get("user_seq")) != user_seq) { return new ResponseEntity<>(HttpStatus.UNAUTHORIZED); }
+    public ResponseEntity<String> userProfileUpdate(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Integer.parseInt(currentUser.get("user_seq")) != user_seq) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         boolean res = userService.updateUserProfile(user_seq, req.get("nickname"));
-        if (res) { return new ResponseEntity<>(HttpStatus.OK); }
-        else { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if (res) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/{user_seq}")
     public ResponseEntity<String> leaveUser(@PathVariable int user_seq) {
         boolean res = userService.leaveUser(user_seq);
-        if (res) { return new ResponseEntity<>(HttpStatus.OK); }
-        else { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if (res) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
-
-//    @GetMapping("/jwt/jwt")
-//    public ResponseEntity<String> jwtTest(@RequestHeader Map<String, String> header) {
-////        System.out.println(header);
-//        String jwt = header.get("jwt");
-////        System.out.println(jwt);
-//        String res = jwtService.decodeJwt(jwt);
-//        return new ResponseEntity<>(res, HttpStatus.OK);
-//    }
 }
