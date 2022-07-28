@@ -106,4 +106,7 @@ dependencies {
 
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.15.0'
+
+    // lottie 애니메이션
+    implementation 'com.airbnb.android:lottie:5.2.0'
 }

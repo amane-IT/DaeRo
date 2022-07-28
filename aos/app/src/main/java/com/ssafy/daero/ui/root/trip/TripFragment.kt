@@ -21,7 +21,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private lateinit var tripPopularAdapter: TripPopularAdapter
     private lateinit var tripHotAdapter: TripHotAdapter
 
-
+    lateinit var loadingDialog: LoadingDialogFragment
     private lateinit var bottomSheet : BottomSheetBehavior<CardView>
     private var cornerRadius : Float = 0f
 
@@ -35,7 +35,9 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     }
 
     private fun initView() {
+        loadingDialog = LoadingDialogFragment.newInstance()
         bottomSheet = BottomSheetBehavior.from(binding.cardTripRecommend)
+        bottomSheet.saveFlags = BottomSheetBehavior.SAVE_PEEK_HEIGHT
         cornerRadius = binding.cardTripRecommend.radius
         binding.textTripKeyword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
@@ -63,6 +65,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private fun setOnClickListeners() {
         binding.textTripKeyword.setOnClickListener {
             // todo: 키워드 선택 바텀싯 띄우기
+            TagBottomSheetFragment().show(childFragmentManager, "TagBottomSheetFragment")
         }
         binding.imageTripNotification.setOnClickListener {
             // todo: 알림 페이지로 이동
@@ -74,7 +77,8 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when(newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        toast("완전히 펴짐")
+                        // todo: 여행지 추천 받기 기능
+                        tripViewModel.getRecommendTripPlace()
                     }
                 }
             }
@@ -99,5 +103,27 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
         // todo: 핫한 여행기 받아오기
         tripHotAdapter.tripHots = hotArticles
+
+        tripViewModel.showProgress.observe(viewLifecycleOwner) {
+            if(it) {
+                showProgressDialog()
+            } else {
+                hideProgressDialog()
+
+            }
+        }
+    }
+
+    fun showProgressDialog() {
+        loadingDialog.show(
+            requireActivity().supportFragmentManager,
+            loadingDialog.tag
+        )
+    }
+
+    fun hideProgressDialog() {
+        if (loadingDialog.isAdded) {
+            loadingDialog.dismissAllowingStateLoss()
+        }
     }
 }
