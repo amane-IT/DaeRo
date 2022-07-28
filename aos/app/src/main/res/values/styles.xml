@@ -181,4 +181,13 @@
         <item name="android:textColor">@color/secondaryColor</item>
     </style>
 
+    <style name="ArticleMenuBottomSheetFragment" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ArticleMenuBottomSheetStyle</item>
+    </style>
+
+    <style name="ArticleMenuBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+
 </resources>
