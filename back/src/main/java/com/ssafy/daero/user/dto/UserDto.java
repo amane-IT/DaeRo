@@ -7,14 +7,15 @@ import lombok.Setter;
 @Setter
 public class UserDto {
     private int userSeq;
-    private String email;
+    private String userEmail;
     private String password;
     private String nickname;
-    private char emailVerifiedYn;
+    private String emailVerifiedYn;
+    private String passwordResetYn;
+    private String suspendedYn;
     private String profileImageLink;
     private int reportedCount;
     private String createdAt;
-    private char delYn;
+    private String delYn;
     private String fcmToken;
-    private char passwordFindYn;
 }
