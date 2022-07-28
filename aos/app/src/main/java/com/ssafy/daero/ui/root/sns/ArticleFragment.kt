@@ -236,7 +236,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    private fun createMarker(trip: MyJourneyResponseDto): Marker {
+    private fun createMarker(trip: TripStamp): Marker {
         return Marker().apply {
             position = LatLng(trip.latitude, trip.longitude)    // 마커 좌표
             icon = OverlayImage.fromResource(R.drawable.ic_marker)
@@ -273,16 +273,16 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
-            (requireParentFragment() as MyPageFragment).disableSlide()
+            (requireParentFragment() as ArticleFragment).disableSlide()
         }
     }
 
     private fun initNaverMap() {
         val _naverMap =
-            childFragmentManager.findFragmentById(R.id.fragmentContainer_myPageMap) as MapFragment?
+            childFragmentManager.findFragmentById(R.id.fragment_article_map) as MapFragment?
                 ?: MapFragment.newInstance().also {
                     childFragmentManager.beginTransaction()
-                        .add(R.id.fragmentContainer_myPageMap, it)
+                        .add(R.id.fragment_article_map, it)
                         .commit()
                 }
         _naverMap.getMapAsync(this)
