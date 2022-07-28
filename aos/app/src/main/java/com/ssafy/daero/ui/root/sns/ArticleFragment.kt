@@ -38,6 +38,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     var expenseList: MutableList<Expense> = mutableListOf()
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
+        //todo 트립스탬프, trip_stamp_seq 번들로 전달
         requireParentFragment().findNavController().navigate(
             R.id.action_articleFragment_to_tripStampDetailFragment
         )
@@ -86,10 +87,16 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     private fun setOnClickListeners() {
         binding.imgArticleUser.setOnClickListener {
-            //todo 마이페이지로 이동
+            //todo 마이페이지로 이동, user_seq 번들로 전달
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_myPageFragment
+            )
         }
         binding.tvArticleUser.setOnClickListener {
-            //todo 마이페이지로 이동
+            //todo 마이페이지로 이동, user_seq 번들로 전달
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_myPageFragment
+            )
         }
         binding.imgArticleLike.setOnClickListener {
             //todo 좋아요 상태 변경 API 연동(좋아요 상태에 따라 변경)
@@ -100,13 +107,22 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             binding.imgArticleLike.startAnimation(fadeScale)
         }
         binding.LinearArticleLike.setOnClickListener {
-            //todo 좋아요 누른 인원 바텀싯
+            //todo 좋아요 누른 인원, article_seq 번들로 전달
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_likeFragment
+            )
         }
         binding.LinearArticleComment.setOnClickListener {
-            //todo 댓글 바텀싯
+            //todo 댓글, article_seq 번들로 전달
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_commentFragment
+            )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
-            //todo 댓글 바텀싯
+            //todo 댓글, article_seq 번들로 전달
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_commentFragment
+            )
         }
         binding.imgArticleMenu.setOnClickListener {
             val articleMenuBottomSheetFragment = ArticleMenuBottomSheetFragment()

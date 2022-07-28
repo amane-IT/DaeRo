@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
@@ -42,18 +43,27 @@ class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
             //todo: 따라가기
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_tripFollowFragment
+            )
         }
         binding.tvArticleMenuShare.setOnClickListener {
             //todo: 공유하기
         }
         binding.tvArticleMenuModify.setOnClickListener {
             //todo: 수정하기
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_articleWriteDayFragment
+            )
         }
         binding.tvArticleMenuDelete.setOnClickListener {
             //todo: 삭제하기
         }
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기
+            requireParentFragment().findNavController().navigate(
+                R.id.action_articleFragment_to_reportFragment
+            )
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //todo: 차단하기
