@@ -43,6 +43,19 @@
         WHERE articles_seq=#{articleSeq}
     </select>
 
+    <select id="selectUserSeqByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+        SELECT users_seq
+        FROM trips t
+        WHERE t.trips_seq IN (SELECT a.trips_seq
+                              FROM articles a
+                              WHERE a.articles_seq=#{articleSeq}
+        )
+    </select>
+
+    <select id="deleteArticleByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+        DELETE FROM articles WHERE articles_seq=#{articleSeq}
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
@@ -63,4 +76,6 @@
         <result property="datetime" column="date" />
         <result property="dayComment" column="day_comment" />
     </resultMap>
+
+
 </mapper>
