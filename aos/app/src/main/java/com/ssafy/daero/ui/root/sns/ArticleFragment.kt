@@ -9,6 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
+import com.naver.maps.map.overlay.OverlayImage
+import com.naver.maps.map.overlay.PathOverlay
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.Expense
@@ -23,7 +29,8 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.getPxFromDp
 
-class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article) {
+class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article),
+    OnMapReadyCallback {
 
     private val articleViewModel : ArticleViewModel by viewModels()
     private lateinit var articleAdapter: ArticleAdapter
@@ -181,7 +188,11 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
         deleteMarkers()
         deletePaths()
-        drawMarkers(it)
+        var list = mutableListOf<Record>()
+        for(i in 0..articleViewModel.articleData.records.size){
+            list.add(articleViewModel.articleData.records[i])
+        }
+        drawMarkers(list)
         drawPolyline(it)
     }
 
@@ -205,7 +216,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         paths = mutableListOf()
     }
 
-    private fun drawMarkers(journey: List<List<MyJourneyResponseDto>>) {
+    private fun drawMarkers(journey: List<Record>) {
         if (journey.isNotEmpty()) {
             journey.forEachIndexed { idx, trips ->
                 markers.add(mutableListOf())
@@ -259,19 +270,6 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    private val applyFilter: (String, String) -> Unit = { startDate, endDate ->
-        getMyJourney(startDate, endDate)
-    }
-
-    private fun setOnClickListeners() {
-        binding.fabMyPageMapFilter.setOnClickListener {
-            MapFilterBottomSheetFragment(applyFilter).show(
-                childFragmentManager,
-                "MapFilterBottomSheetFragment"
-            )
-        }
-    }
-
     override fun setMenuVisibility(menuVisible: Boolean) {
         super.setMenuVisibility(menuVisible)
         if (menuVisible) {
@@ -301,7 +299,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         naverMap?.apply {
             isLiteModeEnabled = true // 가벼운 지도 모드 (건물 내부 상세 표시 X)
 
-            this@MyPageMapFragment.uiSettings = this.uiSettings.apply {
+            this@ArticleFrgment.uiSettings = this.uiSettings.apply {
                 isCompassEnabled = false // 나침반 비활성화
                 isZoomControlEnabled = false // 확대 축소 버튼 비활성화
                 isScaleBarEnabled = false // 스케일 바 비활성화
