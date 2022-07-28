@@ -1,17 +1,22 @@
 package com.ssafy.daero.ui.root.trip
 
 import android.graphics.Paint
+import android.util.Log
 import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.databinding.FragmentTripBinding
 import com.ssafy.daero.ui.adapter.TripHotAdapter
 import com.ssafy.daero.ui.adapter.TripPopularAdapter
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.hotArticles
 import com.ssafy.daero.utils.popularTripPlaces
+import com.ssafy.daero.utils.view.toast
 
 class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private val tripViewModel: TripViewModel by viewModels()
@@ -21,6 +26,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     lateinit var loadingDialog: LoadingDialogFragment
     private lateinit var bottomSheet: BottomSheetBehavior<CardView>
     private var cornerRadius: Float = 0f
+    private var peekHeight: Int = 0
 
     private var categoryTags = listOf<Int>()
     private var regionTags = listOf<Int>()
@@ -37,6 +43,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         loadingDialog = LoadingDialogFragment.newInstance()
         bottomSheet = BottomSheetBehavior.from(binding.cardTripRecommend)
         bottomSheet.saveFlags = BottomSheetBehavior.SAVE_PEEK_HEIGHT
+        peekHeight = bottomSheet.peekHeight
         cornerRadius = binding.cardTripRecommend.radius
         binding.textTripKeyword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
@@ -83,8 +90,11 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_EXPANDED -> {
-                        // todo: 여행지 추천 받기 기능
-                        tripViewModel.getRecommendTripPlace()
+                        tripViewModel.getFirstTripRecommend(
+                            FirstTripRecommendRequestDto(
+                                categoryTags, regionTags
+                            )
+                        )
                     }
                 }
             }
@@ -114,20 +124,32 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
             if (it) {
                 showProgressDialog()
             } else {
+                bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
                 hideProgressDialog()
-
             }
+        }
+        tripViewModel.firstTripRecommendState.observe(viewLifecycleOwner) {
+            when (it) {
+                FAIL -> {
+                    toast("여행지 추천을 받는데 실패했습니다.")
+                    tripViewModel.firstTripRecommendState.value = DEFAULT
+                }
+            }
+        }
+        tripViewModel.firstTripRecommendResponseDto.observe(viewLifecycleOwner) {
+            // todo: 여행 정보 상세 페이지로 이동
+            Log.d("TripFragment_DaeRo", it.toString())
         }
     }
 
-    fun showProgressDialog() {
+    private fun showProgressDialog() {
         loadingDialog.show(
             requireActivity().supportFragmentManager,
             loadingDialog.tag
         )
     }
 
-    fun hideProgressDialog() {
+    private fun hideProgressDialog() {
         if (loadingDialog.isAdded) {
             loadingDialog.dismissAllowingStateLoss()
         }
