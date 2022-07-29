@@ -144,7 +144,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 //            adapter = expenseAdapter
 //            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 //        }
-        articleViewModel.article("1")
+        articleViewModel.article(1)
     }
 
     private fun setOnClickListeners() {
@@ -245,6 +245,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             .into(binding.imgArticleUser)
         binding.tvArticleComment.text = articleViewModel.articleData.comments.toString()
         binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
+
         deleteMarkers()
         deletePaths()
         var list = mutableListOf<TripStamp>()

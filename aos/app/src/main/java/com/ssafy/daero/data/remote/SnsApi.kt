@@ -17,7 +17,7 @@ interface SnsApi {
      * 게시글(여행기록) 상세 조회
      */
     @GET("sns/article/{article_seq}")
-    fun article(@Path("article_seq") articleSeq: String): Single<Response<ArticleResponseDto>>
+    fun article(@Path("article_seq") articleSeq: Int): Single<Response<ArticleResponseDto>>
 
     /**
      * 댓글 조회

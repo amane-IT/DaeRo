@@ -17,7 +17,7 @@ class SnsRepository private constructor(context: Context) {
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
 
-    fun article(articleSeq: String): Single<Response<ArticleResponseDto>> {
+    fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {
         return snsApi.article(articleSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }

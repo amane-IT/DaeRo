@@ -14,7 +14,7 @@ class ArticleViewModel : BaseViewModel() {
     val responseState = MutableLiveData<Int>()
     lateinit var articleData: ArticleResponseDto
 
-    fun article(articleSeq: String) {
+    fun article(articleSeq: Int) {
 
         addDisposable(
             snsRepository.article(articleSeq)
