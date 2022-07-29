@@ -4,52 +4,65 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.trip.mapper.TripMapper">
     <select id="selectByStampSeq" parameterType="_int" resultMap="mappingTripStampDto">
-        SELECT * FROM trip_stamps WHERE `trip_stamps_seq`=#{tripStampSeq};
+        SELECT * FROM trip_stamps WHERE `trip_stamps_seq`=#{tripStampSeq}
     </select>
 
     <select id="selectPlaceByPlaceSeq" parameterType="_int" resultMap="mappingTripPlaceDto">
-        SELECT * FROM trip_places WHERE `trip_places_seq`=#{tripPlaceSeq};
+        SELECT * FROM trip_places WHERE `trip_places_seq`=#{tripPlaceSeq}
     </select>
 
     <select id="selectDateByDaySeq" parameterType="_int" resultType="String">
-        SELECT `date` FROM trip_days WHERE `trip_days_seq`=#{tripDaySeq};
+        SELECT `date` FROM trip_days WHERE `trip_days_seq`=#{tripDaySeq}
     </select>
 
-    <select id="selectTripSeqListByUserSeq" parameterType="_int" resultType="_int">
-        SELECT `trips_seq` FROM trips WHERE `users_seq`=#{userSeq};
-    </select>
 
-<!--    <select id="selectDayListByTripSeq" parameterType="_int" resultMap="mappingTripDayDto">-->
-<!--        SELECT * FROM trip_days WHERE `trip`=#{tripSeq};-->
-<!--    </select>-->
-
-<!--    <select id="selectStampListByDaySeq" parameterType="_int" resultMap="mappingTripStampDto">-->
-<!--        SELECT * FROM trip_stamps WHERE `trip_days_seq`=#{tripDaySeq};-->
-<!--    </select>-->
-
-    <select id="selectOtherJourneyListByUserSeq" resultMap="mappingJourneyDto">
-        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, a.open_yn, tp.latitude, tp.longitude
+    <select id="selectOtherJourneyListByUserSeq" resultMap="mappingJourneyVo">
+        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
         FROM articles a
-        LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
-        LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
+            LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+            LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
         WHERE a.open_yn='y'
         AND str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
         AND str_to_date(#{startDate},'%Y-%m-%d') &lt;= str_to_date(a.created_at,'%Y-%m-%d')
         AND a.trips_seq IN (SELECT t.trips_seq
                             FROM trips t
-                            WHERE users_seq=#{userSeq});
+                            WHERE users_seq=#{userSeq})
     </select>
 
-    <select id="selectMyJourneyListByUserSeq" resultMap="mappingJourneyDto">
-        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, a.open_yn, tp.latitude, tp.longitude
+    <select id="selectMyJourneyListByUserSeq" resultMap="mappingJourneyVo">
+        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
         FROM articles a
-                 LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
-                 LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
+             LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+             LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
         WHERE str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
           AND str_to_date(#{startDate},'%Y-%m-%d') &lt;= str_to_date(a.created_at,'%Y-%m-%d')
           AND a.trips_seq IN (SELECT t.trips_seq
                               FROM trips t
-                              WHERE users_seq=#{userSeq});
+                              WHERE users_seq=#{userSeq})
+    </select>
+
+    <select id="selectOtherAlbumListByUserSeq" resultMap="mappingAlbumVo">
+        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row, a.title, a.trips_seq, a.thumbnail_url, a.open_yn,
+                exists(select * from likes l where l.users_seq=#{userSeq} and l.articles_seq=a.articles_seq) AS like_yn
+                FROM articles a
+                WHERE a.open_yn='y' AND a.trips_seq IN (SELECT t.trips_seq
+                                                        FROM trips t
+                                                        WHERE users_seq=#{userSeq})) AS album
+        WHERE (#{page}-1)*10 &lt; album.row
+                  AND album.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectMyAlbumListByUserSeq" resultMap="mappingAlbumVo">
+        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row, a.title, a.trips_seq, a.thumbnail_url, a.open_yn,
+                     exists(select * from likes l where l.users_seq=#{userSeq} and l.articles_seq=a.articles_seq) AS like_yn
+              FROM articles a
+              WHERE a.trips_seq IN (SELECT t.trips_seq
+                                    FROM trips t
+                                    WHERE users_seq=#{userSeq})) AS album
+        WHERE (#{page}-1)*10 &lt; album.row
+          AND album.row &lt; 1+(#{page}*10)
     </select>
 
 
@@ -63,12 +76,6 @@
         <result property="placeSatisfactionYn" column="place_satisfaction_YN" />
     </resultMap>
 
-    <resultMap id="mappingTripDayDto" type="com.ssafy.daero.trip.dto.TripDayDto">
-        <result property="tripDaySeq" column="trip_days_seq" />
-        <result property="tripSeq" column="trip" />
-        <result property="date" column="date" />
-        <result property="dayComment" column="day_comment" />
-    </resultMap>
 
     <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
         <result property="tripPlaceSeq" column="trip_places_seq" />
@@ -81,13 +88,20 @@
         <result property="imageUrl" column="image_url" />
     </resultMap>
 
-    <resultMap id="mappingJourneyDto" type="com.ssafy.daero.trip.dto.JourneyDto">
+    <resultMap id="mappingJourneyVo" type="com.ssafy.daero.trip.vo.JourneyVo">
         <result property="tripSeq" column="trips_seq" />
-        <result property="openYn" column="open_yn" />
         <result property="createdAt" column="created_at" />
         <result property="tripStampSeq" column="trip_stamps_seq" />
         <result property="latitude" column="latitude" />
         <result property="longitude" column="longitude" />
+    </resultMap>
+
+    <resultMap id="mappingAlbumVo" type="com.ssafy.daero.trip.vo.AlbumVo">
+        <result property="tripSeq" column="trips_seq" />
+        <result property="imageUrl" column="thumbnail_url" />
+        <result property="title" column="title" />
+        <result property="expose" column="open_yn" />
+        <result property="likeYn" column="like_yn" />
     </resultMap>
 
 </mapper>

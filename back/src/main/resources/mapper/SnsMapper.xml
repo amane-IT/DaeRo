@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.daero.sns.mapper.SnsMapper">
+    <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
+        SELECT a.trips_seq, a.title, (SELECT COUNT(*)
+                                     FROM likes l
+                                     WHERE l.articles_seq=a.articles_seq
+                                    ) AS like_count, (SELECT COUNT(*)
+                                                      FROM replies r
+                                                      WHERE r.articles_seq=a.articles_seq) AS reply_count, (SELECT t.users_seq
+                                                                                                            FROM trips t
+                                                                                                            WHERE t.trips_seq=a.trips_seq) AS user_seq,
+               (SELECT t.trip_comment
+                FROM trips t
+                WHERE t.trips_seq=a.trips_seq) AS trip_comment, (SELECT t.trip_expenses
+                                                                 FROM trips t
+                                                                 WHERE t.trips_seq=a.trips_seq) AS trip_expenses, (SELECT t.trip_rating
+                                                                                                                   FROM trips t
+                                                                                                                   WHERE t.trips_seq=a.trips_seq) AS trip_rating
+        FROM articles a
+        WHERE articles_seq=#{articleSeq}
+    </select>
+
+    <select id="selectStampAndDayInfoByTripSeq" parameterType="_int" resultMap="mappingStampVo">
+        SELECT td.trip_days_seq, td.date, td.day_comment, ts.image_url, ts.trip_stamps_seq, tp.latitude, tp.longitude
+        FROM trip_days td
+                 LEFT JOIN trip_stamps ts on td.trip_days_seq = ts.trip_days_seq
+                 LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
+        WHERE td.trips_seq=#{tripSeq}
+    </select>
+
+    <select id="selectUserByUserSeq" parameterType="_int" resultType="java.util.Map">
+        SELECT u.nickname, u.profile_image_link
+        FROM users u
+        WHERE users_seq=#{userSeq}
+    </select>
+
+    <select id="selectPlaceTagsByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT place_tag_seq
+        FROM article_tags
+        WHERE articles_seq=#{articleSeq}
+    </select>
+
+    <select id="selectUserSeqByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+        SELECT users_seq
+        FROM trips t
+        WHERE t.trips_seq IN (SELECT a.trips_seq
+                              FROM articles a
+                              WHERE a.articles_seq=#{articleSeq}
+        )
+    </select>
+
+    <select id="deleteArticleByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+        DELETE FROM articles WHERE articles_seq=#{articleSeq}
+    </select>
+
+    <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY r.created_at ASC) AS row, replies_seq, users_seq, content, created_at, updated_at,
+                    (SELECT COUNT(*)
+                    FROM replies
+                    WHERE rereply_parent=r.replies_seq) AS rereply_count,
+                    (SELECT u.nickname
+                    FROM users u
+                    WHERE users_seq= r.users_seq) AS nickname,
+                    (SELECT u.profile_image_link
+                    FROM users u
+                    WHERE users_seq= r.users_seq) AS profile_url
+            FROM replies r
+            WHERE articles_seq = #{articleSeq} AND rereply_parent IS NULL) AS reply
+        WHERE (#{page}-1)*10 &lt; reply.row
+        AND reply.row &lt;(#{page}*10) + 1
+    </select>
+
+    <select id="selectUserSeqByReplySeq" parameterType="_int" resultType="java.lang.Integer">
+        SELECT users_seq
+        FROM replies
+        WHERE replies_seq=#{replySeq}
+    </select>
+
+    <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM articles
+        WHERE articles_seq=#{articleSeq}
+    </select>
+
+    <select id="insertReply" resultType="java.lang.Integer">
+        INSERT INTO replies(articles_seq, users_seq, content, created_at, updated_at)
+        VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
+    </select>
+
+    <select id="updateReplyByReplySeq" resultType="java.lang.Integer">
+        UPDATE replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
+    </select>
+
+    <select id="deleteReplyByReplySeq" parameterType="_int" resultType="java.lang.Integer">
+        DELETE FROM replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
+    </select>
+
+    <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
+        <result property="tripSeq" column="trips_seq" />
+        <result property="userSeq" column="user_seq" />
+        <result property="title" column="title" />
+        <result property="tripComment" column="trip_comment" />
+        <result property="tripExpenses" column="trip_expenses" />
+        <result property="rating" column="trip_rating" />
+        <result property="likes" column="like_count" />
+        <result property="comments" column="reply_count" />
+    </resultMap>
+
+    <resultMap id="mappingStampVo" type="com.ssafy.daero.sns.vo.StampVo">
+        <result property="imageUrl" column="image_url" />
+        <result property="tripDaySeq" column="trip_days_seq"/>
+        <result property="tripStampSeq" column="trip_stamps_seq" />
+        <result property="latitude" column="latitude" />
+        <result property="longitude" column="longitude" />
+        <result property="datetime" column="date" />
+        <result property="dayComment" column="day_comment" />
+    </resultMap>
+
+    <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
+        <result property="replySeq" column="replies_seq" />
+        <result property="userSeq" column="users_seq" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="rereplyCount" column="rereply_count" />
+        <result property="nickname" column="nickname" />
+        <result property="profileUrl" column="profile_url" />
+    </resultMap>
+
+</mapper>

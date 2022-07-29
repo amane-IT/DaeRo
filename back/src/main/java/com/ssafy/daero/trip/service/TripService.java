@@ -1,10 +1,11 @@
 package com.ssafy.daero.trip.service;
 
-import com.ssafy.daero.trip.dto.JourneyDto;
-import com.ssafy.daero.trip.dto.TripDayDto;
-import com.ssafy.daero.trip.dto.TripPlaceDto;
-import com.ssafy.daero.trip.dto.TripStampDto;
+import com.ssafy.daero.trip.dto.*;
 import com.ssafy.daero.trip.mapper.TripMapper;
+import com.ssafy.daero.trip.vo.AlbumVo;
+import com.ssafy.daero.trip.vo.JourneyVo;
+import com.ssafy.daero.user.dto.UserDto;
+import com.ssafy.daero.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,8 +16,10 @@ import java.util.Objects;
 @Service
 public class TripService {
     private final TripMapper tripMapper;
+    private final UserMapper userMapper;
 
-    public TripService(TripMapper tripMapper) {
+    public TripService(TripMapper tripMapper, UserMapper userMapper) {
+        this.userMapper = userMapper;
         this.tripMapper = tripMapper;
     }
 
@@ -32,38 +35,24 @@ public class TripService {
         return stampDetail;
     }
 
-//    public ArrayList<ArrayList> journeyList(int userSeq) {
-//        ArrayList<Integer> userTrips = tripMapper.selectTripSeqListByUserSeq(userSeq);
-//        ArrayList<ArrayList> journey = new ArrayList<>();
-//        // 여행별로
-//        for (int tripSeq: userTrips
-//             ) {
-//            // 각 여행의 일자별로
-//            ArrayList<TripDayDto> tripDays = tripMapper.selectDayListByTripSeq(tripSeq);
-//            ArrayList<Map<String, Object>> tripInfo = new ArrayList<>();
-//            for (TripDayDto day :
-//                    tripDays) {
-//                ArrayList<TripStampDto> tripStamps = tripMapper.selectStampListByDaySeq(day.getTripDaySeq());
-//                String date = day.getDate();
-//                // 일자별 트립스탬프들
-//                for (TripStampDto stampDto :
-//                        tripStamps) {
-//                    Map<String, Object> stampInfo = new HashMap<>();
-//                    stampInfo.put("date", date);
-//                    stampInfo.put("stamp_seq", stampDto.getTripStampSeq());
-//                    TripPlaceDto tripPlaceDto = tripMapper.selectPlaceByPlaceSeq(stampDto.getTripPlaceSeq());
-//                    stampInfo.put("latitude", tripPlaceDto.getLatitude());
-//                    stampInfo.put("longitude", tripPlaceDto.getLongitude());
-//                    tripInfo.add(stampInfo);
-//                }
-//            }
-//            journey.add(tripInfo);
-//        }
-//        return journey;
-//    }
 
-    public ArrayList journeyList(int userSeq, char who, String startDate, String endDate) {
-        ArrayList<JourneyDto> jList = new ArrayList<>();
+    public ArrayList<ArrayList> journeyList(int userSeq, char who, String startDate, String endDate) {
+        UserDto userDto = userMapper.selectByUserSeq(userSeq);
+        JourneyVo journeyVo = new JourneyVo();
+        ArrayList<JourneyVo> jList = new ArrayList<>();
+        ArrayList<ArrayList> journeyList = new ArrayList<>();  // 결과 배열
+        if (userDto == null) {
+            journeyVo.setResult(JourneyVo.ProfileResult.NO_SUCH_USER);
+            jList.add(journeyVo);
+            journeyList.add(jList);
+            return journeyList;
+        }
+        if (userDto.getDelYn() == 'y') {
+            journeyVo.setResult(JourneyVo.ProfileResult.DELETED);
+            journeyList.add(jList);
+            return journeyList;
+        }
+
         if (Objects.equals(startDate, "null")) { startDate = "1500-01-01"; }
         if (Objects.equals(endDate, "null")) { endDate = "2500-12-31"; }
         if (who == 'n') {
@@ -72,32 +61,72 @@ public class TripService {
         else {
             jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
         }
-        if (jList.size() == 0) { return null; }
+        if (jList.size() == 0) {
+            journeyVo.setResult(JourneyVo.ProfileResult.NO_CONTENT);
+            journeyList.add(jList);
+            return journeyList;
+        }
         int currentTripSeq = jList.get(0).getTripSeq();
         Map<String, Object> stamps = new HashMap<>(); // 각 스탬프
         ArrayList<Map> trip = new ArrayList<>();      // 여행별로
-        ArrayList<ArrayList> journeyList = new ArrayList<>();  // 결과 배열
+
         // 여행별로 잘라 배열에 넣기
-        for (JourneyDto journeyDto :
+        for (JourneyVo jVo :
                 jList) {
-            System.out.println(journeyDto.getTripSeq() != currentTripSeq);
-            if (journeyDto.getTripSeq() != currentTripSeq) {
+            if (jVo.getTripSeq() != currentTripSeq) {
                 journeyList.add(trip);
                 trip = new ArrayList<>();
-                currentTripSeq = journeyDto.getTripSeq();
+                currentTripSeq = jVo.getTripSeq();
             }
-            stamps.put("trip_stamp_seq", journeyDto.getTripStampSeq());
-            stamps.put("latitude", journeyDto.getLatitude());
-            stamps.put("longitude", journeyDto.getLongitude());
-//            if (who == 'y') {
-//                stamps.put("open_yn", journeyDto.getOpenYn());
-//            }
+            stamps.put("trip_stamp_seq", jVo.getTripStampSeq());
+            stamps.put("latitude", jVo.getLatitude());
+            stamps.put("longitude", jVo.getLongitude());
             trip.add(stamps);
             stamps = new HashMap<>();
         }
         journeyList.add(trip);
-        System.out.println(journeyList);
         return journeyList;
+    }
+
+    public ArrayList albumList(int userSeq, String page, char who) {
+        UserDto userDto = userMapper.selectByUserSeq(userSeq);
+        ArrayList albumList = new ArrayList<>(); // 결과 배열
+        AlbumVo albumVo = new AlbumVo();
+        if (userDto == null) {
+            albumVo.setResult(JourneyVo.ProfileResult.NO_SUCH_USER);
+            albumList.add(albumVo);
+            return albumList;
+        }
+        if (userDto.getDelYn() == 'y') {
+            albumVo.setResult(JourneyVo.ProfileResult.DELETED);
+            albumList.add(albumVo);
+            return albumList;
+        }
+
+        int pagenum = Integer.parseInt(page);
+        ArrayList<AlbumVo> albumVos = new ArrayList<>();
+        if (who == 'n') {
+            albumVos = tripMapper.selectOtherAlbumListByUserSeq(userSeq, pagenum);
+        }
+        else {
+            albumVos = tripMapper.selectMyAlbumListByUserSeq(userSeq, pagenum);
+        }
+        Map<String, Object> album = new HashMap<>();
+        for (AlbumVo aVo :
+                albumVos) {
+            album.put("expose", aVo.getExpose());
+            album.put("trip_seq", aVo.getTripSeq());
+            album.put("image_url", aVo.getImageUrl());
+            album.put("title", aVo.getTitle());
+            if (aVo.getLikeYn() == 1) {
+                album.put("like_yn", "y");
+            }
+            else { album.put("like_yn", "n"); }
+            albumList.add(album);
+            album = new HashMap<>();
+        }
+        return albumList;
+        
     }
 
 

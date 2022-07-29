@@ -1,5 +1,7 @@
 package com.ssafy.daero.user.vo;
 
+import com.ssafy.daero.user.dto.UserDto;
+import com.ssafy.daero.util.CryptoUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,19 +10,19 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class SignupVo {
-    private String userEmail;
-    private String password;
-    private String nickname;
+public class SignupVo extends UserDto {
+    private String hashedPassword;
 
-    public String getHashedPassword() {
-
-        return "";
+    @Override
+    public void setPassword(String password) {
+        super.setPassword(password);
+        this.hashedPassword = CryptoUtil.Sha512.hash(password);
     }
 
-    public String getCreatedAt() {
+    @Override
+    public void setCreatedAt(String createdAt) {
         Date createdDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss Z");
-        return format.format(createdDate);
+        super.setCreatedAt(format.format(createdDate));
     }
 }
