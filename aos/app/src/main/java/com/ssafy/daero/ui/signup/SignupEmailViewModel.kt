@@ -29,9 +29,11 @@ class SignupEmailViewModel : BaseViewModel() {
         addDisposable(
             userRepository.verifyEmail(signupEmailRequestDto)
                 .subscribe({ response ->
-                    if (response.body()!!.userSeq > 0) {
+                    if (response.body()!!.user_seq > 0) {
+                        Log.d("SignupEmailVM_DaeRo", response.toString())
+                        Log.d("SignupEmailVM_DaeRo", response.body()!!.toString())
                         responseState_verifyEmail.postValue(SUCCESS)
-                        userSeq = response.body()!!.userSeq
+                        userSeq = response.body()!!.user_seq
 
                     } else {
                         responseState_verifyEmail.postValue(FAIL)
