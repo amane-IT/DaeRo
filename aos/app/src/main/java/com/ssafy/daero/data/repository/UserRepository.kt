@@ -1,7 +1,6 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
@@ -103,28 +102,21 @@ class UserRepository private constructor(context: Context) {
         return userApi.signup(signupRequestDto)
     }
 
-    fun getPreference(userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>> {
+    fun getPreference(userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>> {
         return userApi.getPreferences(userSeq)
             .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
-    }
-
-    fun postPreference(userSeq: Int, result: List<Int>): Single<Void>{
-        return userApi.postPreference(userSeq, result)
     }
 
     fun confirmPassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>> {
         return userApi.confirmPassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun updatePassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>>{
         return userApi.updatePassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
