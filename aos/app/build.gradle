@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -112,4 +113,7 @@ dependencies {
 
     // lottie 애니메이션
     implementation 'com.airbnb.android:lottie:5.2.0'
+
+    // blur 처리
+    implementation 'com.github.mmin18:realtimeblurview:1.2.1'
 }

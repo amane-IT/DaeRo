@@ -10,8 +10,8 @@ import com.ssafy.daero.R
 fun loadImage(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
-        .placeholder(R.drawable.ic_back)
+        .placeholder(R.drawable.placeholder_trip_album)
         .apply(RequestOptions().centerCrop())
-        .error(R.drawable.ic_back)
+        .error(R.drawable.placeholder_trip_album)
         .into(view)
 }
