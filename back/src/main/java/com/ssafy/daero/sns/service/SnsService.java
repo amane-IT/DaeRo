@@ -76,4 +76,17 @@ public class SnsService {
         articleDetail.put("records", records);
         return articleDetail;
     }
+
+    public Integer deleteArticle(int articleSeq, int userSeq) {
+        // 본인 게시글인지 확인
+        Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
+        if (articleUser == null) { return 0; }
+        if (articleUser == userSeq) {
+            snsMapper.deleteArticleByArticleSeq(articleSeq);
+            return 1;
+        }
+        else {
+            return 99;
+        }
+    }
 }

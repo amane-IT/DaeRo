@@ -1,7 +1,6 @@
 package com.ssafy.daero.sns.mapper;
 
 import com.ssafy.daero.sns.vo.ArticleVo;
-import com.ssafy.daero.sns.vo.DayVo;
 import com.ssafy.daero.sns.vo.StampVo;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -18,6 +17,10 @@ public interface SnsMapper {
     Map<String, String> selectUserByUserSeq(int userSeq);
 
     ArrayList<Integer> selectPlaceTagsByArticleSeq(int articleSeq);
+
+    Integer selectUserSeqByArticleSeq(int articleSeq);
+
+    Integer deleteArticleByArticleSeq(int articleSeq);
 
 
 }
