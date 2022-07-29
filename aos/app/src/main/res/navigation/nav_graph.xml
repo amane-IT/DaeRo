@@ -347,6 +347,8 @@
             app:exitAnim="@anim/to_down"
             app:popEnterAnim="@anim/from_down"
             app:popExitAnim="@anim/to_up"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/articleFragment"
             />
         <action
             android:id="@+id/action_articleFragment_to_tripFollowFragment"
@@ -438,8 +440,16 @@
         android:label="CommentFragment"
         tools:layout="@layout/fragment_comment">
         <action
-            android:id="@+id/action_commentFragment_to_reCommentFragment"
-            app:destination="@id/reCommentFragment"
+            android:id="@+id/action_commentFragment_to_reportFragment"
+            app:destination="@id/reportFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/form_left"
+            app:popExitAnim="@anim/to_right"
+            />
+        <action
+            android:id="@+id/action_commentFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/form_left"

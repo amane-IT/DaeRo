@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
+import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
@@ -14,7 +15,7 @@ class ArticleViewModel : BaseViewModel() {
     val responseState = MutableLiveData<Int>()
     lateinit var articleData: ArticleResponseDto
 
-    fun article(articleSeq: String) {
+    fun article(articleSeq: Int) {
 
         addDisposable(
             snsRepository.article(articleSeq)
@@ -28,7 +29,7 @@ class ArticleViewModel : BaseViewModel() {
                         )
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("FindIdVM_DaeRo", throwable.toString())
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
