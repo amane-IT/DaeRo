@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.adapter.sns
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,8 +39,7 @@ class CommentAdapter(
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.bind(commentData[position]!!)
-        Log.d("데이터",position.toString())
+        holder.bind(commentData[position]!!,onItemClickListener)
     }
 
     override fun getItemCount() = commentData.size
@@ -59,7 +57,7 @@ class CommentAdapter(
         private var modified: Char? = null
         private var replyCount: Int? = null
 
-        fun bind(data: CommentResponseDto) {
+        fun bind(data: CommentResponseDto, onItemClickListener: (View, Int, Int, String) -> Unit) {
             Glide.with(binding.imgCommentItemUser)
                 .load(data.profile_url)
                 .placeholder(R.drawable.ic_back)
@@ -71,7 +69,7 @@ class CommentAdapter(
             binding.tvCommentCreateAt.text = data.created_at
             binding.tvCommentContent.text = data.content
             if(data.rereply_count > 0){
-                binding.tvCommentCount.text = data.rereply_count.toString()
+                binding.tvCommentCount.text = "답글 "+data.rereply_count.toString()+"개 더 보기"
                 binding.LinearCommentReComment.visibility = View.VISIBLE
                 replyCount = data.rereply_count
             }
@@ -80,25 +78,22 @@ class CommentAdapter(
             modified = data.modified
         }
         fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit) {
-//            if(replyCount!! > 0) {
-//                binding.LinearCommentReComment.setOnClickListener {
-//                    commentViewModel.reCommentSelect(articleSeq,replySeq!!,10)
-//                    binding.LinearCommentReComment.visibility = View.GONE
-//                    binding.progressBarCommentLoading.visibility = View.VISIBLE
-//                    binding.recyclerCommentReComment.visibility = View.VISIBLE
-//                    binding.recyclerCommentReComment.apply {
-//                        adapter = ReCommentAdapter(onItemClickListener).apply {
-//                            this.reComment = commentViewModel.reCommentData
-//                        }
-//                        layoutManager = LinearLayoutManager(
-//                            binding.root.context,
-//                            RecyclerView.HORIZONTAL,
-//                            false
-//                        )
-//                        binding.progressBarCommentLoading.visibility = View.GONE
-//                    }
-//                }
-//            }
+            binding.LinearCommentReComment.setOnClickListener {
+                binding.LinearCommentReComment.visibility = View.GONE
+                binding.progressBarCommentLoading.visibility = View.VISIBLE
+                binding.recyclerCommentReComment.visibility = View.VISIBLE
+                binding.recyclerCommentReComment.apply {
+                    adapter = ReCommentAdapter(onItemClickListener).apply {
+                        this.reComment = mCallback.reCommentSelect(articleSeq,replySeq!!,10)
+                        binding.progressBarCommentLoading.visibility = View.GONE
+                    }
+                    layoutManager = LinearLayoutManager(
+                        binding.root.context,
+                        RecyclerView.HORIZONTAL,
+                        false
+                    )
+                }
+            }
             binding.imgCommentMenu.setOnClickListener {
                 onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
             }

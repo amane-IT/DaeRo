@@ -51,16 +51,19 @@ class CommentMenuBottomSheetFragment(
         binding.tvCommentMenuModify.setOnClickListener {
             //todo: 수정하기
             mCallback.commentUpdate(content, replySeq)
+            dismiss()
         }
         binding.tvCommentMenuDelete.setOnClickListener {
             //삭제하기
-            commentViewModel.commentDelete(replySeq)
+            mCallback.commentDelete(replySeq)
+            dismiss()
         }
         binding.tvCommentMenuReport.setOnClickListener {
             //todo: 신고하기 bundle
             requireParentFragment().findNavController().navigate(
                 R.id.action_commentFragment_to_reportFragment
             )
+            dismiss()
         }
         binding.tvCommentMenuBlock.setOnClickListener {
             //todo: 차단하기

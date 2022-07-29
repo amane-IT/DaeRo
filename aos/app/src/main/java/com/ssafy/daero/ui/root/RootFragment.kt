@@ -64,7 +64,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     private fun getFragment(fragmentType: FragmentType): Fragment {
         when (fragmentType) {
             FragmentType.HomeFragment -> {
-                return ArticleFragment()
+                return HomeFragment()
             }
             FragmentType.SearchFragment -> {
                 return SearchFragment()

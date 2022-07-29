@@ -100,7 +100,7 @@ class CommentViewModel : BaseViewModel() {
                     reCommentData = response.body()!!
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
+                    Log.d("reCommentSelectVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )

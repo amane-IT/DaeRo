@@ -1,6 +1,10 @@
 package com.ssafy.daero.ui.root.sns
 
+import android.content.Context
 import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -9,11 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
+import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.view.toast
+
 
 class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_comment), CommentListener {
 
@@ -43,13 +50,22 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
     }
 
     private fun initData() {
-        commentViewModel.commentSelect(1,30)
+        //todo: article_seq
+        commentViewModel.commentSelect(3,1)
     }
 
     private fun setOnClickListeners() {
         binding.textCommentWrite.setOnClickListener {
             //todo: article_seq
             commentViewModel.commentAdd(3, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
+            binding.editTextCommentAddComment.setText("")
+            binding.editTextCommentAddComment.postDelayed({
+                val inputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(binding.editTextCommentAddComment.windowToken, 0)
+            },0)
+            toast("댓글이 추가되었습니다.")
+            commentViewModel.commentSelect(3,1)
         }
     }
 
@@ -82,17 +98,69 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
 
     override fun commentUpdate(content: String, sequence: Int) {
         binding.editTextCommentAddComment.requestFocus()
+        binding.editTextCommentAddComment.postDelayed({
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(binding.editTextCommentAddComment, InputMethodManager.SHOW_FORCED)
+        }, 150)
         binding.editTextCommentAddComment.setText(content)
-        binding.editTextCommentAddComment.setOnClickListener {
+        binding.textCommentWrite.setOnClickListener {
             commentViewModel.commentUpdate(sequence, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
+            binding.editTextCommentAddComment.postDelayed({
+                    val inputMethodManager =
+                        requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    inputMethodManager.hideSoftInputFromWindow(binding.editTextCommentAddComment.windowToken, 0)
+                }, 0)
+            binding.editTextCommentAddComment.setText("")
+            toast("댓글이 수정되었습니다.")
+            commentViewModel.commentSelect(3,1)
         }
+    }
+
+    override fun commentDelete(sequence: Int) {
+        commentViewModel.commentDelete(sequence)
+        commentViewModel.commentSelect(3,1)
     }
 
     override fun reCommentAdd(sequence: Int) {
         binding.editTextCommentAddComment.requestFocus()
-        binding.editTextCommentAddComment.setOnClickListener {
+        binding.editTextCommentAddComment.postDelayed({
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(binding.editTextCommentAddComment, InputMethodManager.SHOW_FORCED)
+        }, 150)
+        binding.textCommentWrite.setOnClickListener {
             //todo: article_seq
             commentViewModel.reCommentAdd(3,sequence, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
+            commentViewModel.commentUpdate(sequence, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
+            binding.editTextCommentAddComment.postDelayed({
+                val inputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(binding.editTextCommentAddComment.windowToken, 0)
+            }, 0)
+            binding.editTextCommentAddComment.setText("")
+            toast("답글이 추가되었습니다.")
+            commentViewModel.commentSelect(3,1)
         }
+    }
+
+    override fun reCommentSelect(articleSeq: Int, replySeq: Int, page: Int): List<ReCommentResponseDto> {
+        var list: List<ReCommentResponseDto> = listOf()
+        commentViewModel.reCommentSelect(articleSeq,replySeq,page)
+        commentViewModel.responseState.observe(viewLifecycleOwner) { state ->
+            when(state) {
+                SUCCESS -> {
+                    list = commentViewModel.reCommentData
+                    commentViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+
+                    commentViewModel.responseState.value = DEFAULT
+                }
+            }
+        }.run {
+            return list
+        }
+
     }
 }
