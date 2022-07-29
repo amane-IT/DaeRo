@@ -1,4 +1,4 @@
-package com.ssafy.daero.ui.signup
+package com.ssafy.daero.ui.adapter.signup
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ class TripPreferenceAdapter: RecyclerView.Adapter<TripPreferenceAdapter.ItemView
     var dataList: List<TripPreferenceResponseDto> = emptyList()
     lateinit var onItemClickListener : (View, Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) :ItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) : ItemViewHolder {
         return ItemViewHolder(
             ItemTripPreferenceBinding.inflate(
                 LayoutInflater.from(parent.context),
