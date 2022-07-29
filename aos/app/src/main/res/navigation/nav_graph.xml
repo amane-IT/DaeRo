@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/tripInformationFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -119,7 +119,11 @@
             />
         <action
             android:id="@+id/action_rootFragment_to_tripInformationFragment"
-            app:destination="@id/tripInformationFragment" />
+            app:destination="@id/tripInformationFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"

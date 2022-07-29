@@ -1,9 +1,18 @@
 package com.ssafy.daero.utils.tag
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
 data class Tag(
     val seq: Int,
     val tag: String
 )
+
+@Parcelize
+data class TagCollection(
+    val categoryTags : List<Int>,
+    val regionTags : List<Int>
+) : Parcelable
 
 val categoryTags = listOf(
     Tag(1, "바다"), Tag(2, "산"), Tag(3, "강"),

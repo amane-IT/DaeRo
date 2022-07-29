@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="tripInfo"
+            type="com.ssafy.daero.data.dto.trip.TripInformationResponseDto" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_tripInformation_container"
         android:layout_width="match_parent"
@@ -10,14 +17,15 @@
 
         <ImageView
             android:id="@+id/image_tripInformation_tripPlace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_login"
+            app:imageUrl="@{tripInfo.image_url}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/bg_login" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_tripInformation_inner_container"
@@ -75,9 +83,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
-                        android:text="강릉 안목해변"
+                        android:text="@{tripInfo.place_name}"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="강릉 안목해변" />
 
                     <TextView
                         android:id="@+id/text_tripInformation_address"
@@ -85,9 +94,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="강원 강릉시 창해로 14번길 20-1"
+                        android:text="@{tripInfo.address}"
                         app:layout_constraintStart_toStartOf="@id/text_tripInformation_placeName"
-                        app:layout_constraintTop_toBottomOf="@id/text_tripInformation_placeName" />
+                        app:layout_constraintTop_toBottomOf="@id/text_tripInformation_placeName"
+                        tools:text="강원 강릉시 창해로 14번길 20-1" />
 
                     <View
                         android:id="@+id/view_tripInformation_divider"
@@ -127,7 +137,8 @@
                             style="@style/TripInformationDescription"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="강릉 안목해변은 아름다운 커피거리로 전국에서도 손꼽히는 곳이다.가을에는 커피 축제를 열고 해안선이 쭉 이어져 있어 긴 해안선을 따라 드라이브를 하면 여러 관광지까지 함께 볼 수 있다. 특히나 강릉 커피 거리에서 유명한 몇몇 커피집을 가면 저마다 독특한 커피의 향과 맛을 느낄 수 있을 뿐만 아니라 가게마다 자랑하는 디저트들을 맛보는 것 또한 즐겁다. 강릉 안목해변은 아름다운 커피거리로 전국에서도 손꼽히는 곳이다.가을에는 커피 축제를 열고 해안선이 쭉 이어져 있어 긴 해안선을 따라 드라이브를 하면 여러 관광지까지 함께 볼 수 있다. 특히나 강릉 커피 거리에서 유명한 몇몇 커피집을 가면 저마다 독특한 커피의 향과 맛을 느낄 수 있을 뿐만 아니라 가게마다 자랑하는 디저트들을 맛보는 것 또한 즐겁다." />
+                            android:text="@{tripInfo.description}"
+                            tools:text="어쩌구 저쩌구" />
                     </ScrollView>
 
                     <Button
@@ -159,6 +170,16 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>
+
+            <ProgressBar
+                android:id="@+id/progressBar_tripInformation_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
