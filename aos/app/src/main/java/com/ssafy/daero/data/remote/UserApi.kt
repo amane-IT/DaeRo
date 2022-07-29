@@ -95,13 +95,13 @@ interface UserApi {
      * 선호도 조사 정보 요청
      */
     @GET("users/{user_seq}/preference")
-    fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>>
+    fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>>
 
     /**
     선호도 조사 결과 전송
      * */
     @POST("users/{user_seq}/preference")
-    fun postPreference(
+    fun postPreferencse(
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
     ): Single<Void>
