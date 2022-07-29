@@ -30,16 +30,18 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Map<String, Object>> signupPost(@RequestBody SignupVo signupVo) {
         Map<String, Object> resultMap = new HashMap<>();
-        HttpStatus status;
-        System.out.println("hello");
-        if (userService.signup(signupVo)) {
-            String jwtToken = jwtService.create(signupVo.getUserSeq(), signupVo.getUserEmail());
-            resultMap.put("jwt", jwtToken);
-            status = HttpStatus.OK;
-        } else {
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+        signupVo = userService.signup(signupVo);
+        switch (signupVo.getResult()) {
+            case SUCCESS:
+                String jwtToken = jwtService.create(signupVo.getUserSeq(), signupVo.getUserEmail());
+                resultMap.put("jwt", jwtToken);
+                return new ResponseEntity<>(resultMap, HttpStatus.OK);
+            case NO_SUCH_USER:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            case FAILURE:
+            default:
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(resultMap, status);
     }
 
     @GetMapping("/{userSeq}/verified")

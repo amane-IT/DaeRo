@@ -33,8 +33,19 @@ public class UserService {
         this.mailSender = mailSender;
     }
 
-    public boolean signup(SignupVo signupVo) {
-        return userMapper.updateUser(signupVo) == 1;
+    public SignupVo signup(SignupVo signupVo) {
+        if (userMapper.updateUser(signupVo) != 1) {
+            signupVo.setResult(SignupVo.SignupResult.NO_SUCH_USER);
+            return signupVo;
+        }
+        UserDto userDto = userMapper.selectUserByUserEmail(signupVo.getUserEmail());
+        if (userDto == null) {
+            signupVo.setResult(SignupVo.SignupResult.NO_SUCH_USER);
+            return signupVo;
+        }
+        signupVo.setUserSeq(userDto.getUserSeq());
+        signupVo.setResult(SignupVo.SignupResult.SUCCESS);
+        return signupVo;
     }
 
     public UserDto login(LoginVo loginVO) {

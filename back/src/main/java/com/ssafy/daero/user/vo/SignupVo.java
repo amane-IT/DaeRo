@@ -11,7 +11,18 @@ import java.util.Date;
 @Getter
 @Setter
 public class SignupVo extends UserDto {
+    public enum SignupResult {
+        SUCCESS, FAILURE, NO_SUCH_USER,
+    }
+
+    private String user_email;
     private String hashedPassword;
+    private SignupResult result;
+
+    public void setUser_email(String user_email) {
+        this.user_email = user_email;
+        super.setUserEmail(user_email);
+    }
 
     @Override
     public void setPassword(String password) {
