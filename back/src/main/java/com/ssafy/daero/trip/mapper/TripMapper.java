@@ -1,18 +1,15 @@
 package com.ssafy.daero.trip.mapper;
 
 import com.ssafy.daero.trip.dto.JourneyDto;
-import com.ssafy.daero.trip.dto.TripDayDto;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.dto.TripStampDto;
+import com.ssafy.daero.trip.dto.AlbumDto;
+import com.ssafy.daero.trip.vo.AlbumVo;
+import com.ssafy.daero.trip.vo.JourneyVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface TripMapper {
@@ -23,13 +20,12 @@ public interface TripMapper {
 
     String selectDateByDaySeq(int tripDaySeq);
 
-//    ArrayList<Integer> selectTripSeqListByUserSeq(int userSeq);
 
-//    ArrayList<TripDayDto> selectDayListByTripSeq(int tripSeq);
-//
-//    ArrayList<TripStampDto> selectStampListByDaySeq(int tripDaySeq);
+    ArrayList<JourneyVo> selectOtherJourneyListByUserSeq(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    ArrayList<JourneyDto> selectOtherJourneyListByUserSeq(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
+    ArrayList<JourneyVo> selectMyJourneyListByUserSeq(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
 
-    ArrayList<JourneyDto> selectMyJourneyListByUserSeq(@Param("userSeq") int userSeq, @Param("startDate") String startDate, @Param("endDate") String endDate);
+    ArrayList<AlbumVo> selectOtherAlbumListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    ArrayList<AlbumVo> selectMyAlbumListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
 }
