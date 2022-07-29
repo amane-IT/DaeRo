@@ -2,26 +2,42 @@ package com.ssafy.daero.sns.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.sns.service.SnsService;
+import com.ssafy.daero.user.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = "/sns")
 public class SnsController {
+    private final String SUCCESS = "SUCCESS";
+    private final String FAILURE = "FAILURE";
     private final SnsService snsService;
+    private final JwtService jwtService;
 
-    public SnsController(SnsService snsService) { this.snsService = snsService; }
+    public SnsController(SnsService snsService, JwtService jwtService) { this.snsService = snsService; this.jwtService = jwtService; }
 
     @GetMapping("/article/{article_seq}")
     public ResponseEntity<Map<String, Object>> articleDetail(@PathVariable int article_seq) throws JsonProcessingException {
         Map<String, Object> res = snsService.articleDetail(article_seq);
         return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
+    }
+
+    @DeleteMapping("/article/{article_seq}")
+    public ResponseEntity<String> deleteArticle(@RequestHeader Map<String, String> header, @PathVariable int article_seq) {
+        String userJwt = header.get("jwt");
+        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
+        if(Objects.equals(currentUser.get("user_seq"), "null")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+
+        Integer res = snsService.deleteArticle(article_seq, Integer.parseInt(currentUser.get("user_seq")));
+        if (res == 99) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (res == 0 | res == null) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        else {
+            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+        }
     }
 
 }
