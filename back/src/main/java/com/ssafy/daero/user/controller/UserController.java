@@ -158,7 +158,7 @@ public class UserController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/{email_address}")
+    @GetMapping("/{email_address}/duplicate")
     public ResponseEntity<Map<String, Object>> findId(@PathVariable String email_address) {
         boolean res = userService.findId(email_address);
         Map<String, Object> response = new HashMap<>();
@@ -198,7 +198,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{user_seq}")
+    @PutMapping("/{user_seq}/quit")
     public ResponseEntity<String> leaveUser(@PathVariable int user_seq) {
         boolean res = userService.leaveUser(user_seq);
         if (res) {
