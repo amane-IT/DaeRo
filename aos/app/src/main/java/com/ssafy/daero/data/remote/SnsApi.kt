@@ -23,7 +23,7 @@ interface SnsApi {
      * 댓글 조회
      */
     @GET("sns/article/{article_seq}/reply")
-    fun commentSelect(@Path("article_seq") articleSeq: Int, @Query("page") page: Int): Single<Response<List<CommentResponseDto>>>
+    fun commentSelect(@Path("article_seq") articleSeq: Int, @Query("page") page: Int): Single<List<CommentResponseDto>>
 
     /**
      * 댓글 추가
