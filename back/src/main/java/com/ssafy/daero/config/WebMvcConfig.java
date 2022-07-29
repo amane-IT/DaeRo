@@ -26,7 +26,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/users/**/reset-password")
                 .excludePathPatterns("/users/**/duplicate")
                 .excludePathPatterns("/users/**/fcm-token");
-        // TODO: 회원 탈퇴, 가입 여부 확인 URL 변경 필요.
     }
 
     @Bean
