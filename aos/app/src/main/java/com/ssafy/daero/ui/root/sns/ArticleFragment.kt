@@ -4,8 +4,7 @@ import android.os.Bundle
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.annotation.Nullable
-import androidx.core.view.ViewCompat.setLayerType
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,9 +49,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private lateinit var mapView: ArticleMapView
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
-        //todo 트립스탬프, trip_stamp_seq 번들로 전달
         requireParentFragment().findNavController().navigate(
-            R.id.action_articleFragment_to_tripStampDetailFragment
+            R.id.action_articleFragment_to_tripStampDetailFragment, bundleOf("tripStampSeq" to id)
         )
     }
 
@@ -115,52 +113,51 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     private fun initData() {
-        //binding.fragmentArticleMap.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
-        articleAdapter = ArticleAdapter().apply {
-            this.onItemClickListener = this@ArticleFragment.onItemClickListener
-            stampList.add(TripStamp("https://unsplash.com/photos/qyAka7W5uMY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU4OTA1NDIx&force=true&w=1920",
-                1,1.0,1.0
-            ))
-            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
-                2,2.0,2.0
-            ))
-
-            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
-                3,3.0,3.0
-            ))
-            recordList.add(Record("2022.07.16", "나랑 바다 보러갈래?? 대답.", stampList))
-            recordList.add(Record("2022.07.17", "나랑 산 보러갈래?? 대답.", stampList))
-            this.articleData = recordList.toList()
-        }
-        binding.recyclerArticleTrip.apply {
-            adapter = articleAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        }
-
-        expenseList.add(Expense("대게 먹방", "300000"))
-        expenseList.add(Expense("카페베네", "28000"))
-        expenseList.add(Expense("입장료", "3000"))
-        expenseAdapter = ExpenseAdapter().apply {
-            this.expense = expenseList.toList()
-        }
-        binding.recyclerArticleExpense.apply {
-            adapter = expenseAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        }
-        //articleViewModel.article("1")
+//        articleAdapter = ArticleAdapter().apply {
+//            this.onItemClickListener = this@ArticleFragment.onItemClickListener
+//            stampList.add(TripStamp("https://unsplash.com/photos/qyAka7W5uMY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU4OTA1NDIx&force=true&w=1920",
+//                1,1.0,1.0
+//            ))
+//            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
+//                2,2.0,2.0
+//            ))
+//
+//            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
+//                3,3.0,3.0
+//            ))
+//            recordList.add(Record("2022.07.16", "나랑 바다 보러갈래?? 대답.", stampList))
+//            recordList.add(Record("2022.07.17", "나랑 산 보러갈래?? 대답.", stampList))
+//            this.articleData = recordList.toList()
+//        }
+//        binding.recyclerArticleTrip.apply {
+//            adapter = articleAdapter
+//            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//        }
+//
+//        expenseList.add(Expense("대게 먹방", "300000"))
+//        expenseList.add(Expense("카페베네", "28000"))
+//        expenseList.add(Expense("입장료", "3000"))
+//        expenseAdapter = ExpenseAdapter().apply {
+//            this.expense = expenseList.toList()
+//        }
+//        binding.recyclerArticleExpense.apply {
+//            adapter = expenseAdapter
+//            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+//        }
+        articleViewModel.article("1")
     }
 
     private fun setOnClickListeners() {
         binding.imgArticleUser.setOnClickListener {
-            //todo 마이페이지로 이동, user_seq 번들로 전달
             requireParentFragment().findNavController().navigate(
-                R.id.action_articleFragment_to_myPageFragment
+                R.id.action_articleFragment_to_myPageFragment,
+                bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
         }
         binding.tvArticleUser.setOnClickListener {
-            //todo 마이페이지로 이동, user_seq 번들로 전달
             requireParentFragment().findNavController().navigate(
-                R.id.action_articleFragment_to_myPageFragment
+                R.id.action_articleFragment_to_myPageFragment,
+                bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
         }
         binding.imgArticleLike.setOnClickListener {
@@ -174,7 +171,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         binding.LinearArticleLike.setOnClickListener {
             //todo 좋아요 누른 인원, article_seq 번들로 전달
             requireParentFragment().findNavController().navigate(
-                R.id.action_articleFragment_to_likeFragment
+                R.id.action_articleFragment_to_likeFragment,
             )
         }
         binding.LinearArticleComment.setOnClickListener {
@@ -217,12 +214,15 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private fun setBinding() {
         articleAdapter = ArticleAdapter().apply {
             this.onItemClickListener = this@ArticleFragment.onItemClickListener
+            this.articleData = articleViewModel.articleData.records
         }
         binding.recyclerArticleTrip.apply {
             adapter = articleAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
-        expenseAdapter = ExpenseAdapter()
+        expenseAdapter = ExpenseAdapter().apply {
+            this.expense = articleViewModel.articleData.trip_expenses
+        }
         binding.recyclerArticleExpense.apply {
             adapter = expenseAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
@@ -296,7 +296,6 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             height = requireContext().getPxFromDp(40f)  // 마커 세로 크기
             zIndex = 0  // 마커 높이
             onClickListener = Overlay.OnClickListener {     // 마커 클릭 리스너
-                // todo: trip_seq 이용해서 트립스탬프 상세화면으로 이동
                 return@OnClickListener true
             }
             isHideCollidedMarkers = true    // 겹치면 다른 마커 숨기기

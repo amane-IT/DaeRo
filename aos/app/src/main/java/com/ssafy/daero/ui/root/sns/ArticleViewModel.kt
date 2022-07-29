@@ -28,7 +28,7 @@ class ArticleViewModel : BaseViewModel() {
                         )
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("FindIdVM_DaeRo", throwable.toString())
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )

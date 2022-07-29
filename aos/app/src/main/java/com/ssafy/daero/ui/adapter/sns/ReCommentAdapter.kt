@@ -1,0 +1,72 @@
+package com.ssafy.daero.ui.adapter.sns
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.ssafy.daero.R
+import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.databinding.ItemReCommentBinding
+
+class ReCommentAdapter(onItemClickListener : (View, Int, Int) -> Unit) : RecyclerView.Adapter<ReCommentAdapter.ReCommentViewHolder>() {
+
+    var reComment: List<ReCommentResponseDto> = emptyList()
+    var onItemClickListener = onItemClickListener
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReCommentViewHolder {
+        return ReCommentViewHolder(
+            ItemReCommentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ).apply {
+            bindOnItemClickListener(onItemClickListener)
+        }
+    }
+
+    override fun onBindViewHolder(holder: ReCommentViewHolder, position: Int) {
+        holder.bind(reComment[position])
+    }
+
+    override fun getItemCount() = reComment.size
+
+    class ReCommentViewHolder(private val binding: ItemReCommentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        private var userSeq: Int? = null
+        private var replySeq: Int? = null
+        private var modified: Char? = null
+
+        fun bind(data: ReCommentResponseDto) {
+            Glide.with(binding.imgReCommentUser)
+                .load(data.profile_url)
+                .placeholder(R.drawable.ic_back)
+                .apply(RequestOptions().centerCrop())
+                .error(R.drawable.ic_back)
+                .into(binding.imgReCommentUser)
+
+            binding.tvCommentUser.text = data.nickname
+            binding.tvCommentCreateAt.text = data.created_at
+            binding.tvCommentContent.text = data.content
+            replySeq = data.reply_seq
+            userSeq = data.user_seq
+            modified = data.modified
+        }
+
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int) -> Unit ) {
+            binding.imgReCommentMenu.setOnClickListener {
+                binding.root.setOnClickListener {
+                    onItemClickListener(it, replySeq!!, 1)
+                }
+            }
+            binding.imgReCommentUser.setOnClickListener {
+                binding.root.setOnClickListener {
+                    onItemClickListener(it, replySeq!!, 2)
+                }
+            }
+        }
+    }
+}
