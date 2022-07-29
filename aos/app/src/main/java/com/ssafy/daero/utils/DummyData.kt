@@ -76,24 +76,24 @@ val hotArticles = listOf(
     ),
 )
 
-val myAlbums = listOf(
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
-    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
-        title = "강릉 여행", expose = 'Y', like_yn = 'N')
-)
+//val myAlbums = listOf(
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N'),
+//    TripAlbumResponseDto(trip_seq = 1, image_url = "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920",
+//        title = "강릉 여행", expose = 'Y', like_yn = 'N')
+//)
 
 val tripInfo = TripInformationResponseDto(
     address = "강원 강릉시 창해로14번길 20-1",

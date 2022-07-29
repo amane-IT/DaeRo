@@ -3,9 +3,13 @@ package com.ssafy.daero.ui.root.mypage
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripAlbumItem
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.data.repository.UserRepository
@@ -24,6 +28,11 @@ class MyPageViewModel : BaseViewModel() {
     private val _myJourney = MutableLiveData<List<List<MyJourneyResponseDto>>>()
     val myJourney: LiveData<List<List<MyJourneyResponseDto>>>
         get() = _myJourney
+
+    private val _myAlbum = MutableLiveData<PagingData<TripAlbumItem>>()
+    val myAlbum : LiveData<PagingData<TripAlbumItem>>
+        get() = _myAlbum
+
 
     val getProfileState = MutableLiveData<Int>()
     val getJourneyState = MutableLiveData<Int>()
@@ -65,6 +74,20 @@ class MyPageViewModel : BaseViewModel() {
                     getJourneyState.postValue(FAIL)
                 }
             )
+        )
+    }
+
+    fun getMyAlbum() {
+        addDisposable(
+            tripRepository.getMyAlbum()
+                .cachedIn(viewModelScope)
+                .subscribe(
+                    {
+                        _myAlbum.postValue(it)
+                    }, { throwable ->
+                        Log.d("ProfileSettingVM_DaeRo", throwable.toString())
+                    }
+                )
         )
     }
 }
