@@ -56,6 +56,49 @@
         DELETE FROM articles WHERE articles_seq=#{articleSeq}
     </select>
 
+    <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY r.created_at ASC) AS row, replies_seq, users_seq, content, created_at, updated_at,
+                    (SELECT COUNT(*)
+                    FROM replies
+                    WHERE rereply_parent=r.replies_seq) AS rereply_count,
+                    (SELECT u.nickname
+                    FROM users u
+                    WHERE users_seq= r.users_seq) AS nickname,
+                    (SELECT u.profile_image_link
+                    FROM users u
+                    WHERE users_seq= r.users_seq) AS profile_url
+            FROM replies r
+            WHERE articles_seq = #{articleSeq} AND rereply_parent IS NULL) AS reply
+        WHERE (#{page}-1)*10 &lt; reply.row
+        AND reply.row &lt;(#{page}*10) + 1
+    </select>
+
+    <select id="selectUserSeqByReplySeq" parameterType="_int" resultType="java.lang.Integer">
+        SELECT users_seq
+        FROM replies
+        WHERE replies_seq=#{replySeq}
+    </select>
+
+    <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM articles
+        WHERE articles_seq=#{articleSeq}
+    </select>
+
+    <select id="insertReply" resultType="java.lang.Integer">
+        INSERT INTO replies(articles_seq, users_seq, content, created_at, updated_at)
+        VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
+    </select>
+
+    <select id="updateReplyByReplySeq" resultType="java.lang.Integer">
+        UPDATE replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
+    </select>
+
+    <select id="deleteReplyByReplySeq" parameterType="_int" resultType="java.lang.Integer">
+        DELETE FROM replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
@@ -77,5 +120,15 @@
         <result property="dayComment" column="day_comment" />
     </resultMap>
 
+    <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
+        <result property="replySeq" column="replies_seq" />
+        <result property="userSeq" column="users_seq" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+        <result property="updatedAt" column="updated_at" />
+        <result property="rereplyCount" column="rereply_count" />
+        <result property="nickname" column="nickname" />
+        <result property="profileUrl" column="profile_url" />
+    </resultMap>
 
 </mapper>
