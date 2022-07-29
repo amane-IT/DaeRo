@@ -24,13 +24,6 @@ class MyPageAlbumFragment : BaseFragment<FragmentMyPageAlbumBinding>(R.layout.fr
         binding.recyclerMyPageAlbum.adapter = myPageAlbumAdapter
     }
 
-    override fun setMenuVisibility(menuVisible: Boolean) {
-        super.setMenuVisibility(menuVisible)
-        if(menuVisible) {
-            (requireParentFragment() as MyPageFragment).enableSlide()
-        }
-    }
-
     private fun observeData() {
         // todo: 앨범 리스트 받아오기
         myPageAlbumAdapter.albums = listOf(
