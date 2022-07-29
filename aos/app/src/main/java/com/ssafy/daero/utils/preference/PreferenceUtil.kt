@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.ssafy.daero.utils.constant.DAERO
 import com.ssafy.daero.utils.constant.JWT
+import com.ssafy.daero.utils.constant.NICKNAME
 import com.ssafy.daero.utils.constant.USER_SEQ
 
 class PreferenceUtil(context: Context) {
@@ -20,4 +21,16 @@ class PreferenceUtil(context: Context) {
         set(value) {
             prefs.edit().putInt(USER_SEQ, value).apply()
         }
+
+    var nickname: String?
+        get() = prefs.getString(NICKNAME, null)
+        set(value) {
+            prefs.edit().putString(NICKNAME, value).apply()
+        }
+
+    fun init() {
+        jwt = null
+        userSeq = 0
+        nickname = null
+    }
 }

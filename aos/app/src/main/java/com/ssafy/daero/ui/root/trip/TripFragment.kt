@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.databinding.FragmentTripBinding
@@ -55,6 +56,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         peekHeight = bottomSheet.peekHeight
         cornerRadius = binding.cardTripRecommend.radius
         binding.textTripKeyword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.textTripUsername.text = "${App.prefs.nickname}님"
     }
 
     private fun initAdapter() {

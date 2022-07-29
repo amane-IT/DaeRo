@@ -27,6 +27,9 @@ class LoginViewModel : BaseViewModel() {
                         // userSeq 저장
                         App.prefs.userSeq = response.body()?.user_seq ?: 0
 
+                        // nickname 저장
+                        App.prefs.nickname = response.body()?.user_nickname ?: ""
+
                         _showProgress.postValue(false)
                         responseState.postValue(SUCCESS)
                     },

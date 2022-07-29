@@ -8,8 +8,11 @@ import android.provider.Settings
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSettingBinding
+import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.utils.constant.FragmentType
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.checkPermissions
 
@@ -113,7 +116,9 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private val logoutListener: () -> Unit = {
-        // todo: 로그아웃 기능
+        App.prefs.init()
+        RootFragment.curFragmentType = FragmentType.HomeFragment
+        findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
     }
 
     private fun showWithdrawalDialog() {
