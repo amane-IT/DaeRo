@@ -19,7 +19,14 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 
     private var isGood = true
     override fun init() {
+        initView()
         setOnClickListeners()
+    }
+
+    private fun initView(){
+        binding.apply {
+            // TODO: 이미지뷰에 사진 & 장소명 & 날짜 뿌리기
+        }
     }
 
     private fun setOnClickListeners(){
