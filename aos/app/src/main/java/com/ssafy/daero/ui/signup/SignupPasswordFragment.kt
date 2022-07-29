@@ -15,13 +15,8 @@ import java.util.regex.Pattern
 
 class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.layout.fragment_signup_password){
     override fun init() {
-        initView()
         setOnClickListeners()
         addTextChangedListeners()
-    }
-
-    private fun initView(){
-
     }
 
     private fun setOnClickListeners(){

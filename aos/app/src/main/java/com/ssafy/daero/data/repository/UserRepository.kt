@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.http.Path
 
 class UserRepository private constructor(context: Context) {
 
@@ -43,7 +44,7 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getUserProfile(userSeq: Int) : Single<Response<UserProfileResponseDto>> {
+    fun getUserProfile(userSeq: Int): Single<Response<UserProfileResponseDto>> {
         return userApi.getUserProfile(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
@@ -86,7 +87,7 @@ class UserRepository private constructor(context: Context) {
     }
 
     fun verifyUserEmail(signupEmailResponseDto: SignupEmailResponseDto): Single<Response<VerifyUserEmailResponseDto>> {
-        return userApi.verifyUserEmail(signupEmailResponseDto.userSeq)
+        return userApi.verifyUserEmail(signupEmailResponseDto.user_seq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -99,7 +100,7 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun signup(signupRequestDto: SignupRequestDto) : Single<Void>{
+    fun signup(signupRequestDto: SignupRequestDto): Single<Void> {
         return userApi.signup(signupRequestDto)
     }
 
@@ -110,19 +111,32 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun postPreference(userSeq: Int, result: List<Int>): Single<Void>{
+    fun postPreference(userSeq: Int, result: List<Int>): Single<Void> {
         return userApi.postPreference(userSeq, result)
     }
 
-    fun confirmPassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>> {
+    fun confirmPassword(
+        userSeq: Int,
+        passwordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>> {
         return userApi.confirmPassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updatePassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>>{
+    fun updatePassword(
+        userSeq: Int,
+        passwordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>> {
         return userApi.updatePassword(userSeq, passwordRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun withdrawal(userSeq: Int): Single<Response<Boolean>> {
+        return userApi.withdrawal(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())

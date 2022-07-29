@@ -27,7 +27,7 @@ interface UserApi {
     /**
      * 가입 여부 확인
      */
-    @GET("users/{email_address}")
+    @GET("users/{email_address}/duplicate")
     fun findID(@Path("email_address") email: String): Single<Response<FindIDResponseDto>>
 
     /**
@@ -65,7 +65,6 @@ interface UserApi {
         @Body findPasswordModifyRequestDto: FindPasswordModifyRequestDto,
         @Path("password_reset_seq") reset_seq: String
     ): Single<Response<FindPasswordModifyResponseDto>>
-
 
     /**
      * 이메일 인증 요청
@@ -116,7 +115,7 @@ interface UserApi {
     ): Single<Response<ResetPasswordResponseDto>>
 
     /**
-     * 비밀번호 변경 요청
+     * 비밀번호 변경
      */
     @PUT("users/{user_seq}/password")
     fun updatePassword(
@@ -124,4 +123,9 @@ interface UserApi {
         @Body resetPasswordRequestDto: ResetPasswordRequestDto
     ): Single<Response<ResetPasswordResponseDto>>
 
+    /**
+     * 회원 탈퇴
+     */
+    @PUT("users/{user_seq}/quit")
+    fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
 }
