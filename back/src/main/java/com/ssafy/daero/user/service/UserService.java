@@ -121,7 +121,7 @@ public class UserService {
     }
 
     public boolean nicknameAvailable(String nickname) {
-        return userMapper.selectNicknameCount(nickname) > 0;
+        return userMapper.selectNicknameCount(nickname) == 0;
     }
 
     public boolean resetPassword(String userEmail) throws MessagingException {
