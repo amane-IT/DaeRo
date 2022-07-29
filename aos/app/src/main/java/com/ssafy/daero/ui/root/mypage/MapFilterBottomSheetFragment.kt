@@ -64,6 +64,9 @@ class MapFilterBottomSheetFragment(val applyFilter : (String, String) -> Unit) :
             applyFilter(startDate.value ?: "", endDate.value ?: "")
             dismiss()
         }
+        binding.imageTagClose.setOnClickListener {
+            dismiss()
+        }
     }
 
     private fun expandFullHeight() {

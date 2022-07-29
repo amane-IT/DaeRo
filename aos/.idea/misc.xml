@@ -7,17 +7,9 @@
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.26875" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_login.xml" value="0.22" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.186" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/dlg_bottomsheet.xml" value="0.1" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/menu_selector_color_icon.xml" value="0.298" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/menu_selector_color_text.xml" value="0.298" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/overlay_gradient_login.xml" value="0.181" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/overlay_gradient_my_page_album.xml" value="0.1435" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/placeholder_trip_album.xml" value="0.1435" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/text_filter_date.xml" value="0.176" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_map_filter.xml" value="0.264" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/dlg_find_password.xml" value="0.20520833333333333" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/dlg_logout.xml" value="0.20520833333333333" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_Terms.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_Thumbnail.xml" value="0.36614583333333334" />
@@ -35,9 +27,9 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_home.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_like.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_login.xml" value="0.176" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page.xml" value="0.264" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_album.xml" value="0.264" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_map.xml" value="0.2" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page.xml" value="0.33" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_album.xml" value="0.30104166666666665" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_map.xml" value="0.30104166666666665" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_profile_setting.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_re_comment.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_root.xml" value="0.25" />
@@ -47,13 +39,13 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_search_placename_.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_search_username.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_setting.xml" value="0.23324275362318841" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_email.xml" value="0.36614583333333334" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_password.xml" value="0.36614583333333334" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_username.xml" value="0.36614583333333334" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip.xml" value="0.2526041666666667" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_email.xml" value="0.25" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_password.xml" value="0.25" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_username.xml" value="0.25" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip.xml" value="0.25" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_information.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_preference.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_stamp_detail.xml" value="0.36614583333333334" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_my_page_album.xml" value="0.4" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1634963768115942" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2942708333333333" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.1955" />
@@ -115,28 +107,18 @@
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_re_comment.xml" value="0.25" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1875" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.173" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/button_disabled.xml" value="0.1235" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/circle_article.xml" value="0.1225" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/circle_article_text.xml" value="0.1225" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.2465" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml.xml" value="0.2465" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/imagebutton_regular.xml" value="0.1235" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_logout.xml" value="0.22826086956521738" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.34760885082084225" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_expense.xml" value="0.1125" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.2" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_find_id.xml" value="0.152" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_root.xml" value="0.25364583333333335" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_setting.xml" value="0.22826086956521738" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_article_day.xml" value="0.152" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_article_day_end.xml" value="0.8" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_article_day_start.xml" value="0.536" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_article_day_trip_stamp.xml" value="0.11145833333333334" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_article_expense.xml" value="0.2" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_day_end.xml" value="0.11145833333333334" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1125" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_camera.xml" value="0.1905" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_gallery.xml" value="0.1885" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_preference.xml" value="0.1875" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_bottom_sheet.xml" value="0.1875" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_detail.xml" value="0.1875" />
       </map>
     </option>
   </component>

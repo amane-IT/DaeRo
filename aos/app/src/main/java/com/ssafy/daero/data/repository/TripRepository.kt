@@ -1,20 +1,18 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
-import com.ssafy.daero.data.dto.login.*
-import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.remote.TripApi
-import com.ssafy.daero.data.remote.UserApi
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.http.GET
 import retrofit2.http.Path
-import retrofit2.http.Query
 
 class TripRepository private constructor(context: Context) {
 
@@ -27,6 +25,22 @@ class TripRepository private constructor(context: Context) {
         endDate: String
     ): Single<Response<List<List<MyJourneyResponseDto>>>> {
         return tripApi.getMyJourney(user_seq, startDate, endDate)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getFirstTripRecommend(
+        firstTripRecommendRequestDto: FirstTripRecommendRequestDto
+    ): Single<Response<FirstTripRecommendResponseDto>> {
+        return tripApi.getFirstTripRecommend(firstTripRecommendRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getTripInformation(placeSeq: Int): Single<Response<TripInformationResponseDto>> {
+        return tripApi.getTripInformation(placeSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())

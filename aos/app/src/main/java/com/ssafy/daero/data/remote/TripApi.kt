@@ -1,12 +1,12 @@
 package com.ssafy.daero.data.remote
 
-import com.ssafy.daero.data.dto.login.FindIDResponseDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface TripApi {
     /**
@@ -18,4 +18,18 @@ interface TripApi {
         @Query("start-date") startDate: String,
         @Query("end-date") endDate: String
     ): Single<Response<List<List<MyJourneyResponseDto>>>>
+
+    /**
+     * 첫 여행지 추천
+     */
+    @POST("trips/recommend")
+    fun getFirstTripRecommend(
+        @Body firstTripRecommendRequestDto: FirstTripRecommendRequestDto
+    ): Single<Response<FirstTripRecommendResponseDto>>
+
+    /**
+     * 여행지 정보
+     */
+    @GET("trips/info/{trip_places_seq}")
+    fun getTripInformation(@Path("trip_places_seq") placeSeq : Int) : Single<Response<TripInformationResponseDto>>
 }
