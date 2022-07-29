@@ -25,6 +25,10 @@ public interface SnsMapper {
 
     Integer deleteArticleByArticleSeq(int articleSeq);
 
+    Integer deleteReplyByArticleSeq(int articleSeq);
+
+    Integer deleteArticleTagByArticleSeq(int articleSeq);
+
 
     ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
@@ -38,6 +42,11 @@ public interface SnsMapper {
 
     Integer deleteReplyByReplySeq(int replySeq);
 
+    ArrayList<ReplyVo> selectRereplyListByReplySeq(@Param("replySeq") int replySeq, @Param("page") int page);
+
+    int selectReplyByReplySeq(int replySeq);
+
+    Integer insertRereply(@Param("articleSeq") int articleSeq, @Param("replySeq") int replySeq, @Param("userSeq") int userSeq, @Param("content") String content);
 
 
 

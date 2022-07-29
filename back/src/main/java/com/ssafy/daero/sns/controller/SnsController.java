@@ -23,10 +23,11 @@ public class SnsController {
 
     public SnsController(SnsService snsService, JwtService jwtService) { this.snsService = snsService; this.jwtService = jwtService; }
 
-    @GetMapping("/article/{article_seq}")
-    public ResponseEntity<Map<String, Object>> articleDetail(@PathVariable int article_seq) throws JsonProcessingException {
-        Map<String, Object> res = snsService.articleDetail(article_seq);
-        return new ResponseEntity<>(res, HttpStatus.ACCEPTED);
+    @GetMapping("/article/{articleSeq}")
+    public ResponseEntity<Map<String, Object>> articleDetail(@PathVariable int articleSeq) throws JsonProcessingException {
+        Map<String, Object> res = snsService.articleDetail(articleSeq);
+        if (res.isEmpty()) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        else {return new ResponseEntity<>(res, HttpStatus.ACCEPTED); }
     }
 
     @DeleteMapping("/article/{article_seq}")
@@ -52,9 +53,8 @@ public class SnsController {
     }
 
     @PostMapping("/article/{article_seq}/reply")
-    public ResponseEntity<String> createReply(@RequestHeader Map<String, String> header, @PathVariable int article_seq, @RequestBody Map<String, String> req) {
-        String userJwt = header.get("jwt");
-        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
+    public ResponseEntity<String> createReply(@RequestHeader("jwt") String jwt, @PathVariable int article_seq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
         if (Objects.equals(currentUser.get("user_seq"), "null")) {
             return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
         }
@@ -65,9 +65,8 @@ public class SnsController {
     }
 
     @PutMapping("/reply/{reply_seq}")
-    public ResponseEntity<String> updateReply(@RequestHeader Map<String, String> header, @PathVariable int reply_seq, @RequestBody Map<String, String> req) {
-        String userJwt = header.get("jwt");
-        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
+    public ResponseEntity<String> updateReply(@RequestHeader("jwt") String jwt, @PathVariable int reply_seq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
         if (Objects.equals(currentUser.get("user_seq"), "null")) {
             return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
         }
@@ -78,9 +77,8 @@ public class SnsController {
     }
 
     @DeleteMapping("/reply/{reply_seq}")
-    public ResponseEntity<String> deleteReply(@RequestHeader Map<String, String> header, @PathVariable int reply_seq) {
-        String userJwt = header.get("jwt");
-        Map<String, String> currentUser = jwtService.decodeJwt(userJwt);
+    public ResponseEntity<String> deleteReply(@RequestHeader("jwt") String jwt, @PathVariable int reply_seq) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
         if (Objects.equals(currentUser.get("user_seq"), "null")) {
             return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
         }
@@ -89,4 +87,25 @@ public class SnsController {
         else if (replyVo.getResult() == ReplyVo.ReplyResult.UNAUTHORIZED ) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
         else { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
     }
+
+    @GetMapping("/article/{article_seq}/reply/{reply_seq}")
+    public ResponseEntity<ArrayList<Map<String, Object>>> rereplyList(@PathVariable int article_seq, @PathVariable int reply_seq, @RequestParam(defaultValue = "1") String page) {
+        ArrayList<Map<String, Object>> res = snsService.rereplyList(reply_seq, page);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
+        else { return new ResponseEntity<>(res, HttpStatus.OK); }
+    }
+
+    @PostMapping("/article/{article_seq}/reply/{reply_seq}/rereply")
+    public ResponseEntity<String> createRereply(@RequestHeader("jwt") String jwt, @PathVariable int article_seq, @PathVariable int reply_seq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        ReplyVo replyVo = snsService.createRereply(article_seq, reply_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("content"));
+        if (replyVo.getResult() == ReplyVo.ReplyResult.NO_SUCH_REPLY) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        else { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+    }
+
+
 }

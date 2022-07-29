@@ -15,4 +15,5 @@ public class ReplyVo extends ReplyDto {
     private ReplyResult result;
     private String nickname;
     private String profileUrl;
+    private char modified;
 }
