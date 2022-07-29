@@ -117,6 +117,13 @@
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right"
             />
+        <action
+            android:id="@+id/action_rootFragment_to_tripInformationFragment"
+            app:destination="@id/tripInformationFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -433,4 +440,9 @@
         android:name="com.ssafy.daero.ui.root.sns.ReCommentFragment"
         android:label="ReCommentFragment"
         tools:layout="@layout/fragment_re_comment"/>
+    <fragment
+        android:id="@+id/tripInformationFragment"
+        android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"
+        android:label="TripInformationFragment"
+        tools:layout="@layout/fragment_trip_information"/>
 </navigation>
