@@ -28,7 +28,7 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putString(NICKNAME, value).apply()
         }
 
-    fun init() {
+    fun initAll() {
         jwt = null
         userSeq = 0
         nickname = null

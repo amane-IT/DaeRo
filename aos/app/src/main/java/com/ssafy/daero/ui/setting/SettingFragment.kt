@@ -2,29 +2,47 @@ package com.ssafy.daero.ui.setting
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSettingBinding
 import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.FragmentType
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.checkPermissions
+import com.ssafy.daero.utils.view.toast
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
+    private val settingViewModel: SettingViewModel by viewModels()
+
     override fun init() {
-        initViews()
+        observeData()
         setOnClickListeners()
         otherListeners()
     }
 
-    private fun initViews() {
-
+    private fun observeData() {
+        settingViewModel.withdrawalState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    settingViewModel.withdrawalState.value = DEFAULT
+                    App.prefs.initAll()
+                    RootFragment.curFragmentType = FragmentType.HomeFragment
+                    findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
+                }
+                FAIL -> {
+                    toast("회원탈퇴를 실패하였습니다.")
+                    settingViewModel.withdrawalState.value = DEFAULT
+                }
+            }
+        }
     }
 
     private fun setOnClickListeners() {
@@ -116,7 +134,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private val logoutListener: () -> Unit = {
-        App.prefs.init()
+        App.prefs.initAll()
         RootFragment.curFragmentType = FragmentType.HomeFragment
         findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
     }
@@ -126,6 +144,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private val withdrawalListener: () -> Unit = {
-        // todo: 회원탈퇴 기능
+        settingViewModel.withdrawal()
     }
 }

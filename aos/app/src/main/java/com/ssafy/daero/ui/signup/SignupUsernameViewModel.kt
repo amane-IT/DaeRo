@@ -9,7 +9,6 @@ import com.ssafy.daero.data.dto.signup.SignupRequestDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import io.reactivex.rxjava3.core.Single
 
 class SignupUsernameViewModel : BaseViewModel() {
 
@@ -28,7 +27,7 @@ class SignupUsernameViewModel : BaseViewModel() {
         addDisposable(
             userRepository.verifyNickname(nickname)
                 .subscribe({ response ->
-                    if (response.body()!!.availableYn == 'Y') {
+                    if (response.body()!!.available_YN == 'Y') {
                         responseState_nickname.postValue(SUCCESS)
                     } else {
                         responseState_nickname.postValue(FAIL)
