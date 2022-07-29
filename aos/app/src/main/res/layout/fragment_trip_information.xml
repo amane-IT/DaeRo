@@ -1,10 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_tripInformation_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/image_tripInformation_tripPlace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg_login"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_tripInformation_inner_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/image_tripInformation_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/black" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="464dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginBottom="32dp"
+                app:cardBackgroundColor="@color/transparent"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <com.github.mmin18.widget.RealtimeBlurView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:realtimeOverlayColor="#88353535" />
+
+                    <TextView
+                        android:id="@+id/text_tripInformation_placeName"
+                        style="@style/HeadBoldWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="24dp"
+                        android:text="강릉 안목해변"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/text_tripInformation_address"
+                        style="@style/BodyWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="강원 강릉시 창해로 14번길 20-1"
+                        app:layout_constraintStart_toStartOf="@id/text_tripInformation_placeName"
+                        app:layout_constraintTop_toBottomOf="@id/text_tripInformation_placeName" />
+
+                    <View
+                        android:id="@+id/view_tripInformation_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="0.5dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_tripInformation_address" />
+
+                    <TextView
+                        android:id="@+id/text_tripInformation_label_description"
+                        style="@style/HeadBoldWhite"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="16dp"
+                        android:text="설명"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/view_tripInformation_divider" />
+
+                    <ScrollView
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintBottom_toTopOf="@id/button_tripInformation_startTrip"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_tripInformation_label_description">
+
+                        <TextView
+                            android:id="@+id/text_tripInformation_description"
+                            style="@style/TripInformationDescription"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="강릉 안목해변은 아름다운 커피거리로 전국에서도 손꼽히는 곳이다.가을에는 커피 축제를 열고 해안선이 쭉 이어져 있어 긴 해안선을 따라 드라이브를 하면 여러 관광지까지 함께 볼 수 있다. 특히나 강릉 커피 거리에서 유명한 몇몇 커피집을 가면 저마다 독특한 커피의 향과 맛을 느낄 수 있을 뿐만 아니라 가게마다 자랑하는 디저트들을 맛보는 것 또한 즐겁다. 강릉 안목해변은 아름다운 커피거리로 전국에서도 손꼽히는 곳이다.가을에는 커피 축제를 열고 해안선이 쭉 이어져 있어 긴 해안선을 따라 드라이브를 하면 여러 관광지까지 함께 볼 수 있다. 특히나 강릉 커피 거리에서 유명한 몇몇 커피집을 가면 저마다 독특한 커피의 향과 맛을 느낄 수 있을 뿐만 아니라 가게마다 자랑하는 디저트들을 맛보는 것 또한 즐겁다." />
+                    </ScrollView>
+
+                    <Button
+                        android:id="@+id/button_tripInformation_startTrip"
+                        style="@style/BodyWhite"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/button_regular"
+                        android:text="여행하기"
+                        app:layout_constraintBottom_toTopOf="@id/button_tripInformation_reRecommend"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/button_tripInformation_reRecommend"
+                        style="@style/BodyWhite"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_marginHorizontal="24dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@color/transparent"
+                        android:text="다시 추천받기"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

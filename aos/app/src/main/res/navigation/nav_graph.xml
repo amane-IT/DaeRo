@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/tripInformationFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -117,6 +117,9 @@
             app:popEnterAnim="@anim/form_left"
             app:popExitAnim="@anim/to_right"
             />
+        <action
+            android:id="@+id/action_rootFragment_to_tripInformationFragment"
+            app:destination="@id/tripInformationFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -433,4 +436,9 @@
         android:name="com.ssafy.daero.ui.root.sns.ReCommentFragment"
         android:label="ReCommentFragment"
         tools:layout="@layout/fragment_re_comment"/>
+    <fragment
+        android:id="@+id/tripInformationFragment"
+        android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"
+        android:label="TripInformationFragment"
+        tools:layout="@layout/fragment_trip_information"/>
 </navigation>
