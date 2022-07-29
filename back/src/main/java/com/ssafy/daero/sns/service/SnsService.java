@@ -6,6 +6,7 @@ import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
+import com.ssafy.daero.sns.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -188,5 +189,50 @@ public class SnsService {
             replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
             return replyVo;
         }
+    }
+
+    public String likeArticle(int userSeq, int articleSeq, char like) {
+        // user 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return "NO_SUCH_ARTICLE"; }
+        // 좋아요 누른 적 있는지 확인
+        int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
+        if (like == 'l') {
+            if (liked == 0) {
+                snsMapper.insertLike(articleSeq, userSeq);
+                return "SUCCESS";
+            }
+            else { return "BAD_REQUEST"; }
+        }
+        else if (like == 'u') {
+            if (liked == 1) {
+                snsMapper.deleteLike(articleSeq, userSeq);
+                return "SUCCESS";
+            }
+            else { return "BAD_REQUEST"; }
+        }
+        else { return "BAD_REQUEST"; }
+    }
+
+    public ArrayList<Map<String, Object>> likeUserList(int articleSeq, String page) {
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return null; }
+        ArrayList<UserVo> userList = snsMapper.selectLikeUserListByArticleSeq(articleSeq, Integer.parseInt(page));
+        ArrayList<Map<String, Object>> likeUserList = new ArrayList<>();
+        Map<String, Object> user = new HashMap<>();
+        for (UserVo uVo :
+                userList) {
+            user.put("profile_url", uVo.getProfileImageLink());
+            user.put("nickname", uVo.getNickname());
+            user.put("user_seq", uVo.getUserSeq());
+            likeUserList.add(user);
+            user = new HashMap<>();
+        }
+        return likeUserList;
+
     }
 }

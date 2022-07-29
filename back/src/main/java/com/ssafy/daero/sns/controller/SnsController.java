@@ -3,6 +3,7 @@ package com.ssafy.daero.sns.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.sns.service.SnsService;
 import com.ssafy.daero.sns.vo.ReplyVo;
+import com.ssafy.daero.sns.vo.UserVo;
 import com.ssafy.daero.user.service.JwtService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
@@ -60,7 +61,7 @@ public class SnsController {
         }
         ReplyVo replyVo = snsService.createReply(article_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("content"));
         if (replyVo.getResult() == ReplyVo.ReplyResult.NO_SUCH_ARTICLE) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
-        else { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        else { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
 
     }
 
@@ -93,7 +94,7 @@ public class SnsController {
         ArrayList<Map<String, Object>> res = snsService.rereplyList(reply_seq, page);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
-        else { return new ResponseEntity<>(res, HttpStatus.OK); }
+        else { return new ResponseEntity<>(res, HttpStatus.CREATED); }
     }
 
     @PostMapping("/article/{article_seq}/reply/{reply_seq}/rereply")
@@ -105,6 +106,29 @@ public class SnsController {
         ReplyVo replyVo = snsService.createRereply(article_seq, reply_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("content"));
         if (replyVo.getResult() == ReplyVo.ReplyResult.NO_SUCH_REPLY) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
         else { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+    }
+
+    @PostMapping("/like")
+    public ResponseEntity<String> likeArticle(@RequestParam("user") int user_seq, @RequestParam("article") int article_seq) {
+        String res = snsService.likeArticle(user_seq, article_seq, 'l');
+        if (Objects.equals(res, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        else if (Objects.equals(res, "NO_SUCH_USER")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
+    @DeleteMapping("/like")
+    public ResponseEntity<String> unlikeArticle(@RequestParam("user") int user_seq, @RequestParam("article") int article_seq) {
+        String res = snsService.likeArticle(user_seq, article_seq, 'u');
+        if (Objects.equals(res, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        else if (Objects.equals(res, "NO_SUCH_USER")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
+    @GetMapping("/article/{article_seq}/likes")
+    public ResponseEntity<ArrayList<Map<String, Object>>> likeUserList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") String page){
+        ArrayList<Map<String, Object>> res = snsService.likeUserList(article_seq, page);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        else { return new ResponseEntity<>(res, HttpStatus.OK); }
     }
 
 

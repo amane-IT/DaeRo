@@ -138,6 +138,33 @@
         VALUES (#{articleSeq}, #{userSeq}, #{replySeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </select>
 
+    <select id="selectArticleLikeByUserSeq" resultType="_int">
+        SELECT COUNT(*)
+        FROM likes
+        WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
+    </select>
+
+    <select id="insertLike" resultType="java.lang.Integer">
+        INSERT INTO likes(users_seq, articles_seq, liked_at)
+        VALUES (#{userSeq}, #{articleSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'))
+    </select>
+
+    <select id="deleteLike" resultType="java.lang.Integer">
+        DELETE FROM likes WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
+    </select>
+
+    <select id="selectLikeUserListByArticleSeq" resultMap="mappingUserVo">
+        SELECT *
+        FROM (SELECT row_number()                       over (ORDER BY nickname ASC) AS row,
+        users_seq, nickname, profile_image_link
+        FROM daero.users u
+        WHERE u.users_seq IN (SELECT l.users_seq
+        FROM daero.likes l
+        WHERE articles_seq=#{articleSeq})) AS user
+        WHERE (#{page} - 1) * 10 &lt; user.row
+                             AND user.row &lt; (#{page} * 10) + 1
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
@@ -178,6 +205,12 @@
         <result property="updatedAt" column="updated_at" />
         <result property="nickname" column="nickname" />
         <result property="profileUrl" column="profile_url" />
+    </resultMap>
+
+    <resultMap id="mappingUserVo" type="com.ssafy.daero.sns.vo.UserVo">
+        <result property="profileImageLink" column="profile_image_link" />
+        <result property="nickname" column="nickname" />
+        <result property="userSeq" column="users_seq" />
     </resultMap>
 
 </mapper>
