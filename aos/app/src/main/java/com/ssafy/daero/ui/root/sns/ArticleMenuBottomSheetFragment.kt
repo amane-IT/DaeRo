@@ -43,7 +43,7 @@ class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
             //todo: 따라가기
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_tripFollowFragment
             )
         }
@@ -52,7 +52,7 @@ class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
         }
         binding.tvArticleMenuModify.setOnClickListener {
             //todo: 수정하기
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_articleWriteDayFragment
             )
         }
@@ -61,7 +61,7 @@ class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
         }
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_reportFragment
             )
         }
