@@ -7,6 +7,7 @@ import com.ssafy.daero.databinding.FragmentRootBinding
 import com.ssafy.daero.ui.root.collection.CollectionFragment
 import com.ssafy.daero.ui.root.mypage.MyPageFragment
 import com.ssafy.daero.ui.root.search.SearchFragment
+import com.ssafy.daero.ui.root.sns.ArticleFragment
 import com.ssafy.daero.ui.root.sns.HomeFragment
 import com.ssafy.daero.ui.root.trip.TripFragment
 import com.ssafy.daero.utils.constant.FragmentType
@@ -63,7 +64,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     private fun getFragment(fragmentType: FragmentType): Fragment {
         when (fragmentType) {
             FragmentType.HomeFragment -> {
-                return HomeFragment()
+                return ArticleFragment()
             }
             FragmentType.SearchFragment -> {
                 return SearchFragment()

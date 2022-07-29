@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.chip.Chip
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
@@ -49,7 +50,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private lateinit var mapView: ArticleMapView
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
-        requireParentFragment().findNavController().navigate(
+        findNavController().navigate(
             R.id.action_articleFragment_to_tripStampDetailFragment, bundleOf("tripStampSeq" to id)
         )
     }
@@ -144,18 +145,17 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 //            adapter = expenseAdapter
 //            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 //        }
-        articleViewModel.article(1)
     }
 
     private fun setOnClickListeners() {
         binding.imgArticleUser.setOnClickListener {
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_myPageFragment,
                 bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
         }
         binding.tvArticleUser.setOnClickListener {
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_myPageFragment,
                 bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
@@ -170,19 +170,19 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.LinearArticleLike.setOnClickListener {
             //todo 좋아요 누른 인원, article_seq 번들로 전달
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_likeFragment,
             )
         }
         binding.LinearArticleComment.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_commentFragment
             )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
-            requireParentFragment().findNavController().navigate(
+            findNavController().navigate(
                 R.id.action_articleFragment_to_commentFragment
             )
         }
@@ -245,12 +245,28 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             .into(binding.imgArticleUser)
         binding.tvArticleComment.text = articleViewModel.articleData.comments.toString()
         binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
-
+        for(i in articleViewModel.articleData.tags){
+            var chip: Chip
+            if(i==1){
+                binding.chipArticleTag.addView(Chip(requireContext()).apply {
+                    text = "1번태그"
+                    setTextColor(R.color.primaryTextColor)
+                    setChipBackgroundColorResource(R.color.primaryLightColor)
+                    setOnCloseIconClickListener { binding.chipArticleTag.removeView(this) }
+                })
+            }else if(i==2){
+                binding.chipArticleTag.addView(Chip(requireContext()).apply {
+                    text = "2번태그"
+                    setChipBackgroundColorResource(R.color.primaryLightColor)
+                    setOnCloseIconClickListener { binding.chipArticleTag.removeView(this) }
+                })
+            }
+        }
         deleteMarkers()
         deletePaths()
         var list = mutableListOf<TripStamp>()
-        for(i in 0..articleViewModel.articleData.records.size){
-            for(j in 0..articleViewModel.articleData.records[i].trip_stamps.size){
+        for(i in 0 until articleViewModel.articleData.records.size){
+            for(j in 0 until articleViewModel.articleData.records[i].trip_stamps.size){
                 list.add(articleViewModel.articleData.records[i].trip_stamps[j])
             }
         }
@@ -340,6 +356,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
         setNaverMapUI()
         //getMyJourney("", "")
+        articleViewModel.article(3)
     }
 
     private fun setNaverMapUI() {

@@ -9,12 +9,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
+import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.databinding.FragmentCommentMenuBottomSheetBinding
 
 
-class CommentMenuBottomSheetFragment : BottomSheetDialogFragment() {
+class CommentMenuBottomSheetFragment(
+    val replySeq: Int,
+    val commentViewModel: CommentViewModel,
+    val content: String,
+    listener: CommentListener
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentCommentMenuBottomSheetBinding
+    var mCallback = listener
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +50,14 @@ class CommentMenuBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.tvCommentMenuModify.setOnClickListener {
             //todo: 수정하기
+            mCallback.commentUpdate(content, replySeq)
         }
         binding.tvCommentMenuDelete.setOnClickListener {
-            //todo: 삭제하기
+            //삭제하기
+            commentViewModel.commentDelete(replySeq)
         }
         binding.tvCommentMenuReport.setOnClickListener {
-            //todo: 신고하기
+            //todo: 신고하기 bundle
             requireParentFragment().findNavController().navigate(
                 R.id.action_commentFragment_to_reportFragment
             )

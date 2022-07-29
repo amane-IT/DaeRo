@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ArticleResponseDto
+import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import retrofit2.http.Body
+import retrofit2.http.Path
 
 class CommentViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
@@ -30,6 +33,64 @@ class CommentViewModel : BaseViewModel() {
                 })
         )
     }
+
+    fun commentAdd(
+        articleSeq: Int,
+        commentAddRequestDto: CommentAddRequestDto
+    ) {
+        addDisposable(
+            snsRepository.commentAdd(articleSeq, commentAddRequestDto)
+                .subscribe({
+                    responseState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("commentSelectVM_DaeRo", throwable.toString())
+                    responseState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun commentUpdate(
+        replySeq: Int,
+        commentAddRequestDto: CommentAddRequestDto
+    ) {
+
+        addDisposable(
+            snsRepository.commentUpdate(replySeq, commentAddRequestDto)
+                .subscribe({
+                    responseState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("commentSelectVM_DaeRo", throwable.toString())
+                    responseState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun commentDelete(replySeq: Int) {
+
+        addDisposable(
+            snsRepository.commentDelete(replySeq)
+                .subscribe({
+                    responseState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("commentSelectVM_DaeRo", throwable.toString())
+                    responseState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun reCommentAdd(articleSeq: Int, replySeq: Int, commentAddRequestDto: CommentAddRequestDto) {
+
+        addDisposable(
+            snsRepository.reCommentAdd(articleSeq,replySeq, commentAddRequestDto)
+                .subscribe({
+                    responseState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("commentSelectVM_DaeRo", throwable.toString())
+                    responseState.postValue(FAIL)
+                })
+        )
+    }
+
 
     fun reCommentSelect(articleSeq: Int, replySeq: Int, page: Int) {
 

@@ -8,27 +8,28 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
-class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_comment) {
+class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_comment), CommentListener {
 
     private val commentViewModel : CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
 
-    private val onItemClickListener: (View, Int, Int) -> Unit = { _, id, index ->
+    private val onItemClickListener: (View, Int, Int, String) -> Unit = { _, id, index, content ->
         //todo 1. 햄버거 2. 유저 사진
         when(index){
             1 -> {
-                val commentMenuBottomSheetFragment = CommentMenuBottomSheetFragment()
+                val commentMenuBottomSheetFragment = CommentMenuBottomSheetFragment(id, commentViewModel, content, this@CommentFragment)
                 commentMenuBottomSheetFragment.show(childFragmentManager,commentMenuBottomSheetFragment.tag)
             }
             2 -> {
-                requireParentFragment().findNavController().navigate(
-                    R.id.action_articleFragment_to_myPageFragment,
+                findNavController().navigate(
+                    R.id.action_commentFragment_to_myPageFragment,
                     bundleOf("UserSeq" to id)
                 )
             }
@@ -42,17 +43,13 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
     }
 
     private fun initData() {
-        commentViewModel.commentSelect(1,10)
+        commentViewModel.commentSelect(1,30)
     }
 
     private fun setOnClickListeners() {
-        commentAdapter = CommentAdapter(1, commentViewModel).apply {
-            this.onItemClickListener = this@CommentFragment.onItemClickListener
-            this.commentData = commentViewModel.commentData
-        }
-        binding.recyclerComment.apply {
-            adapter = commentAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        binding.textCommentWrite.setOnClickListener {
+            //todo: article_seq
+            commentViewModel.commentAdd(3, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
         }
     }
 
@@ -72,13 +69,30 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
     }
 
     private fun setBinding() {
-        commentAdapter = CommentAdapter(1,commentViewModel).apply {
+        //todo: article_seq
+        commentAdapter = CommentAdapter(3,commentViewModel,this@CommentFragment).apply {
             this.onItemClickListener = this@CommentFragment.onItemClickListener
             this.commentData = commentViewModel.commentData
         }
         binding.recyclerComment.apply {
             adapter = commentAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
+    }
+
+    override fun commentUpdate(content: String, sequence: Int) {
+        binding.editTextCommentAddComment.requestFocus()
+        binding.editTextCommentAddComment.setText(content)
+        binding.editTextCommentAddComment.setOnClickListener {
+            commentViewModel.commentUpdate(sequence, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
+        }
+    }
+
+    override fun reCommentAdd(sequence: Int) {
+        binding.editTextCommentAddComment.requestFocus()
+        binding.editTextCommentAddComment.setOnClickListener {
+            //todo: article_seq
+            commentViewModel.reCommentAdd(3,sequence, CommentAddRequestDto(binding.editTextCommentAddComment.text.toString()))
         }
     }
 }

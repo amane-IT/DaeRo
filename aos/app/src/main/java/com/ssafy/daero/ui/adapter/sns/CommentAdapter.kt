@@ -11,12 +11,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.databinding.ItemCommentBinding
+import com.ssafy.daero.ui.root.sns.CommentListener
 import com.ssafy.daero.ui.root.sns.CommentViewModel
 
-class CommentAdapter(private val articleSeq: Int, private val commentViewModel: CommentViewModel) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+class CommentAdapter(
+    private val articleSeq: Int,
+    private val commentViewModel: CommentViewModel
+    , listener: CommentListener
+    ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
 
     var commentData: List<CommentResponseDto> = emptyList()
-    lateinit var onItemClickListener : (View, Int, Int) -> Unit
+    lateinit var onItemClickListener : (View, Int, Int, String) -> Unit
+    var mCallback = listener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
         return CommentViewHolder(
@@ -24,7 +30,10 @@ class CommentAdapter(private val articleSeq: Int, private val commentViewModel: 
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),commentViewModel,articleSeq
+            ),
+            commentViewModel,
+            articleSeq,
+            mCallback
         ).apply {
             bindOnItemClickListener(onItemClickListener)
         }
@@ -40,7 +49,8 @@ class CommentAdapter(private val articleSeq: Int, private val commentViewModel: 
     class CommentViewHolder(
         private val binding: ItemCommentBinding,
         private val commentViewModel: CommentViewModel,
-        private val articleSeq: Int
+        private val articleSeq: Int,
+        private val mCallback: CommentListener
     ) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -69,31 +79,34 @@ class CommentAdapter(private val articleSeq: Int, private val commentViewModel: 
             userSeq = data.user_seq
             modified = data.modified
         }
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int) -> Unit) {
-            if(replyCount!! > 0) {
-                binding.LinearCommentReComment.setOnClickListener {
-                    commentViewModel.reCommentSelect(articleSeq,replySeq!!,10)
-                    binding.LinearCommentReComment.visibility = View.GONE
-                    binding.progressBarCommentLoading.visibility = View.VISIBLE
-                    binding.recyclerCommentReComment.visibility = View.VISIBLE
-                    binding.recyclerCommentReComment.apply {
-                        adapter = ReCommentAdapter(onItemClickListener).apply {
-                            this.reComment = commentViewModel.reCommentData
-                        }
-                        layoutManager = LinearLayoutManager(
-                            binding.root.context,
-                            RecyclerView.HORIZONTAL,
-                            false
-                        )
-                        binding.progressBarCommentLoading.visibility = View.GONE
-                    }
-                }
-            }
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit) {
+//            if(replyCount!! > 0) {
+//                binding.LinearCommentReComment.setOnClickListener {
+//                    commentViewModel.reCommentSelect(articleSeq,replySeq!!,10)
+//                    binding.LinearCommentReComment.visibility = View.GONE
+//                    binding.progressBarCommentLoading.visibility = View.VISIBLE
+//                    binding.recyclerCommentReComment.visibility = View.VISIBLE
+//                    binding.recyclerCommentReComment.apply {
+//                        adapter = ReCommentAdapter(onItemClickListener).apply {
+//                            this.reComment = commentViewModel.reCommentData
+//                        }
+//                        layoutManager = LinearLayoutManager(
+//                            binding.root.context,
+//                            RecyclerView.HORIZONTAL,
+//                            false
+//                        )
+//                        binding.progressBarCommentLoading.visibility = View.GONE
+//                    }
+//                }
+//            }
             binding.imgCommentMenu.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 1)
+                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
             }
             binding.imgCommentItemUser.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 2)
+                onItemClickListener(it, replySeq!!, 2, "")
+            }
+            binding.tvCommentReCommentAdd.setOnClickListener {
+                mCallback.reCommentAdd(replySeq!!)
             }
         }
     }

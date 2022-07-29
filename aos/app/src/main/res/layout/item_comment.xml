@@ -41,13 +41,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="58dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/gray"
         android:text="1일"
         android:textSize="12dp"
-        app:layout_constraintStart_toEndOf="@id/tv_comment_user"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_content"
+        />
+
+    <TextView
+        android:id="@+id/tv_comment_reCommentAdd"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/gray"
+        android:text="답글달기"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@id/tv_comment_create_at"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_content"
         />
 
     <TextView

@@ -22,8 +22,8 @@ interface SnsApi {
     /**
      * 댓글 조회
      */
-    @GET("sns/article/{article_seq}/reply?page={page}")
-    fun commentSelect(@Path("article_seq") articleSeq: Int, @Path("page") page: Int): Single<Response<List<CommentResponseDto>>>
+    @GET("sns/article/{article_seq}/reply")
+    fun commentSelect(@Path("article_seq") articleSeq: Int, @Query("page") page: Int): Single<Response<List<CommentResponseDto>>>
 
     /**
      * 댓글 추가
@@ -51,11 +51,11 @@ interface SnsApi {
     /**
      * 대댓글 조회
      */
-    @GET("sns/article/{article_seq}/reply/{reply_seq}?page={page}")
+    @GET("sns/article/{article_seq}/reply/{reply_seq}")
     fun reCommentSelect(
         @Path("article_seq") articleSeq: Int,
         @Path("reply_seq") replySeq: Int,
-        @Path("page") page: Int
+        @Query("page") page: Int
     ): Single<Response<List<ReCommentResponseDto>>>
 
     /**

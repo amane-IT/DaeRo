@@ -10,7 +10,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.databinding.ItemReCommentBinding
 
-class ReCommentAdapter(onItemClickListener : (View, Int, Int) -> Unit) : RecyclerView.Adapter<ReCommentAdapter.ReCommentViewHolder>() {
+class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) : RecyclerView.Adapter<ReCommentAdapter.ReCommentViewHolder>() {
 
     var reComment: List<ReCommentResponseDto> = emptyList()
     var onItemClickListener = onItemClickListener
@@ -56,15 +56,15 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int) -> Unit) : Recycle
             modified = data.modified
         }
 
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int) -> Unit ) {
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit ) {
             binding.imgReCommentMenu.setOnClickListener {
                 binding.root.setOnClickListener {
-                    onItemClickListener(it, replySeq!!, 1)
+                    onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
                 }
             }
             binding.imgReCommentUser.setOnClickListener {
                 binding.root.setOnClickListener {
-                    onItemClickListener(it, replySeq!!, 2)
+                    onItemClickListener(it, replySeq!!, 2, "")
                 }
             }
         }
