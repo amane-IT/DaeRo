@@ -20,12 +20,13 @@ public class SnsService {
     public SnsService(SnsMapper snsMapper) { this.snsMapper = snsMapper; }
 
     public Map<String, Object> articleDetail(int articleSeq) throws JsonProcessingException {
-
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
+        Map<String, Object> articleDetail = new HashMap<>();
+        if(articleVo == null) { return articleDetail; }
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());
         ArrayList<Integer> tags = snsMapper.selectPlaceTagsByArticleSeq(articleSeq);
-        Map<String, Object> articleDetail = new HashMap<>();
+
 
         ArrayList<Map> records = new ArrayList<>();
         Map<String, Object> days = new HashMap<>();
@@ -84,6 +85,8 @@ public class SnsService {
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         if (articleUser == null) { return 0; }
         if (articleUser == userSeq) {
+            snsMapper.deleteArticleTagByArticleSeq(articleSeq);
+            snsMapper.deleteReplyByArticleSeq(articleSeq);
             snsMapper.deleteArticleByArticleSeq(articleSeq);
             return 1;
         }
@@ -95,10 +98,10 @@ public class SnsService {
     public ArrayList<Map<String, Object>> replyList(int articleSeq, String page) {
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         if (articleUser == null) { return null; }
-
-        ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
         ArrayList<Map<String, Object>> replyList = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
+        ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
+
         for (ReplyVo rVo :
                 replyVos) {
             reply.put("reply_seq", rVo.getReplySeq());
@@ -151,6 +154,39 @@ public class SnsService {
         snsMapper.deleteReplyByReplySeq(replySeq);
         replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
         return replyVo;
+    }
 
+    public ArrayList<Map<String, Object>> rereplyList(int replySeq, String page) {
+        Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
+        if (replyUser == null) { return null; }
+        ArrayList<ReplyVo> rereplyVos = snsMapper.selectRereplyListByReplySeq(replySeq, Integer.parseInt(page));
+        ArrayList<Map<String, Object>> rereplyList = new ArrayList<>();
+        Map<String, Object> reply = new HashMap<>();
+        for (ReplyVo rVo :
+                rereplyVos) {
+            reply.put("reply_seq", rVo.getReplySeq());
+            reply.put("nickname", rVo.getNickname());
+            reply.put("user_seq", rVo.getUserSeq());
+            reply.put("profile_url", rVo.getProfileUrl());
+            reply.put("created_at", rVo.getCreatedAt());
+            reply.put("content", rVo.getContent());
+            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) { reply.put("modified", 'n'); }
+            else { reply.put("modified", 'y'); }
+            rereplyList.add(reply);
+            reply = new HashMap<>();
+        }
+        return rereplyList;
+    }
+
+    public ReplyVo createRereply(int articleSeq,int replySeq, int userSeq, String content) {
+        ReplyVo replyVo = new ReplyVo();
+        // reply가 존재하는지 확인
+        int reply = snsMapper.selectReplyByReplySeq(replySeq);
+        if (reply == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo; }
+        else {
+            snsMapper.insertRereply(articleSeq, replySeq, userSeq, content);
+            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            return replyVo;
+        }
     }
 }

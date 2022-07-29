@@ -26,9 +26,7 @@ public class TripController {
 
     // tripstamp 상세 조회
     @GetMapping("/trip-stamp/{trip_stamp_seq}")
-    public ResponseEntity<Map<String, Object>> tripStampDetail(@RequestHeader Map<String, String> header, @PathVariable int trip_stamp_seq) {
-        String userJwt = header.get("jwt");
-
+    public ResponseEntity<Map<String, Object>> tripStampDetail(@PathVariable int trip_stamp_seq) {
         Map<String, Object> res = tripService.tripStampDetail(trip_stamp_seq);
         if (res != null) {
             return new ResponseEntity<>(res, HttpStatus.OK);

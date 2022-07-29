@@ -51,7 +51,7 @@ public class UserService {
     public UserDto login(LoginVo loginVO) {
         UserDto userDto = userMapper.selectById(loginVO.getId());
         // 존재하는 유저고, 비밀번호도 맞고, 이용정지당한 유저가 아니고, 이메일 인증을 완료한 유저
-        if (userDto != null && Objects.equals(userDto.getPassword(), loginVO.getHashedPassword())
+        if (userDto.getDelYn() == 'n' && Objects.equals(userDto.getPassword(), loginVO.getHashedPassword())
                 && userDto.getSuspendedYn() == 'n' && userDto.getEmailVerifiedYn() == 'y') {
             return userDto;
         } else {
