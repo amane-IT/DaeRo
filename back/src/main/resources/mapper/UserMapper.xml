@@ -32,9 +32,9 @@
 
     <update id="deleteUser" parameterType="_int">
         UPDATE users SET `user_email`=NULL, `password`=NULL,
-            `nickname`=NULL, `email_verified_yn`=NULL, `suspended_yn`=NULL,
-            `profile_image_link`=NULL, `reported_count`=NULL, `created_at`=NULL, `del_yn`='y',
-            `fcm_token`=NULL, `password_find_yn`=NULL WHERE `users_seq`=#{user_seq};
+                         `nickname`=NULL, `email_verified_yn`=NULL, `suspended_yn`=NULL,
+                         `profile_image_link`=NULL, `reported_count`=NULL, `created_at`=NULL, `del_yn`='y',
+                         `fcm_token`=NULL, `password_find_yn`=NULL WHERE `users_seq`=#{user_seq};
     </update>
 
 
