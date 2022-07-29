@@ -56,7 +56,7 @@ interface SnsApi {
         @Path("article_seq") articleSeq: Int,
         @Path("reply_seq") replySeq: Int,
         @Query("page") page: Int
-    ): Single<Response<List<ReCommentResponseDto>>>
+    ): Single<List<ReCommentResponseDto>>
 
     /**
      * 대댓글 추가

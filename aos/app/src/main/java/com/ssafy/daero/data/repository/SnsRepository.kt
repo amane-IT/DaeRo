@@ -1,14 +1,21 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.rxjava3.flowable
 import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.data.remote.SnsApi
+import com.ssafy.daero.data.repository.paging.CommentDataSource
+import com.ssafy.daero.data.repository.paging.ReCommentDataSource
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
@@ -26,11 +33,15 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun commentSelect(articleSeq: Int, page: Int): Single<Response<List<CommentResponseDto>>> {
-        return snsApi.commentSelect(articleSeq,page)
-            .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
-            .observeOn(AndroidSchedulers.mainThread())
+    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {CommentDataSource(snsApi, articleSeq)}
+        ).flowable
     }
 
     fun commentAdd(articleSeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
@@ -49,11 +60,15 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
-    fun reCommentSelect(articleSeq: Int, replySeq: Int, page: Int): Single<Response<List<ReCommentResponseDto>>> {
-        return snsApi.reCommentSelect(articleSeq,replySeq,page)
-            .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
-            .observeOn(AndroidSchedulers.mainThread())
+    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { ReCommentDataSource(snsApi, articleSeq, replySeq) }
+        ).flowable
     }
 
     companion object {
