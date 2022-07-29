@@ -125,7 +125,7 @@ CREATE TABLE `user_achievements`
 
 CREATE TABLE `place_tags`
 (
-    `place_tag_seq` int auto_increment,
+    `place_tag_seq` tinyint auto_increment,
     `tag`           nvarchar(15) not null,
     constraint primary key (`place_tag_seq`),
     constraint unique (`tag`)
@@ -151,8 +151,8 @@ CREATE TABLE `region_tags`
 CREATE TABLE `tag_trip_places`
 (
     `tag_trip_places_seq` int auto_increment,
-    `place_tag_seq`       int NOT NULL,
-    `trip_places_seq`     int NOT NULL,
+    `place_tag_seq`       tinyint NOT NULL,
+    `trip_places_seq`     int     NOT NULL,
     constraint primary key (`tag_trip_places_seq`),
     constraint foreign key (`place_tag_seq`) references `place_tags` (`place_tag_seq`),
     constraint foreign key (`trip_places_seq`) references `trip_places` (`trip_places_seq`)
