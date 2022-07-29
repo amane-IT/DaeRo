@@ -1,7 +1,11 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
@@ -20,16 +24,22 @@ class CommentViewModel : BaseViewModel() {
     lateinit var commentData: List<CommentResponseDto>
     lateinit var reCommentData: List<ReCommentResponseDto>
 
-    fun commentSelect(articleSeq: Int, page: Int) {
+    private val _comment = MutableLiveData< PagingData<CommentResponseDto>>()
+    val comment : LiveData<PagingData<CommentResponseDto>>
+        get() = _comment
+
+    private val _reComment = MutableLiveData< PagingData<ReCommentResponseDto>>()
+    val reComment : LiveData<PagingData<ReCommentResponseDto>>
+        get() = _reComment
+
+    fun commentSelect(articleSeq: Int) {
 
         addDisposable(
-            snsRepository.commentSelect(articleSeq, page)
-                .subscribe({ response ->
-                    commentData = response.body()!!
-                    responseState.postValue(SUCCESS)
+            snsRepository.commentSelect(articleSeq).cachedIn(viewModelScope)
+                .subscribe({
+                    _comment.postValue(it)
                 }, { throwable ->
                     Log.d("commentSelectVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
                 })
         )
     }
@@ -92,16 +102,14 @@ class CommentViewModel : BaseViewModel() {
     }
 
 
-    fun reCommentSelect(articleSeq: Int, replySeq: Int, page: Int) {
+    fun reCommentSelect(articleSeq: Int, replySeq: Int) {
 
         addDisposable(
-            snsRepository.reCommentSelect(articleSeq, replySeq, page)
-                .subscribe({ response ->
-                    reCommentData = response.body()!!
-                    responseState.postValue(SUCCESS)
+            snsRepository.reCommentSelect(articleSeq, replySeq).cachedIn(viewModelScope)
+                .subscribe({
+                    _reComment.postValue(it)
                 }, { throwable ->
                     Log.d("reCommentSelectVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
                 })
         )
     }

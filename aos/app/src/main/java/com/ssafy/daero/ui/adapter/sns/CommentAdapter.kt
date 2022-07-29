@@ -1,8 +1,12 @@
 package com.ssafy.daero.ui.adapter.sns
 
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -11,15 +15,12 @@ import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.databinding.ItemCommentBinding
 import com.ssafy.daero.ui.root.sns.CommentListener
-import com.ssafy.daero.ui.root.sns.CommentViewModel
 
 class CommentAdapter(
-    private val articleSeq: Int,
-    private val commentViewModel: CommentViewModel
+    private val articleSeq: Int
     , listener: CommentListener
-    ) : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() {
+    ) : PagingDataAdapter<CommentResponseDto, CommentAdapter.CommentViewHolder>(COMPARATOR) {
 
-    var commentData: List<CommentResponseDto> = emptyList()
     lateinit var onItemClickListener : (View, Int, Int, String) -> Unit
     var mCallback = listener
 
@@ -30,7 +31,6 @@ class CommentAdapter(
                 parent,
                 false
             ),
-            commentViewModel,
             articleSeq,
             mCallback
         ).apply {
@@ -39,14 +39,13 @@ class CommentAdapter(
     }
 
     override fun onBindViewHolder(holder: CommentViewHolder, position: Int) {
-        holder.bind(commentData[position]!!,onItemClickListener)
+        getItem(position)?.let {
+            holder.bind(it)
+        }
     }
-
-    override fun getItemCount() = commentData.size
 
     class CommentViewHolder(
         private val binding: ItemCommentBinding,
-        private val commentViewModel: CommentViewModel,
         private val articleSeq: Int,
         private val mCallback: CommentListener
     ) :
@@ -57,7 +56,8 @@ class CommentAdapter(
         private var modified: Char? = null
         private var replyCount: Int? = null
 
-        fun bind(data: CommentResponseDto, onItemClickListener: (View, Int, Int, String) -> Unit) {
+        fun bind(data: CommentResponseDto) {
+            binding.recyclerCommentReComment.visibility=View.GONE
             Glide.with(binding.imgCommentItemUser)
                 .load(data.profile_url)
                 .placeholder(R.drawable.ic_back)
@@ -79,20 +79,21 @@ class CommentAdapter(
         }
         fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit) {
             binding.LinearCommentReComment.setOnClickListener {
+                var adapter: ReCommentAdapter = mCallback.reCommentSelect(articleSeq,replySeq!!,ReCommentAdapter(onItemClickListener))
                 binding.LinearCommentReComment.visibility = View.GONE
                 binding.progressBarCommentLoading.visibility = View.VISIBLE
-                binding.recyclerCommentReComment.visibility = View.VISIBLE
-                binding.recyclerCommentReComment.apply {
-                    adapter = ReCommentAdapter(onItemClickListener).apply {
-                        this.reComment = mCallback.reCommentSelect(articleSeq,replySeq!!,10)
-                        binding.progressBarCommentLoading.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.recyclerCommentReComment.visibility = View.VISIBLE
+                    binding.recyclerCommentReComment.apply {
+                        this.adapter = adapter
+                        layoutManager = LinearLayoutManager(
+                            binding.root.context,
+                            RecyclerView.VERTICAL,
+                            false
+                        )
                     }
-                    layoutManager = LinearLayoutManager(
-                        binding.root.context,
-                        RecyclerView.HORIZONTAL,
-                        false
-                    )
-                }
+                    binding.progressBarCommentLoading.visibility = View.GONE
+                }, 500L)
             }
             binding.imgCommentMenu.setOnClickListener {
                 onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
@@ -102,6 +103,21 @@ class CommentAdapter(
             }
             binding.tvCommentReCommentAdd.setOnClickListener {
                 mCallback.reCommentAdd(replySeq!!)
+            }
+        }
+    }
+
+    companion object {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CommentResponseDto>() {
+            override fun areItemsTheSame(oldItem: CommentResponseDto, newItem: CommentResponseDto): Boolean {
+                return oldItem.reply_seq == newItem.reply_seq
+            }
+
+            override fun areContentsTheSame(
+                oldItem: CommentResponseDto,
+                newItem: CommentResponseDto
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }

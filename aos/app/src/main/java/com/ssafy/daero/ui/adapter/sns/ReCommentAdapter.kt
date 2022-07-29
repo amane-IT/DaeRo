@@ -3,16 +3,20 @@ package com.ssafy.daero.ui.adapter.sns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
+import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.databinding.ItemReCommentBinding
 
-class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) : RecyclerView.Adapter<ReCommentAdapter.ReCommentViewHolder>() {
+class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
+    PagingDataAdapter<ReCommentResponseDto, ReCommentAdapter.ReCommentViewHolder>
+        (COMPARATOR) {
 
-    var reComment: List<ReCommentResponseDto> = emptyList()
     var onItemClickListener = onItemClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReCommentViewHolder {
@@ -28,10 +32,10 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ReCommentViewHolder, position: Int) {
-        holder.bind(reComment[position])
+        getItem(position)?.let {
+            holder.bind(it)
+        }
     }
-
-    override fun getItemCount() = reComment.size
 
     class ReCommentViewHolder(private val binding: ItemReCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -58,14 +62,25 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
 
         fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit ) {
             binding.imgReCommentMenu.setOnClickListener {
-                binding.root.setOnClickListener {
-                    onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
-                }
+                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
             }
             binding.imgReCommentUser.setOnClickListener {
-                binding.root.setOnClickListener {
-                    onItemClickListener(it, replySeq!!, 2, "")
-                }
+                onItemClickListener(it, replySeq!!, 2, "")
+            }
+        }
+    }
+
+    companion object {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<ReCommentResponseDto>() {
+            override fun areItemsTheSame(oldItem: ReCommentResponseDto, newItem: ReCommentResponseDto): Boolean {
+                return oldItem.reply_seq == newItem.reply_seq
+            }
+
+            override fun areContentsTheSame(
+                oldItem: ReCommentResponseDto,
+                newItem: ReCommentResponseDto
+            ): Boolean {
+                return oldItem == newItem
             }
         }
     }
