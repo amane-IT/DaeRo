@@ -28,4 +28,6 @@ public interface TripMapper {
     ArrayList<AlbumVo> selectOtherAlbumListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
 
     ArrayList<AlbumVo> selectMyAlbumListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    int selectAlbumCountByUserSeq(int userSeq);
 }
