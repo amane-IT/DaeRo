@@ -49,7 +49,7 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
 
     private fun observeData(){
         tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner){
-            binding.progressBarSignupEmailLoading.isVisible = it
+            binding.progressBarTripPreferenceLoading.isVisible = it
         }
 
 //        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner){ state ->
