@@ -233,6 +233,31 @@ public class SnsService {
             user = new HashMap<>();
         }
         return likeUserList;
+    }
 
+    public String reportArticle(int articleSeq, int userSeq, int reportSeq) {
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return "BAD_REQUEST"; }
+        Integer reportedUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
+        // 신고한 적 있는지 확인
+        int reported = snsMapper.selectReportArticleByUserSeq(articleSeq, userSeq);
+        if (reported == 1) { return "ALREADY_REPORTED"; }
+        // 신고하기
+        snsMapper.insertReport(articleSeq, userSeq, reportedUser, reportSeq, "article");
+        return "SUCCESS";
+    }
+
+    public String reportReply(int replySeq, int userSeq, int reportSeq) {
+        // reply 있는지 확인
+        int reply = snsMapper.selectReplyByReplySeq(replySeq);
+        if (reply == 0) { return "BAD_REQUEST"; }
+        Integer reportedUser = snsMapper.selectUserSeqByReplySeq(replySeq);
+        // 신고한 적 있는지 확인
+        int reported = snsMapper.selectReportReplyByUserSeq(replySeq, userSeq);
+        if(reported == 1) { return "ALREADY_REPORTED"; }
+        // 신고하기
+        snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
+        return "SUCCESS";
     }
 }
