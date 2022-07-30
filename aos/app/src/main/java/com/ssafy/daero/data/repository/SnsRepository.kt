@@ -5,12 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.CommentDataSource
+import com.ssafy.daero.data.repository.paging.LikeDataSource
 import com.ssafy.daero.data.repository.paging.ReCommentDataSource
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -68,6 +66,17 @@ class SnsRepository private constructor(context: Context) {
                 prefetchDistance = 1
             ),
             pagingSourceFactory = { ReCommentDataSource(snsApi, articleSeq, replySeq) }
+        ).flowable
+    }
+
+    fun getLikeUsers(articleSeq: Int) : Flowable<PagingData<LikeItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { LikeDataSource(snsApi, articleSeq) }
         ).flowable
     }
 

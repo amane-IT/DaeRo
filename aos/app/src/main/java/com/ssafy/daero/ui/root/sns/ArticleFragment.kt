@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -150,13 +151,13 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private fun setOnClickListeners() {
         binding.imgArticleUser.setOnClickListener {
             findNavController().navigate(
-                R.id.action_articleFragment_to_myPageFragment,
+                R.id.action_articleFragment_to_otherPageFragment,
                 bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
         }
         binding.tvArticleUser.setOnClickListener {
             findNavController().navigate(
-                R.id.action_articleFragment_to_myPageFragment,
+                R.id.action_articleFragment_to_otherPageFragment,
                 bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
             )
         }
@@ -170,9 +171,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.LinearArticleLike.setOnClickListener {
             //todo 좋아요 누른 인원, article_seq 번들로 전달
-            findNavController().navigate(
-                R.id.action_articleFragment_to_likeFragment,
-            )
+            Log.d("ArticleFragment_싸피", "setOnClickListeners: ")
+            LikeBottomSheetFragment(3, articleViewModel.articleData.likes).show(childFragmentManager, "LikeBottomSheet")
         }
         binding.LinearArticleComment.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
