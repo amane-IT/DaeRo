@@ -16,3 +16,5 @@ const val MY_PAGE_FRAGMENT = "my_age_fragment"
 
 const val COMMENT_BOTTOM_SHEET = "comment_bottom_sheet"
 const val LIKE_BOTTOM_SHEET = "like_bottom_sheet"
+const val REPORT_BOTTOM_SHEET = "report_bottom_sheet"
+const val ARTICLE_MENU_BOTTOM_SHEET = "article_menu_bottom_sheet"

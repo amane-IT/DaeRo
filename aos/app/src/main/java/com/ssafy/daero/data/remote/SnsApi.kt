@@ -72,4 +72,22 @@ interface SnsApi {
         @Path("article_seq") articleSeq: Int,
         @Query("page") page: Int
     ): Single<PagingResponseDto<LikeItem>>
+
+    /**
+     * 게시글 신고하기
+     */
+    @POST("sns/article/{article_seq}/report")
+    fun reportArticle(
+        @Path("article_seq") articleSeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
+
+    /**
+     * 댓글 신고하기
+     */
+    @POST("sns/reply/{reply_seq}/report")
+    fun reportComment(
+        @Path("reply_seq") replySeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
 }
