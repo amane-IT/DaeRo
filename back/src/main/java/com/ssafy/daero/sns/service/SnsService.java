@@ -101,13 +101,15 @@ public class SnsService {
         }
     }
 
-    public ArrayList<Map<String, Object>> replyList(int articleSeq, String page) {
+    public Map<String, Object> replyList(int articleSeq, String page) {
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         if (articleUser == null) { return null; }
+        int totalPage = (int) Math.ceil((snsMapper.selectReplyByArticleSeq(articleSeq))/10.0);
+        if (totalPage  == 0) { totalPage = 1; }
         ArrayList<Map<String, Object>> replyList = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
         ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
-
+        Map<String, Object> results = new HashMap<>();
         for (ReplyVo rVo :
                 replyVos) {
             reply.put("reply_seq", rVo.getReplySeq());
@@ -122,7 +124,10 @@ public class SnsService {
             replyList.add(reply);
             reply = new HashMap<>();
         }
-        return replyList;
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", replyList);
+        return results;
     }
 
     public ReplyVo createReply(int articleSeq, int userSeq, String content) {
@@ -162,9 +167,12 @@ public class SnsService {
         return replyVo;
     }
 
-    public ArrayList<Map<String, Object>> rereplyList(int replySeq, String page) {
+    public Map<String, Object> rereplyList(int replySeq, String page) {
         Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
         if (replyUser == null) { return null; }
+        int totalPage = (int) Math.ceil((snsMapper.selectRereplyByReplySeq(replySeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        Map<String, Object> results = new HashMap<>();
         ArrayList<ReplyVo> rereplyVos = snsMapper.selectRereplyListByReplySeq(replySeq, Integer.parseInt(page));
         ArrayList<Map<String, Object>> rereplyList = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
@@ -181,7 +189,10 @@ public class SnsService {
             rereplyList.add(reply);
             reply = new HashMap<>();
         }
-        return rereplyList;
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", rereplyList);
+        return results;
     }
 
     public ReplyVo createRereply(int articleSeq,int replySeq, int userSeq, String content) {
@@ -241,7 +252,7 @@ public class SnsService {
             user = new HashMap<>();
         }
         results.put("total_page", totalPage);
-        results.put("page", page);
+        results.put("page", Integer.parseInt(page));
         results.put("results", likeUserList);
         return results;
     }
@@ -342,7 +353,7 @@ public class SnsService {
             following = new HashMap<>();
         }
         results.put("total_page", totalPage);
-        results.put("page", page);
+        results.put("page", Integer.parseInt(page));
         results.put("results", followingList);
         return results;
     }

@@ -48,8 +48,8 @@ public class SnsController {
     }
 
     @GetMapping("/article/{article_seq}/reply")
-    public ResponseEntity<ArrayList<Map<String, Object>>> replyList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") String page) {
-        ArrayList<Map<String, Object>> res = snsService.replyList(article_seq, page);
+    public ResponseEntity<Map<String, Object>> replyList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> res = snsService.replyList(article_seq, page);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
@@ -92,8 +92,8 @@ public class SnsController {
     }
 
     @GetMapping("/article/{article_seq}/reply/{reply_seq}")
-    public ResponseEntity<ArrayList<Map<String, Object>>> rereplyList(@PathVariable int article_seq, @PathVariable int reply_seq, @RequestParam(defaultValue = "1") String page) {
-        ArrayList<Map<String, Object>> res = snsService.rereplyList(reply_seq, page);
+    public ResponseEntity<Map<String, Object>> rereplyList(@PathVariable int article_seq, @PathVariable int reply_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> res = snsService.rereplyList(reply_seq, page);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
         else { return new ResponseEntity<>(res, HttpStatus.CREATED); }

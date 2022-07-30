@@ -240,6 +240,18 @@
         WHERE articles_seq=#{articleSeq}
     </select>
 
+    <select id="selectReplyByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.replies
+        WHERE articles_seq=#{articleSeq} AND rereply_parent IS NULL
+    </select>
+
+    <select id="selectRereplyByReplySeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.replies
+        WHERE rereply_parent=#{replySeq}
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
