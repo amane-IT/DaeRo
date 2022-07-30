@@ -31,7 +31,7 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentResponseDto>> {
+    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -58,7 +58,7 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
-    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentResponseDto>> {
+    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,

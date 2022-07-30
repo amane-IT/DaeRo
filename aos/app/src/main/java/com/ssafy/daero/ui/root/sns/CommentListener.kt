@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
 
 interface CommentListener {

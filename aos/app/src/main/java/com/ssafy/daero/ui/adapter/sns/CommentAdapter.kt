@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.adapter.sns
 
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
-import com.ssafy.daero.data.dto.article.CommentResponseDto
+import com.ssafy.daero.data.dto.article.CommentItem
 import com.ssafy.daero.databinding.ItemCommentBinding
 import com.ssafy.daero.ui.root.sns.CommentListener
 
 class CommentAdapter(
     private val articleSeq: Int
     , listener: CommentListener
-    ) : PagingDataAdapter<CommentResponseDto, CommentAdapter.CommentViewHolder>(COMPARATOR) {
+    ) : PagingDataAdapter<CommentItem, CommentAdapter.CommentViewHolder>(COMPARATOR) {
 
     lateinit var onItemClickListener : (View, Int, Int, String) -> Unit
     var mCallback = listener
@@ -56,7 +55,7 @@ class CommentAdapter(
         private var modified: Char? = null
         private var replyCount: Int? = null
 
-        fun bind(data: CommentResponseDto) {
+        fun bind(data: CommentItem) {
             binding.recyclerCommentReComment.visibility=View.GONE
             Glide.with(binding.imgCommentItemUser)
                 .load(data.profile_url)
@@ -108,14 +107,14 @@ class CommentAdapter(
     }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<CommentResponseDto>() {
-            override fun areItemsTheSame(oldItem: CommentResponseDto, newItem: CommentResponseDto): Boolean {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<CommentItem>() {
+            override fun areItemsTheSame(oldItem: CommentItem, newItem: CommentItem): Boolean {
                 return oldItem.reply_seq == newItem.reply_seq
             }
 
             override fun areContentsTheSame(
-                oldItem: CommentResponseDto,
-                newItem: CommentResponseDto
+                oldItem: CommentItem,
+                newItem: CommentItem
             ): Boolean {
                 return oldItem == newItem
             }
