@@ -234,6 +234,12 @@
           AND user.row &lt; (#{page} * 10) + 1
     </select>
 
+    <select id="selectLikeCountByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.likes
+        WHERE articles_seq=#{articleSeq}
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
