@@ -1,10 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_tripNext"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/text_tripNext_title1">
+
+            <TextView
+                style="@style/HeadBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:text="DaeRo" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <TextView
+            android:id="@+id/text_tripNext_title1"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="김싸피님 다음"
+            android:textSize="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_tripNext"/>
+
+        <TextView
+            android:id="@+id/text_tripNext_title2"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:text="여행을 시작해볼까요?"
+            android:textSize="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripNext_title1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_tripNext_nextTripRecommend"
+            style="@style/BodyWhite"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="16dp"
+            android:text="다음 여행지 추천"
+            android:background="@drawable/button_regular"
+            app:layout_constraintBottom_toTopOf="@id/text_tripNext_nearBy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripNext_title2" />
+
+        <TextView
+            android:id="@+id/text_tripNext_nearBy"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="내 주변 여행지"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/button_tripNext_nextTripRecommend" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_tripNext_nearBy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingStart="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripNext_nearBy"
+            app:layout_constraintBottom_toTopOf="@id/text_tripNext_now"
+            tools:listitem="@layout/item_trip_popular" />
+
+        <TextView
+            android:id="@+id/text_tripNext_now"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="지금까지 여행지"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recycler_tripNext_nearBy"
+            app:layout_constraintBottom_toTopOf="@id/recycler_tripNext_now"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_tripNext_now"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="240dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp"
+            android:paddingStart="12dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripNext_now"
+            tools:listitem="@layout/item_trip_popular" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_tripNext_stop"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginVertical="16dp"
+            android:layout_marginHorizontal="16dp"
+            style="@style/BodyWhite"
+            android:backgroundTint="@color/lightGray"
+            android:background="@drawable/button_disabled"
+            android:text="그만하기"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
