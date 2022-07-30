@@ -3,20 +3,13 @@ package com.ssafy.daero.ui.root.trip
 
 import android.view.View
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripNextBinding
-import com.ssafy.daero.ui.adapter.TripHotAdapter
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.hotArticles
 import com.ssafy.daero.utils.popularTripPlaces
-import com.ssafy.daero.utils.view.toast
 
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
