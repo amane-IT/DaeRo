@@ -75,4 +75,6 @@ public interface SnsMapper {
     ArrayList<UserVo> selectFollowerListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
 
     ArrayList<UserVo> selectFollowingListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    int selectLikeCountByArticleSeq(int articleSeq);
 }
