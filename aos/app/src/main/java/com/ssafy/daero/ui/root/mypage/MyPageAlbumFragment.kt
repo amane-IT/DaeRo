@@ -4,10 +4,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.databinding.FragmentMyPageAlbumBinding
 import com.ssafy.daero.ui.adapter.MyPageAlbumAdapter
-import com.ssafy.daero.utils.myAlbums
 
 class MyPageAlbumFragment :
     BaseFragment<FragmentMyPageAlbumBinding>(R.layout.fragment_my_page_album) {
@@ -17,6 +15,11 @@ class MyPageAlbumFragment :
     override fun init() {
         initAdapter()
         observeData()
+        getMyAlbum()
+    }
+
+    private fun getMyAlbum() {
+        myPageViewModel.getMyAlbum()
     }
 
     private fun initAdapter() {
@@ -34,9 +37,9 @@ class MyPageAlbumFragment :
     }
 
     private fun observeData() {
-        // todo: 앨범 리스트 받아오기
-        myPageAlbumAdapter.albums = myAlbums
-        myPageAlbumAdapter.notifyDataSetChanged()
+        myPageViewModel.myAlbum.observe(viewLifecycleOwner) {
+            myPageAlbumAdapter.submitData(lifecycle, it)
+        }
     }
 
     private val albumItemClickListener: (View, Int) -> Unit = { _, tripSeq ->
