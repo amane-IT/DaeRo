@@ -1,4 +1,4 @@
-package com.ssafy.daero.ui.adapter
+package com.ssafy.daero.ui.adapter.signup
 
 import android.view.LayoutInflater
 import android.view.View

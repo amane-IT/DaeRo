@@ -26,3 +26,13 @@ fun loadPreference(view: ImageView, url: String?) {
         .transform(CenterCrop(), RoundedCorners(16))
         .into(view)
 }
+
+@BindingAdapter("circleImageUrl")
+fun loadCircleImage(view: ImageView, url: String?) {
+    Glide.with(view)
+        .load(url)
+        .placeholder(R.drawable.placeholder_trip_album)
+        .apply(RequestOptions().centerCrop().circleCrop())
+        .error(R.drawable.placeholder_trip_album)
+        .into(view)
+}

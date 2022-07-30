@@ -1,9 +1,7 @@
 package com.ssafy.daero.data.remote
 
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import io.reactivex.rxjava3.core.Completable
@@ -67,4 +65,13 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body commentAddRequestDto: CommentAddRequestDto
     ): Completable
+
+    /**
+     * 좋아요 누른 사람 목록
+     */
+    @GET("sns/article/{article_seq}/likes")
+    fun getLikeUsers(
+        @Path("article_seq") articleSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<LikeItem>>
 }
