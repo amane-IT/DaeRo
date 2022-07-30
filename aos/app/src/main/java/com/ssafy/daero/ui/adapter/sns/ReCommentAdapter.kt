@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.article.ReCommentItem
 import com.ssafy.daero.databinding.ItemReCommentBinding
 
 class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
-    PagingDataAdapter<ReCommentResponseDto, ReCommentAdapter.ReCommentViewHolder>
+    PagingDataAdapter<ReCommentItem, ReCommentAdapter.ReCommentViewHolder>
         (COMPARATOR) {
 
     var onItemClickListener = onItemClickListener
@@ -44,7 +43,7 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
         private var replySeq: Int? = null
         private var modified: Char? = null
 
-        fun bind(data: ReCommentResponseDto) {
+        fun bind(data: ReCommentItem) {
             Glide.with(binding.imgReCommentUser)
                 .load(data.profile_url)
                 .placeholder(R.drawable.ic_back)
@@ -71,14 +70,14 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
     }
 
     companion object {
-        private val COMPARATOR = object : DiffUtil.ItemCallback<ReCommentResponseDto>() {
-            override fun areItemsTheSame(oldItem: ReCommentResponseDto, newItem: ReCommentResponseDto): Boolean {
+        private val COMPARATOR = object : DiffUtil.ItemCallback<ReCommentItem>() {
+            override fun areItemsTheSame(oldItem: ReCommentItem, newItem: ReCommentItem): Boolean {
                 return oldItem.reply_seq == newItem.reply_seq
             }
 
             override fun areContentsTheSame(
-                oldItem: ReCommentResponseDto,
-                newItem: ReCommentResponseDto
+                oldItem: ReCommentItem,
+                newItem: ReCommentItem
             ): Boolean {
                 return oldItem == newItem
             }
