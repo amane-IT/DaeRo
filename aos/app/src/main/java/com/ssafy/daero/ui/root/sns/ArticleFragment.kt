@@ -27,9 +27,7 @@ import com.ssafy.daero.data.dto.article.TripStamp
 import com.ssafy.daero.databinding.FragmentArticleBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleAdapter
 import com.ssafy.daero.ui.adapter.sns.ExpenseAdapter
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.getPxFromDp
 
 
@@ -170,21 +168,22 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             binding.imgArticleLike.startAnimation(fadeScale)
         }
         binding.LinearArticleLike.setOnClickListener {
-            //todo 좋아요 누른 인원, article_seq 번들로 전달
-            Log.d("ArticleFragment_싸피", "setOnClickListeners: ")
-            LikeBottomSheetFragment(3, articleViewModel.articleData.likes).show(childFragmentManager, "LikeBottomSheet")
+            //todo: 좋아요 리스트 페이지: 좋아요 누른 인원, article_seq 번들로 전달
+            LikeBottomSheetFragment(3, articleViewModel.articleData.likes).show(childFragmentManager, LIKE_BOTTOM_SHEET)
         }
         binding.LinearArticleComment.setOnClickListener {
-            //todo 댓글, article_seq 번들로 전달
-            findNavController().navigate(
-                R.id.action_articleFragment_to_commentFragment
-            )
+            //todo 댓글 리스트 페이지: 댓글수, article_seq 번들로 전달
+            CommentBottomSheetFragment(3, articleViewModel.articleData.comments).show(childFragmentManager, COMMENT_BOTTOM_SHEET)
+//            findNavController().navigate(
+//                R.id.action_articleFragment_to_commentFragment
+//            )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
-            findNavController().navigate(
-                R.id.action_articleFragment_to_commentFragment
-            )
+            CommentBottomSheetFragment(3, articleViewModel.articleData.comments).show(childFragmentManager, COMMENT_BOTTOM_SHEET)
+//            findNavController().navigate(
+//                R.id.action_articleFragment_to_commentFragment
+//            )
         }
         binding.imgArticleMenu.setOnClickListener {
             val articleMenuBottomSheetFragment = ArticleMenuBottomSheetFragment()

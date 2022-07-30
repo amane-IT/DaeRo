@@ -15,7 +15,7 @@ import com.ssafy.daero.databinding.FragmentCommentMenuBottomSheetBinding
 
 class CommentMenuBottomSheetFragment(
     val replySeq: Int,
-    val commentViewModel: CommentViewModel,
+    val articleViewModel: ArticleViewModel,
     val content: String,
     listener: CommentListener
 ) : BottomSheetDialogFragment() {
@@ -60,9 +60,7 @@ class CommentMenuBottomSheetFragment(
         }
         binding.tvCommentMenuReport.setOnClickListener {
             //todo: 신고하기 bundle
-            requireParentFragment().findNavController().navigate(
-                R.id.action_commentFragment_to_reportFragment
-            )
+
             dismiss()
         }
         binding.tvCommentMenuBlock.setOnClickListener {

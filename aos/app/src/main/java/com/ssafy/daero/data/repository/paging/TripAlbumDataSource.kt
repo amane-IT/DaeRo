@@ -21,9 +21,9 @@ class TripAlbumDataSource(private val tripApi: TripApi) : RxPagingSource<Int, Tr
             .subscribeOn(Schedulers.io())
             .map {
                 LoadResult.Page(
-                    data = it,
+                    data = it.results,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = page + 1
+                    nextKey = if (page == it.total_page) null else page + 1
                 ) as LoadResult<Int, TripAlbumItem>
             }
             .onErrorReturn {

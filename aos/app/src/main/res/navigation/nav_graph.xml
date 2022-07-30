@@ -325,14 +325,6 @@
             app:popExitAnim="@anim/to_right"
             />
         <action
-            android:id="@+id/action_articleFragment_to_commentFragment"
-            app:destination="@id/commentFragment"
-            app:enterAnim="@anim/from_up"
-            app:exitAnim="@anim/to_down"
-            app:popEnterAnim="@anim/from_down"
-            app:popExitAnim="@anim/to_up"
-            />
-        <action
             android:id="@+id/action_articleFragment_to_tripFollowFragment"
             app:destination="@id/tripFollowFragment"
             app:enterAnim="@anim/from_right"
@@ -409,28 +401,6 @@
         android:name="com.ssafy.daero.ui.setting.ReportFragment"
         android:label="ReportFragment"
         tools:layout="@layout/fragment_report"/>
-    <fragment
-        android:id="@+id/commentFragment"
-        android:name="com.ssafy.daero.ui.root.sns.CommentFragment"
-        android:label="CommentFragment"
-        tools:layout="@layout/fragment_comment">
-        <action
-            android:id="@+id/action_commentFragment_to_reportFragment"
-            app:destination="@id/reportFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
-        <action
-            android:id="@+id/action_commentFragment_to_otherPageFragment"
-            app:destination="@id/otherPageFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/reCommentFragment"
-        android:name="com.ssafy.daero.ui.root.sns.ReCommentFragment"
-        android:label="ReCommentFragment"
-        tools:layout="@layout/fragment_re_comment"/>
     <fragment
         android:id="@+id/tripInformationFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"

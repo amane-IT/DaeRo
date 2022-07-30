@@ -13,3 +13,6 @@ const val SEARCH_FRAGMENT = "search_fragment"
 const val TRIP_FRAGMENT = "trip_fragment"
 const val COLLECTION_FRAGMENT = "collection_fragment"
 const val MY_PAGE_FRAGMENT = "my_age_fragment"
+
+const val COMMENT_BOTTOM_SHEET = "comment_bottom_sheet"
+const val LIKE_BOTTOM_SHEET = "like_bottom_sheet"
