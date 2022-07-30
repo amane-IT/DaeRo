@@ -183,6 +183,57 @@
         WHERE reporter_users_seq=#{userSeq} AND report_url=#{replySeq}
     </select>
 
+    <select id="selectFollowByUserSeq" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.follows
+        WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
+    </select>
+
+    <select id="insertFollow" resultType="java.lang.Integer">
+        INSERT INTO daero.follows(following_users_seq, follower_users_seq)
+        VALUES (#{followedUserSeq}, #{followerUserSeq})
+    </select>
+
+    <select id="deleteFollow" resultType="java.lang.Integer">
+        DELETE FROM daero.follows WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
+    </select>
+
+    <select id="selectFollowerByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.follows
+        WHERE following_users_seq=#{userSeq}
+    </select>
+
+    <select id="selectFollowingByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.follows
+        WHERE follower_users_seq=#{userSeq}
+    </select>
+
+    <select id="selectFollowerListByUserSeq" resultMap="mappingUserVo">
+        SELECT *
+        FROM
+        (SELECT row_number()                       over (ORDER BY nickname ASC) AS row, users_seq, nickname, profile_image_link
+        FROM daero.users
+        WHERE users_seq IN (SELECT follower_users_seq
+        FROM daero.follows
+        WHERE following_users_seq=#{userSeq})) AS user
+        WHERE (#{page} - 1) * 10 &lt; user.row
+                             AND user.row &lt; (#{page} * 10) + 1
+    </select>
+
+    <select id="selectFollowingListByUserSeq" resultMap="mappingUserVo">
+        SELECT *
+        FROM
+            (SELECT row_number()                       over (ORDER BY nickname ASC) AS row, users_seq, nickname, profile_image_link
+             FROM daero.users
+             WHERE users_seq IN (SELECT following_users_seq
+                                 FROM daero.follows
+                                 WHERE follower_users_seq=#{userSeq})) AS user
+        WHERE (#{page} - 1) * 10 &lt; user.row
+          AND user.row &lt; (#{page} * 10) + 1
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
