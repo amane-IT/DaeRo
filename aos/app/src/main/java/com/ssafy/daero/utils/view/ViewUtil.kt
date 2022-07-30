@@ -1,8 +1,10 @@
 package com.ssafy.daero.utils.view
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.os.Build
+import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,8 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.core.content.ContentProviderCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.WindowCompat
@@ -18,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import com.ssafy.daero.R
@@ -112,4 +117,21 @@ fun showSnackbar(view: View, message: String){
     Snackbar.make(view,message, Snackbar.LENGTH_INDEFINITE)
         .setAction("확인"){}
         .show()
+}
+
+fun BottomSheetDialogFragment.setFullHeight() : BottomSheetDialog {
+    return BottomSheetDialog(requireContext(), theme).apply {
+        setOnShowListener { bottomSheetDialog ->
+            (bottomSheetDialog as BottomSheetDialog).findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)?.let { view ->
+                BottomSheetBehavior.from(view).apply {
+                    state = BottomSheetBehavior.STATE_EXPANDED
+                    isDraggable = false
+                }
+
+                val layoutParams = view.layoutParams
+                layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
+                view.layoutParams = layoutParams
+            }
+        }
+    }
 }

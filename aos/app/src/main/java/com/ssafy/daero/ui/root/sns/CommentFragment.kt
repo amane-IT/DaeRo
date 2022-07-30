@@ -1,25 +1,20 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.databinding.*
-import com.ssafy.daero.ui.adapter.MyPageAlbumAdapter
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
 import com.ssafy.daero.utils.view.toast
-import kotlinx.coroutines.flow.collectLatest
 
 
 class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_comment),
@@ -46,7 +41,7 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
                 }
                 2 -> {
                     findNavController().navigate(
-                        R.id.action_commentFragment_to_myPageFragment,
+                        R.id.action_commentFragment_to_otherPageFragment,
                         bundleOf("UserSeq" to id)
                     )
                 }

@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -10,6 +9,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentMyPageBinding
+import com.ssafy.daero.ui.adapter.mypage.MyPageViewPagerAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.view.toast

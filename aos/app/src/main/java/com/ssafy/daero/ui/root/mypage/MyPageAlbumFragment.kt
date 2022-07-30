@@ -5,7 +5,7 @@ import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentMyPageAlbumBinding
-import com.ssafy.daero.ui.adapter.MyPageAlbumAdapter
+import com.ssafy.daero.ui.adapter.mypage.MyPageAlbumAdapter
 
 class MyPageAlbumFragment :
     BaseFragment<FragmentMyPageAlbumBinding>(R.layout.fragment_my_page_album) {
