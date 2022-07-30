@@ -260,4 +260,79 @@ public class SnsService {
         snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
         return "SUCCESS";
     }
+
+    public String followUser(int followerUserSeq, int followedUserSeq) {
+        // follow할 유저가 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // follow한 적 있는지 확인
+        int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
+        if (followed != 0) { return "BAD_REQUEST"; }
+        // follow
+        snsMapper.insertFollow(followerUserSeq, followedUserSeq);
+        return "SUCCESS";
+    }
+
+    public String unfollowUser(int followerUserSeq, int followedUserSeq) {
+        // unfollow할 유저가 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // follow한 적 있는지 확인
+        int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
+        if (followed != 1) { return "BAD_REQUEST"; }
+        // unfollow
+        snsMapper.deleteFollow(followerUserSeq, followedUserSeq);
+        return "SUCCESS";
+    }
+
+    public Map<String, Object> followerList(int userSeq, String page) {
+        // user확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return null; }
+        // follow 목록 불러오기
+        int totalPage = (int) Math.ceil((snsMapper.selectFollowerByUserSeq(userSeq))*10/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        ArrayList<UserVo> users = snsMapper.selectFollowerListByUserSeq(userSeq, Integer.parseInt(page));
+        Map<String, Object> results = new HashMap<>();
+        ArrayList<Map<String, Object>> followerList = new ArrayList<>();
+        Map<String, Object> follower = new HashMap<>();
+        for (UserVo uVo :
+                users) {
+            follower.put("user_seq", uVo.getUserSeq());
+            follower.put("nickname", uVo.getNickname());
+            follower.put("profile_url", uVo.getProfileImageLink());
+            followerList.add(follower);
+            follower = new HashMap<>();
+        }
+        results.put("page", Integer.parseInt(page));
+        results.put("total_page", totalPage);
+        results.put("results", followerList);
+
+        return results;
+    }
+
+    public Map<String, Object> followingList(int userSeq, String page) {
+        // user확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return null; }
+        // follow 목록 불러오기
+        int totalPage = (int) Math.ceil((snsMapper.selectFollowingByUserSeq(userSeq))*10/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        ArrayList<UserVo> users = snsMapper.selectFollowingListByUserSeq(userSeq, Integer.parseInt(page));
+        ArrayList<Map<String, Object>> followingList = new ArrayList<>();
+        Map<String, Object> results = new HashMap<>();
+        Map<String, Object> following = new HashMap<>();
+        for (UserVo uVo :
+                users) {
+            following.put("user_seq", uVo.getUserSeq());
+            following.put("nickname", uVo.getNickname());
+            following.put("profile_url", uVo.getProfileImageLink());
+            followingList.add(following);
+            following = new HashMap<>();
+        }
+        results.put("total_page", totalPage);
+        results.put("page", page);
+        results.put("results", followingList);
+        return results;
+    }
 }

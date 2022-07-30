@@ -155,4 +155,44 @@ public class SnsController {
         else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
     }
 
+    @PostMapping("/follow")
+    public ResponseEntity<String> followUser(@RequestHeader("jwt") String jwt, @RequestParam("follow-user") int user_seq) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        String follow = snsService.followUser(Integer.parseInt(currentUser.get("user_seq")), user_seq);
+        if (follow == "NO_SUCH_USER") { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (follow == "SUCCESS") { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
+    @DeleteMapping("/follow")
+    public ResponseEntity<String> unfollowUser(@RequestHeader("jwt") String jwt, @RequestParam("follow-user") int user_seq) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        String follow = snsService.unfollowUser(Integer.parseInt(currentUser.get("user_seq")), user_seq);
+        if (follow == "NO_SUCH_USER") { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (follow == "SUCCESS") { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
+    @GetMapping("/user/{user_seq}/follower")
+    public ResponseEntity<Map<String, Object>> followerList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> followerList = snsService.followerList(user_seq, page);
+        if (followerList == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        else { return new ResponseEntity<>(followerList, HttpStatus.OK); }
+    }
+
+    @GetMapping("/user/{user_seq}/following")
+    public ResponseEntity<Map<String, Object>> followingList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> followingList = snsService.followingList(user_seq, page);
+        if (followingList == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(followingList, HttpStatus.OK);
+        }
+    }
 }

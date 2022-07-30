@@ -62,4 +62,17 @@ public interface SnsMapper {
     int selectReportArticleByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
     int selectReportReplyByUserSeq(@Param("replySeq") int replySeq, @Param("userSeq") int userSeq);
+
+    int selectFollowByUserSeq(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+    Integer insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+
+    Integer deleteFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+
+    int selectFollowerByUserSeq(int userSeq);
+
+    int selectFollowingByUserSeq(int userSeq);
+
+    ArrayList<UserVo> selectFollowerListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    ArrayList<UserVo> selectFollowingListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
 }
