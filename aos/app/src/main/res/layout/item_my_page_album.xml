@@ -8,7 +8,7 @@
 
         <variable
             name="album"
-            type="com.ssafy.daero.data.dto.trip.TripAlbumResponseDto" />
+            type="com.ssafy.daero.data.dto.trip.TripAlbumItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,6 +35,13 @@
                 android:scaleType="centerCrop"
                 app:imageUrl="@{album.image_url}"
                 tools:src="@drawable/img_my_page_album" />
+
+<!--            <ImageView-->
+<!--                android:id="@+id/image_item_MyPageAlbum_img"-->
+<!--                android:layout_width="176dp"-->
+<!--                android:layout_height="176dp"-->
+<!--                android:scaleType="centerCrop"-->
+<!--                android:src="@drawable/img_my_page_album"/>-->
 
             <View
                 android:layout_width="176dp"
