@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -19,6 +20,7 @@ import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.Expense
 import com.ssafy.daero.data.dto.article.Record
@@ -38,9 +40,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private val articleViewModel : ArticleViewModel by viewModels()
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var expenseAdapter: ExpenseAdapter
-    var recordList: MutableList<Record> = mutableListOf()
-    var stampList: MutableList<TripStamp> = mutableListOf()
-    var expenseList: MutableList<Expense> = mutableListOf()
+    private var likeYn: Char? = null
 
     private var naverMap: NaverMap? = null
     private var uiSettings: UiSettings? = null
@@ -108,43 +108,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
 
     override fun init() {
-        initData()
         setOnClickListeners()
         observeData()
-    }
-
-    private fun initData() {
-//        articleAdapter = ArticleAdapter().apply {
-//            this.onItemClickListener = this@ArticleFragment.onItemClickListener
-//            stampList.add(TripStamp("https://unsplash.com/photos/qyAka7W5uMY/download?ixid=MnwxMjA3fDB8MXxhbGx8fHx8fHx8fHwxNjU4OTA1NDIx&force=true&w=1920",
-//                1,1.0,1.0
-//            ))
-//            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
-//                2,2.0,2.0
-//            ))
-//
-//            stampList.add(TripStamp("https://unsplash.com/photos/A5rCN8626Ck/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8Mnx8dHJpcHxlbnwwfHx8fDE2NTg4OTEyNjg&force=true&w=1920",
-//                3,3.0,3.0
-//            ))
-//            recordList.add(Record("2022.07.16", "나랑 바다 보러갈래?? 대답.", stampList))
-//            recordList.add(Record("2022.07.17", "나랑 산 보러갈래?? 대답.", stampList))
-//            this.articleData = recordList.toList()
-//        }
-//        binding.recyclerArticleTrip.apply {
-//            adapter = articleAdapter
-//            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-//        }
-//
-//        expenseList.add(Expense("대게 먹방", "300000"))
-//        expenseList.add(Expense("카페베네", "28000"))
-//        expenseList.add(Expense("입장료", "3000"))
-//        expenseAdapter = ExpenseAdapter().apply {
-//            this.expense = expenseList.toList()
-//        }
-//        binding.recyclerArticleExpense.apply {
-//            adapter = expenseAdapter
-//            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-//        }
     }
 
     private fun setOnClickListeners() {
@@ -161,12 +126,17 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             )
         }
         binding.imgArticleLike.setOnClickListener {
-            //todo 좋아요 상태 변경 API 연동(좋아요 상태에 따라 변경)
-            //binding.imgArticleLike.setImageResource(R.drawable.ic_like)
-
-            binding.imgArticleLike.setImageResource(R.drawable.ic_like_full)
-            var fadeScale: Animation  = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
-            binding.imgArticleLike.startAnimation(fadeScale)
+            // todo articleSeq
+            if(likeYn=='Y'){
+                Log.d("성공2-1", likeYn.toString())
+                articleViewModel.likeDelete(App.prefs.userSeq, 3)
+                likeYn=='N'
+            }else{
+                Log.d("성공2-2", likeYn.toString())
+                articleViewModel.likeAdd(App.prefs.userSeq, 3)
+                likeYn=='Y'
+            }
+            likeSetting()
         }
         binding.LinearArticleLike.setOnClickListener {
             //todo 좋아요 누른 인원, article_seq 번들로 전달
@@ -194,6 +164,17 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             requireActivity().onBackPressed()
         }
 
+    }
+
+    private fun likeSetting() {
+        Log.d("성공3", likeYn.toString())
+        if(likeYn=='Y'){
+            binding.imgArticleLike.setImageResource(R.drawable.ic_like_full)
+            var fadeScale: Animation  = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
+            binding.imgArticleLike.startAnimation(fadeScale)
+        }else{
+            binding.imgArticleLike.setImageResource(R.drawable.ic_like)
+        }
     }
 
     private fun observeData() {
@@ -262,6 +243,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 })
             }
         }
+        likeYn = articleViewModel.articleData.like_yn
+        likeSetting()
         deleteMarkers()
         deletePaths()
         var list = mutableListOf<TripStamp>()

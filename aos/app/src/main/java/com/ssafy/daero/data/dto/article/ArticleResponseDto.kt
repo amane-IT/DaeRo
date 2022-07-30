@@ -4,6 +4,7 @@ data class ArticleResponseDto(
     val user_seq: Int,
     val nickname: String,
     val profile_url: String,
+    val like_yn : Char,
     val title: String,
     val trip_comment: String,
     val trip_expenses: List<Expense>,

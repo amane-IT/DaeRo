@@ -67,4 +67,22 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body commentAddRequestDto: CommentAddRequestDto
     ): Completable
+
+    /**
+     * 좋아요 추가
+     */
+    @POST("sns/like")
+    fun likeAdd(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
+
+    /**
+     * 좋아요 삭제
+     */
+    @DELETE("sns/like")
+    fun likeDelete(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
 }
