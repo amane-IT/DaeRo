@@ -20,10 +20,14 @@ public class SnsService {
 
     public SnsService(SnsMapper snsMapper) { this.snsMapper = snsMapper; }
 
-    public Map<String, Object> articleDetail(int articleSeq) throws JsonProcessingException {
+    public Map<String, Object> articleDetail(int articleSeq, int userSeq) throws JsonProcessingException {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
         Map<String, Object> articleDetail = new HashMap<>();
         if(articleVo == null) { return articleDetail; }
+        int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
+        char like;
+        if (liked == 0) { like = 'n'; }
+        else { like = 'y'; }
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());
         ArrayList<Integer> tags = snsMapper.selectPlaceTagsByArticleSeq(articleSeq);
@@ -78,6 +82,7 @@ public class SnsService {
         articleDetail.put("tags", tags);
         articleDetail.put("trip_expenses", expenses);
         articleDetail.put("records", records);
+        articleDetail.put("like_yn", like);
         return articleDetail;
     }
 
