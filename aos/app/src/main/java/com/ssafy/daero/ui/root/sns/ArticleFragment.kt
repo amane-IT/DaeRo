@@ -186,8 +186,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 //            )
         }
         binding.imgArticleMenu.setOnClickListener {
-            val articleMenuBottomSheetFragment = ArticleMenuBottomSheetFragment()
-            articleMenuBottomSheetFragment.show(childFragmentManager,articleMenuBottomSheetFragment.tag)
+            // todo: articleSeq 넘기기
+            ArticleMenuBottomSheetFragment(3).show(childFragmentManager, ARTICLE_MENU_BOTTOM_SHEET)
         }
         binding.imgArticleBack.setOnClickListener {
             requireActivity().onBackPressed()

@@ -18,6 +18,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.http.Body
 
 class SnsRepository private constructor(context: Context) {
 
@@ -38,23 +39,27 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {CommentDataSource(snsApi, articleSeq)}
+            pagingSourceFactory = { CommentDataSource(snsApi, articleSeq) }
         ).flowable
     }
 
     fun commentAdd(articleSeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentAdd(articleSeq,commentAddRequestDto)
+        return snsApi.commentAdd(articleSeq, commentAddRequestDto)
     }
 
     fun commentUpdate(replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentUpdate(replySeq,commentAddRequestDto)
+        return snsApi.commentUpdate(replySeq, commentAddRequestDto)
     }
 
     fun commentDelete(replySeq: Int): Completable {
         return snsApi.commentDelete(replySeq)
     }
 
-    fun reCommentAdd(articleSeq: Int, replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
+    fun reCommentAdd(
+        articleSeq: Int,
+        replySeq: Int,
+        commentAddRequestDto: CommentAddRequestDto
+    ): Completable {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
@@ -69,7 +74,7 @@ class SnsRepository private constructor(context: Context) {
         ).flowable
     }
 
-    fun getLikeUsers(articleSeq: Int) : Flowable<PagingData<LikeItem>> {
+    fun getLikeUsers(articleSeq: Int): Flowable<PagingData<LikeItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -78,6 +83,18 @@ class SnsRepository private constructor(context: Context) {
             ),
             pagingSourceFactory = { LikeDataSource(snsApi, articleSeq) }
         ).flowable
+    }
+
+    fun reportArticle(articleSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportArticle(articleSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun reportComment(replySeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportComment(replySeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     companion object {
