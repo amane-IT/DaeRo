@@ -217,11 +217,14 @@ public class SnsService {
         else { return "BAD_REQUEST"; }
     }
 
-    public ArrayList<Map<String, Object>> likeUserList(int articleSeq, String page) {
+    public Map<String, Object> likeUserList(int articleSeq, String page) {
         // article 있는지 확인
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
         if (article == 0) { return null; }
+        int totalPage = (int) Math.ceil((snsMapper.selectLikeCountByArticleSeq(articleSeq))*10/10.0);
+        if (totalPage == 0) { totalPage = 1; }
         ArrayList<UserVo> userList = snsMapper.selectLikeUserListByArticleSeq(articleSeq, Integer.parseInt(page));
+        Map<String, Object> results = new HashMap<>();
         ArrayList<Map<String, Object>> likeUserList = new ArrayList<>();
         Map<String, Object> user = new HashMap<>();
         for (UserVo uVo :
@@ -232,7 +235,10 @@ public class SnsService {
             likeUserList.add(user);
             user = new HashMap<>();
         }
-        return likeUserList;
+        results.put("total_page", totalPage);
+        results.put("page", page);
+        results.put("result", likeUserList);
+        return results;
     }
 
     public String reportArticle(int articleSeq, int userSeq, int reportSeq) {
