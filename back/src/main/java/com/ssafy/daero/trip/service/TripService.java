@@ -88,19 +88,11 @@ public class TripService {
         return journeyList;
     }
 
-    public ArrayList albumList(int userSeq, String page, char who) {
+    public Map<String, Object> albumList(int userSeq, String page, char who) {
         UserDto userDto = userMapper.selectByUserSeq(userSeq);
-        ArrayList albumList = new ArrayList<>(); // 결과 배열
         AlbumVo albumVo = new AlbumVo();
-        if (userDto == null) {
-            albumVo.setResult(JourneyVo.ProfileResult.NO_SUCH_USER);
-            albumList.add(albumVo);
-            return albumList;
-        }
-        if (userDto.getDelYn() == 'y') {
-            albumVo.setResult(JourneyVo.ProfileResult.DELETED);
-            albumList.add(albumVo);
-            return albumList;
+        if (userDto == null | userDto.getDelYn() == 'y') {
+            return null;
         }
 
         int pagenum = Integer.parseInt(page);
@@ -111,6 +103,9 @@ public class TripService {
         else {
             albumVos = tripMapper.selectMyAlbumListByUserSeq(userSeq, pagenum);
         }
+        int totalPage = (int) Math.ceil((tripMapper.selectAlbumCountByUserSeq(userSeq))/10.0);
+        Map<String, Object> results = new HashMap<>(); // 결과 배열
+        ArrayList albumList = new ArrayList<>();
         Map<String, Object> album = new HashMap<>();
         for (AlbumVo aVo :
                 albumVos) {
@@ -125,7 +120,10 @@ public class TripService {
             albumList.add(album);
             album = new HashMap<>();
         }
-        return albumList;
+        results.put("total_page", totalPage);
+        results.put("page", pagenum);
+        results.put("results", albumList);
+        return results;
         
     }
 
