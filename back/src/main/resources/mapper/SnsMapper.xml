@@ -5,27 +5,27 @@
 <mapper namespace="com.ssafy.daero.sns.mapper.SnsMapper">
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
         SELECT a.trips_seq, a.title, (SELECT COUNT(*)
-                                     FROM likes l
+                                     FROM daero.likes l
                                      WHERE l.articles_seq=a.articles_seq
                                     ) AS like_count, (SELECT COUNT(*)
-                                                      FROM replies r
+                                                      FROM daero.replies r
                                                       WHERE r.articles_seq=a.articles_seq) AS reply_count, (SELECT t.users_seq
-                                                                                                            FROM trips t
+                                                                                                            FROM daero.trips t
                                                                                                             WHERE t.trips_seq=a.trips_seq) AS user_seq,
                (SELECT t.trip_comment
-                FROM trips t
+                FROM daero.trips t
                 WHERE t.trips_seq=a.trips_seq) AS trip_comment, (SELECT t.trip_expenses
-                                                                 FROM trips t
+                                                                 FROM daero.trips t
                                                                  WHERE t.trips_seq=a.trips_seq) AS trip_expenses, (SELECT t.trip_rating
-                                                                                                                   FROM trips t
+                                                                                                                   FROM daero.trips t
                                                                                                                    WHERE t.trips_seq=a.trips_seq) AS trip_rating
-        FROM articles a
+        FROM daero.articles a
         WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="selectStampAndDayInfoByTripSeq" parameterType="_int" resultMap="mappingStampVo">
         SELECT td.trip_days_seq, td.date, td.day_comment, ts.image_url, ts.trip_stamps_seq, tp.latitude, tp.longitude
-        FROM trip_days td
+        FROM daero.trip_days td
                  LEFT JOIN trip_stamps ts on td.trip_days_seq = ts.trip_days_seq
                  LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
         WHERE td.trip=#{tripSeq}
@@ -33,50 +33,50 @@
 
     <select id="selectUserByUserSeq" parameterType="_int" resultType="java.util.Map">
         SELECT u.nickname, u.profile_image_link
-        FROM users u
+        FROM daero.users u
         WHERE users_seq=#{userSeq}
     </select>
 
     <select id="selectPlaceTagsByArticleSeq" parameterType="_int" resultType="_int">
         SELECT place_tag_seq
-        FROM article_tags
+        FROM daero.article_tags
         WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="selectUserSeqByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
         SELECT users_seq
-        FROM trips t
+        FROM daero.trips t
         WHERE t.trips_seq IN (SELECT a.trips_seq
-                              FROM articles a
+                              FROM daero.articles a
                               WHERE a.articles_seq=#{articleSeq}
         )
     </select>
 
     <select id="deleteArticleByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
-        DELETE FROM articles WHERE articles_seq=#{articleSeq}
+        DELETE FROM daero.articles WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="deleteReplyByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
-        DELETE FROM replies WHERE articles_seq=#{articleSeq}
+        DELETE FROM daero.replies WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="deleteArticleTagByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
-        DELETE FROM article_tags WHERE articles_seq=#{articleSeq}
+        DELETE FROM daero.article_tags WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
         SELECT *
         FROM (SELECT row_number() over (ORDER BY r.created_at ASC) AS row, replies_seq, users_seq, content, created_at, updated_at,
                     (SELECT COUNT(*)
-                    FROM replies
+                    FROM daero.replies
                     WHERE rereply_parent=r.replies_seq) AS rereply_count,
                     (SELECT u.nickname
-                    FROM users u
+                    FROM daero.users u
                     WHERE users_seq= r.users_seq) AS nickname,
                     (SELECT u.profile_image_link
-                    FROM users u
+                    FROM daero.users u
                     WHERE users_seq= r.users_seq) AS profile_url
-            FROM replies r
+            FROM daero.replies r
             WHERE articles_seq = #{articleSeq} AND rereply_parent IS NULL) AS reply
         WHERE (#{page}-1)*10 &lt; reply.row
         AND reply.row &lt;(#{page}*10) + 1
@@ -84,27 +84,27 @@
 
     <select id="selectUserSeqByReplySeq" parameterType="_int" resultType="java.lang.Integer">
         SELECT users_seq
-        FROM replies
+        FROM daero.replies
         WHERE replies_seq=#{replySeq}
     </select>
 
     <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
-        FROM articles
+        FROM daero.articles
         WHERE articles_seq=#{articleSeq}
     </select>
 
     <select id="insertReply" resultType="java.lang.Integer">
-        INSERT INTO replies(articles_seq, users_seq, content, created_at, updated_at)
+        INSERT INTO daero.replies(articles_seq, users_seq, content, created_at, updated_at)
         VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </select>
 
     <select id="updateReplyByReplySeq" resultType="java.lang.Integer">
-        UPDATE replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
+        UPDATE daero.replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
     </select>
 
     <select id="deleteReplyByReplySeq" parameterType="_int" resultType="java.lang.Integer">
-        DELETE FROM replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
+        DELETE FROM daero.replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
     </select>
 
     <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
@@ -115,12 +115,12 @@
                      created_at,
                      updated_at,
                      (SELECT u.nickname
-                      FROM users u
+                      FROM daero.users u
                       WHERE users_seq = r.users_seq) AS nickname,
                      (SELECT u.profile_image_link
-                      FROM users u
+                      FROM daero.users u
                       WHERE users_seq = r.users_seq) AS profile_url
-              FROM replies r
+              FROM daero.replies r
               WHERE rereply_parent = #{replySeq}) AS reply
         WHERE (#{page} - 1) * 10 &lt; reply.row
           AND reply.row &lt; (#{page} * 10) + 1;
@@ -129,28 +129,28 @@
 
     <select id="selectReplyByReplySeq" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
-        FROM replies
+        FROM daero.replies
         WHERE replies_seq=#{replySeq}
     </select>
 
     <select id="insertRereply" resultType="java.lang.Integer">
-        INSERT INTO replies(articles_seq, users_seq, rereply_parent, content, created_at, updated_at)
+        INSERT INTO daero.replies(articles_seq, users_seq, rereply_parent, content, created_at, updated_at)
         VALUES (#{articleSeq}, #{userSeq}, #{replySeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </select>
 
     <select id="selectArticleLikeByUserSeq" resultType="_int">
         SELECT COUNT(*)
-        FROM likes
+        FROM daero.likes
         WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
     </select>
 
     <select id="insertLike" resultType="java.lang.Integer">
-        INSERT INTO likes(users_seq, articles_seq, liked_at)
+        INSERT INTO daero.likes(users_seq, articles_seq, liked_at)
         VALUES (#{userSeq}, #{articleSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </select>
 
     <select id="deleteLike" resultType="java.lang.Integer">
-        DELETE FROM likes WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
+        DELETE FROM daero.likes WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
     </select>
 
     <select id="selectLikeUserListByArticleSeq" resultMap="mappingUserVo">
@@ -163,6 +163,24 @@
         WHERE articles_seq=#{articleSeq})) AS user
         WHERE (#{page} - 1) * 10 &lt; user.row
                              AND user.row &lt; (#{page} * 10) + 1
+    </select>
+
+    <select id="insertReport" resultType="java.lang.Integer">
+        INSERT INTO daero.reports(reporter_users_seq, reported_users_seq, reported_at, report_url, report_categories_seq, article_type)
+        VALUES (#{reporterUserSeq}, #{reportedUserSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'), #{articleSeq}, #{reportSeq}, #{type})
+    </select>
+
+    <select id="selectReportArticleByUserSeq" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.reports
+        WHERE reporter_users_seq = #{userSeq}
+          AND report_url = #{articleSeq};
+    </select>
+
+    <select id="selectReportReplyByUserSeq" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.reports
+        WHERE reporter_users_seq=#{userSeq} AND report_url=#{replySeq}
     </select>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
