@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
