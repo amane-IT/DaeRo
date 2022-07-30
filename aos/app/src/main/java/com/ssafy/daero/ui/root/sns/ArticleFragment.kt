@@ -1,5 +1,6 @@
 package com.ssafy.daero.ui.root.sns
 
+import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -40,7 +41,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private val articleViewModel : ArticleViewModel by viewModels()
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var expenseAdapter: ExpenseAdapter
-    private var likeYn: Char? = null
+    private var likeYn: Boolean? = null
+    private var likes: Int = 0
 
     private var naverMap: NaverMap? = null
     private var uiSettings: UiSettings? = null
@@ -127,15 +129,18 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleLike.setOnClickListener {
             // todo articleSeq
-            if(likeYn=='Y'){
-                Log.d("성공2-1", likeYn.toString())
+            if(likeYn==true){
                 articleViewModel.likeDelete(App.prefs.userSeq, 3)
-                likeYn=='N'
+                likes-=1
+                binding.tvArticleLike.text = likes.toString()
             }else{
-                Log.d("성공2-2", likeYn.toString())
                 articleViewModel.likeAdd(App.prefs.userSeq, 3)
-                likeYn=='Y'
+                if(binding.tvArticleLike.text.toString().toInt()>0){
+                    likes+=1
+                    binding.tvArticleLike.text = likes.toString()
+                }
             }
+            likeYn = !likeYn!!
             likeSetting()
         }
         binding.LinearArticleLike.setOnClickListener {
@@ -167,13 +172,13 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     private fun likeSetting() {
-        Log.d("성공3", likeYn.toString())
-        if(likeYn=='Y'){
+        if(likeYn == true){
             binding.imgArticleLike.setImageResource(R.drawable.ic_like_full)
             var fadeScale: Animation  = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
             binding.imgArticleLike.startAnimation(fadeScale)
         }else{
-            binding.imgArticleLike.setImageResource(R.drawable.ic_like)
+            binding.imgArticleLike.setImageDrawable(requireActivity().getDrawable(R.drawable.ic_like))
+            binding.imgArticleLike.invalidate()
         }
     }
 
@@ -187,6 +192,17 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 FAIL -> {
 
                     articleViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
+        articleViewModel.likeState.observe(viewLifecycleOwner) { state ->
+            when(state) {
+                SUCCESS -> {
+                    articleViewModel.likeState.value = DEFAULT
+                }
+                FAIL -> {
+
+                    articleViewModel.likeState.value = DEFAULT
                 }
             }
         }
@@ -226,6 +242,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             .into(binding.imgArticleUser)
         binding.tvArticleComment.text = articleViewModel.articleData.comments.toString()
         binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
+        likes = articleViewModel.articleData.likes
         for(i in articleViewModel.articleData.tags){
             var chip: Chip
             if(i==1){
@@ -243,7 +260,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 })
             }
         }
-        likeYn = articleViewModel.articleData.like_yn
+        likeYn = articleViewModel.articleData.like_yn=='y'
         likeSetting()
         deleteMarkers()
         deletePaths()

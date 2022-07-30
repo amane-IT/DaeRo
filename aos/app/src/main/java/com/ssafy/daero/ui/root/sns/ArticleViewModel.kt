@@ -13,6 +13,7 @@ class ArticleViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
 
     val responseState = MutableLiveData<Int>()
+    val likeState = MutableLiveData<Int>()
     lateinit var articleData: ArticleResponseDto
 
     fun article(articleSeq: Int) {
@@ -41,10 +42,10 @@ class ArticleViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.likeAdd(userSeq, articleSeq)
                 .subscribe({
-                    responseState.postValue(SUCCESS)
+                    likeState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    likeState.postValue(FAIL)
                 })
         )
     }
@@ -54,10 +55,10 @@ class ArticleViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.likeDelete(userSeq, articleSeq)
                 .subscribe({
-                    responseState.postValue(SUCCESS)
+                    likeState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    likeState.postValue(FAIL)
                 })
         )
     }

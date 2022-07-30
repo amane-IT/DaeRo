@@ -291,8 +291,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="3dp"
-                        app:srcCompat="@drawable/ic_like"
-                        app:tint="@color/black" />
+                        app:srcCompat="@drawable/ic_like" />
 
                 </LinearLayout>
 
