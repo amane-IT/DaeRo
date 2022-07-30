@@ -57,4 +57,9 @@ public interface SnsMapper {
 
     ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
+    Integer insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
+
+    int selectReportArticleByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    int selectReportReplyByUserSeq(@Param("replySeq") int replySeq, @Param("userSeq") int userSeq);
 }

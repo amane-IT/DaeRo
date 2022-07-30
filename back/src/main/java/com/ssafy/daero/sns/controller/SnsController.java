@@ -131,5 +131,28 @@ public class SnsController {
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
     }
 
+    @PostMapping("/article/{article_seq}/report")
+    public ResponseEntity<String> reportArticle(@RequestHeader("jwt") String jwt, @PathVariable int article_seq, @RequestBody Map<String, Integer> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        String reported = snsService.reportArticle(article_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("report_seq"));
+        if (Objects.equals(reported, "ALREADY_REPORTED")) { return new ResponseEntity<>(FAILURE, HttpStatus.ALREADY_REPORTED); }
+        else if (Objects.equals(reported, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
+    @PostMapping("/reply/{reply_seq}/report")
+    public ResponseEntity<String> reportReply(@RequestHeader("jwt") String jwt, @PathVariable int reply_seq, @RequestBody Map<String, Integer> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        String reported = snsService.reportReply(reply_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("report_seq"));
+        if (Objects.equals(reported, "ALREADY_REPORTED")) { return new ResponseEntity<>(FAILURE, HttpStatus.ALREADY_REPORTED); }
+        else if (Objects.equals(reported, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
 
 }
