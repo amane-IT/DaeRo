@@ -237,7 +237,7 @@ public class SnsService {
         }
         results.put("total_page", totalPage);
         results.put("page", page);
-        results.put("result", likeUserList);
+        results.put("results", likeUserList);
         return results;
     }
 
