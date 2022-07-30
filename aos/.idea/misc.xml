@@ -15,6 +15,8 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_comment.xml" value="0.2671875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_like.xml" value="0.2484375" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_map_filter.xml" value="0.2484375" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_report.xml" value="0.24592391304347827" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_repory.xml" value="0.26875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_Terms.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article.xml" value="0.31910112359550563" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_Thumbnail.xml" value="0.36614583333333334" />
@@ -61,6 +63,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_like.xml" value="0.2526041666666667" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_my_page_album.xml" value="0.21603260869565216" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_re_comment.xml" value="0.2786458333333333" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_report.xml" value="0.26875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1634963768115942" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2942708333333333" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_block_user.xml" value="0.358695652173913" />

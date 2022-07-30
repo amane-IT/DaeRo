@@ -16,3 +16,10 @@ const val TRIP_KIND = "trip_kind"
  */
 const val FIRST_TRIP = 100
 const val NEXT_TRIP = 101
+
+
+/**
+ * 신고 유형
+ */
+const val ARTICLE = 90
+const val COMMENT = 91

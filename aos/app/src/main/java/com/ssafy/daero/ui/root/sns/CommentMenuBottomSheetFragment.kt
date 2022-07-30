@@ -1,6 +1,8 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +13,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.databinding.FragmentCommentMenuBottomSheetBinding
+import com.ssafy.daero.utils.constant.COMMENT
+import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
 class CommentMenuBottomSheetFragment(
@@ -59,9 +63,8 @@ class CommentMenuBottomSheetFragment(
             dismiss()
         }
         binding.tvCommentMenuReport.setOnClickListener {
-            //todo: 신고하기 bundle
-
             dismiss()
+            ReportBottomSheetFragment(COMMENT, replySeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvCommentMenuBlock.setOnClickListener {
             //todo: 차단하기
