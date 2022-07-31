@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <string-array name="spinner_time_list">
+        <item>30분</item>
+        <item>1시간</item>
+        <item>1시간 30분</item>
+        <item>2시간</item>
+        <item>3시간</item>
+    </string-array>
+</resources>

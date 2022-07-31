@@ -142,7 +142,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_tripStamp_retry"
             style="@style/BodyWhite"
             android:layout_width="176dp"
@@ -155,7 +155,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintRight_toLeftOf="@id/button_tripStamp_share"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_tripStamp_share"
             style="@style/BodyWhite"
             android:layout_width="176dp"

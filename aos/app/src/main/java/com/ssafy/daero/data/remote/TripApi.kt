@@ -1,5 +1,6 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.trip.*
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -23,7 +24,7 @@ interface TripApi {
     fun getMyAlbum(
         @Path("user_seq") userSeq: Int,
         @Query("page") page: Int
-    ) : Single<TripAlbumResponseDto>
+    ): Single<PagingResponseDto<TripAlbumItem>>
 
     /**
      * 첫 여행지 추천

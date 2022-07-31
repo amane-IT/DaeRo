@@ -4,17 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
-import com.ssafy.daero.databinding.ItemMyPageAlbumBinding
 import com.ssafy.daero.databinding.ItemTripPopularBinding
 
-class TripPopularAdapter : RecyclerView.Adapter<TripPopularAdapter.TripPopularViewHolder>() {
+class TripUntilNowAdapter : RecyclerView.Adapter<TripUntilNowAdapter.TripUntilNowViewAdapter>() {
     var tripPlaces: List<TripPopularResponseDto> = emptyList()
     lateinit var onItemClickListener: (View, Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripPopularViewHolder {
-        return TripPopularViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripUntilNowAdapter.TripUntilNowViewAdapter {
+        return TripUntilNowAdapter.TripUntilNowViewAdapter(
             ItemTripPopularBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -25,13 +23,13 @@ class TripPopularAdapter : RecyclerView.Adapter<TripPopularAdapter.TripPopularVi
         }
     }
 
-    override fun onBindViewHolder(holder: TripPopularViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TripUntilNowAdapter.TripUntilNowViewAdapter, position: Int) {
         holder.bind(tripPlaces[position])
     }
 
     override fun getItemCount(): Int = tripPlaces.size
 
-    class TripPopularViewHolder(private val binding: ItemTripPopularBinding) :
+    class TripUntilNowViewAdapter(private val binding: ItemTripPopularBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(tripPlace: TripPopularResponseDto) {

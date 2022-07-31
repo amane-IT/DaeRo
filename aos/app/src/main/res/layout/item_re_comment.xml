@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_reComment_user"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginStart="16dp"
-        android:src="@drawable/ic_user"
         android:layout_margin="12dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/img_user"
         app:civ_border_color="@color/white"
         app:civ_border_overlay="true"
         app:civ_border_width="1dp"
         app:civ_circle_background_color="@color/lightGray"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_comment_user"
@@ -29,11 +27,10 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:textStyle="bold"
         android:text="ssafy_kim"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/img_reComment_user"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_comment_create_at"
@@ -43,12 +40,11 @@
         android:layout_gravity="center_vertical"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:textColor="@color/gray"
         android:text="1일"
+        android:textColor="@color/gray"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@id/tv_comment_user"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_comment_content"
@@ -65,17 +61,16 @@
 
     <ImageView
         android:id="@+id/img_reComment_menu"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_gravity="center_vertical|right"
         android:layout_margin="12dp"
         android:clickable="true"
         android:focusable="true"
         android:padding="3dp"
         android:src="@drawable/ic_menu"
-        app:tint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

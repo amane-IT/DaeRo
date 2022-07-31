@@ -9,7 +9,7 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.signup.TripPreferenceResponseDto
 import com.ssafy.daero.databinding.FragmentTripPreferenceBinding
-import com.ssafy.daero.ui.adapter.TripPreferenceAdapter
+import com.ssafy.daero.ui.adapter.signup.TripPreferenceAdapter
 
 class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.layout.fragment_trip_preference){
 
@@ -49,7 +49,7 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
 
     private fun observeData(){
         tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner){
-            binding.progressBarSignupEmailLoading.isVisible = it
+            binding.progressBarTripPreferenceLoading.isVisible = it
         }
 
 //        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner){ state ->

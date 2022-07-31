@@ -5,12 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.CommentDataSource
+import com.ssafy.daero.data.repository.paging.LikeDataSource
 import com.ssafy.daero.data.repository.paging.ReCommentDataSource
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -20,6 +18,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
+import retrofit2.http.Body
 
 class SnsRepository private constructor(context: Context) {
 
@@ -33,30 +32,34 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentResponseDto>> {
+    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {CommentDataSource(snsApi, articleSeq)}
+            pagingSourceFactory = { CommentDataSource(snsApi, articleSeq) }
         ).flowable
     }
 
     fun commentAdd(articleSeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentAdd(articleSeq,commentAddRequestDto)
+        return snsApi.commentAdd(articleSeq, commentAddRequestDto)
     }
 
     fun commentUpdate(replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentUpdate(replySeq,commentAddRequestDto)
+        return snsApi.commentUpdate(replySeq, commentAddRequestDto)
     }
 
     fun commentDelete(replySeq: Int): Completable {
         return snsApi.commentDelete(replySeq)
     }
 
-    fun reCommentAdd(articleSeq: Int, replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
+    fun reCommentAdd(
+        articleSeq: Int,
+        replySeq: Int,
+        commentAddRequestDto: CommentAddRequestDto
+    ): Completable {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
@@ -67,8 +70,7 @@ class SnsRepository private constructor(context: Context) {
     fun likeDelete(userSeq: Int, articleSeq: Int): Completable {
         return snsApi.likeDelete(userSeq, articleSeq)
     }
-
-    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentResponseDto>> {
+    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -77,6 +79,29 @@ class SnsRepository private constructor(context: Context) {
             ),
             pagingSourceFactory = { ReCommentDataSource(snsApi, articleSeq, replySeq) }
         ).flowable
+    }
+
+    fun getLikeUsers(articleSeq: Int): Flowable<PagingData<LikeItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { LikeDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun reportArticle(articleSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportArticle(articleSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun reportComment(replySeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportComment(replySeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     companion object {
