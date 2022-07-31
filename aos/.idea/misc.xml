@@ -66,6 +66,24 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_report.xml" value="0.26875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1634963768115942" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2942708333333333" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.1955" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/button_disabled.xml" value="0.1955" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/button_edt.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/circle_article.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/dialog_backgound.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/dlg_bottomsheet.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/edittext_comment.xml" value="0.192" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.193" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/ic_check.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/imagebutton_regular.xml" value="0.1955" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/img_regular.xml" value="0.1945" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/text_button_regular.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/activity_main.xml" value="0.35280797101449274" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.34185932120019674" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_menu_bottom_sheet.xml" value="0.33" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_day.xml" value="0.18489583333333334" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_expense.xml" value="0.35280797101449274" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_thumbnail.xml" value="0.35280797101449274" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_block_user.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_faq.xml" value="0.358695652173913" />
@@ -97,6 +115,14 @@
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_bottom_sheet.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.358695652173913" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_article_day.xml" value="0.3345690454124189" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_article_day_trip_stamp.xml" value="0.358695652173913" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_article_expense.xml" value="0.67" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_article_write_expense.xml" value="0.35280797101449274" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_article_write_thumbnail.xml" value="0.33" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_comment.xml" value="0.5" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/item_re_comment.xml" value="0.25" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1875" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable-v24/button_regular.xml" value="0.173" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.2465" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml.xml" value="0.2465" />

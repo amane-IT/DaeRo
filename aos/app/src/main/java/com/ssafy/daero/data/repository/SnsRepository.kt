@@ -63,6 +63,13 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
+    fun likeAdd(userSeq: Int, articleSeq: Int): Completable {
+        return snsApi.likeAdd(userSeq, articleSeq)
+    }
+
+    fun likeDelete(userSeq: Int, articleSeq: Int): Completable {
+        return snsApi.likeDelete(userSeq, articleSeq)
+    }
     fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
