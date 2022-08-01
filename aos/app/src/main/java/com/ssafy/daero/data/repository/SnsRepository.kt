@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
+import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
@@ -76,6 +77,18 @@ class SnsRepository private constructor(context: Context) {
                 prefetchDistance = 1
             ),
             pagingSourceFactory = { ReCommentDataSource(snsApi, articleSeq, replySeq) }
+        ).flowable
+    }
+
+<<<<<<< aos/app/src/main/java/com/ssafy/daero/data/repository/SnsRepository.kt
+    fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
         ).flowable
     }
 

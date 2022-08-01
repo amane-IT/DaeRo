@@ -88,7 +88,7 @@ interface UserApi {
      * 회원가입
      */
     @POST("users/signup")
-    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Void>
+    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Response<SignupResponseDto>>
 
     /**
      * 선호도 조사 정보 요청

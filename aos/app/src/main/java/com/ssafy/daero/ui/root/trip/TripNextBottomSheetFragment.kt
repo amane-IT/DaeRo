@@ -14,7 +14,7 @@ import com.ssafy.daero.databinding.FragmentTripNextBottomSheetBinding
 import com.ssafy.daero.utils.view.expandFullHeight
 
 
-class TripNextBottomSheetFragment(val applyFilter : (String, String) -> Unit) : BottomSheetDialogFragment() {
+class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentTripNextBottomSheetBinding? = null
     private val binding get() = _binding!!
 
