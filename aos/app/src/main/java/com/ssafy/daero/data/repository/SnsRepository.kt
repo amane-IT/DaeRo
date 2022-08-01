@@ -80,7 +80,6 @@ class SnsRepository private constructor(context: Context) {
         ).flowable
     }
 
-<<<<<<< aos/app/src/main/java/com/ssafy/daero/data/repository/SnsRepository.kt
     fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
         return Pager(
             config = PagingConfig(

@@ -2,7 +2,6 @@ package com.ssafy.daero.utils
 
 import androidx.paging.PagingData
 import com.ssafy.daero.data.dto.sns.UserNameItem
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
