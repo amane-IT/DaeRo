@@ -1,5 +1,7 @@
 package com.ssafy.daero.utils
 
+import androidx.paging.PagingData
+import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
@@ -104,3 +106,28 @@ val tripInfo = TripInformationResponseDto(
     place_name = "강릉 안목해변",
     place_seq = 1
 )
+
+val searchedUser = listOf(
+    UserNameItem(
+        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        "김싸피",
+        1
+    ),
+    UserNameItem(
+        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        "김싸피",
+        1
+    ),
+    UserNameItem(
+        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        "김싸피",
+        1
+    ),
+    UserNameItem(
+        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        "김싸피",
+        1
+    )
+)
+
+val pagingUser = PagingData.from(searchedUser)
