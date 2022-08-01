@@ -1,7 +1,11 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
+import com.ssafy.daero.data.dto.sns.UserNameItem
+import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.common.PagingResponseDto
+import com.ssafy.daero.data.dto.user.FollowResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -65,6 +69,33 @@ interface SnsApi {
     ): Completable
 
     /**
+     * 사용자 이름 검색
+     * */
+    @GET("sns/search")
+    fun searchUserName(
+        @Query("user_nickname") userNickname: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<UserNameItem>>
+
+    /**
+     * 좋아요 추가
+     */
+    @POST("sns/like")
+    fun likeAdd(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
+
+    /**
+     * 좋아요 삭제
+     */
+    @DELETE("sns/like")
+    fun likeDelete(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
+
+    /**
      * 좋아요 누른 사람 목록
      */
     @GET("sns/article/{article_seq}/likes")
@@ -90,4 +121,38 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body reportRequest: ReportRequestDto
     ): Completable
+
+    /**
+     * 팔로우
+     */
+    @POST("sns/follow")
+    fun follow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 언팔로우
+     */
+    @DELETE("sns/follow")
+    fun unFollow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 팔로워 목록
+     */
+    @GET("sns/user/{user_seq}/follower")
+    fun follower(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
+
+    /**
+     * 팔로잉 목록
+     */
+    @GET("sns/user/{user_seq}/following")
+    fun following(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
 }

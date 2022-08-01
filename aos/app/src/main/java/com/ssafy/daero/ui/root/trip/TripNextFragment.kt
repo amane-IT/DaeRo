@@ -50,7 +50,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         binding.apply {
 
             buttonTripNextNextTripRecommend.setOnClickListener {
-                TripNextBottomSheetFragment(applyFilter).show(
+                TripNextBottomSheetFragment().show(
                     childFragmentManager,
                     "TripNextBottomSheetFragment"
                 )
@@ -69,9 +69,5 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
         // TODO: 지금까지 여행지 상세 정보 받아오기
         tripUntilNowAdapter.tripPlaces = popularTripPlaces
-    }
-
-    private val applyFilter: (String, String) -> Unit = { startDate, endDate ->
-
     }
 }

@@ -3,6 +3,7 @@ package com.ssafy.daero.ui.signup
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.signup.SignupNicknameRequestDto
 import com.ssafy.daero.data.dto.signup.SignupRequestDto
@@ -27,7 +28,7 @@ class SignupUsernameViewModel : BaseViewModel() {
         addDisposable(
             userRepository.verifyNickname(nickname)
                 .subscribe({ response ->
-                    if (response.body()!!.available_YN == 'Y') {
+                    if (response.body()!!.available_YN == 'y') {
                         responseState_nickname.postValue(SUCCESS)
                     } else {
                         responseState_nickname.postValue(FAIL)
@@ -46,9 +47,12 @@ class SignupUsernameViewModel : BaseViewModel() {
 
         addDisposable(
             userRepository.signup(signupRequestDto)
-                .subscribe({
-                    _showProgress.postValue(false)
-                    responseState_signup.postValue(SUCCESS)
+                .subscribe({ response ->
+                    if(response.body()!!.jwt.isNotEmpty()) {
+                        _showProgress.postValue(false)
+                        responseState_signup.postValue(SUCCESS)
+                        App.prefs.jwt = response.body()!!.jwt
+                    }
                 }, { throwable ->
                     Log.d("SignupUsernameVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)

@@ -51,6 +51,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
             checkboxSignupUsernameTermCheck.setOnCheckedChangeListener { box, isChecked ->
                 flag = isChecked
+                buttonSignupUsernameNextStep.isEnabled = isChecked
             }
         }
     }
