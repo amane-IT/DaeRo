@@ -2,6 +2,7 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.common.PagingResponseDto
+import com.ssafy.daero.data.dto.user.FollowResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -108,4 +109,38 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body reportRequest: ReportRequestDto
     ): Completable
+
+    /**
+     * 팔로우
+     */
+    @POST("sns/follow")
+    fun follow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 언팔로우
+     */
+    @DELETE("sns/follow")
+    fun unFollow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 팔로워 목록
+     */
+    @GET("sns/user/{user_seq}/follower")
+    fun follower(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
+
+    /**
+     * 팔로잉 목록
+     */
+    @GET("sns/user/{user_seq}/following")
+    fun following(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
 }

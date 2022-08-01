@@ -300,12 +300,20 @@
         android:id="@+id/followerFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowerFragment"
         android:label="FollowerFragment"
-        tools:layout="@layout/fragment_follower" />
+        tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_followerFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/followingFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowingFragment"
         android:label="FollowingFragment"
-        tools:layout="@layout/fragment_following" />
+        tools:layout="@layout/fragment_following" >
+        <action
+            android:id="@+id/action_followingFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.ssafy.daero.ui.setting.ResetPasswordFragment"
@@ -411,5 +419,11 @@
         android:name="com.ssafy.daero.ui.root.mypage.OtherPageFragment"
         android:label="OtherPageFragment"
         tools:layout="@layout/fragment_other_page"
+        />
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.ssafy.daero.ui.root.mypage.MyPageFragment"
+        android:label="MyPageFragment"
+        tools:layout="@layout/fragment_my_page"
         />
 </navigation>

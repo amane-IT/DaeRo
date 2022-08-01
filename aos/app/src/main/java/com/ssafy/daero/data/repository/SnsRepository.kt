@@ -6,10 +6,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
-import com.ssafy.daero.data.repository.paging.CommentDataSource
-import com.ssafy.daero.data.repository.paging.LikeDataSource
-import com.ssafy.daero.data.repository.paging.ReCommentDataSource
+import com.ssafy.daero.data.repository.paging.*
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -18,7 +17,6 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.http.Body
 
 class SnsRepository private constructor(context: Context) {
 
@@ -102,6 +100,36 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.reportComment(replySeq, reportRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun follower(articleSeq: Int): Flowable<PagingData<FollowResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { FollowerDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun following(articleSeq: Int): Flowable<PagingData<FollowResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { FollowingDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun follow(userSeq: Int): Completable {
+        return snsApi.follow(userSeq)
+    }
+
+    fun unFollow(userSeq: Int): Completable {
+        return snsApi.unFollow(userSeq)
     }
 
     companion object {
