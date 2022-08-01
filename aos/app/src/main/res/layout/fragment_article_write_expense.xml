@@ -37,6 +37,15 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <View
+            android:id="@+id/view_article"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_article_write" />
+
 
         <TextView
             android:id="@+id/tv_article_write_expense"
