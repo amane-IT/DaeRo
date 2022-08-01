@@ -5,19 +5,29 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
+import androidx.room.Room
 import com.ssafy.daero.data.dto.trip.*
+import com.ssafy.daero.data.entity.TripStamp
+import com.ssafy.daero.data.local.AppDatabase
 import com.ssafy.daero.data.remote.TripApi
 import com.ssafy.daero.data.repository.paging.TripAlbumDataSource
+import com.ssafy.daero.utils.constant.DATABASE
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.http.Path
 
 class TripRepository private constructor(context: Context) {
+    // Database
+    private val database: AppDatabase = Room.databaseBuilder(
+        context.applicationContext,
+        AppDatabase::class.java,
+        DATABASE
+    ).build()
 
     // Trip API
     private val tripApi = RetrofitBuilder.retrofit.create(TripApi::class.java)
@@ -49,15 +59,29 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getMyAlbum() : Flowable<PagingData<TripAlbumItem>> {
+    fun getMyAlbum(): Flowable<PagingData<TripAlbumItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {TripAlbumDataSource(tripApi)}
+            pagingSourceFactory = { TripAlbumDataSource(tripApi) }
         ).flowable
+    }
+
+    // TripStamp 저장
+    fun insertTripStamp(tripStamp: TripStamp): Completable {
+        return database.tripStampDao().insertTripStamp(tripStamp)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripStamp 모두 가져오기
+    fun getTripStamps(): Single<List<TripStamp>> {
+        return database.tripStampDao().getTripStamps()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     companion object {
