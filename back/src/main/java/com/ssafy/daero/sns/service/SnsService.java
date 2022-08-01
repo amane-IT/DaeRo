@@ -307,7 +307,7 @@ public class SnsService {
         return "SUCCESS";
     }
 
-    public Map<String, Object> followerList(int userSeq, String page) {
+    public Map<String, Object> followerList(int currentUserSeq, int userSeq, String page) {
         // user확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
         if (user == null) { return null; }
@@ -323,6 +323,9 @@ public class SnsService {
             follower.put("user_seq", uVo.getUserSeq());
             follower.put("nickname", uVo.getNickname());
             follower.put("profile_url", uVo.getProfileImageLink());
+            int followed = snsMapper.selectFollowByUserSeq(currentUserSeq, uVo.getUserSeq());
+            if (followed == 1) { follower.put("follow_yn", 'y'); }
+            else { follower.put("follow_yn", 'n'); }
             followerList.add(follower);
             follower = new HashMap<>();
         }
@@ -333,7 +336,7 @@ public class SnsService {
         return results;
     }
 
-    public Map<String, Object> followingList(int userSeq, String page) {
+    public Map<String, Object> followingList(int currentUserSeq, int userSeq, String page) {
         // user확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
         if (user == null) { return null; }
@@ -349,6 +352,9 @@ public class SnsService {
             following.put("user_seq", uVo.getUserSeq());
             following.put("nickname", uVo.getNickname());
             following.put("profile_url", uVo.getProfileImageLink());
+            int followed = snsMapper.selectFollowByUserSeq(currentUserSeq, uVo.getUserSeq());
+            if (followed == 1) { following.put("follow_yn", 'y'); }
+            else { following.put("follow_yn", 'n'); }
             followingList.add(following);
             following = new HashMap<>();
         }
