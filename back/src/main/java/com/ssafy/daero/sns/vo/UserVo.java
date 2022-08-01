@@ -7,5 +7,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UserVo extends UserDto {
-
+    private char followYn;
 }
