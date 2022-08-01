@@ -1,5 +1,6 @@
 package com.ssafy.daero.service.controller;
 
+import com.ssafy.daero.service.dto.FaqDto;
 import com.ssafy.daero.service.dto.NoticeDto;
 import com.ssafy.daero.service.service.ServiceService;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,12 @@ public class ServiceController {
     @GetMapping("/notice")
     public ResponseEntity<ArrayList<NoticeDto>> noticeList() {
         ArrayList<NoticeDto> res = serviceService.noticeList();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/faq")
+    public ResponseEntity<ArrayList<FaqDto>> faqList() {
+        ArrayList<FaqDto> res = serviceService.faqList();
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
