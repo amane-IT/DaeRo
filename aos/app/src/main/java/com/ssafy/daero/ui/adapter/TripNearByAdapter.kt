@@ -4,16 +4,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
-import com.ssafy.daero.databinding.ItemMyPageAlbumBinding
 import com.ssafy.daero.databinding.ItemTripPopularBinding
 
 class TripNearByAdapter : RecyclerView.Adapter<TripNearByAdapter.TripNearByViewHolder>() {
     var tripPlaces: List<TripPopularResponseDto> = emptyList()
     lateinit var onItemClickListener: (View, Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripNearByAdapter.TripNearByViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): TripNearByAdapter.TripNearByViewHolder {
         return TripNearByAdapter.TripNearByViewHolder(
             ItemTripPopularBinding.inflate(
                 LayoutInflater.from(parent.context),

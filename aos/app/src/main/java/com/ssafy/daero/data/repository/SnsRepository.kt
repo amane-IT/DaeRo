@@ -5,15 +5,11 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
 import com.ssafy.daero.data.dto.sns.UserNameItem
+import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
-import com.ssafy.daero.data.repository.paging.CommentDataSource
-import com.ssafy.daero.data.repository.paging.ReCommentDataSource
-import com.ssafy.daero.data.repository.paging.SearchUserNameDataSource
+import com.ssafy.daero.data.repository.paging.*
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -35,34 +31,45 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentResponseDto>> {
+    fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {CommentDataSource(snsApi, articleSeq)}
+            pagingSourceFactory = { CommentDataSource(snsApi, articleSeq) }
         ).flowable
     }
 
     fun commentAdd(articleSeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentAdd(articleSeq,commentAddRequestDto)
+        return snsApi.commentAdd(articleSeq, commentAddRequestDto)
     }
 
     fun commentUpdate(replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
-        return snsApi.commentUpdate(replySeq,commentAddRequestDto)
+        return snsApi.commentUpdate(replySeq, commentAddRequestDto)
     }
 
     fun commentDelete(replySeq: Int): Completable {
         return snsApi.commentDelete(replySeq)
     }
 
-    fun reCommentAdd(articleSeq: Int, replySeq: Int, commentAddRequestDto: CommentAddRequestDto): Completable {
+    fun reCommentAdd(
+        articleSeq: Int,
+        replySeq: Int,
+        commentAddRequestDto: CommentAddRequestDto
+    ): Completable {
         return snsApi.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
     }
 
-    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentResponseDto>> {
+    fun likeAdd(userSeq: Int, articleSeq: Int): Completable {
+        return snsApi.likeAdd(userSeq, articleSeq)
+    }
+
+    fun likeDelete(userSeq: Int, articleSeq: Int): Completable {
+        return snsApi.likeDelete(userSeq, articleSeq)
+    }
+    fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -73,6 +80,7 @@ class SnsRepository private constructor(context: Context) {
         ).flowable
     }
 
+<<<<<<< aos/app/src/main/java/com/ssafy/daero/data/repository/SnsRepository.kt
     fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
         return Pager(
             config = PagingConfig(
@@ -82,6 +90,59 @@ class SnsRepository private constructor(context: Context) {
             ),
             pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
         ).flowable
+    }
+
+    fun getLikeUsers(articleSeq: Int): Flowable<PagingData<LikeItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { LikeDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun reportArticle(articleSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportArticle(articleSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun reportComment(replySeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportComment(replySeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun follower(articleSeq: Int): Flowable<PagingData<FollowResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { FollowerDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun following(articleSeq: Int): Flowable<PagingData<FollowResponseDto>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { FollowingDataSource(snsApi, articleSeq) }
+        ).flowable
+    }
+
+    fun follow(userSeq: Int): Completable {
+        return snsApi.follow(userSeq)
+    }
+
+    fun unFollow(userSeq: Int): Completable {
+        return snsApi.unFollow(userSeq)
     }
 
     companion object {

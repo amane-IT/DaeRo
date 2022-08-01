@@ -2,10 +2,8 @@ package com.ssafy.daero.ui.root.trip
 
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.cardview.widget.CardView
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -14,8 +12,8 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.databinding.FragmentTripBinding
-import com.ssafy.daero.ui.adapter.TripHotAdapter
-import com.ssafy.daero.ui.adapter.TripPopularAdapter
+import com.ssafy.daero.ui.adapter.trip.TripHotAdapter
+import com.ssafy.daero.ui.adapter.trip.TripPopularAdapter
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.hotArticles
 import com.ssafy.daero.utils.popularTripPlaces

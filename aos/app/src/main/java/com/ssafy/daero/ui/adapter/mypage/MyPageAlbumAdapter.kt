@@ -1,4 +1,4 @@
-package com.ssafy.daero.ui.adapter
+package com.ssafy.daero.ui.adapter.mypage
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,11 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.data.dto.trip.TripAlbumItem
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.databinding.ItemMyPageAlbumBinding
 
-class MyPageAlbumAdapter : PagingDataAdapter<TripAlbumItem, MyPageAlbumAdapter.MyPageAlbumViewHolder>(COMPARATOR) {
+class MyPageAlbumAdapter : PagingDataAdapter<TripAlbumItem, MyPageAlbumAdapter.MyPageAlbumViewHolder>(
+    COMPARATOR
+) {
     lateinit var onItemClickListener: (View, Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPageAlbumViewHolder {

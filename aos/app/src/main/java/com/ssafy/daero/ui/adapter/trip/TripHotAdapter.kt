@@ -1,15 +1,11 @@
-package com.ssafy.daero.ui.adapter
+package com.ssafy.daero.ui.adapter.trip
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.trip.TripAlbumResponseDto
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
-import com.ssafy.daero.databinding.ItemMyPageAlbumBinding
 import com.ssafy.daero.databinding.ItemTripHotBinding
-import com.ssafy.daero.databinding.ItemTripPopularBinding
 
 class TripHotAdapter : RecyclerView.Adapter<TripHotAdapter.TripHotViewHolder>() {
     var tripHots: List<TripHotResponseDto> = emptyList()

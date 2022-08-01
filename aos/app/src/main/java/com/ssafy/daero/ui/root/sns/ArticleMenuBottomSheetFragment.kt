@@ -1,6 +1,8 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
+import com.ssafy.daero.utils.constant.ARTICLE
+import com.ssafy.daero.utils.constant.COMMENT
+import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
-class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
+class ArticleMenuBottomSheetFragment(private val articleSeq: Int) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
 
@@ -60,10 +65,9 @@ class ArticleMenuBottomSheetFragment : BottomSheetDialogFragment() {
             //todo: 삭제하기
         }
         binding.tvArticleMenuReport.setOnClickListener {
-            //todo: 신고하기
-            findNavController().navigate(
-                R.id.action_articleFragment_to_reportFragment
-            )
+            //todo: 신고하기, album_seq
+            dismiss()
+            ReportBottomSheetFragment(ARTICLE, articleSeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //todo: 차단하기

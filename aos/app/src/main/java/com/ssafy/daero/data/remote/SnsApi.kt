@@ -1,13 +1,11 @@
 package com.ssafy.daero.data.remote
 
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.CommentResponseDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
-import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
 import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
+import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.common.PagingResponseDto
+import com.ssafy.daero.data.dto.user.FollowResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -25,7 +23,7 @@ interface SnsApi {
      * 댓글 조회
      */
     @GET("sns/article/{article_seq}/reply")
-    fun commentSelect(@Path("article_seq") articleSeq: Int, @Query("page") page: Int): Single<List<CommentResponseDto>>
+    fun commentSelect(@Path("article_seq") articleSeq: Int, @Query("page") page: Int): Single<PagingResponseDto<CommentItem>>
 
     /**
      * 댓글 추가
@@ -58,7 +56,7 @@ interface SnsApi {
         @Path("article_seq") articleSeq: Int,
         @Path("reply_seq") replySeq: Int,
         @Query("page") page: Int
-    ): Single<List<ReCommentResponseDto>>
+    ): Single<PagingResponseDto<ReCommentItem>>
 
     /**
      * 대댓글 추가
@@ -78,4 +76,83 @@ interface SnsApi {
         @Query("user_nickname") userNickname: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<UserNameItem>>
+
+    /**
+     * 좋아요 추가
+     */
+    @POST("sns/like")
+    fun likeAdd(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
+
+    /**
+     * 좋아요 삭제
+     */
+    @DELETE("sns/like")
+    fun likeDelete(
+        @Query("user") userSeq: Int,
+        @Query("article") articleSeq: Int
+    ): Completable
+
+    /**
+     * 좋아요 누른 사람 목록
+     */
+    @GET("sns/article/{article_seq}/likes")
+    fun getLikeUsers(
+        @Path("article_seq") articleSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<LikeItem>>
+
+    /**
+     * 게시글 신고하기
+     */
+    @POST("sns/article/{article_seq}/report")
+    fun reportArticle(
+        @Path("article_seq") articleSeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
+
+    /**
+     * 댓글 신고하기
+     */
+    @POST("sns/reply/{reply_seq}/report")
+    fun reportComment(
+        @Path("reply_seq") replySeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
+
+    /**
+     * 팔로우
+     */
+    @POST("sns/follow")
+    fun follow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 언팔로우
+     */
+    @DELETE("sns/follow")
+    fun unFollow(
+        @Query("follow-user") userSeq: Int
+    ): Completable
+
+    /**
+     * 팔로워 목록
+     */
+    @GET("sns/user/{user_seq}/follower")
+    fun follower(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
+
+    /**
+     * 팔로잉 목록
+     */
+    @GET("sns/user/{user_seq}/following")
+    fun following(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<FollowResponseDto>>
 }

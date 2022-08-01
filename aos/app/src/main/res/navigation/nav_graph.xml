@@ -15,14 +15,14 @@
             app:destination="@id/emailLoginFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_loginFragment_to_signupEmailFragment"
             app:destination="@id/signupEmailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_loginFragment_to_rootFragment"
@@ -53,14 +53,14 @@
             app:destination="@id/findIdFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_emailLoginFragment_to_findPasswordConfirmFragment"
             app:destination="@id/findPasswordConfirmFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
@@ -73,7 +73,7 @@
             app:destination="@id/signupPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
@@ -86,7 +86,7 @@
             app:destination="@id/settingFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_profileSettingFragment"
@@ -100,21 +100,21 @@
             app:destination="@id/followerFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_followingFragment"
             app:destination="@id/followingFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_articleFragment"
             app:destination="@id/articleFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
         <action
@@ -135,42 +135,42 @@
             app:destination="@id/noticeFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_FAQFragment"
             app:destination="@id/FAQFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_profileSettingFragment"
             app:destination="@id/profileSettingFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_blockUserFragment"
             app:destination="@id/blockUserFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_inquiryFragment"
             app:destination="@id/inquiryFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_resetPasswordConfirmFragment"
             app:destination="@id/resetPasswordConfirmFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_settingFragment_to_loginFragment"
@@ -197,7 +197,7 @@
             app:destination="@id/resetPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"/>
     </fragment>
     <fragment
@@ -235,7 +235,7 @@
             app:destination="@id/findPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
@@ -248,7 +248,7 @@
             app:destination="@id/loginFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
@@ -261,7 +261,7 @@
             app:destination="@id/signupUsernameFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
@@ -274,14 +274,14 @@
             app:destination="@id/termsFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_signupUsernameFragment_to_tripPreferenceFragment"
             app:destination="@id/tripPreferenceFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/signupUsernameFragment"
             app:popUpToInclusive="true"/>
@@ -300,12 +300,20 @@
         android:id="@+id/followerFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowerFragment"
         android:label="FollowerFragment"
-        tools:layout="@layout/fragment_follower" />
+        tools:layout="@layout/fragment_follower" >
+        <action
+            android:id="@+id/action_followerFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/followingFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowingFragment"
         android:label="FollowingFragment"
-        tools:layout="@layout/fragment_following" />
+        tools:layout="@layout/fragment_following" >
+        <action
+            android:id="@+id/action_followingFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+    </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
         android:name="com.ssafy.daero.ui.setting.ResetPasswordFragment"
@@ -321,41 +329,15 @@
             app:destination="@id/tripStampDetailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
-            />
-        <action
-            android:id="@+id/action_articleFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
-            app:popExitAnim="@anim/to_right"
-            />
-        <action
-            android:id="@+id/action_articleFragment_to_likeFragment"
-            app:destination="@id/likeFragment"
-            app:enterAnim="@anim/from_up"
-            app:exitAnim="@anim/to_down"
-            app:popEnterAnim="@anim/from_down"
-            app:popExitAnim="@anim/to_up"
-            />
-        <action
-            android:id="@+id/action_articleFragment_to_commentFragment"
-            app:destination="@id/commentFragment"
-            app:enterAnim="@anim/from_up"
-            app:exitAnim="@anim/to_down"
-            app:popEnterAnim="@anim/from_down"
-            app:popExitAnim="@anim/to_up"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/articleFragment"
             />
         <action
             android:id="@+id/action_articleFragment_to_tripFollowFragment"
             app:destination="@id/tripFollowFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
         <action
@@ -363,7 +345,7 @@
             app:destination="@id/articleWriteDayFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
         <action
@@ -371,9 +353,12 @@
             app:destination="@id/reportFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
+        <action
+            android:id="@+id/action_articleFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/tripStampDetailFragment"
@@ -396,7 +381,7 @@
             app:destination="@id/articleWriteExpenseFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
     </fragment>
@@ -410,7 +395,7 @@
             app:destination="@id/articleWriteThumbnailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
+            app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             />
     </fragment>
@@ -425,45 +410,20 @@
         android:label="ReportFragment"
         tools:layout="@layout/fragment_report"/>
     <fragment
-        android:id="@+id/myPageFragment"
-        android:name="com.ssafy.daero.ui.root.mypage.MyPageFragment"
-        android:label="MyPageFragment"
-        tools:layout="@layout/fragment_my_page"/>
-    <fragment
-        android:id="@+id/likeFragment"
-        android:name="com.ssafy.daero.ui.root.sns.LikeFragment"
-        android:label="LikeFragment"
-        tools:layout="@layout/fragment_like"/>
-    <fragment
-        android:id="@+id/commentFragment"
-        android:name="com.ssafy.daero.ui.root.sns.CommentFragment"
-        android:label="CommentFragment"
-        tools:layout="@layout/fragment_comment">
-        <action
-            android:id="@+id/action_commentFragment_to_reportFragment"
-            app:destination="@id/reportFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
-            app:popExitAnim="@anim/to_right"
-            />
-        <action
-            android:id="@+id/action_commentFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/form_left"
-            app:popExitAnim="@anim/to_right"
-            />
-    </fragment>
-    <fragment
-        android:id="@+id/reCommentFragment"
-        android:name="com.ssafy.daero.ui.root.sns.ReCommentFragment"
-        android:label="ReCommentFragment"
-        tools:layout="@layout/fragment_re_comment"/>
-    <fragment
         android:id="@+id/tripInformationFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"
         android:label="TripInformationFragment"
         tools:layout="@layout/fragment_trip_information"/>
+    <fragment
+        android:id="@+id/otherPageFragment"
+        android:name="com.ssafy.daero.ui.root.mypage.OtherPageFragment"
+        android:label="OtherPageFragment"
+        tools:layout="@layout/fragment_other_page"
+        />
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.ssafy.daero.ui.root.mypage.MyPageFragment"
+        android:label="MyPageFragment"
+        tools:layout="@layout/fragment_my_page"
+        />
 </navigation>

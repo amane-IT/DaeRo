@@ -1,32 +1,33 @@
 package com.ssafy.daero.ui.root.sns
 
+import android.app.Dialog
 import android.content.Context
-import android.util.Log
+import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
-import com.ssafy.daero.data.dto.article.ReCommentResponseDto
-import com.ssafy.daero.databinding.*
-import com.ssafy.daero.ui.adapter.MyPageAlbumAdapter
+import com.ssafy.daero.databinding.BottomsheetCommentBinding
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
+import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
-import kotlinx.coroutines.flow.collectLatest
 
-
-class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_comment),
-    CommentListener {
-
-    private val commentViewModel: CommentViewModel by viewModels()
+class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int) :
+    BottomSheetDialogFragment(), CommentListener {
+    private val articleViewModel: ArticleViewModel by viewModels({ requireParentFragment() })
     private lateinit var commentAdapter: CommentAdapter
+
+    private var _binding: BottomsheetCommentBinding? = null
+    private val binding get() = _binding!!
 
     private val commentItemClickListener: (View, Int, Int, String) -> Unit =
         { _, id, index, content ->
@@ -35,9 +36,9 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
                 1 -> {
                     val commentMenuBottomSheetFragment = CommentMenuBottomSheetFragment(
                         id,
-                        commentViewModel,
+                        articleViewModel,
                         content,
-                        this@CommentFragment
+                        this@CommentBottomSheetFragment
                     )
                     commentMenuBottomSheetFragment.show(
                         childFragmentManager,
@@ -46,62 +47,52 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
                 }
                 2 -> {
                     findNavController().navigate(
-                        R.id.action_commentFragment_to_myPageFragment,
+                        R.id.action_articleFragment_to_otherPageFragment,
                         bundleOf("UserSeq" to id)
                     )
                 }
             }
         }
 
-    override fun init() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = BottomsheetCommentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        return setFullHeight()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initView()
         getComment()
         observeData()
         setOnClickListeners()
     }
 
-    private fun initData() {
-        //todo: article_seq
-        commentAdapter = CommentAdapter(3, this@CommentFragment).apply {
-            this.onItemClickListener = commentItemClickListener
-        }
-        binding.recyclerComment.apply {
-            adapter = commentAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-        }
-        binding.imgArticleBack.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+    private fun initView() {
+        binding.textCommentCount.text = "$comments"
     }
 
     private fun getComment() {
-        //todo: article_seq
-        commentViewModel.commentSelect(3)
+        articleViewModel.commentSelect(articleSeq)
     }
 
-    private fun setOnClickListeners() {
-        binding.textCommentWrite.setOnClickListener {
-            //todo: article_seq
-            commentViewModel.commentAdd(
-                3,
-                CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
-            )
-            binding.editTextCommentAddComment.setText("")
-            binding.editTextCommentAddComment.postDelayed({
-                val inputMethodManager =
-                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.hideSoftInputFromWindow(
-                    binding.editTextCommentAddComment.windowToken,
-                    0
-                )
-            }, 0)
-            toast("댓글이 추가되었습니다.")
-            getComment()
-        }
+    private val userProfileClickListener: (Int) -> Unit = { userSeq ->
+        // todo: OtherPageFragment 로 이동, userSeq 번들로 전달
+        findNavController().navigate(R.id.action_articleFragment_to_otherPageFragment)
     }
+
 
     private fun observeData() {
-        commentViewModel.comment.observe(viewLifecycleOwner) {
-            commentAdapter = CommentAdapter(3, this@CommentFragment).apply {
+        articleViewModel.comment.observe(viewLifecycleOwner) {
+            commentAdapter = CommentAdapter(3, this@CommentBottomSheetFragment).apply {
                 this.onItemClickListener = commentItemClickListener
             }
             commentAdapter.submitData(lifecycle, it)
@@ -124,7 +115,7 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
         }, 150)
         binding.editTextCommentAddComment.setText(content)
         binding.textCommentWrite.setOnClickListener {
-            commentViewModel.commentUpdate(
+            articleViewModel.commentUpdate(
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -143,7 +134,7 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
     }
 
     override fun commentDelete(sequence: Int) {
-        commentViewModel.commentDelete(sequence)
+        articleViewModel.commentDelete(sequence)
         getComment()
     }
 
@@ -159,12 +150,12 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
         }, 150)
         binding.textCommentWrite.setOnClickListener {
             //todo: article_seq
-            commentViewModel.reCommentAdd(
+            articleViewModel.reCommentAdd(
                 3,
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
-            commentViewModel.commentUpdate(
+            articleViewModel.commentUpdate(
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -182,16 +173,45 @@ class CommentFragment : BaseFragment<FragmentCommentBinding>(R.layout.fragment_c
         }
     }
 
+    private fun setOnClickListeners() {
+        binding.imageCommentClose.setOnClickListener { dismiss() }
+        binding.textCommentWrite.setOnClickListener {
+            //todo: article_seq
+            articleViewModel.commentAdd(
+                3,
+                CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
+            )
+            binding.editTextCommentAddComment.setText("")
+            binding.editTextCommentAddComment.postDelayed({
+                val inputMethodManager =
+                    requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(
+                    binding.editTextCommentAddComment.windowToken,
+                    0
+                )
+            }, 0)
+            toast("댓글이 추가되었습니다.")
+            getComment()
+        }
+    }
+
     override fun reCommentSelect(
         articleSeq: Int,
         replySeq: Int,
         reCommentAdapter: ReCommentAdapter
     ): ReCommentAdapter {
-        commentViewModel.reCommentSelect(articleSeq, replySeq)
-        commentViewModel.reComment.observe(viewLifecycleOwner) {
+        articleViewModel.reCommentSelect(articleSeq, replySeq)
+        articleViewModel.reComment.observe(viewLifecycleOwner) {
             reCommentAdapter.submitData(lifecycle, it)
         }.run {
             return reCommentAdapter
         }
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
+
+

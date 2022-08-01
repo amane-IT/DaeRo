@@ -106,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
                     android:text="2022.07.16~2022.07.17"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_title" />
@@ -114,7 +115,7 @@
                     android:id="@+id/fragment_article_map"
                     android:layout_width="360dp"
                     android:layout_height="240dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="24dp"
                     android:name="com.naver.maps.map.MapFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -196,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="48dp"
                     android:text="여행경비"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_article_end" />
@@ -217,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="48dp"
                     android:text="이번 여행은......"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycler_article_expense" />
@@ -242,7 +243,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="32dp"
+                    android:layout_marginTop="48dp"
                     android:text="여행만족도"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_content" />
@@ -291,8 +292,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:padding="3dp"
-                        app:srcCompat="@drawable/ic_like"
-                        app:tint="@color/black" />
+                        app:srcCompat="@drawable/ic_like" />
 
                 </LinearLayout>
 
