@@ -8,7 +8,18 @@
         FROM notice
     </select>
 
+    <select id="selectFaqList" resultMap="mappingFaqDto">
+        SELECT title, content, created_at
+        FROM faq
+    </select>
+
     <resultMap id="mappingNoticeDto" type="com.ssafy.daero.service.dto.NoticeDto">
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <resultMap id="mappingFaqDto" type="com.ssafy.daero.service.dto.FaqDto">
         <result property="title" column="title" />
         <result property="content" column="content" />
         <result property="createdAt" column="created_at" />

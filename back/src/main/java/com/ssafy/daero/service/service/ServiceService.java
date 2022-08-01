@@ -1,5 +1,6 @@
 package com.ssafy.daero.service.service;
 
+import com.ssafy.daero.service.dto.FaqDto;
 import com.ssafy.daero.service.dto.NoticeDto;
 import com.ssafy.daero.service.mapper.ServiceMapper;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,10 @@ public class ServiceService {
     public ArrayList<NoticeDto> noticeList() {
         ArrayList<NoticeDto> noticeList = serviceMapper.selectNoticeList();
         return noticeList;
+    }
+
+    public ArrayList<FaqDto> faqList() {
+        ArrayList<FaqDto> faqList = serviceMapper.selectFaqList();
+        return faqList;
     }
 }
