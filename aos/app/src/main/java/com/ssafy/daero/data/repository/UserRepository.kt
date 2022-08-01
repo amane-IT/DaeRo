@@ -100,8 +100,11 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun signup(signupRequestDto: SignupRequestDto): Single<Void> {
+    fun signup(signupRequestDto: SignupRequestDto): Single<Response<SignupResponseDto>> {
         return userApi.signup(signupRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if(t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getPreference(userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>> {
