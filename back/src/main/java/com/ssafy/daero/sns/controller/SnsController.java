@@ -182,15 +182,23 @@ public class SnsController {
     }
 
     @GetMapping("/user/{user_seq}/follower")
-    public ResponseEntity<Map<String, Object>> followerList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, Object> followerList = snsService.followerList(user_seq, page);
+    public ResponseEntity<Map<String, Object>> followerList(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Map<String, Object> followerList = snsService.followerList(Integer.parseInt(currentUser.get("user_seq")), user_seq, page);
         if (followerList == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else { return new ResponseEntity<>(followerList, HttpStatus.OK); }
     }
 
     @GetMapping("/user/{user_seq}/following")
-    public ResponseEntity<Map<String, Object>> followingList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, Object> followingList = snsService.followingList(user_seq, page);
+    public ResponseEntity<Map<String, Object>> followingList(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+        Map<String, Object> followingList = snsService.followingList(Integer.parseInt(currentUser.get("user_seq")), user_seq, page);
         if (followingList == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
