@@ -21,7 +21,7 @@ import java.util.Objects;
 
 @Service
 public class UserService {
-    private final String URL_PREFIX = "127.0.0.1";
+    private final String URL_PREFIX = "http://i7d110.p.ssafy.io/";
     private final String NO_REPLY = "no-reply@daero.com";
 
     private final UserMapper userMapper;
