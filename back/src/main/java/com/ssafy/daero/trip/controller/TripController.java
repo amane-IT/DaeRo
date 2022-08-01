@@ -26,9 +26,7 @@ public class TripController {
 
     // tripstamp 상세 조회
     @GetMapping("/trip-stamp/{trip_stamp_seq}")
-    public ResponseEntity<Map<String, Object>> tripStampDetail(@RequestHeader Map<String, String> header, @PathVariable int trip_stamp_seq) {
-        String userJwt = header.get("jwt");
-
+    public ResponseEntity<Map<String, Object>> tripStampDetail(@PathVariable int trip_stamp_seq) {
         Map<String, Object> res = tripService.tripStampDetail(trip_stamp_seq);
         if (res != null) {
             return new ResponseEntity<>(res, HttpStatus.OK);
@@ -58,19 +56,19 @@ public class TripController {
     }
 
     @GetMapping("/user/{user_seq}/album")
-    public ResponseEntity<ArrayList<Map<String, Object>>> albumList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        ArrayList res = tripService.albumList(user_seq, page, 'n');
-        if (res.get(0).getClass().getName().equals("com.ssafy.daero.trip.vo.AlbumVo") | res.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Map<String, Object>> albumList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> res = tripService.albumList(user_seq, page, 'n');
+        if (res == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
     }
 
     @GetMapping("/my/{user_seq}/album")
-    public ResponseEntity<ArrayList<Map<String, Object>>> myAlbumList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        ArrayList res = tripService.albumList(user_seq, page, 'y');
-        if (res.get(0).getClass().getName().equals("com.ssafy.daero.trip.vo.AlbumVo") | res.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Map<String, Object>> myAlbumList(@PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
+        Map<String, Object> res = tripService.albumList(user_seq, page, 'y');
+        if (res == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
     }

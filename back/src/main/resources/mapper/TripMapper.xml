@@ -65,6 +65,14 @@
           AND album.row &lt; 1+(#{page}*10)
     </select>
 
+    <select id="selectAlbumCountByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM articles a
+        WHERE a. trips_seq IN (SELECT t.trips_seq
+                                FROM trips t
+                                WHERE t.users_seq=#{userSeq})
+    </select>
+
 
 
     <resultMap id="mappingTripStampDto" type="com.ssafy.daero.trip.dto.TripStampDto">

@@ -4,6 +4,7 @@ import com.ssafy.daero.sns.dto.ReplyDto;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
+import com.ssafy.daero.sns.vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -25,6 +26,10 @@ public interface SnsMapper {
 
     Integer deleteArticleByArticleSeq(int articleSeq);
 
+    Integer deleteReplyByArticleSeq(int articleSeq);
+
+    Integer deleteArticleTagByArticleSeq(int articleSeq);
+
 
     ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
@@ -38,7 +43,42 @@ public interface SnsMapper {
 
     Integer deleteReplyByReplySeq(int replySeq);
 
+    ArrayList<ReplyVo> selectRereplyListByReplySeq(@Param("replySeq") int replySeq, @Param("page") int page);
 
+    int selectReplyByReplySeq(int replySeq);
 
+    Integer insertRereply(@Param("articleSeq") int articleSeq, @Param("replySeq") int replySeq, @Param("userSeq") int userSeq, @Param("content") String content);
 
+    int selectArticleLikeByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    Integer insertLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    Integer deleteLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
+
+    Integer insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
+
+    int selectReportArticleByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    int selectReportReplyByUserSeq(@Param("replySeq") int replySeq, @Param("userSeq") int userSeq);
+
+    int selectFollowByUserSeq(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+    Integer insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+
+    Integer deleteFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+
+    int selectFollowerByUserSeq(int userSeq);
+
+    int selectFollowingByUserSeq(int userSeq);
+
+    ArrayList<UserVo> selectFollowerListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    ArrayList<UserVo> selectFollowingListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+
+    int selectLikeCountByArticleSeq(int articleSeq);
+
+    int selectReplyByArticleSeq(int articleSeq);
+
+    int selectRereplyByReplySeq(int replySeq);
 }

@@ -6,6 +6,7 @@ import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
+import com.ssafy.daero.sns.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,13 +20,18 @@ public class SnsService {
 
     public SnsService(SnsMapper snsMapper) { this.snsMapper = snsMapper; }
 
-    public Map<String, Object> articleDetail(int articleSeq) throws JsonProcessingException {
-
+    public Map<String, Object> articleDetail(int articleSeq, int userSeq) throws JsonProcessingException {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
+        Map<String, Object> articleDetail = new HashMap<>();
+        if(articleVo == null) { return articleDetail; }
+        int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
+        char like;
+        if (liked == 0) { like = 'n'; }
+        else { like = 'y'; }
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());
         ArrayList<Integer> tags = snsMapper.selectPlaceTagsByArticleSeq(articleSeq);
-        Map<String, Object> articleDetail = new HashMap<>();
+
 
         ArrayList<Map> records = new ArrayList<>();
         Map<String, Object> days = new HashMap<>();
@@ -76,6 +82,7 @@ public class SnsService {
         articleDetail.put("tags", tags);
         articleDetail.put("trip_expenses", expenses);
         articleDetail.put("records", records);
+        articleDetail.put("like_yn", like);
         return articleDetail;
     }
 
@@ -84,6 +91,8 @@ public class SnsService {
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         if (articleUser == null) { return 0; }
         if (articleUser == userSeq) {
+            snsMapper.deleteArticleTagByArticleSeq(articleSeq);
+            snsMapper.deleteReplyByArticleSeq(articleSeq);
             snsMapper.deleteArticleByArticleSeq(articleSeq);
             return 1;
         }
@@ -92,13 +101,15 @@ public class SnsService {
         }
     }
 
-    public ArrayList<Map<String, Object>> replyList(int articleSeq, String page) {
+    public Map<String, Object> replyList(int articleSeq, String page) {
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         if (articleUser == null) { return null; }
-
-        ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
+        int totalPage = (int) Math.ceil((snsMapper.selectReplyByArticleSeq(articleSeq))/10.0);
+        if (totalPage  == 0) { totalPage = 1; }
         ArrayList<Map<String, Object>> replyList = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
+        ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
+        Map<String, Object> results = new HashMap<>();
         for (ReplyVo rVo :
                 replyVos) {
             reply.put("reply_seq", rVo.getReplySeq());
@@ -113,7 +124,10 @@ public class SnsService {
             replyList.add(reply);
             reply = new HashMap<>();
         }
-        return replyList;
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", replyList);
+        return results;
     }
 
     public ReplyVo createReply(int articleSeq, int userSeq, String content) {
@@ -151,6 +165,196 @@ public class SnsService {
         snsMapper.deleteReplyByReplySeq(replySeq);
         replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
         return replyVo;
+    }
 
+    public Map<String, Object> rereplyList(int replySeq, String page) {
+        Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
+        if (replyUser == null) { return null; }
+        int totalPage = (int) Math.ceil((snsMapper.selectRereplyByReplySeq(replySeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        Map<String, Object> results = new HashMap<>();
+        ArrayList<ReplyVo> rereplyVos = snsMapper.selectRereplyListByReplySeq(replySeq, Integer.parseInt(page));
+        ArrayList<Map<String, Object>> rereplyList = new ArrayList<>();
+        Map<String, Object> reply = new HashMap<>();
+        for (ReplyVo rVo :
+                rereplyVos) {
+            reply.put("reply_seq", rVo.getReplySeq());
+            reply.put("nickname", rVo.getNickname());
+            reply.put("user_seq", rVo.getUserSeq());
+            reply.put("profile_url", rVo.getProfileUrl());
+            reply.put("created_at", rVo.getCreatedAt());
+            reply.put("content", rVo.getContent());
+            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) { reply.put("modified", 'n'); }
+            else { reply.put("modified", 'y'); }
+            rereplyList.add(reply);
+            reply = new HashMap<>();
+        }
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", rereplyList);
+        return results;
+    }
+
+    public ReplyVo createRereply(int articleSeq,int replySeq, int userSeq, String content) {
+        ReplyVo replyVo = new ReplyVo();
+        // reply가 존재하는지 확인
+        int reply = snsMapper.selectReplyByReplySeq(replySeq);
+        if (reply == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo; }
+        else {
+            snsMapper.insertRereply(articleSeq, replySeq, userSeq, content);
+            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            return replyVo;
+        }
+    }
+
+    public String likeArticle(int userSeq, int articleSeq, char like) {
+        // user 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return "NO_SUCH_ARTICLE"; }
+        // 좋아요 누른 적 있는지 확인
+        int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
+        if (like == 'l') {
+            if (liked == 0) {
+                snsMapper.insertLike(articleSeq, userSeq);
+                return "SUCCESS";
+            }
+            else { return "BAD_REQUEST"; }
+        }
+        else if (like == 'u') {
+            if (liked == 1) {
+                snsMapper.deleteLike(articleSeq, userSeq);
+                return "SUCCESS";
+            }
+            else { return "BAD_REQUEST"; }
+        }
+        else { return "BAD_REQUEST"; }
+    }
+
+    public Map<String, Object> likeUserList(int articleSeq, String page) {
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return null; }
+        int totalPage = (int) Math.ceil((snsMapper.selectLikeCountByArticleSeq(articleSeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        ArrayList<UserVo> userList = snsMapper.selectLikeUserListByArticleSeq(articleSeq, Integer.parseInt(page));
+        Map<String, Object> results = new HashMap<>();
+        ArrayList<Map<String, Object>> likeUserList = new ArrayList<>();
+        Map<String, Object> user = new HashMap<>();
+        for (UserVo uVo :
+                userList) {
+            user.put("profile_url", uVo.getProfileImageLink());
+            user.put("nickname", uVo.getNickname());
+            user.put("user_seq", uVo.getUserSeq());
+            likeUserList.add(user);
+            user = new HashMap<>();
+        }
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", likeUserList);
+        return results;
+    }
+
+    public String reportArticle(int articleSeq, int userSeq, int reportSeq) {
+        // article 있는지 확인
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return "BAD_REQUEST"; }
+        Integer reportedUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
+        // 신고한 적 있는지 확인
+        int reported = snsMapper.selectReportArticleByUserSeq(articleSeq, userSeq);
+        if (reported == 1) { return "ALREADY_REPORTED"; }
+        // 신고하기
+        snsMapper.insertReport(articleSeq, userSeq, reportedUser, reportSeq, "article");
+        return "SUCCESS";
+    }
+
+    public String reportReply(int replySeq, int userSeq, int reportSeq) {
+        // reply 있는지 확인
+        int reply = snsMapper.selectReplyByReplySeq(replySeq);
+        if (reply == 0) { return "BAD_REQUEST"; }
+        Integer reportedUser = snsMapper.selectUserSeqByReplySeq(replySeq);
+        // 신고한 적 있는지 확인
+        int reported = snsMapper.selectReportReplyByUserSeq(replySeq, userSeq);
+        if(reported == 1) { return "ALREADY_REPORTED"; }
+        // 신고하기
+        snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
+        return "SUCCESS";
+    }
+
+    public String followUser(int followerUserSeq, int followedUserSeq) {
+        // follow할 유저가 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // follow한 적 있는지 확인
+        int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
+        if (followed != 0) { return "BAD_REQUEST"; }
+        // follow
+        snsMapper.insertFollow(followerUserSeq, followedUserSeq);
+        return "SUCCESS";
+    }
+
+    public String unfollowUser(int followerUserSeq, int followedUserSeq) {
+        // unfollow할 유저가 있는지 확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
+        if (user == null) { return "NO_SUCH_USER"; }
+        // follow한 적 있는지 확인
+        int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
+        if (followed != 1) { return "BAD_REQUEST"; }
+        // unfollow
+        snsMapper.deleteFollow(followerUserSeq, followedUserSeq);
+        return "SUCCESS";
+    }
+
+    public Map<String, Object> followerList(int userSeq, String page) {
+        // user확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return null; }
+        // follow 목록 불러오기
+        int totalPage = (int) Math.ceil((snsMapper.selectFollowerByUserSeq(userSeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        ArrayList<UserVo> users = snsMapper.selectFollowerListByUserSeq(userSeq, Integer.parseInt(page));
+        Map<String, Object> results = new HashMap<>();
+        ArrayList<Map<String, Object>> followerList = new ArrayList<>();
+        Map<String, Object> follower = new HashMap<>();
+        for (UserVo uVo :
+                users) {
+            follower.put("user_seq", uVo.getUserSeq());
+            follower.put("nickname", uVo.getNickname());
+            follower.put("profile_url", uVo.getProfileImageLink());
+            followerList.add(follower);
+            follower = new HashMap<>();
+        }
+        results.put("page", Integer.parseInt(page));
+        results.put("total_page", totalPage);
+        results.put("results", followerList);
+
+        return results;
+    }
+
+    public Map<String, Object> followingList(int userSeq, String page) {
+        // user확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return null; }
+        // follow 목록 불러오기
+        int totalPage = (int) Math.ceil((snsMapper.selectFollowingByUserSeq(userSeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        ArrayList<UserVo> users = snsMapper.selectFollowingListByUserSeq(userSeq, Integer.parseInt(page));
+        ArrayList<Map<String, Object>> followingList = new ArrayList<>();
+        Map<String, Object> results = new HashMap<>();
+        Map<String, Object> following = new HashMap<>();
+        for (UserVo uVo :
+                users) {
+            following.put("user_seq", uVo.getUserSeq());
+            following.put("nickname", uVo.getNickname());
+            following.put("profile_url", uVo.getProfileImageLink());
+            followingList.add(following);
+            following = new HashMap<>();
+        }
+        results.put("total_page", totalPage);
+        results.put("page", Integer.parseInt(page));
+        results.put("results", followingList);
+        return results;
     }
 }

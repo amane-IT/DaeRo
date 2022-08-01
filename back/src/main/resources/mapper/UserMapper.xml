@@ -148,7 +148,7 @@
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="userSeq" column="users_seq"/>
-        <result property="email" column="user_email"/>
+        <result property="userEmail" column="user_email"/>
         <result property="password" column="password"/>
         <result property="nickname" column="nickname"/>
         <result property="emailVerifiedYn" column="email_verified_yn"/>
