@@ -13,7 +13,7 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampBottomSheetBinding
 
 
-class TripStampBottomSheetFragment(val applyFilter : (String, String) -> Unit) : BottomSheetDialogFragment() {
+class TripStampBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentTripStampBottomSheetBinding? = null
     private val binding get() = _binding!!
 

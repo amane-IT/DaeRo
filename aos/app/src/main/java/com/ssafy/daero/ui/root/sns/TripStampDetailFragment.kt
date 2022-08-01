@@ -1,17 +1,9 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.app.ProgressDialog.show
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.PorterDuff
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.databinding.FragmentArticleBinding
-import com.ssafy.daero.databinding.FragmentHomeBinding
-import com.ssafy.daero.databinding.FragmentKeywordBinding
 import com.ssafy.daero.databinding.FragmentTripStampDetailBinding
 import com.ssafy.daero.ui.root.trip.TripStampBottomSheetFragment
 
@@ -53,7 +45,7 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 
             buttonTripStampRetry.setOnClickListener {
                 // TODO: 트립스탬프 재생성
-                TripStampBottomSheetFragment(applyFilter).show(
+                TripStampBottomSheetFragment().show(
                     childFragmentManager,
                     "TripStampBottomSheetFragment"
                 )
@@ -64,9 +56,5 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
                 // 참고: https://youngest-programming.tistory.com/530
             }
         }
-    }
-
-    private val applyFilter: (String, String) -> Unit = { startDate, endDate ->
-        //getMyJourney(startDate, endDate)
     }
 }

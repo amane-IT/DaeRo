@@ -1,5 +1,8 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
+import com.ssafy.daero.data.dto.sns.UserNameItem
+import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
@@ -64,6 +67,15 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body commentAddRequestDto: CommentAddRequestDto
     ): Completable
+
+    /**
+     * 사용자 이름 검색
+     * */
+    @GET("sns/search")
+    fun searchUserName(
+        @Query("user_nickname") userNickname: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<UserNameItem>>
 
     /**
      * 좋아요 추가
