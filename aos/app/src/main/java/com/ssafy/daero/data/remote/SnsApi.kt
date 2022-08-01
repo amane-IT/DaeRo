@@ -4,7 +4,9 @@ import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
+import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -67,4 +69,13 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body commentAddRequestDto: CommentAddRequestDto
     ): Completable
+
+    /**
+     * 사용자 이름 검색
+     * */
+    @GET("sns/search")
+    fun searchUserName(
+        @Query("user_nickname") userNickname: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<UserNameItem>>
 }

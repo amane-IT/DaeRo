@@ -9,9 +9,11 @@ import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.data.dto.article.CommentResponseDto
 import com.ssafy.daero.data.dto.article.ReCommentResponseDto
+import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.CommentDataSource
 import com.ssafy.daero.data.repository.paging.ReCommentDataSource
+import com.ssafy.daero.data.repository.paging.SearchUserNameDataSource
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -68,6 +70,17 @@ class SnsRepository private constructor(context: Context) {
                 prefetchDistance = 1
             ),
             pagingSourceFactory = { ReCommentDataSource(snsApi, articleSeq, replySeq) }
+        ).flowable
+    }
+
+    fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
         ).flowable
     }
 
