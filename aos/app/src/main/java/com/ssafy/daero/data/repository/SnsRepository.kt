@@ -5,11 +5,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.sns.UserNameItem
+import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.search.ArticleMoreItem
+import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.*
+import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -80,17 +83,6 @@ class SnsRepository private constructor(context: Context) {
         ).flowable
     }
 
-    fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = false,
-                prefetchDistance = 1
-            ),
-            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
-        ).flowable
-    }
-
     fun getLikeUsers(articleSeq: Int): Flowable<PagingData<LikeItem>> {
         return Pager(
             config = PagingConfig(
@@ -142,6 +134,35 @@ class SnsRepository private constructor(context: Context) {
 
     fun unFollow(userSeq: Int): Completable {
         return snsApi.unFollow(userSeq)
+    }
+
+    fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
+        ).flowable
+    }
+
+    fun searchArticle(searchKeyword: String): Single<Response<SearchArticleResponseDto>> {
+        return snsApi.searchArticles(searchKeyword)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun searchContentMore(searchKeyword: String): Flowable<PagingData<ArticleMoreItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchContentMoreDataSource(snsApi, searchKeyword) }
+        ).flowable
     }
 
     companion object {

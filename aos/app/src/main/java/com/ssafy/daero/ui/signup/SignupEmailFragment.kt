@@ -27,7 +27,6 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
     private fun setOnClickListeners(){
         binding.apply {
             buttonSignupEmailEmailLogin.setOnClickListener{
-                toast("이메일을 전송했습니다.")
                 val dto = SignupEmailRequestDto(editTextSignupEmailEmailId.text.toString())
                 signupEmailViewModel.verifyEmail(dto)
             }

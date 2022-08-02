@@ -1,4 +1,4 @@
-package com.ssafy.daero.data.dto.sns
+package com.ssafy.daero.data.dto.search
 
 data class UserNameItem(
     val profile_url: String,
