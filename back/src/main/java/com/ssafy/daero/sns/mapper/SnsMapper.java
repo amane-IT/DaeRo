@@ -24,49 +24,49 @@ public interface SnsMapper {
 
     Integer selectUserSeqByArticleSeq(int articleSeq);
 
-    Integer deleteArticleByArticleSeq(int articleSeq);
+    int deleteArticleByArticleSeq(int articleSeq);
 
-    Integer deleteReplyByArticleSeq(int articleSeq);
+    int deleteReplyByArticleSeq(int articleSeq);
 
-    Integer deleteArticleTagByArticleSeq(int articleSeq);
+    int deleteArticleTagByArticleSeq(int articleSeq);
 
 
     ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
     Integer selectUserSeqByReplySeq(int replySeq);
 
-    Integer insertReply(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq, @Param("content") String content);
+    int insertReply(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq, @Param("content") String content);
 
     int selectArticleByArticleSeq(int articleSeq);
 
-    Integer updateReplyByReplySeq(@Param("replySeq") int replySeq, @Param("content") String content);
+    int updateReplyByReplySeq(@Param("replySeq") int replySeq, @Param("content") String content);
 
-    Integer deleteReplyByReplySeq(int replySeq);
+    int deleteReplyByReplySeq(int replySeq);
 
     ArrayList<ReplyVo> selectRereplyListByReplySeq(@Param("replySeq") int replySeq, @Param("page") int page);
 
     int selectReplyByReplySeq(int replySeq);
 
-    Integer insertRereply(@Param("articleSeq") int articleSeq, @Param("replySeq") int replySeq, @Param("userSeq") int userSeq, @Param("content") String content);
+    int insertRereply(@Param("articleSeq") int articleSeq, @Param("replySeq") int replySeq, @Param("userSeq") int userSeq, @Param("content") String content);
 
     int selectArticleLikeByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
-    Integer insertLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+    int insertLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
-    Integer deleteLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+    int deleteLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
     ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
-    Integer insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
+    int insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
 
     int selectReportArticleByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
     int selectReportReplyByUserSeq(@Param("replySeq") int replySeq, @Param("userSeq") int userSeq);
 
     int selectFollowByUserSeq(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
-    Integer insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+    int insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
 
-    Integer deleteFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+    int deleteFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
 
     int selectFollowerByUserSeq(int userSeq);
 
