@@ -6,7 +6,7 @@
     <data>
         <variable
             name="users"
-            type="com.ssafy.daero.data.dto.sns.UserNameItem" />
+            type="com.ssafy.daero.data.dto.search.UserNameItem" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
