@@ -1,5 +1,6 @@
 package com.ssafy.daero.admin.service;
 
+import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,35 @@ public class AdminService {
         result.put("total_page", totalPage);
         result.put("page", page);
         result.put("results", userList);
+        return result;
+    }
+
+    public Map<String, Object> reportList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectReportCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+        ArrayList<ReportDto> reports = adminMapper.selectReportList(page);
+
+        Map<String, Object> result = new HashMap<>();
+        ArrayList<Map<String, Object>> reportList = new ArrayList<>();
+        Map<String, Object> report = new HashMap<>();
+
+        for (ReportDto rDto :
+                reports) {
+            report.put("report_seq", rDto.getReportSeq());
+            report.put("report_categories_seq", rDto.getReportCategorySeq());
+            report.put("content_type", rDto.getArticleType());
+            report.put("handled_yn", rDto.getHandledYn());
+            report.put("reporter_user_seq", rDto.getReporterSeq());
+            report.put("reported_user_seq", rDto.getReportedSeq());
+            report.put("reported_at", rDto.getReportedAt());
+            report.put("report_url", rDto.getReportUrl());
+            reportList.add(report);
+            report = new HashMap<>();
+        }
+        result.put("total_page", totalPage);
+        result.put("page", page);
+        result.put("results", reportList);
         return result;
     }
 }

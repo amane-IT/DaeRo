@@ -18,6 +18,26 @@
                          AND user.row &lt; 1+(#{page}*10)
     </select>
 
+    <select id="selectReportCount" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.reports
+    </select>
+
+    <select id="selectReportList" parameterType="_int" resultMap="mappingReportDto">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY r.reports_seq ASC) AS row, reports_seq,
+                     reporter_users_seq,
+                     reported_users_seq,
+                     reported_at,
+                     report_url,
+                     report_categories_seq,
+                     handled_yn,
+                     article_type
+              FROM daero.reports r) AS report
+        WHERE (#{page} -1)*10 &lt; report.row
+          AND report.row &lt; 1+(#{page}*10)
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
@@ -25,5 +45,16 @@
         <result property="reportedCount" column="report_count" />
         <result property="createdAt" column="created_at" />
         <result property="suspendedYn" column="suspended_yn" />
+    </resultMap>
+
+    <resultMap id="mappingReportDto" type="com.ssafy.daero.admin.dto.ReportDto">
+        <result property="reportSeq" column="reports_seq" />
+        <result property="reporterSeq" column="reporter_users_seq" />
+        <result property="reportedSeq" column="reported_users_seq" />
+        <result property="reportedAt" column="reported_at" />
+        <result property="reportUrl" column="reported_url" />
+        <result property="reportCategorySeq" column="report_categories_seq" />
+        <result property="handledYn" column="handled_yn" />
+        <result property="articleType" column="article_type" />
     </resultMap>
 </mapper>
