@@ -13,7 +13,7 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_setting"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="56dp"
                 app:contentInsetStart="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -32,7 +32,7 @@
                     app:tint="@color/black" />
 
                 <TextView
-                    style="@style/SubHeadBold"
+                    style="@style/HeadBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

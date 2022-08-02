@@ -5,6 +5,7 @@ import com.ssafy.daero.data.dto.article.ArticleHomeItem
 import com.ssafy.daero.data.dto.search.ArticleItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.UserNameItem
+import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
@@ -175,38 +176,46 @@ val articles = listOf(
 )
 
 val searchedArticleContent = listOf(
-    ArticleItem(1,
-        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
-        "강원도"
-        ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
         "강원도"
     ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
         "강원도"
     ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
+        "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        "강원도"
+    ),
+    ArticleItem(
+        1,
         "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
         "강원도"
     ),
 )
 
 val searchedArticlePlace = listOf(
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
         "강원도"
     ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
         "강원도"
     ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
         "강원도"
     ),
-    ArticleItem(1,
+    ArticleItem(
+        1,
         "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
         "강원도"
     ),
