@@ -30,8 +30,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             val keyword = binding.editTextSearchSearchBar.text.toString()
             Log.d("TAG", "setOnClickListeners: $keyword")
             searchViewModel.searchUserName(keyword)
-            // TODO: 게시글 검색 목록 불러오기
-//            searchViewModel.searchArticle(keyword)
+            searchViewModel.searchArticle(keyword)
         }
     }
 }

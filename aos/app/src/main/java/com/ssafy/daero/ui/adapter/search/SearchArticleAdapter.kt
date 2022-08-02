@@ -6,16 +6,19 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.sns.ArticleItem
+import com.ssafy.daero.data.dto.search.ArticleItem
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.ItemSearchArticleBinding
+import com.ssafy.daero.databinding.ItemTripPopularBinding
+import com.ssafy.daero.ui.adapter.trip.TripPopularAdapter
 
-class SearchArticleAdapter : PagingDataAdapter<ArticleItem, SearchArticleAdapter.SearchArticleViewHolder>(
-    COMPARATOR
-) {
+class SearchArticleAdapter
+    : RecyclerView.Adapter<SearchArticleAdapter.SearchArticleViewHolder>() {
+    var resultList : List<ArticleItem> = emptyList()
     lateinit var onItemClickListener: (View, Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchArticleAdapter.SearchArticleViewHolder {
-        return SearchArticleAdapter.SearchArticleViewHolder(
+        return SearchArticleViewHolder(
             ItemSearchArticleBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -27,10 +30,10 @@ class SearchArticleAdapter : PagingDataAdapter<ArticleItem, SearchArticleAdapter
     }
 
     override fun onBindViewHolder(holder: SearchArticleAdapter.SearchArticleViewHolder, position: Int) {
-        getItem(position)?.let{
-            holder.bind(it)
-        }
+        holder.bind(resultList[position])
     }
+
+    override fun getItemCount(): Int = resultList.size
 
     class SearchArticleViewHolder(private val binding: ItemSearchArticleBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -41,21 +44,6 @@ class SearchArticleAdapter : PagingDataAdapter<ArticleItem, SearchArticleAdapter
         fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit){
             binding.root.setOnClickListener{
                 onItemClickListener(it, binding.article!!.article_seq)
-            }
-        }
-    }
-
-    companion object{
-        private val COMPARATOR = object : DiffUtil.ItemCallback<ArticleItem>(){
-            override fun areItemsTheSame(oldItem: ArticleItem, newItem: ArticleItem): Boolean {
-                return oldItem.article_seq == newItem.article_seq
-            }
-
-            override fun areContentsTheSame(
-                oldItem: ArticleItem,
-                newItem: ArticleItem
-            ): Boolean {
-                return oldItem == newItem
             }
         }
     }
