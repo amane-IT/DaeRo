@@ -215,4 +215,8 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/white</item>
+    </style>
+
 </resources>

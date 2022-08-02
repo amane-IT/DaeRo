@@ -10,7 +10,11 @@ import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
+import java.io.File
 
 class ProfileSettingViewModel : BaseViewModel() {
     private val userRepository = UserRepository.get()
@@ -45,24 +49,53 @@ class ProfileSettingViewModel : BaseViewModel() {
         )
     }
 
-    fun editProfile(profileEditRequestDto: ProfileEditRequestDto) {
+    private fun editJustProfile(profileEditRequestDto: ProfileEditRequestDto) {
+        _showProgress.postValue(true)
+        addDisposable(
+            userRepository.editProfile(App.prefs.userSeq, profileEditRequestDto)
+                .subscribe(
+                    {
+                        _showProgress.postValue(false)
+                        editState.postValue(SUCCESS)
+                    }, throwableBlock
+                )
+        )
+    }
+
+    fun editProfile(imagePath: String?, imageUrl: String, nickname: String) {
         _showProgress.postValue(true)
 
-        val userSeq = App.prefs.userSeq
+        if (imagePath == null) {
+            editJustProfile(ProfileEditRequestDto(image_url = imageUrl, nickname = nickname))
+        } else {
+            addDisposable(
+                userRepository.postImage(
+                    MultipartBody.Part.createFormData(
+                        "file",
+                        imagePath,
+                        File(imagePath).asRequestBody("image/jpeg".toMediaTypeOrNull())
+                    )
+                )
+                    .subscribe(
+                        {
+                            editJustProfile(
+                                ProfileEditRequestDto(
+                                    image_url = it.body()!!.image_url,
+                                    nickname = nickname
+                                )
+                            )
+                        }, throwableBlock
+                    )
+            )
+        }
+    }
 
-        addDisposable(
-            userRepository.editProfile(userSeq, profileEditRequestDto)
-                .subscribe({
-                    _showProgress.postValue(false)
-                    editState.postValue(SUCCESS)
-                }, { throwable ->
-                    Log.d("ProfileSettingVM_DaeRo", throwable.toString())
-                    if (throwable is HttpException) {
-                        Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
-                    }
-                    _showProgress.postValue(false)
-                    editState.postValue(FAIL)
-                })
-        )
+    private val throwableBlock: (Throwable) -> Unit = { throwable ->
+        Log.d("ProfileSettingVM_DaeRo", throwable.toString())
+        if (throwable is HttpException) {
+            Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
+        }
+        _showProgress.postValue(false)
+        editState.postValue(FAIL)
     }
 }
