@@ -1,6 +1,6 @@
 package com.ssafy.daero.data.dto.article
 
-data class ArticleItem(
+data class ArticleHomeItem(
     val article_seq: Int,
     val comments: Int,
     val created_at: String,

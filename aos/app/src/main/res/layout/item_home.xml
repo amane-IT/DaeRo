@@ -8,7 +8,7 @@
 
         <variable
             name="article"
-            type="com.ssafy.daero.data.dto.article.ArticleItem" />
+            type="com.ssafy.daero.data.dto.article.ArticleHomeItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

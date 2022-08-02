@@ -4,11 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.article.ArticleItem
+import com.ssafy.daero.data.dto.article.ArticleHomeItem
 import com.ssafy.daero.databinding.ItemHomeBinding
 
 class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
-    private var articles: List<ArticleItem> = com.ssafy.daero.utils.articles
+    private var articles: List<ArticleHomeItem> = com.ssafy.daero.utils.articles
     //lateinit var onItemClickListener: (View, Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
@@ -32,7 +32,7 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
     class HomeViewHolder(private val binding: ItemHomeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(article: ArticleItem) {
+        fun bind(article: ArticleHomeItem) {
             binding.article = article
         }
 

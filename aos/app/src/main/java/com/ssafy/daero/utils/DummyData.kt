@@ -1,7 +1,7 @@
 package com.ssafy.daero.utils
 
 import androidx.paging.PagingData
-import com.ssafy.daero.data.dto.article.ArticleItem
+import com.ssafy.daero.data.dto.article.ArticleHomeItem
 import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
@@ -114,7 +114,7 @@ val searchedUser = listOf(
 val pagingUser = PagingData.from(searchedUser)
 
 val articles = listOf(
-    ArticleItem(
+    ArticleHomeItem(
         article_seq = 3,
         comments = 50,
         created_at = "2022-07-23",
@@ -128,7 +128,7 @@ val articles = listOf(
         title = "강릉 ~ 속초 여행",
         user_seq = 3
     ),
-    ArticleItem(
+    ArticleHomeItem(
         article_seq = 3,
         comments = 0,
         created_at = "2022-07-23",
@@ -142,7 +142,7 @@ val articles = listOf(
         title = "강릉 ~ 속초 여행",
         user_seq = 3
     ),
-    ArticleItem(
+    ArticleHomeItem(
         article_seq = 3,
         comments = 50,
         created_at = "2022-07-23",
@@ -156,7 +156,7 @@ val articles = listOf(
         title = "강릉 ~ 속초 여행",
         user_seq = 3
     ),
-    ArticleItem(
+    ArticleHomeItem(
         article_seq = 3,
         comments = 50,
         created_at = "2022-07-23",
