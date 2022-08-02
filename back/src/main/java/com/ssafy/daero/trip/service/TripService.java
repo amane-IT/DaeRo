@@ -8,7 +8,7 @@ import com.ssafy.daero.trip.vo.RecommendTagVo;
 import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.dto.UserFavorDto;
 import com.ssafy.daero.user.mapper.UserMapper;
-import com.ssafy.daero.util.DistanceUtil;
+import com.ssafy.daero.common.util.DistanceUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.*;

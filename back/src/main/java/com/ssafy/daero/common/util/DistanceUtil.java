@@ -1,4 +1,4 @@
-package com.ssafy.daero.util;
+package com.ssafy.daero.common.util;
 
 public class DistanceUtil {
     public static class ReverseHaversine {
