@@ -2,25 +2,22 @@ package com.ssafy.daero.trip.controller;
 
 
 import com.ssafy.daero.trip.service.TripService;
-import com.ssafy.daero.trip.vo.JourneyVo;
-import org.apache.ibatis.annotations.Param;
+import com.ssafy.daero.user.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/trips")
 public class TripController {
-    private final String SUCCESS = "SUCCESS";
-    private final String FAILURE = "FAILURE";
-
     private final TripService tripService;
+    private final JwtService jwtService;
 
-    public TripController(TripService tripService) {
+    public TripController(TripService tripService, JwtService jwtService) {
         this.tripService = tripService;
+        this.jwtService = jwtService;
     }
 
 
@@ -73,4 +70,78 @@ public class TripController {
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
     }
 
+    @PostMapping("/recommend")
+    public ResponseEntity<Map<String, Integer>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody Map<String, ArrayList<Integer>> req) {
+        Map<String, Integer> resultMap = new HashMap<>();
+        ArrayList<Integer> regionCodes = req.get("regions");
+        ArrayList<Integer> tags = req.get("tags");
+        int tripPlaceSeq;
+        // 아무 태그 없이 검색한 경우
+        if (req.isEmpty() || (regionCodes.size() == 0 && tags.size() == 0)) {
+            int userSeq = Integer.parseInt(jwtService.decodeJwt(jwt).get("user_seq"));
+            tripPlaceSeq = tripService.recommendByRandom(userSeq);
+            // 검색된 결과가 없으면 404 Not Found
+            if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            resultMap.put("place_seq", tripPlaceSeq);
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }
+        // 태그로 검색한 경우
+        try {
+            if (tags.size() == 0) {
+                tripPlaceSeq = tripService.recommendByRegions(regionCodes);
+            } else {
+                tripPlaceSeq = tripService.recommendByTags(regionCodes, tags);
+            }
+            // 검색된 결과가 없으면 404 Not Found
+            if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            resultMap.put("place_seq", tripPlaceSeq);
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/recommend?place-name={trip_places_seq}&time={time}&transportation={transportation}")
+    public ResponseEntity<Map<String, Integer>> recommendGet(
+            @PathVariable("trip_places_seq") int tripPlaceSeq,
+            @PathVariable("time") int time,
+            @PathVariable("transportation") String transportation) {
+        int placeSeq = this.tripService.recommendNextPlace(tripPlaceSeq, time, transportation);
+        if (placeSeq == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Map<String, Integer> resultMap = new HashMap<>();
+        resultMap.put("place_seq", placeSeq);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/nearby?place-name={trip_places_seq}")
+    public ResponseEntity<List<Map<String, Object>>> nearbyGet(@PathVariable("trip_places_seq") int tripPlaceSeq) {
+        LinkedList<Map<String, Object>> responseList;
+        try {
+            responseList = this.tripService.nearbyPlace(tripPlaceSeq);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(responseList, HttpStatus.OK);
+    }
+
+    @GetMapping("/info/{trip_places_seq}")
+    public ResponseEntity<Map<String, Object>> placeInfo(@PathVariable("trip_places_seq") int tripPlaceSeq) {
+        Map<String, Object> resultMap = this.tripService.placeInfo(tripPlaceSeq);
+        if (resultMap == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping("/popular")
+    public ResponseEntity<List<Map<String, Object>>> popularPlace() {
+        LinkedList<Map<String, Object>> resultList = this.tripService.popularPlace();
+        if (resultList == null || resultList.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
 }
