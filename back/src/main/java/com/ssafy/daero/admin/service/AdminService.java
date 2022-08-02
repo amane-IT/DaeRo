@@ -6,6 +6,7 @@ import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
+import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
 import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
@@ -145,6 +146,45 @@ public class AdminService {
         articleDetail.put("trip_expenses", expenses);
         articleDetail.put("records", records);
         return articleDetail;
+    }
+
+    public Map<String, Object> replyList(int articleSeq, int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectReplyCount(articleSeq)/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+
+        ArrayList<ReplyVo> replyVos = adminMapper.selectReplyListByArticleSeq(articleSeq, page);
+        Map<String, Object> replyList = new HashMap<>(); // 최종 결과
+        ArrayList<Map<String, Object>> results = new ArrayList<>();
+        ArrayList<Map<String, Object>> rereplies = new ArrayList<>();
+        Map<String, Object> reply = new HashMap<>();
+        ArrayList<ReplyVo> rereply = new ArrayList<>();
+
+        for (ReplyVo rVo:replyVos) {
+            rereply = adminMapper.selectRereplyListByByReplySeq(rVo.getReplySeq());
+            for (ReplyVo rrVo : rereply) {
+                reply.put("reply_seq", rrVo.getReplySeq());
+                reply.put("nickname", rrVo.getNickname());
+                reply.put("user_seq", rrVo.getUserSeq());
+                reply.put("content", rrVo.getContent());
+                reply.put("created_at", rrVo.getCreatedAt());
+                rereplies.add(reply);
+                reply = new HashMap<>();
+            }
+            reply.put("reply_seq", rVo.getReplySeq());
+            reply.put("nickname", rVo.getNickname());
+            reply.put("user_seq", rVo.getUserSeq());
+            reply.put("content", rVo.getContent());
+            reply.put("created_at", rVo.getCreatedAt());
+            reply.put("rereply", rereplies);
+            results.add(reply);
+            reply = new HashMap<>();
+            rereplies = new ArrayList<>();
+        }
+        replyList.put("total_page", totalPage);
+        replyList.put("page", page);
+        replyList.put("results", results);
+        return replyList;
     }
 
 

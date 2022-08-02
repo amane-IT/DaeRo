@@ -44,6 +44,32 @@
         WHERE reports_seq=#{reportSeq}
     </update>
 
+    <select id="selectReplyCount" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.replies
+        WHERE `articles_seq`=#{articleSeq} AND `rereply_parent` IS NULL
+    </select>
+
+    <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY r.replies_seq ASC) AS row, replies_seq,
+        users_seq, content, created_at, (SELECT nickname
+        FROM daero.users u
+        WHERE u.users_seq=r.users_seq) AS nickname
+        FROM daero.replies r
+        WHERE r.articles_seq=#{articleSeq} AND r.rereply_parent IS NULL) AS reply
+        WHERE (#{page} -1)*10 &lt; reply.row
+                          AND reply.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectRereplyListByByReplySeq" resultMap="mappingReplyVo">
+        SELECT replies_seq, users_seq, content, created_at, (SELECT nickname
+                                                            FROM daero.users u
+                                                            WHERE u.users_seq=r.users_seq) AS nickname
+        FROM daero.replies r
+        WHERE r.rereply_parent=#{replySeq}
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
@@ -62,5 +88,13 @@
         <result property="reportCategorySeq" column="report_categories_seq" />
         <result property="handledYn" column="handled_yn" />
         <result property="articleType" column="article_type" />
+    </resultMap>
+
+    <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
+        <result property="replySeq" column="replies_seq" />
+        <result property="nickname" column="nickname" />
+        <result property="userSeq" column="users_seq" />
+        <result property="content" column="content" />
+        <result property="createdAt" column="created_at" />
     </resultMap>
 </mapper>

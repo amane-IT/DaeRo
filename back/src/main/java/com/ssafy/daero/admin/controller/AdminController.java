@@ -45,4 +45,10 @@ public class AdminController {
         Map<String, Object> res = adminService.articleDetail(article_seq);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/article/{article_seq}/reply")
+    public ResponseEntity<Map<String, Object>> replyList(@PathVariable int article_seq, @RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.replyList(article_seq, Integer.parseInt(page));
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }
