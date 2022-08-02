@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.daero.admin.mapper.AdminMapper">
+    <select id="selectUserCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.users
+    </select>
+
+    <select id="selectUserList" parameterType="_int" resultMap="mappingUserDto">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
+        FROM reports r
+        WHERE r.reported_users_seq=u.users_seq) AS report_count
+        FROM daero.users u) AS user
+        WHERE (#{page} -1)*10 &lt; user.row
+                         AND user.row &lt; 1+(#{page}*10)
+    </select>
+
+    <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
+        <result property="profileImageLink" column="profile_image_url" />
+        <result property="nickname" column="nickname" />
+        <result property="userSeq" column="user_seq" />
+        <result property="reportedCount" column="report_count" />
+        <result property="createdAt" column="created_at" />
+        <result property="suspendedYn" column="suspended_yn" />
+    </resultMap>
+</mapper>
