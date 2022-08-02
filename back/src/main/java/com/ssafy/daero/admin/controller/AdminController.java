@@ -1,6 +1,8 @@
 package com.ssafy.daero.admin.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.admin.service.AdminService;
+import com.ssafy.daero.sns.service.SnsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -36,5 +38,11 @@ public class AdminController {
         boolean res = adminService.handleReport(report_seq);
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/article/{article_seq}")
+    public ResponseEntity<Map<String, Object>> articleList(@PathVariable int article_seq) throws JsonProcessingException {
+        Map<String, Object> res = adminService.articleDetail(article_seq);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
