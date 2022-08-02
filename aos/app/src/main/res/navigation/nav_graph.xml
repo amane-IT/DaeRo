@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/rootFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -124,6 +124,20 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_rootFragment_to_searchContentMoreFragment"
+            app:destination="@id/searchContentMoreFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_rootFragment_to_searchPlaceNameMoreFragment"
+            app:destination="@id/searchPlaceNameMoreFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -426,4 +440,14 @@
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_my_page"
         />
+    <fragment
+        android:id="@+id/searchContentMoreFragment"
+        android:name="com.ssafy.daero.ui.root.search.SearchContentMoreFragment"
+        android:label="SearchContentMoreFragment"
+        tools:layout="@layout/fragment_search_content_more"/>
+    <fragment
+        android:id="@+id/searchPlaceNameMoreFragment"
+        android:name="com.ssafy.daero.ui.root.search.SearchPlaceNameMoreFragment"
+        android:label="SearchPlaceNameMoreFragment"
+        tools:layout="@layout/fragment_search_place_name_more"/>
 </navigation>

@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchArticleBinding
 import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
@@ -14,6 +15,7 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.searchedArticleContent
 import com.ssafy.daero.utils.searchedArticlePlace
+import com.ssafy.daero.utils.view.toast
 
 class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layout.fragment_search_article){
     private val TAG = "SearchArticleFragment_DaeRo"
@@ -70,7 +72,17 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
     private fun setOnClickListeners(){
         binding.apply {
             textSearchArticleContentMoreData.setOnClickListener {
-                findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
+                if(App.keyword != "")
+                    findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
+                else
+                    toast("검색 결과가 없습니다.")
+            }
+
+            textSearchArticlePlaceMoreData.setOnClickListener {
+                if(App.keyword != "")
+                    findNavController().navigate(R.id.action_rootFragment_to_searchPlaceNameMoreFragment)
+                else
+                    toast("검색 결과가 없습니다.")
             }
         }
     }

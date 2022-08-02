@@ -165,6 +165,17 @@ class SnsRepository private constructor(context: Context) {
         ).flowable
     }
 
+    fun searchPlaceMore(searchKeyword: String): Flowable<PagingData<ArticleMoreItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchPlaceMoreDataSource(snsApi, searchKeyword) }
+        ).flowable
+    }
+
     companion object {
         private var instance: SnsRepository? = null
 

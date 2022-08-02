@@ -56,6 +56,6 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
     }
 
     private val searchArticleItemClickListener: (
-        View, Int) -> Unit = { _, userSeq ->
+        View, Int) -> Unit = { _, articleSeq ->
     }
 }
