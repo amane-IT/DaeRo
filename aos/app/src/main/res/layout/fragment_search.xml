@@ -25,15 +25,15 @@
 
             <ImageView
                 android:id="@+id/image_search_notification"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="center_vertical|end"
                 android:layout_marginEnd="16dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:padding="3dp"
                 android:src="@drawable/ic_notification"
-                app:tint="@color/primaryDarkColor" />
+                app:tint="@color/dark_gray" />
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
@@ -52,7 +52,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="12dp"
             android:maxLines="1"
             android:imeOptions="actionDone"
             android:background="@drawable/edittext_comment"
@@ -63,7 +63,7 @@
             android:id="@+id/imageView_search_searchIcon"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:src="@drawable/ic_search"
@@ -75,7 +75,7 @@
             android:id="@+id/tab_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editText_search_searchBar" />

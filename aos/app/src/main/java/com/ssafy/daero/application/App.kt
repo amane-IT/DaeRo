@@ -26,6 +26,7 @@ class App : Application() {
         lateinit var password: String
         var userName: String = ""
         var userSeq: Int = 0
+        var keyword = ""
 
         lateinit var prefs: PreferenceUtil
     }

@@ -1,10 +1,10 @@
 package com.ssafy.daero.data.remote
 
-import com.ssafy.daero.data.dto.login.JwtLoginResponseDto
-import com.ssafy.daero.data.dto.sns.UserNameItem
-import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
+import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.common.PagingResponseDto
+import com.ssafy.daero.data.dto.search.ArticleMoreItem
+import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -67,15 +67,6 @@ interface SnsApi {
         @Path("reply_seq") replySeq: Int,
         @Body commentAddRequestDto: CommentAddRequestDto
     ): Completable
-
-    /**
-     * 사용자 이름 검색
-     * */
-    @GET("sns/search")
-    fun searchUserName(
-        @Query("user_nickname") userNickname: String,
-        @Query("page") page: Int
-    ): Single<PagingResponseDto<UserNameItem>>
 
     /**
      * 좋아요 추가
@@ -155,4 +146,40 @@ interface SnsApi {
         @Path("user_seq") userSeq: Int,
         @Query("page") page: Int
     ): Single<PagingResponseDto<FollowResponseDto>>
+
+    /**
+     * 사용자 이름 검색
+     * */
+    @GET("sns/search")
+    fun searchUserName(
+        @Query("user_nickname") userNickname: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<UserNameItem>>
+
+    /**
+     * 게시물 검색 목록
+     * */
+    @GET("sns/search")
+    fun searchArticles(
+        @Query("article") article: String
+    ): Single<Response<SearchArticleResponseDto>>
+
+    /**
+     * 내용 검색 목록
+     * */
+    @GET("sns/search")
+    fun searchContentMore(
+        @Query("content") content: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<ArticleMoreItem>>
+
+    /**
+     * 여행지 검색 목록
+     * */
+    @GET("sns/search")
+    fun searchPlaceMore(
+        @Query("place-name") place_name: String,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<ArticleMoreItem>>
+
 }
