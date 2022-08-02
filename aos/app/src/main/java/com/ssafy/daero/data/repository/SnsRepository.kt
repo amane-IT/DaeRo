@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
@@ -151,6 +152,17 @@ class SnsRepository private constructor(context: Context) {
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun searchContentMore(searchKeyword: String): Flowable<PagingData<ArticleMoreItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = {SearchContentMoreDataSource(snsApi, searchKeyword) }
+        ).flowable
     }
 
     companion object {

@@ -2,7 +2,9 @@ package com.ssafy.daero.ui.root.search
 
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchArticleBinding
@@ -22,6 +24,7 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
     override fun init() {
         initAdapter()
         observeData()
+        setOnClickListeners()
     }
 
     private fun initAdapter(){
@@ -60,6 +63,14 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
         searchViewModel.responseState_userName.observe(viewLifecycleOwner){ state ->
             when(state){
                 FAIL -> binding.textSearchUserNoData.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setOnClickListeners(){
+        binding.apply {
+            textSearchArticleContentMoreData.setOnClickListener {
+                findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
             }
         }
     }
