@@ -1,5 +1,6 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.service.FAQResponseDto
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -11,4 +12,7 @@ interface ServiceApi {
      */
     @GET("service/notice")
     fun getNotices() : Single<Response<List<NoticeResponseDto>>>
+
+    @GET("service/faq")
+    fun getFaqs() : Single<Response<List<FAQResponseDto>>>
 }
