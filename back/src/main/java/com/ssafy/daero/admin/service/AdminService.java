@@ -89,7 +89,7 @@ public class AdminService {
     public Map<String, Object> articleDetail(int articleSeq) throws JsonProcessingException {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
         Map<String, Object> articleDetail = new HashMap<>();
-        if(articleVo == null) { return articleDetail; }
+        if(articleVo == null) { return null; }
 
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());
@@ -185,6 +185,21 @@ public class AdminService {
         replyList.put("page", page);
         replyList.put("results", results);
         return replyList;
+    }
+
+    public Map<String, Object> replyDetail(int articleSeq, int replySeq) {
+        int article = adminMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return null; }
+        ReplyVo replyVo = adminMapper.selectReplyByReplySeq(replySeq);
+        if (replyVo == null) { return null; }
+        Map<String, Object> replyDetail = new HashMap<>();
+        replyDetail.put("reply_seq", replyVo.getReplySeq());
+        replyDetail.put("nickname", replyVo.getNickname());
+        replyDetail.put("user_seq", replyVo.getUserSeq());
+        replyDetail.put("content", replyVo.getContent());
+        replyDetail.put("created_at", replyVo.getCreatedAt());
+        return replyDetail;
+
     }
 
 

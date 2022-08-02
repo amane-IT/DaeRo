@@ -26,4 +26,8 @@ public interface AdminMapper {
     ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
     ArrayList<ReplyVo> selectRereplyListByByReplySeq(@Param("replySeq") int replySeq);
+
+    int selectArticleByArticleSeq(int articleSeq);
+
+    ReplyVo selectReplyByReplySeq(int replySeq);
 }

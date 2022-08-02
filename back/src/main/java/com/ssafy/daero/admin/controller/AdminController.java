@@ -43,12 +43,21 @@ public class AdminController {
     @GetMapping("/article/{article_seq}")
     public ResponseEntity<Map<String, Object>> articleList(@PathVariable int article_seq) throws JsonProcessingException {
         Map<String, Object> res = adminService.articleDetail(article_seq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/article/{article_seq}/reply")
     public ResponseEntity<Map<String, Object>> replyList(@PathVariable int article_seq, @RequestParam(required = false, defaultValue = "1") String page) {
         Map<String, Object> res = adminService.replyList(article_seq, Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/article/{article_seq}/reply/{reply_seq}")
+    public ResponseEntity<Map<String, Object>> replyDetail(@PathVariable int article_seq, @PathVariable int reply_seq) {
+        Map<String, Object> res = adminService.replyDetail(article_seq, reply_seq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

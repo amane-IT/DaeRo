@@ -70,6 +70,20 @@
         WHERE r.rereply_parent=#{replySeq}
     </select>
 
+    <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.articles
+        WHERE `articles_seq`=#{articleSeq}
+    </select>
+
+    <select id="selectReplyByReplySeq" parameterType="_int" resultMap="mappingReplyVo">
+        SELECT `replies_seq`, `users_seq`, `content`, `created_at`, (SELECT nickname
+                                                                     FROM daero.users u
+                                                                     WHERE u.users_seq=r.users_seq) AS nickname
+        FROM daero.replies r
+        WHERE `replies_seq`=#{replySeq}
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
