@@ -42,7 +42,7 @@ public interface UserMapper {
     int updateUserPassword(ChangePasswordVo changePasswordVo);
 
     // 유저 프로필 수정
-    int updateProfile(@Param("user_seq") int user_seq, @Param("nickname") String nickname);
+    int updateProfile(@Param("user_seq") int user_seq, @Param("nickname") String nickname, @Param("profileUrl") String url);
 
     // 회원 탈퇴
     int deleteUser(int user_seq);

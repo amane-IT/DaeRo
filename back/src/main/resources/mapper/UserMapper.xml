@@ -112,7 +112,8 @@
 
     <update id="updateProfile">
         UPDATE users
-        SET `nickname`=#{nickname}
+        SET `nickname`=#{nickname},
+            `profile_image_link` = #{profileUrl}
         WHERE `users_seq` = #{user_seq};
     </update>
 

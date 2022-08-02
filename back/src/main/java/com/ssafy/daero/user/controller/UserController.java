@@ -192,7 +192,7 @@ public class UserController {
         if (Integer.parseInt(currentUser.get("user_seq")) != user_seq) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        boolean res = userService.updateUserProfile(user_seq, req.get("nickname"));
+        boolean res = userService.updateUserProfile(user_seq, req.get("nickname"), req.get("image_url"));
         if (res) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

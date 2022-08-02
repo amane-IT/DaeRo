@@ -92,9 +92,8 @@ public class UserService {
         return profile;
     }
 
-    public boolean updateUserProfile(int userSeq, String nickname) {
-        int res = userMapper.updateProfile(userSeq, nickname);
-        return res == 1;
+    public boolean updateUserProfile(int userSeq, String nickname, String url) {
+        return userMapper.updateProfile(userSeq, nickname, url) == 1;
     }
 
     public boolean leaveUser(int userSeq) {
