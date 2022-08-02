@@ -38,6 +38,12 @@
           AND report.row &lt; 1+(#{page}*10)
     </select>
 
+    <update id="updateReportHandled" parameterType="_int">
+        UPDATE daero.reports
+        SET `handled_yn` = 'y'
+        WHERE reports_seq=#{reportSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

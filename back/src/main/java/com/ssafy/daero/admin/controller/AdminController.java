@@ -3,10 +3,7 @@ package com.ssafy.daero.admin.controller;
 import com.ssafy.daero.admin.service.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -32,5 +29,12 @@ public class AdminController {
         Map<String, Object> res = adminService.reportList(Integer.parseInt(page));
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PutMapping("/report/{report_seq}")
+    public ResponseEntity<String> handleReport(@PathVariable int report_seq) {
+        boolean res = adminService.handleReport(report_seq);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
     }
 }

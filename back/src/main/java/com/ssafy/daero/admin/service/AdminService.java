@@ -69,4 +69,10 @@ public class AdminService {
         result.put("results", reportList);
         return result;
     }
+
+    public boolean handleReport(int reportSeq) {
+        int updated = adminMapper.updateReportHandled(reportSeq);
+        if (updated == 1) { return true; }
+        else { return false; }
+    }
 }

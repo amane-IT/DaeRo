@@ -16,4 +16,6 @@ public interface AdminMapper {
     int selectReportCount();
 
     ArrayList<ReportDto> selectReportList(int page);
+
+    int updateReportHandled(int reportSeq);
 }
