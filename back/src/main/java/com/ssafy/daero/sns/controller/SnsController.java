@@ -39,9 +39,9 @@ public class SnsController {
         Map<String, String> currentUser = jwtService.decodeJwt(jwt);
         if(Objects.equals(currentUser.get("user_seq"), "null")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
 
-        Integer res = snsService.deleteArticle(article_seq, Integer.parseInt(currentUser.get("user_seq")));
-        if (res == 99) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
-        else if (res == 0 | res == null) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        int res = snsService.deleteArticle(article_seq, Integer.parseInt(currentUser.get("user_seq")));
+        if (res == 0) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (res == 1) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
         else {
             return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
         }
