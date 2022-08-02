@@ -19,20 +19,29 @@ public class ImageService {
     private final String IMAGE_URL_PREFIX = "http://i7d110.p.ssafy.io/image/download/";
     private final String[] ALLOWED_IMAGE_MIMES = new String[]{"image/jpeg", "image/png"};
 
-    public ImageVo uploadFile(MultipartFile file) {
+    public ImageVo uploadFile(MultipartFile multipartFile) {
         ImageVo imageVo = new ImageVo();
-        if (file == null || file.getContentType() == null || Arrays.stream(ALLOWED_IMAGE_MIMES).noneMatch(file.getContentType()::equals)) {
+        if (multipartFile == null || multipartFile.getContentType() == null || Arrays.stream(ALLOWED_IMAGE_MIMES).noneMatch(multipartFile.getContentType()::equals)) {
             imageVo.setResult(ImageVo.ImageResult.BAD_REQUEST);
             return imageVo;
         }
-        String fileName = file.getOriginalFilename();
-        File newFile = new File(IMAGE_PATH + fileName);
+        String file = multipartFile.getOriginalFilename();
+        if (file == null) {
+            imageVo.setResult(ImageVo.ImageResult.BAD_REQUEST);
+            return imageVo;
+        }
+        String fileName = file.substring(0, file.lastIndexOf("."));
+        String fileExt = file.substring(file.lastIndexOf(".") + 1);
+
+        File newFile = new File(IMAGE_PATH + file);
         int fileCount = 1;
         while (newFile.exists()) {
-            newFile = new File(IMAGE_PATH + fileName + "-" + fileCount);
+            newFile = new File(IMAGE_PATH + fileName + "-" + fileCount + fileExt);
+            fileCount++;
         }
+
         try {
-            file.transferTo(newFile);
+            multipartFile.transferTo(newFile);
         } catch (IOException e) {
             imageVo.setResult(ImageVo.ImageResult.SERVER_ERROR);
             return imageVo;
