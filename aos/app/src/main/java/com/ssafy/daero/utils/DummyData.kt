@@ -1,6 +1,7 @@
 package com.ssafy.daero.utils
 
 import androidx.paging.PagingData
+import com.ssafy.daero.data.dto.article.ArticleItem
 import com.ssafy.daero.data.dto.sns.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
@@ -111,3 +112,62 @@ val searchedUser = listOf(
 )
 
 val pagingUser = PagingData.from(searchedUser)
+
+val articles = listOf(
+    ArticleItem(
+        article_seq = 3,
+        comments = 50,
+        created_at = "2022-07-23",
+        description = "이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구",
+        end_date = "2022-07-23",
+        likes = 123,
+        nickname = "김싸피",
+        profile_url = "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        start_date = "2022-07-23",
+        thumbnail_url = "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
+        title = "강릉 ~ 속초 여행",
+        user_seq = 3
+    ),
+    ArticleItem(
+        article_seq = 3,
+        comments = 0,
+        created_at = "2022-07-23",
+        description = "어쩌구 저쩌구",
+        end_date = "2022-07-23",
+        likes = 0,
+        nickname = "김싸피",
+        profile_url = "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        start_date = "2022-07-23",
+        thumbnail_url = "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
+        title = "강릉 ~ 속초 여행",
+        user_seq = 3
+    ),
+    ArticleItem(
+        article_seq = 3,
+        comments = 50,
+        created_at = "2022-07-23",
+        description = "이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구",
+        end_date = "2022-07-23",
+        likes = 123,
+        nickname = "김싸피",
+        profile_url = "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        start_date = "2022-07-23",
+        thumbnail_url = "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
+        title = "강릉 ~ 속초 여행",
+        user_seq = 3
+    ),
+    ArticleItem(
+        article_seq = 3,
+        comments = 50,
+        created_at = "2022-07-23",
+        description = "이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구이번 여행은 어쩌구 저쩌구",
+        end_date = "2022-07-23",
+        likes = 123,
+        nickname = "김싸피",
+        profile_url = "https://images.unsplash.com/photo-1503249023995-51b0f3778ccf?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=660&q=80",
+        start_date = "2022-07-23",
+        thumbnail_url = "https://unsplash.com/photos/odII8BzuWU8/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8NDJ8fGJlYWNofGVufDB8fHx8MTY1OTA3Mjc4MA&force=true&w=1920",
+        title = "강릉 ~ 속초 여행",
+        user_seq = 3
+    )
+)
