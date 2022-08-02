@@ -36,7 +36,7 @@ public class ImageService {
         File newFile = new File(IMAGE_PATH + file);
         int fileCount = 1;
         while (newFile.exists()) {
-            newFile = new File(IMAGE_PATH + fileName + "-" + fileCount + fileExt);
+            newFile = new File(IMAGE_PATH + fileName + "-" + fileCount + "." +  fileExt);
             fileCount++;
         }
 

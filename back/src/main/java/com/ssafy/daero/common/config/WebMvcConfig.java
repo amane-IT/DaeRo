@@ -12,7 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(this.jwtInterceptor())
                 .addPathPatterns("/**")
-                .excludePathPatterns("/admin")
+                .excludePathPatterns("/admin/*")
                 .excludePathPatterns("/users/signup")
                 .excludePathPatterns("/users/email")
                 .excludePathPatterns("/users/email/**")
@@ -25,7 +25,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/users/reset-password/*")
                 .excludePathPatterns("/users/**/reset-password")
                 .excludePathPatterns("/users/**/duplicate")
-                .excludePathPatterns("/users/**/fcm-token");
+                .excludePathPatterns("/users/**/fcm-token")
+                .excludePathPatterns("/users/**/fcm-token")
+                .excludePathPatterns("/image/download/*");
     }
 
     @Bean
