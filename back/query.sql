@@ -53,6 +53,14 @@ CREATE TABLE `password_reset_keys`
     constraint foreign key (`user_seq`) references `users` (`users_seq`)
 );
 
+CREATE TABLE `region_tags`
+(
+    `region_seq`  tinyint auto_increment,
+    `region_name` nvarchar(20) unique,
+    constraint primary key (`region_seq`),
+    constraint unique (`region_name`)
+);
+
 CREATE TABLE `trip_places`
 (
     `trip_places_seq` int auto_increment,
@@ -91,14 +99,29 @@ CREATE TABLE `trip_days`
 CREATE TABLE `trip_stamps`
 (
     `trip_stamps_seq`       int auto_increment,
-    `trip_seq`              int           not null,
-    `trip_days_seq`         int           NOT NULL,
-    `trip_places_seq`       int           NOT NULL,
-    `image_url`             nvarchar(100) NULL,
-    `place_satisfaction_YN` varchar(1)    NULL,
+    `trip_seq`              int        not null,
+    `trip_days_seq`         int        NOT NULL,
+    `trip_places_seq`       int        NOT NULL,
+    `image_url`             text       NULL,
+    `place_satisfaction_YN` varchar(1) NULL,
     constraint primary key (`trip_stamps_seq`),
     constraint foreign key (`trip_days_seq`) references `trip_days` (`trip_days_seq`),
     constraint foreign key (`trip_seq`) references `trips` (`trips_seq`)
+);
+
+CREATE TABLE `articles`
+(
+    `articles_seq`  int auto_increment,
+    `title`         nvarchar(20) not null,
+    `trips_seq`     int          NOT NULL,
+    `created_at`    nvarchar(30) NOT NULL,
+    `updated_at`    nvarchar(30) NOT NULL,
+    `like_count`    int        DEFAULT 0,
+    `reply_count`   int        DEFAULT 0,
+    `open_yn`       varchar(1) DEFAULT 'n',
+    `thumbnail_url` text         NOT NULL,
+    constraint primary key (`articles_seq`),
+    constraint foreign key (`trips_seq`) references `trips` (`trips_seq`)
 );
 
 CREATE TABLE `likes`
@@ -119,8 +142,8 @@ CREATE TABLE `user_achievements`
     `region_seq`            tinyint NOT NULL,
     `count`                 int     NULL,
     constraint primary key (`user_achievements_seq`),
-    constraint primary key (`user_achievements_seq`),
-    constraint foreign key (`users_seq`) references `users` (`users_seq`)
+    constraint foreign key (`users_seq`) references `users` (`users_seq`),
+    constraint foreign key (`region_seq`) references `region_tags` (`region_seq`)
 );
 
 CREATE TABLE `place_tags`
@@ -134,18 +157,10 @@ CREATE TABLE `place_tags`
 CREATE TABLE `article_tags`
 (
     `article_tags_seq` int auto_increment,
-    `articles_seq`     int NOT NULL,
-    `place_tag_seq`    int NOT NULL,
+    `articles_seq`     int     NOT NULL,
+    `place_tag_seq`    tinyint NOT NULL,
     constraint primary key (`article_tags_seq`),
     constraint foreign key (`articles_seq`) references `articles` (`articles_seq`)
-);
-
-CREATE TABLE `region_tags`
-(
-    `region_seq`  tinyint auto_increment,
-    `region_name` nvarchar(20) unique,
-    constraint primary key (`region_seq`),
-    constraint unique (`region_name`)
 );
 
 CREATE TABLE `tag_trip_places`
@@ -158,6 +173,15 @@ CREATE TABLE `tag_trip_places`
     constraint foreign key (`trip_places_seq`) references `trip_places` (`trip_places_seq`)
 );
 
+CREATE TABLE `admin`
+(
+    `admin_seq`  int auto_increment,
+    `admin_name` nvarchar(50),
+    `created_at` nvarchar(30) NOT NULL,
+    constraint primary key (`admin_seq`),
+    constraint unique (`admin_name`)
+);
+
 CREATE TABLE `faq`
 (
     `faq_seq`    int auto_increment,
@@ -168,15 +192,6 @@ CREATE TABLE `faq`
     `updated_at` nvarchar(30) NOT NULL,
     constraint primary key (`faq_seq`),
     foreign key (`admin_seq`) references `admin` (`admin_seq`)
-);
-
-CREATE TABLE `admin`
-(
-    `admin_seq`  int key auto_increment,
-    `admin_name` nvarchar(50),
-    `created_at` nvarchar(30) NOT NULL,
-    constraint primary key (`admin_seq`),
-    constraint unique (`admin_name`)
 );
 
 CREATE TABLE `notice`
@@ -250,21 +265,6 @@ CREATE TABLE `follows`
     constraint foreign key (`follower_users_seq`) references `users` (`users_seq`)
 );
 
-CREATE TABLE `articles`
-(
-    `articles_seq`  int auto_increment,
-    `title`         nvarchar(20) not null,
-    `trips_seq`     int          NOT NULL,
-    `created_at`    nvarchar(30) NOT NULL,
-    `updated_at`    nvarchar(30) NOT NULL,
-    `like_count`    int        DEFAULT 0,
-    `reply_count`   int        DEFAULT 0,
-    `open_yn`       varchar(1) DEFAULT 'n',
-    `thumbnail_url` text         NOT NULL,
-    constraint primary key (`articles_seq`),
-    constraint foreign key (`trips_seq`) references `trips` (`trips_seq`)
-);
-
 CREATE TABLE `replies`
 (
     `replies_seq`    int auto_increment,
@@ -279,3 +279,9 @@ CREATE TABLE `replies`
     constraint foreign key (`articles_seq`) references `articles` (`articles_seq`),
     constraint foreign key (`users_seq`) references `users` (`users_seq`)
 );
+
+create view `tag_region_place` as
+select `p`.`trip_places_seq`, `p`.`place_name`, `t`.`place_tag_seq`, `p`.`region_seq`
+from `tag_trip_places` as `t`
+         left join `trip_places` as `p`
+                   on `t`.`trip_places_seq` = `p`.`trip_places_seq`;

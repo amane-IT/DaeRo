@@ -14,12 +14,11 @@
     <select id="selectDateByDaySeq" parameterType="_int" resultType="String">
         SELECT `date` FROM trip_days WHERE `trip_days_seq`=#{tripDaySeq}
     </select>
-
-
+    
     <select id="selectOtherJourneyListByUserSeq" resultMap="mappingJourneyVo">
-        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
+        SELECT ts.trip_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
         FROM articles a
-            LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+            LEFT JOIN trip_stamps ts on a.trips_seq = ts.trip_seq
             LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
         WHERE a.open_yn='y'
         AND str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
@@ -30,9 +29,9 @@
     </select>
 
     <select id="selectMyJourneyListByUserSeq" resultMap="mappingJourneyVo">
-        SELECT ts.trips_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
+        SELECT ts.trip_seq, ts.trip_stamps_seq, a.created_at, tp.latitude, tp.longitude
         FROM articles a
-             LEFT JOIN trip_stamps ts on a.trips_seq = ts.trips_seq
+             LEFT JOIN trip_stamps ts on a.trips_seq = ts.trip_seq
              LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
         WHERE str_to_date(a.created_at,'%Y-%m-%d') &lt;= str_to_date(#{endDate},'%Y-%m-%d')
           AND str_to_date(#{startDate},'%Y-%m-%d') &lt;= str_to_date(a.created_at,'%Y-%m-%d')
@@ -103,5 +102,4 @@
         <result property="expose" column="open_yn" />
         <result property="likeYn" column="like_yn" />
     </resultMap>
-
 </mapper>

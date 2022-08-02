@@ -1,5 +1,6 @@
 package com.ssafy.daero.user.service;
 
+import com.ssafy.daero.trip.vo.RecommendTagVo;
 import com.ssafy.daero.user.dto.EmailVerificationDto;
 import com.ssafy.daero.user.dto.PasswordResetDto;
 import com.ssafy.daero.user.dto.UserDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -190,5 +192,19 @@ public class UserService {
         this.mailSender.send(message);
 
         return true;
+    }
+
+    public void setPreference(int userSeq, ArrayList<Integer> placeArray) {
+        ArrayList<Integer> tagArray = userMapper.selectPlaceTagAll();
+        for (int tagSeq : tagArray) {
+            userMapper.insertUserFavor(userSeq, tagSeq);
+        }
+        for (int placeSeq : placeArray) {
+            ArrayList<RecommendTagVo> recommendTagVos = userMapper.selectTagByPlaceSeq(placeSeq);
+            for (RecommendTagVo recommendTagVo : recommendTagVos) {
+                int tag = recommendTagVo.getTagSeq();
+                userMapper.updateUserFavor(userSeq, tag);
+            }
+        }
     }
 }

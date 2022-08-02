@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -208,5 +209,11 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PostMapping("/{user_seq}/preference")
+    public ResponseEntity<String> preferencePost(@PathVariable("user_seq") int userSeq, @RequestBody ArrayList<Integer> placeArray) {
+        userService.setPreference(userSeq, placeArray);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
