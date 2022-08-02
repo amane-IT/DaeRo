@@ -4,10 +4,12 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -44,6 +46,13 @@ interface UserApi {
         @Path("user_seq") userSeq: Int,
         @Body profileEditRequestDto: ProfileEditRequestDto
     ): Completable
+
+    /**
+     * 단일 이미지 업로드
+     */
+    @Multipart
+    @POST("image/upload")
+    fun postImage(@Part image: MultipartBody.Part): Single<Response<ImageUploadResponseDto>>
 
     /**
      * 비밀번호 찾기 요청
