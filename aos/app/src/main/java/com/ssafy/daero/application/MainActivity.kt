@@ -1,5 +1,7 @@
 package com.ssafy.daero.application
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +18,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        supportActionBar?.let {
+            it.setBackgroundDrawable(ColorDrawable(R.color.white))
+            it.hide()
+        }
     }
 
     override fun onDestroy() {

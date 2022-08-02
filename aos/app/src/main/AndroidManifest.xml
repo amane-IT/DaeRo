@@ -12,6 +12,9 @@
         android:name="android.permission.CAMERA"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
     <application
         android:name=".application.App"
         android:allowBackup="true"
