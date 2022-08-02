@@ -52,7 +52,7 @@ class SignupEmailViewModel : BaseViewModel() {
         addDisposable(
             userRepository.verifyUserEmail(SignupEmailResponseDto(userSeq))
                 .subscribe({ response ->
-                    if (response.body()!!.result == 'Y') {
+                    if (response.body()!!.result == 'n') {
                         responseState_verifyUserEmail.postValue(SUCCESS)
                         userSeq = 0
                     } else {
