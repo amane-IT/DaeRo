@@ -48,7 +48,7 @@
                 android:focusable="true"
                 android:padding="3dp"
                 android:src="@drawable/ic_notification"
-                app:tint="@color/primaryDarkColor" />
+                app:tint="@color/dark_gray" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
@@ -83,6 +83,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_searchContentMore_keyword"
+            app:layout_constraintBottom_toBottomOf="parent"
             />
 
         <TextView

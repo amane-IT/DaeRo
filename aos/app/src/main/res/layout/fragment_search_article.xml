@@ -84,7 +84,8 @@
                     tools:itemCount="4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_place"/>
+                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_place"
+                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <TextView
                     android:id="@+id/text_searchUser_noData"
