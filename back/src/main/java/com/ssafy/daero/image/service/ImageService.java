@@ -30,6 +30,9 @@ public class ImageService {
             imageVo.setResult(ImageVo.ImageResult.BAD_REQUEST);
             return imageVo;
         }
+        if (file.contains("/")) {
+            file = file.substring(file.lastIndexOf("/") + 1);
+        }
         String fileName = file.substring(0, file.lastIndexOf("."));
         String fileExt = file.substring(file.lastIndexOf(".") + 1);
 

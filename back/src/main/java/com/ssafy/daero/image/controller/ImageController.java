@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/image")
@@ -21,11 +23,13 @@ public class ImageController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> imagePost(@RequestParam MultipartFile file) {
+    public ResponseEntity<Map<String, String>> imagePost(@RequestParam MultipartFile file) {
+        Map<String, String> resultMap = new HashMap<>();
         ImageVo imageVo = this.imageService.uploadFile(file);
         switch (imageVo.getResult()) {
             case SUCCESS:
-                return new ResponseEntity<>(imageVo.getDownloadUrl(), HttpStatus.OK);
+                resultMap.put("image_url", imageVo.getDownloadUrl());
+                return new ResponseEntity<>(resultMap, HttpStatus.OK);
             case SERVER_ERROR:
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             case BAD_REQUEST:

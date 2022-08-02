@@ -93,9 +93,6 @@ public class UserService {
     }
 
     public boolean updateUserProfile(int userSeq, String nickname, String url) {
-        UserDto userDto = this.userMapper.selectByUserSeq(userSeq);
-        nickname = nickname.equals("") ? userDto.getNickname() : nickname;
-        url = url.equals("") ? userDto.getProfileImageLink() : url;
         return userMapper.updateProfile(userSeq, nickname, url) == 1;
     }
 
