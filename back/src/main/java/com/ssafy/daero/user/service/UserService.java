@@ -7,7 +7,7 @@ import com.ssafy.daero.user.mapper.UserMapper;
 import com.ssafy.daero.user.vo.ChangePasswordVo;
 import com.ssafy.daero.user.vo.LoginVo;
 import com.ssafy.daero.user.vo.SignupVo;
-import com.ssafy.daero.util.CryptoUtil;
+import com.ssafy.daero.common.util.CryptoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;

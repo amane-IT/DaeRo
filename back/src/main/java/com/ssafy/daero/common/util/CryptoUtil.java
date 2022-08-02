@@ -1,4 +1,4 @@
-package com.ssafy.daero.util;
+package com.ssafy.daero.common.util;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;

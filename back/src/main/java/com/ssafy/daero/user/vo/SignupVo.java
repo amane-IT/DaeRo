@@ -1,7 +1,7 @@
 package com.ssafy.daero.user.vo;
 
 import com.ssafy.daero.user.dto.UserDto;
-import com.ssafy.daero.util.CryptoUtil;
+import com.ssafy.daero.common.util.CryptoUtil;
 import lombok.Getter;
 import lombok.Setter;
 

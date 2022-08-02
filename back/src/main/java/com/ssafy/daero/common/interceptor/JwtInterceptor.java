@@ -1,4 +1,4 @@
-package com.ssafy.daero.interceptor;
+package com.ssafy.daero.common.interceptor;
 
 import com.ssafy.daero.user.service.JwtService;
 import org.springframework.web.servlet.HandlerInterceptor;

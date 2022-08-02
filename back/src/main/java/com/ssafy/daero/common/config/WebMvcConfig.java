@@ -1,6 +1,6 @@
-package com.ssafy.daero.config;
+package com.ssafy.daero.common.config;
 
-import com.ssafy.daero.interceptor.JwtInterceptor;
+import com.ssafy.daero.common.interceptor.JwtInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

@@ -1,7 +1,7 @@
 package com.ssafy.daero.user.service;
 
 import com.ssafy.daero.user.mapper.JwtMapper;
-import com.ssafy.daero.util.CryptoUtil;
+import com.ssafy.daero.common.util.CryptoUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Base64;
@@ -29,7 +29,7 @@ public class JwtService {
         String headerString = new String(encodedHeader);
         String payloadString = new String(encodedPayload);
 
-        String signature = CryptoUtil.Sha512.hash(String.format("%s%s%s", headerString, payloadString, SECRET_KEY));
+        String signature = CryptoUtil.Sha256.hash(String.format("%s%s%s", headerString, payloadString, SECRET_KEY));
         return headerString + "." + payloadString + "." + signature;
     }
 
@@ -38,7 +38,7 @@ public class JwtService {
         String headerString = jwtSplitter[0];
         String payloadString = jwtSplitter[1];
         String signature = jwtSplitter[2];
-        if (!signature.equals(CryptoUtil.Sha512.hash(String.format("%s%s%s", headerString, payloadString, SECRET_KEY)))) {
+        if (!signature.equals(CryptoUtil.Sha256.hash(String.format("%s%s%s", headerString, payloadString, SECRET_KEY)))) {
             return false;
         }
         String decodePayload = new String(decoder.decode(payloadString));

@@ -1,7 +1,7 @@
-package com.ssafy.daero.common.controller;
+package com.ssafy.daero.image.controller;
 
-import com.ssafy.daero.common.service.ImageService;
-import com.ssafy.daero.common.vo.ImageVo;
+import com.ssafy.daero.image.service.ImageService;
+import com.ssafy.daero.image.vo.ImageVo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
-package com.ssafy.daero.common.service;
+package com.ssafy.daero.image.service;
 
-import com.ssafy.daero.common.vo.ImageVo;
+import com.ssafy.daero.image.vo.ImageVo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.mock.web.MockMultipartFile;
