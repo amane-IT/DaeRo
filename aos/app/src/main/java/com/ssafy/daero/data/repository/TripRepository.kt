@@ -31,6 +31,7 @@ class TripRepository private constructor(context: Context) {
 
     // Trip API
     private val tripApi = RetrofitBuilder.retrofit.create(TripApi::class.java)
+    private val tripApi2 = RetrofitBuilder.retrofit2.create(TripApi::class.java)
 
     fun getMyJourney(
         user_seq: Int,
@@ -81,6 +82,21 @@ class TripRepository private constructor(context: Context) {
     fun getTripStamps(): Single<List<TripStamp>> {
         return database.tripStampDao().getTripStamps()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getWeather(
+        dataType: String,
+        numOfRows: Int,
+        pageNo: Int,
+        base_date: String,
+        base_time: String,
+        nx: Double,
+        ny: Double
+    ): Single<Response<Weather>> {
+        return tripApi.getWeather(dataType,numOfRows,pageNo,base_date,base_time,nx,ny)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

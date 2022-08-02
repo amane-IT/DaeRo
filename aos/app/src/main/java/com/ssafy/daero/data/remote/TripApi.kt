@@ -39,4 +39,18 @@ interface TripApi {
      */
     @GET("trips/info/{trip_places_seq}")
     fun getTripInformation(@Path("trip_places_seq") placeSeq: Int): Single<Response<TripInformationResponseDto>>
+
+    /**
+     * 여행지 날씨 정보
+     */
+    @GET("getVilageFcst?serviceKey=서비스키")
+    fun getWeather(
+        @Query("dataType") data_type: String,
+        @Query("numOfRows") num_of_rows: Int,
+        @Query("pageNo") page_no: Int,
+        @Query("base_date") base_date: String,
+        @Query("base_time") base_time: String,
+        @Query("nx") nx: Double,
+        @Query("ny") ny: Double
+    ): Single<Response<Weather>>
 }

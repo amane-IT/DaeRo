@@ -6,15 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
+import com.ssafy.daero.data.dto.trip.Weather
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.tripInfo
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
-import retrofit2.HttpException
-import java.util.concurrent.TimeUnit
 
 class TripInformationViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
@@ -24,6 +18,8 @@ class TripInformationViewModel : BaseViewModel() {
         get() = _tripInformation
 
     var tripInformationState = MutableLiveData<Int>()
+
+    lateinit var weather: Weather
 
     private val _showProgress = MutableLiveData<Boolean>()
     val showProgress: LiveData<Boolean>
@@ -85,5 +81,31 @@ class TripInformationViewModel : BaseViewModel() {
                         tripInformationState.postValue(FAIL)
                     })
         )
+    }
+
+    fun getWeather(
+        dataType: String,
+        numOfRows: Int,
+        pageNo: Int,
+        base_date: String,
+        base_time: String,
+        nx: Double,
+        ny: Double
+    ) {
+        addDisposable(
+            tripRepository.getWeather(dataType,numOfRows,pageNo,base_date,base_time,nx,ny)
+                .subscribe(
+                    { response ->
+                        weather = response.body()!!
+                    },
+                    { throwable ->
+                        Log.d("TripInfoVM_DaeRo", throwable.toString())
+                        tripInformationState.postValue(FAIL)
+                    }
+                )
+        )
+
+        // 임시
+        //_tripInformation.postValue(tripInfo)
     }
 }

@@ -1,10 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_traveling"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/HeadBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:text="DaeRo" />
+
+            <ImageView
+                android:id="@+id/image_traveling_notification"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_notification"
+                app:tint="@color/primaryDarkColor" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_traveling" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_traveling">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/text_traveling_username"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="김싸피님,"
+                    android:textSize="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_traveling_title"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="여행중이시군요?"
+                    android:textSize="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_traveling_username" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_plane"
+                    app:layout_constraintBottom_toBottomOf="@id/text_traveling_title"
+                    app:layout_constraintStart_toEndOf="@id/text_traveling_title"
+                    app:layout_constraintTop_toTopOf="@id/text_traveling_title" />
+
+                <ImageView
+                    android:id="@+id/img_traveling_trip_stamp"
+                    android:layout_width="390dp"
+                    android:layout_height="260dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@drawable/ic_plane"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_traveling_title" />
+
+                <TextView
+                    android:id="@+id/tv_traveling_trip_name"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="48dp"
+                    android:text="강릉 안목해변"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_traveling_trip_stamp" />
+
+                <TextView
+                    android:id="@+id/tv_traveling_address"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="강원 강릉시 창해로14번길 20-1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_trip_name"/>
+
+                <TextView
+                    android:id="@+id/tv_traveling_weather"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="날씨 맑음"
+                    app:layout_constraintEnd_toStartOf="@id/img_traveling_weather"
+                    app:layout_constraintTop_toBottomOf="@id/img_traveling_trip_stamp"/>
+
+                <ImageView
+                    android:id="@+id/img_traveling_weather"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginTop="52dp"
+                    android:layout_marginEnd="24dp"
+                    android:src="@drawable/ic_plane"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/img_traveling_trip_stamp" />
+
+                <Button
+                    android:id="@+id/button_traveling_directions"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="16dp"
+                    android:text="길찾기"
+                    android:background="@drawable/button_regular"
+                    style="@style/BodyWhite"
+                    app:layout_constraintTop_toBottomOf="@id/img_traveling_weather"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+
+                <TextView
+                    android:id="@+id/tv_traveling_trip_stamp_verification"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="48dp"
+                    android:text="트립스탬프 인증"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_address" />
+
+                <TextView
+                    android:id="@+id/tv_traveling_verification_content"
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="16dp"
+                    android:text="목적지 주변에 도착하면 5번 흔들어주세요!"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_trip_stamp_verification"/>
+
+                <TextView
+                    android:id="@+id/tv_traveling_verification_count"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:text="5"
+                    android:textColor="@color/primaryLightColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_verification_content" />
+
+                <TextView
+                    android:id="@+id/tv_traveling_trip_stamp_so_far"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="48dp"
+                    android:text="지금까지 여행지"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_verification_count" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_traveling_trip_stamp_so_far"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="8dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_trip_stamp_so_far"
+                    tools:listitem="@layout/item_article_day_trip_stamp" />
+
+                <TextView
+                    android:id="@+id/tv_traveling_trip_stamp_so_far_none"
+                    style="@style/SubHeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="48dp"
+                    android:text="아직 기록한 여행이 없습니다."
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_traveling_trip_stamp_so_far"/>
+
+                <Button
+                    android:id="@+id/button_traveling_next"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="48dp"
+                    android:text="다른 여행지 추천받기"
+                    android:background="@drawable/button_regular"
+                    style="@style/BodyWhite"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_traveling_trip_stamp_so_far"
+                    app:layout_constraintBottom_toTopOf="@id/button_traveling_stop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <android.widget.Button
+                    android:id="@+id/button_traveling_stop"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="여행 그만하기"
+                    android:background="@drawable/button_disabled"
+                    android:backgroundTint="@color/hintGray"
+                    style="@style/BodyWhite"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
