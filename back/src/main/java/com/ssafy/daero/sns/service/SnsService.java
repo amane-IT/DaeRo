@@ -33,9 +33,9 @@ public class SnsService {
         ArrayList<Integer> tags = snsMapper.selectPlaceTagsByArticleSeq(articleSeq);
 
 
-        ArrayList<Map> records = new ArrayList<>();
+        ArrayList<Map<String, Object>> records = new ArrayList<>();
         Map<String, Object> days = new HashMap<>();
-        ArrayList<Map> stamps = new ArrayList<>();
+        ArrayList<Map<String, Object>> stamps = new ArrayList<>();
         Map<String, Object> stamp = new HashMap<>();
 
         int currentDaySeq = stampVo.get(0).getTripDaySeq();
@@ -69,7 +69,7 @@ public class SnsService {
         records.add(days);
 
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Map> expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
+        ArrayList<Map<String, Object>> expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
 
         articleDetail.put("user_seq", articleVo.getUserSeq());
         articleDetail.put("nickname", userInfo.get("nickname"));
@@ -86,18 +86,21 @@ public class SnsService {
         return articleDetail;
     }
 
-    public Integer deleteArticle(int articleSeq, int userSeq) {
+    public int deleteArticle(int articleSeq, int userSeq) {
         // 본인 게시글인지 확인
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
-        if (articleUser == null) { return 0; }
+        if (articleUser == null) { return 1; }
         if (articleUser == userSeq) {
-            snsMapper.deleteArticleTagByArticleSeq(articleSeq);
-            snsMapper.deleteReplyByArticleSeq(articleSeq);
-            snsMapper.deleteArticleByArticleSeq(articleSeq);
-            return 1;
+            int deletedTags = snsMapper.deleteArticleTagByArticleSeq(articleSeq);
+            if (deletedTags == 0) { return 1; }
+            int deletedReply = snsMapper.deleteReplyByArticleSeq(articleSeq);
+            if (deletedReply == 0) { return 1; }
+            int deletedArticle = snsMapper.deleteArticleByArticleSeq(articleSeq);
+            if (deletedArticle == 0) { return 1;}
+            return 2;
         }
         else {
-            return 99;
+            return 0;
         }
     }
 
@@ -137,8 +140,9 @@ public class SnsService {
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
         if (article == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_ARTICLE); return replyVo; }
         else {
-            snsMapper.insertReply(articleSeq, userSeq, content);
-            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            int inserted = snsMapper.insertReply(articleSeq, userSeq, content);
+            if (inserted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
+            else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
             return replyVo;
         }
     }
@@ -151,8 +155,9 @@ public class SnsService {
         // replyUser와 userSeq가 다른 경우(본인이 아닌 경우) (UNAUTH)
         if (replyUser != userSeq) { replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED); return replyVo;}
         // 본인이 맞는 경우 -> 수정
-        snsMapper.updateReplyByReplySeq(replySeq, content);
-        replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+        int updated = snsMapper.updateReplyByReplySeq(replySeq, content);
+        if (updated == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
+        else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
         return replyVo;
     }
 
@@ -163,8 +168,9 @@ public class SnsService {
         if (replyUser == null) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo;}
         // replyUser와 userSeq가 다른 경우(본인이 아닌 경우) (UNAUTH)
         if (replyUser != userSeq) { replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED); return replyVo;}
-        snsMapper.deleteReplyByReplySeq(replySeq);
-        replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+        int deleted = snsMapper.deleteReplyByReplySeq(replySeq);
+        if (deleted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
+        else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
         return replyVo;
     }
 
@@ -203,8 +209,9 @@ public class SnsService {
         int reply = snsMapper.selectReplyByReplySeq(replySeq);
         if (reply == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo; }
         else {
-            snsMapper.insertRereply(articleSeq, replySeq, userSeq, content);
-            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            int inserted = snsMapper.insertRereply(articleSeq, replySeq, userSeq, content);
+            if (inserted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
+            else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
             return replyVo;
         }
     }
@@ -220,19 +227,18 @@ public class SnsService {
         int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
         if (like == 'l') {
             if (liked == 0) {
-                snsMapper.insertLike(articleSeq, userSeq);
-                return "SUCCESS";
+                int inserted = snsMapper.insertLike(articleSeq, userSeq);
+                if (inserted == 1) { return "SUCCESS"; }
             }
-            else { return "BAD_REQUEST"; }
         }
         else if (like == 'u') {
             if (liked == 1) {
-                snsMapper.deleteLike(articleSeq, userSeq);
-                return "SUCCESS";
+                int deleted = snsMapper.deleteLike(articleSeq, userSeq);
+                if (deleted == 1) { return "SUCCESS"; }
             }
-            else { return "BAD_REQUEST"; }
         }
         else { return "BAD_REQUEST"; }
+        return "BAD_REQUEST";
     }
 
     public Map<String, Object> likeUserList(int articleSeq, String page) {
@@ -269,8 +275,9 @@ public class SnsService {
         int reported = snsMapper.selectReportArticleByUserSeq(articleSeq, userSeq);
         if (reported == 1) { return "ALREADY_REPORTED"; }
         // 신고하기
-        snsMapper.insertReport(articleSeq, userSeq, reportedUser, reportSeq, "article");
-        return "SUCCESS";
+        int inserted = snsMapper.insertReport(articleSeq, userSeq, reportedUser, reportSeq, "article");
+        if (inserted == 1) { return "SUCCESS"; }
+        return "BAD_REQUEST";
     }
 
     public String reportReply(int replySeq, int userSeq, int reportSeq) {
@@ -282,8 +289,9 @@ public class SnsService {
         int reported = snsMapper.selectReportReplyByUserSeq(replySeq, userSeq);
         if(reported == 1) { return "ALREADY_REPORTED"; }
         // 신고하기
-        snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
-        return "SUCCESS";
+        int inserted = snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
+        if (inserted == 1) { return "SUCCESS"; }
+        return "BAD_REQUEST";
     }
 
     public String followUser(int followerUserSeq, int followedUserSeq) {
@@ -294,8 +302,9 @@ public class SnsService {
         int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
         if (followed != 0) { return "BAD_REQUEST"; }
         // follow
-        snsMapper.insertFollow(followerUserSeq, followedUserSeq);
-        return "SUCCESS";
+        int follow = snsMapper.insertFollow(followerUserSeq, followedUserSeq);
+        if (follow == 1) { return "SUCCESS"; }
+        return "BAD_REQUEST";
     }
 
     public String unfollowUser(int followerUserSeq, int followedUserSeq) {
@@ -306,8 +315,9 @@ public class SnsService {
         int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
         if (followed != 1) { return "BAD_REQUEST"; }
         // unfollow
-        snsMapper.deleteFollow(followerUserSeq, followedUserSeq);
-        return "SUCCESS";
+        int deleted = snsMapper.deleteFollow(followerUserSeq, followedUserSeq);
+        if (deleted == 1) { return "SUCCESS"; }
+        return "BAD_REQUEST";
     }
 
     public Map<String, Object> followerList(int currentUserSeq, int userSeq, String page) {

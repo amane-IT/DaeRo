@@ -52,17 +52,17 @@
         )
     </select>
 
-    <select id="deleteArticleByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+    <delete id="deleteArticleByArticleSeq" parameterType="_int">
         DELETE FROM daero.articles WHERE articles_seq=#{articleSeq}
-    </select>
+    </delete>
 
-    <select id="deleteReplyByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+    <delete id="deleteReplyByArticleSeq" parameterType="_int">
         DELETE FROM daero.replies WHERE articles_seq=#{articleSeq}
-    </select>
+    </delete>
 
-    <select id="deleteArticleTagByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
+    <delete id="deleteArticleTagByArticleSeq" parameterType="_int">
         DELETE FROM daero.article_tags WHERE articles_seq=#{articleSeq}
-    </select>
+    </delete>
 
     <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
         SELECT *
@@ -94,18 +94,18 @@
         WHERE articles_seq=#{articleSeq}
     </select>
 
-    <select id="insertReply" resultType="java.lang.Integer">
+    <insert id="insertReply">
         INSERT INTO daero.replies(articles_seq, users_seq, content, created_at, updated_at)
         VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
-    </select>
+    </insert>
 
-    <select id="updateReplyByReplySeq" resultType="java.lang.Integer">
+    <update id="updateReplyByReplySeq">
         UPDATE daero.replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
-    </select>
+    </update>
 
-    <select id="deleteReplyByReplySeq" parameterType="_int" resultType="java.lang.Integer">
+    <delete id="deleteReplyByReplySeq" parameterType="_int">
         DELETE FROM daero.replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
-    </select>
+    </delete>
 
     <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
         SELECT *
@@ -133,10 +133,10 @@
         WHERE replies_seq=#{replySeq}
     </select>
 
-    <select id="insertRereply" resultType="java.lang.Integer">
+    <insert id="insertRereply">
         INSERT INTO daero.replies(articles_seq, users_seq, rereply_parent, content, created_at, updated_at)
         VALUES (#{articleSeq}, #{userSeq}, #{replySeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
-    </select>
+    </insert>
 
     <select id="selectArticleLikeByUserSeq" resultType="_int">
         SELECT COUNT(*)
@@ -144,14 +144,14 @@
         WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
     </select>
 
-    <select id="insertLike" resultType="java.lang.Integer">
+    <insert id="insertLike">
         INSERT INTO daero.likes(users_seq, articles_seq, liked_at)
         VALUES (#{userSeq}, #{articleSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'))
-    </select>
+    </insert>
 
-    <select id="deleteLike" resultType="java.lang.Integer">
+    <delete id="deleteLike">
         DELETE FROM daero.likes WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
-    </select>
+    </delete>
 
     <select id="selectLikeUserListByArticleSeq" resultMap="mappingUserVo">
         SELECT *
@@ -165,10 +165,10 @@
                              AND user.row &lt; (#{page} * 10) + 1
     </select>
 
-    <select id="insertReport" resultType="java.lang.Integer">
+    <insert id="insertReport">
         INSERT INTO daero.reports(reporter_users_seq, reported_users_seq, reported_at, report_url, report_categories_seq, article_type)
         VALUES (#{reporterUserSeq}, #{reportedUserSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'), #{articleSeq}, #{reportSeq}, #{type})
-    </select>
+    </insert>
 
     <select id="selectReportArticleByUserSeq" resultType="_int">
         SELECT COUNT(*)
@@ -189,14 +189,14 @@
         WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
     </select>
 
-    <select id="insertFollow" resultType="java.lang.Integer">
+    <insert id="insertFollow">
         INSERT INTO daero.follows(following_users_seq, follower_users_seq)
         VALUES (#{followedUserSeq}, #{followerUserSeq})
-    </select>
+    </insert>
 
-    <select id="deleteFollow" resultType="java.lang.Integer">
+    <delete id="deleteFollow">
         DELETE FROM daero.follows WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
-    </select>
+    </delete>
 
     <select id="selectFollowerByUserSeq" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
