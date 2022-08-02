@@ -9,6 +9,8 @@
         <variable
             name="notice"
             type="com.ssafy.daero.data.dto.service.NoticeResponseDto" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,10 +33,10 @@
             android:id="@+id/constraint_notice_background"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/lightGray"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/notice_content_background"
             android:padding="16dp"
-            android:visibility="gone"
+            android:visibility="@{notice.isShow ? View.VISIBLE : View.GONE }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_notice_title"
@@ -42,7 +44,7 @@
 
             <TextView
                 android:id="@+id/text_notice_content"
-                style="@style/Body"
+                style="@style/NoticeContent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@{notice.content}"
@@ -55,7 +57,8 @@
                 style="@style/Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@{notice.created_at}"
                 android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/text_notice_content"
