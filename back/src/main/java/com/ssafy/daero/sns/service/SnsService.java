@@ -106,6 +106,7 @@ public class SnsService {
         if (articleUser == null) { return null; }
         int totalPage = (int) Math.ceil((snsMapper.selectReplyByArticleSeq(articleSeq))/10.0);
         if (totalPage  == 0) { totalPage = 1; }
+        if (Integer.parseInt(page) > totalPage) { return null; }
         ArrayList<Map<String, Object>> replyList = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
         ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
@@ -172,6 +173,7 @@ public class SnsService {
         if (replyUser == null) { return null; }
         int totalPage = (int) Math.ceil((snsMapper.selectRereplyByReplySeq(replySeq))/10.0);
         if (totalPage == 0) { totalPage = 1; }
+        if (Integer.parseInt(page) > totalPage) { return null; }
         Map<String, Object> results = new HashMap<>();
         ArrayList<ReplyVo> rereplyVos = snsMapper.selectRereplyListByReplySeq(replySeq, Integer.parseInt(page));
         ArrayList<Map<String, Object>> rereplyList = new ArrayList<>();
@@ -239,6 +241,7 @@ public class SnsService {
         if (article == 0) { return null; }
         int totalPage = (int) Math.ceil((snsMapper.selectLikeCountByArticleSeq(articleSeq))/10.0);
         if (totalPage == 0) { totalPage = 1; }
+        if (Integer.parseInt(page) > totalPage) { return null; }
         ArrayList<UserVo> userList = snsMapper.selectLikeUserListByArticleSeq(articleSeq, Integer.parseInt(page));
         Map<String, Object> results = new HashMap<>();
         ArrayList<Map<String, Object>> likeUserList = new ArrayList<>();
@@ -314,6 +317,7 @@ public class SnsService {
         // follow 목록 불러오기
         int totalPage = (int) Math.ceil((snsMapper.selectFollowerByUserSeq(userSeq))/10.0);
         if (totalPage == 0) { totalPage = 1; }
+        if (Integer.parseInt(page) > totalPage) { return null; }
         ArrayList<UserVo> users = snsMapper.selectFollowerListByUserSeq(userSeq, Integer.parseInt(page));
         Map<String, Object> results = new HashMap<>();
         ArrayList<Map<String, Object>> followerList = new ArrayList<>();
@@ -343,6 +347,7 @@ public class SnsService {
         // follow 목록 불러오기
         int totalPage = (int) Math.ceil((snsMapper.selectFollowingByUserSeq(userSeq))/10.0);
         if (totalPage == 0) { totalPage = 1; }
+        if (Integer.parseInt(page) > totalPage) { return null; }
         ArrayList<UserVo> users = snsMapper.selectFollowingListByUserSeq(userSeq, Integer.parseInt(page));
         ArrayList<Map<String, Object>> followingList = new ArrayList<>();
         Map<String, Object> results = new HashMap<>();
