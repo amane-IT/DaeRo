@@ -68,7 +68,7 @@ public class TripService {
         }
         int currentTripSeq = jList.get(0).getTripSeq();
         Map<String, Object> stamps = new HashMap<>(); // 각 스탬프
-        ArrayList<Map> trip = new ArrayList<>();      // 여행별로
+        ArrayList<Map<String, Object>> trip = new ArrayList<>();      // 여행별로
 
         // 여행별로 잘라 배열에 넣기
         for (JourneyVo jVo :
@@ -94,8 +94,10 @@ public class TripService {
         if (userDto == null | userDto.getDelYn() == 'y') {
             return null;
         }
-
+        int totalPage = (int) Math.ceil((tripMapper.selectAlbumCountByUserSeq(userSeq))/10.0);
+        if (totalPage == 0) { totalPage = 1; }
         int pagenum = Integer.parseInt(page);
+        if (pagenum > totalPage) { return null; }
         ArrayList<AlbumVo> albumVos = new ArrayList<>();
         if (who == 'n') {
             albumVos = tripMapper.selectOtherAlbumListByUserSeq(userSeq, pagenum);
@@ -103,9 +105,9 @@ public class TripService {
         else {
             albumVos = tripMapper.selectMyAlbumListByUserSeq(userSeq, pagenum);
         }
-        int totalPage = (int) Math.ceil((tripMapper.selectAlbumCountByUserSeq(userSeq))/10.0);
+
         Map<String, Object> results = new HashMap<>(); // 결과 배열
-        ArrayList albumList = new ArrayList<>();
+        ArrayList<Map<String, Object>> albumList = new ArrayList<>();
         Map<String, Object> album = new HashMap<>();
         for (AlbumVo aVo :
                 albumVos) {
