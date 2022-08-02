@@ -7,6 +7,7 @@
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/activity_main.xml" value="0.20833333333333334" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.26875" />
         <entry key="..\:/CommomProject/aos/app/src/main/res/layout/fragment_login.xml" value="0.22" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable-v24/notice_content_background.xml" value="0.143" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/circle_article.xml" value="0.154" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/edittext_comment.xml" value="0.159" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/menu_selector_color_icon.xml" value="0.298" />
@@ -36,6 +37,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page.xml" value="0.33" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_album.xml" value="0.30104166666666665" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_my_page_map.xml" value="0.30104166666666665" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_notice.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_other_page.xml" value="0.33" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_other_page_album.xml" value="0.35052083333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_other_page_map.xml" value="0.35052083333333334" />
@@ -62,6 +64,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_home.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_like.xml" value="0.2526041666666667" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_my_page_album.xml" value="0.21603260869565216" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_notice.xml" value="0.33" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_re_comment.xml" value="0.2786458333333333" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1634963768115942" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2942708333333333" />
