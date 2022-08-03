@@ -329,4 +329,23 @@ public class AdminService {
         if (tripPlaceDto == null) { return false; }
         return adminMapper.deletePlace(placeSeq) == 1;
     }
+
+    public Map<String, Object> inquiryList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectInquiryCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+        ArrayList<Map<String, Object>> inquires = adminMapper.selectInquiryList(page);
+
+        Map<String, Object> inquiryList = new HashMap<>();
+//        ArrayList<Map<String, Object>> results = new ArrayList<>();
+//        Map<String, Object> result = new HashMap<>();
+
+//        for (Map<String, Object> inquire:inquires) {
+//
+//        }
+        inquiryList.put("total_page", totalPage);
+        inquiryList.put("page", page);
+        inquiryList.put("results", inquires);
+        return inquiryList;
+    }
 }
