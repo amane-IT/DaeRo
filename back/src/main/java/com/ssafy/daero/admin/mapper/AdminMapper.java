@@ -35,4 +35,6 @@ public interface AdminMapper {
     int selectArticleCount();
 
     ArrayList<ArticleVo> selectArticleList(int page);
+
+    ArrayList<UserDto> selectUserListBySearch(@Param("search") String search, @Param("page") int page);
 }

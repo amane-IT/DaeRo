@@ -67,4 +67,11 @@ public class AdminController {
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/users/search")
+    public ResponseEntity<Map<String, Object>> searchUser(@RequestParam String search, @RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.searchUser(search, Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

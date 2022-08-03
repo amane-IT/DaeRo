@@ -228,6 +228,29 @@ public class AdminService {
         articleList.put("results", results);
         return articleList;
     }
+    public Map<String, Object> searchUser(String search, int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectUserCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
 
+        ArrayList<UserDto> userDtos = adminMapper.selectUserListBySearch(search, page);
+        Map<String, Object> searchUserList = new HashMap<>();
+        ArrayList<Map<String, Object>> results = new ArrayList<>();
+        Map<String, Object> result = new HashMap<>();
+        for(UserDto uDto:userDtos) {
+            result.put("profile_url", uDto.getProfileImageLink());
+            result.put("nickname", uDto.getNickname());
+            result.put("user_seq", uDto.getUserSeq());
+            result.put("report_count", uDto.getReportedCount());
+            result.put("reg_date", uDto.getCreatedAt());
+            result.put("suspended_yn", uDto.getSuspendedYn());
+            results.add(result);
+            result = new HashMap<>();
+        }
+        searchUserList.put("total_page", totalPage);
+        searchUserList.put("page", page);
+        searchUserList.put("results", results);
+        return searchUserList;
+    }
 
 }

@@ -99,6 +99,17 @@
           AND article.row &lt; 1+(#{page}*10)
     </select>
 
+    <select id="selectUserListBySearch" resultMap="mappingUserDto">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
+                                                                                                                                              FROM reports r
+                                                                                                                                              WHERE r.reported_users_seq=u.users_seq) AS report_count
+              FROM daero.users u
+              WHERE u.nickname LIKE CONCAT('%',#{search},'%')) AS user
+        WHERE (#{page} -1)*10 &lt; user.row
+          AND user.row &lt; 1+(#{page}*10)
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
