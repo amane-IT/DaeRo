@@ -45,10 +45,10 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 
             buttonTripStampRetry.setOnClickListener {
                 // TODO: 트립스탬프 재생성
-                TripStampBottomSheetFragment().show(
-                    childFragmentManager,
-                    "TripStampBottomSheetFragment"
-                )
+//                TripStampBottomSheetFragment().show(
+//                    childFragmentManager,
+//                    "TripStampBottomSheetFragment"
+//                )
             }
 
             buttonTripStampShare.setOnClickListener {
