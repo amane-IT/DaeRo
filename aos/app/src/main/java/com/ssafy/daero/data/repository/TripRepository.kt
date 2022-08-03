@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
 import com.ssafy.daero.data.dto.trip.*
+import com.ssafy.daero.data.entity.Notification
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.local.AppDatabase
 import com.ssafy.daero.data.remote.TripApi
@@ -68,6 +69,27 @@ class TripRepository private constructor(context: Context) {
             ),
             pagingSourceFactory = { TripAlbumDataSource(tripApi) }
         ).flowable
+    }
+
+    // 알림 저장
+    fun insertNotification(notification: Notification): Completable {
+        return database.notificationDao().insertNotification(notification)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 알림 받아오기기
+    fun getNotifications(): Single<List<Notification>> {
+        return database.notificationDao().getNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 알림 전체 삭제
+    fun deleteAllNotifications(): Completable {
+        return database.notificationDao().deleteAllNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     // TripStamp 저장

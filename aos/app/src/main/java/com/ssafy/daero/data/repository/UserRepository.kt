@@ -5,6 +5,7 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
@@ -151,6 +152,15 @@ class UserRepository private constructor(context: Context) {
         return userApi.withdrawal(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun updateFcmToken(
+        userSeq: Int,
+        fcmTokenRequestDto: FCMTokenRequestDto
+    ): Completable {
+        return userApi.updateFcmToken(userSeq, fcmTokenRequestDto)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

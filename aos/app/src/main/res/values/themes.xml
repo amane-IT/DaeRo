@@ -17,6 +17,10 @@
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
         <!-- Customize your theme here. -->
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/primaryColor</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/splash_icon</item>
+        <item name="android:windowSplashScreenIconBackgroundColor" tools:targetApi="s">@color/primaryColor</item>
+
         <!-- ActionBar Style-->
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>

@@ -4,6 +4,7 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
@@ -137,4 +138,13 @@ interface UserApi {
      */
     @PUT("users/{user_seq}/quit")
     fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
+
+    /**
+     * FCM Token 전송
+     */
+    @PUT("users/{user_seq}/fcm-token")
+    fun updateFcmToken(
+        @Path("user_seq") userSeq: Int,
+        @Body fcmTokenRequestDto: FCMTokenRequestDto
+    ): Completable
 }

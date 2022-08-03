@@ -8,6 +8,7 @@ import com.ssafy.daero.data.dto.service.FAQResponseDto
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
 
 class FAQViewModel : BaseViewModel() {
     private val serviceRepository = ServiceRepository.get()
@@ -25,7 +26,7 @@ class FAQViewModel : BaseViewModel() {
                     _faqs.postValue(response.body()!!)
                 }, { throwable ->
                     Log.d("FaqVM", throwable.toString())
-                    faqState.postValue(DEFAULT)
+                    faqState.postValue(FAIL)
                 })
         )
     }

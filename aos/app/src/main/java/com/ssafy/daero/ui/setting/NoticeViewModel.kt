@@ -7,6 +7,7 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
 
 class NoticeViewModel : BaseViewModel() {
     private val serviceRepository = ServiceRepository.get()
@@ -24,7 +25,7 @@ class NoticeViewModel : BaseViewModel() {
                     _notices.postValue(response.body()!!)
                 }, { throwable ->
                     Log.d("NoticeVM", throwable.toString())
-                    noticeState.postValue(DEFAULT)
+                    noticeState.postValue(FAIL)
                 })
         )
     }
