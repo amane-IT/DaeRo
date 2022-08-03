@@ -4,6 +4,7 @@ package com.ssafy.daero.admin.mapper;
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,8 @@ public interface AdminMapper {
     ArrayList<ArticleVo> selectArticleList(int page);
 
     ArrayList<UserDto> selectUserListBySearch(@Param("search") String search, @Param("page") int page);
+
+    ArrayList<TripPlaceDto> selectPlaceList(int page);
+
+    int selectPlaceCount();
 }

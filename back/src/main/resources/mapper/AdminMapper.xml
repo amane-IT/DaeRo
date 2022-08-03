@@ -110,6 +110,19 @@
           AND user.row &lt; 1+(#{page}*10)
     </select>
 
+    <select id="selectPlaceList" parameterType="_int" resultMap="mappingTripPlaceDto">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY tp.trip_places_seq ASC) AS row, trip_places_seq, place_name, address
+              FROM daero.trip_places tp) AS place
+        WHERE (#{page} -1)*10 &lt; place.row
+          AND place.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectPlaceCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.trip_places
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
@@ -147,5 +160,11 @@
         <result property="startDate" column="start_date" />
         <result property="endDate" column="end_date" />
         <result property="openYn" column="open_yn" />
+    </resultMap>
+
+    <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
+        <result property="tripPlaceSeq" column="trip_places_seq" />
+        <result property="placeName" column="place_name" />
+        <result property="address" column="address" />
     </resultMap>
 </mapper>

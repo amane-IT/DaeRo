@@ -8,6 +8,7 @@ import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -267,5 +268,28 @@ public class AdminService {
         int deletedReply = snsMapper.deleteReplyByReplySeq(replySeq);
         if (deletedReply == 0) { return 0; }
         return 1;
+    }
+
+    public Map<String, Object> placeList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectPlaceCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+
+        ArrayList<TripPlaceDto> placeDtos = adminMapper.selectPlaceList(page);
+        if (placeDtos == null) { return null; }
+        Map<String, Object> result = new HashMap<>();
+        ArrayList<Map<String, Object>> results = new ArrayList<>();
+        Map<String, Object> placeList = new HashMap<>();
+        for (TripPlaceDto pDto: placeDtos) {
+            result.put("trip_place_seq", pDto.getTripPlaceSeq());
+            result.put("place_name", pDto.getPlaceName());
+            result.put("address", pDto.getAddress());
+            results.add(result);
+            result = new HashMap<>();
+        }
+        placeList.put("total_page", totalPage);
+        placeList.put("page", page);
+        placeList.put("results", results);
+        return placeList;
     }
 }

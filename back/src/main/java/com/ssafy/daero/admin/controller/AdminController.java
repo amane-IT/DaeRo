@@ -89,4 +89,11 @@ public class AdminController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
+    @GetMapping("/place")
+    public  ResponseEntity<Map<String, Object>> placeList(@RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.placeList(Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }
