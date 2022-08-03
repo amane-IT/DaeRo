@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="articleMore"
+            type="com.ssafy.daero.data.dto.search.ArticleMoreItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_articleMore_userImg"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:imageUrl="@{articleMore.profile_url}"
+            tools:src="@drawable/img_user" />
+
+        <TextView
+            android:id="@+id/text_articleMore_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SubHeadBold"
+            android:text="@{articleMore.nickname}"
+            tools:text="SSAFY_KIM"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@id/image_articleMore_userImg"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/image_articleMore_userImg"/>
+
+        <TextView
+            android:id="@+id/text_articleMore_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SubHead"
+            android:textColor="@color/dark_gray"
+            android:text="@{articleMore.created_at}"
+            tools:text="1분 전"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toEndOf="@id/image_articleMore_userImg"
+            app:layout_constraintTop_toBottomOf="@id/text_articleMore_userName"
+            app:layout_constraintBottom_toTopOf="@id/text_articleMore_content"/>
+
+        <ImageView
+            android:id="@+id/imageView_articleMore_menu"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_menu"
+            android:layout_marginTop="28dp"
+            android:layout_marginEnd="16dp"
+            app:tint="@color/gray"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            style="@style/Body"
+            android:id="@+id/text_articleMore_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
+            android:text="@{articleMore.description}"
+            app:layout_constraintTop_toBottomOf="@id/text_articleMore_time"
+            app:layout_constraintBottom_toTopOf="@id/imageView_articleMore_tripStamp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+        <ImageView
+            android:id="@+id/imageView_articleMore_tripStamp"
+            android:layout_width="360dp"
+            android:layout_height="360dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="centerCrop"
+            app:roundImg="@{articleMore.thumbnail_url}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_articleMore_content"
+            tools:src="@drawable/img_my_page_album" />
+
+        <ImageView
+            android:id="@+id/imageView_articleMore_like"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/text_articleMore_like"
+            android:src="@drawable/ic_like"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/text_articleMore_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/HeadWhite"
+            tools:text="15K"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="20dp"
+            android:text="@{Integer.toString(articleMore.likes)}"
+            app:layout_constraintEnd_toStartOf="@id/imageView_articleMore_comment"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/imageView_articleMore_comment"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
+            android:src="@drawable/ic_comment"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/text_articleMore_comment"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/text_articleMore_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/HeadWhite"
+            tools:text="10K"
+            android:text="@{Integer.toString(articleMore.comments)}"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

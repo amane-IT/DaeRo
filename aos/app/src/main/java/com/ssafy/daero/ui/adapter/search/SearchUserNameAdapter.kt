@@ -3,14 +3,11 @@ package com.ssafy.daero.ui.adapter.search
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.sns.UserNameItem
-import com.ssafy.daero.data.repository.paging.SearchUserNameDataSource
+import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.databinding.ItemSearchUserBinding
-import com.ssafy.daero.ui.root.search.SearchViewModel
 
 class SearchUserNameAdapter : PagingDataAdapter<UserNameItem, SearchUserNameAdapter.SearchUserNameViewHolder>(
     COMPARATOR

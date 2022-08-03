@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchBinding
 import com.ssafy.daero.ui.adapter.search.SearchViewPagerAdapter
@@ -30,8 +31,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             val keyword = binding.editTextSearchSearchBar.text.toString()
             Log.d("TAG", "setOnClickListeners: $keyword")
             searchViewModel.searchUserName(keyword)
-            // TODO: 게시글 검색 목록 불러오기
-//            searchViewModel.searchArticle(keyword)
+            searchViewModel.searchArticle(keyword)
+            App.keyword = keyword
         }
     }
 }

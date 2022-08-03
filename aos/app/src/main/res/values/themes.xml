@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.DaeRo" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <!--    <style name="Theme.DaeRo" parent="Theme.MaterialComponents.Light.NoActionBar">-->
+    <style name="Theme.DaeRo" parent="Theme.MaterialComponents.Light">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
@@ -16,5 +17,7 @@
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
         <!-- Customize your theme here. -->
         <item name="bottomSheetDialogTheme">@style/BottomSheetDialog</item>
+        <!-- ActionBar Style-->
+        <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 </resources>

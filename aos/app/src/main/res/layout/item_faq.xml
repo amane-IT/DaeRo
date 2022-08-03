@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="faq"
+            type="com.ssafy.daero.data.dto.service.FAQResponseDto" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="32dp">
+
+        <TextView
+            android:id="@+id/text_faq_title"
+            style="@style/SubHeadSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{faq.title}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="FAQ 1. 이것은 FAQ 입니다." />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_faq_background"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/notice_content_background"
+            android:padding="16dp"
+            android:visibility="@{faq.isShow ? View.VISIBLE : View.GONE }"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_faq_title"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/text_faq_content"
+                style="@style/NoticeContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{faq.content}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="FAQ 내용입니다." />
+
+            <TextView
+                android:id="@+id/text_faq_createdAt"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@{faq.created_at}"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/text_faq_content"
+                tools:text="2022-07-26" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/constraint_faq_background" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

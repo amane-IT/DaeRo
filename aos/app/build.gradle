@@ -24,12 +24,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+//    compileOptions {
+//        sourceCompatibility JavaVersion.VERSION_1_8
+//        targetCompatibility JavaVersion.VERSION_1_8
+//    }
+//    kotlinOptions {
+//        jvmTarget = '1.8'
+//    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
     buildFeatures {
         viewBinding = true
@@ -117,6 +125,11 @@ dependencies {
     // blur 처리
     implementation 'com.github.mmin18:realtimeblurview:1.2.1'
 
+
     //좌표 구하기 SDK
     implementation 'com.google.android.gms:play-services-location:18.0.0'
+
+    // CanHub/Android-Image-Cropper
+    implementation 'com.github.CanHub:Android-Image-Cropper:4.3.1'
+
 }
