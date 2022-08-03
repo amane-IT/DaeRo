@@ -90,6 +90,7 @@ public class AdminService {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
         Map<String, Object> articleDetail = new HashMap<>();
         if(articleVo == null) { return null; }
+        if(articleVo.getOpenYn() == 'n') { return null; }
 
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());

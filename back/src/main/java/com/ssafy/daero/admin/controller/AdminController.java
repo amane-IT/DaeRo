@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/article/{article_seq}")
-    public ResponseEntity<Map<String, Object>> articleList(@PathVariable int article_seq) throws JsonProcessingException {
+    public ResponseEntity<Map<String, Object>> articleDetail(@PathVariable int article_seq) throws JsonProcessingException {
         Map<String, Object> res = adminService.articleDetail(article_seq);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
