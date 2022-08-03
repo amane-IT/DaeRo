@@ -106,6 +106,7 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+
     companion object {
         private var instance: TripRepository? = null
 

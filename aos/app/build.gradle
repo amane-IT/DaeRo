@@ -119,6 +119,10 @@ dependencies {
     // blur 처리
     implementation 'com.github.mmin18:realtimeblurview:1.2.1'
 
+
+    //좌표 구하기 SDK
+    implementation 'com.google.android.gms:play-services-location:18.0.0'
+
     // CanHub/Android-Image-Cropper
     implementation 'com.github.CanHub:Android-Image-Cropper:4.3.1'
 
