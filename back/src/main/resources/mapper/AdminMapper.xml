@@ -129,6 +129,22 @@
         WHERE trip_places_seq=#{placeSeq}
     </select>
 
+    <insert id="insertPlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
+        INSERT INTO daero.trip_places (`place_name`, `address`, `latitude`, `longitude`, `description`, `region_seq`, `image_url`)
+        VALUES (#{placeName}, #{address}, #{latitude}, #{longitude}, #{description}, #{regionSeq}, #{imageUrl})
+    </insert>
+
+    <select id="selectPlaceSeqByPlaceAddress" parameterType="String" resultType="java.lang.Integer">
+        SELECT `trip_places_seq`
+        FROM trip_places
+        WHERE address=#{address}
+    </select>
+
+    <insert id="insertPlaceTag">
+        INSERT INTO daero.tag_trip_places(`place_tag_seq`, `trip_places_seq`)
+        VALUES (#{tag}, #{placeSeq})
+    </insert>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

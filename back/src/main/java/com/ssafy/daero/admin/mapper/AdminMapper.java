@@ -2,6 +2,7 @@ package com.ssafy.daero.admin.mapper;
 
 
 import com.ssafy.daero.admin.dto.ReportDto;
+import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
@@ -44,4 +45,10 @@ public interface AdminMapper {
     int selectPlaceCount();
 
     ArrayList<Integer> selectTagsByPlaceSeq(int placeSeq);
+
+    int insertPlace(TripPlaceVo tripPlaceVo);
+
+    int insertPlaceTag(int placeSeq, int tag);
+
+    Integer selectPlaceSeqByPlaceAddress(String address);
 }

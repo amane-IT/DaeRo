@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
+import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
@@ -310,5 +311,16 @@ public class AdminService {
         placeDetail.put("image_url", placeDto.getImageUrl());
         placeDetail.put("description", placeDto.getDescription());
         return placeDetail;
+    }
+
+    public boolean createPlace(TripPlaceVo tripPlaceVo) {
+        int insertPlace = adminMapper.insertPlace(tripPlaceVo);
+        if (insertPlace == 0) { return false; }
+        Integer placeSeq = adminMapper.selectPlaceSeqByPlaceAddress(tripPlaceVo.getAddress());
+        for(int tag: tripPlaceVo.getTags()) {
+            int inserted = adminMapper.insertPlaceTag(placeSeq, tag);
+            if (inserted == 0) { return false; }
+        }
+        return true;
     }
 }
