@@ -28,4 +28,16 @@ class TravelingViewModel : BaseViewModel() {
         )
     }
 
+    fun insertTripStamp(tripStamp: TripStamp) {
+        addDisposable(
+            tripRepository.insertTripStamp(tripStamp)
+                .subscribe({
+                    responseState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
+                    responseState.postValue(FAIL)
+                })
+        )
+    }
+
 }

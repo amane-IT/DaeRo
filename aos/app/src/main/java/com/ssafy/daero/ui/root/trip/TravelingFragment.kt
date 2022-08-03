@@ -1,28 +1,34 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.view.View
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.gms.location.*
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
-import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.permission.checkPermission
+import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
-import java.util.*
 import kotlin.math.sqrt
 
 class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling), SensorEventListener {
@@ -42,8 +48,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var mShakeTime: Long = 0
     private var shakeCount = 5
     private var mShakeCount = 0
+    private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
+    lateinit var mLastLocation: Location
+    internal lateinit var mLocationRequest: LocationRequest
+    private val REQUEST_PERMISSION_LOCATION = 10
 
-    private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
+    private val tripUntilNowClickListener: (View, Int) -> Unit = { _, articleSeq ->
         // TODO: 지금까지 여행지 상세 페이지로 이동
     }
 
@@ -70,6 +80,13 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun initData(){
+        if(!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
+            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,{
+                toast("권한 허용이 확인되었습니다.")
+            }, {
+                toast("권한을 허용하지 않으면 인증할 수 없습니다.")
+            })
+        }
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
 
         placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
@@ -118,7 +135,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             binding.tvTravelingTripStampSoFarNone.visibility = View.GONE
             binding.recyclerTravelingTripStampSoFar.visibility = View.VISIBLE
             tripUntilNowAdapter = TripUntilNowAdapter().apply {
-                onItemClickListener = hotArticleClickListener
+                onItemClickListener = tripUntilNowClickListener
                 tripPlaces = tripUntilNowList
             }
             binding.recyclerTravelingTripStampSoFar.apply {
@@ -164,7 +181,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 shakeCount -= mShakeCount
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
                 if(shakeCount < 1){
-                    //todo : 반경 10km 안이면 인증 완료 화면 전환, 아니면 다시 인증해주세요 다이얼로그 -> 현재위치 전송해줘야함
+                    startLocationUpdates()
                 }
             }
         }
@@ -172,5 +189,30 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         TODO("Not yet implemented")
+    }
+
+    private fun startLocationUpdates() {
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return
+        }
+        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+    }
+
+    private val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            locationResult.lastLocation
+            onLocationChanged(locationResult.lastLocation)
+        }
+    }
+
+    // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
+    fun onLocationChanged(location: Location) {
+        //todo : 반경 10km 안이면 인증 완료 화면 전환, 아니면 다시 인증해주세요 다이얼로그 -> 현재위치 전송해줘야함
+        mLastLocation = location
+        mLastLocation.latitude // 갱신 된 위도
+        mLastLocation.longitude // 갱신 된 경도
+
     }
 }
