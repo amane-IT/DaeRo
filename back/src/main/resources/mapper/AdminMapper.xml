@@ -145,6 +145,10 @@
         VALUES (#{tag}, #{placeSeq})
     </insert>
 
+    <delete id="deletePlace" parameterType="_int">
+        DELETE FROM daero.trip_places WHERE `trip_places_seq`=#{placeSeq}
+    </delete>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

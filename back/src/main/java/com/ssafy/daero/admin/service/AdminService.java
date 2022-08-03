@@ -323,4 +323,10 @@ public class AdminService {
         }
         return true;
     }
+
+    public boolean deletePlace(int placeSeq) {
+        TripPlaceDto tripPlaceDto = tripMapper.selectPlaceByPlaceSeq(placeSeq);
+        if (tripPlaceDto == null) { return false; }
+        return adminMapper.deletePlace(placeSeq) == 1;
+    }
 }

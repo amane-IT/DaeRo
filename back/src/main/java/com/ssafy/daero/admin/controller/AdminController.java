@@ -111,4 +111,11 @@ public class AdminController {
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
     }
 
+    @DeleteMapping("/place/{place_seq}")
+    public ResponseEntity<String> deletePlace(@PathVariable int place_seq) {
+        boolean res = adminService.deletePlace(place_seq);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
+
 }

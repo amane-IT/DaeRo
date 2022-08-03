@@ -51,4 +51,6 @@ public interface AdminMapper {
     int insertPlaceTag(int placeSeq, int tag);
 
     Integer selectPlaceSeqByPlaceAddress(String address);
+
+    int deletePlace(int placeSeq);
 }
