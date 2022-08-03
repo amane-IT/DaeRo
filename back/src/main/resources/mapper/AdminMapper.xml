@@ -84,6 +84,21 @@
         WHERE `replies_seq`=#{replySeq}
     </select>
 
+    <select id="selectArticleCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.articles
+    </select>
+
+    <select id="selectArticleList" parameterType="_int" resultMap="mappingArticleVo">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY a.articles_seq ASC) AS row, a.articles_seq, a.title, a.created_at, a.open_yn, (SELECT t.users_seq
+                                                                        FROM trips t
+                                                                        WHERE t.trips_seq=a.trips_seq) AS users_seq
+              FROM daero.articles a) AS article
+        WHERE (#{page} -1)*10 &lt; article.row
+          AND article.row &lt; 1+(#{page}*10)
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
@@ -110,5 +125,16 @@
         <result property="userSeq" column="users_seq" />
         <result property="content" column="content" />
         <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
+        <result property="articleSeq" column="article_seq" />
+        <result property="nickname" column="nickname" />
+        <result property="userSeq" column="users_seq" />
+        <result property="createdAt" column="created_at" />
+        <result property="title" column="title" />
+        <result property="startDate" column="start_date" />
+        <result property="endDate" column="end_date" />
+        <result property="openYn" column="open_yn" />
     </resultMap>
 </mapper>

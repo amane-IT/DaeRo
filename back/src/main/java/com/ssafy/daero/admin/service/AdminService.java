@@ -203,5 +203,31 @@ public class AdminService {
 
     }
 
+    public Map<String, Object> articleList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectArticleCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+        Map<String, Object> articleList = new HashMap<>();
+        ArrayList<Map<String, Object>> results = new ArrayList<>();
+        Map<String, Object> article = new HashMap<>();
+        ArrayList<ArticleVo> articleVos = adminMapper.selectArticleList(page);
+        for (ArticleVo aVo :
+                articleVos) {
+            Map<String, String> userInfo = snsMapper.selectUserByUserSeq(aVo.getUserSeq());
+            article.put("article_seq", aVo.getArticleSeq());
+            article.put("nickname", userInfo.get("nickname"));
+            article.put("user_seq", aVo.getUserSeq());
+            article.put("created_at", aVo.getCreatedAt());
+            article.put("title", aVo.getTitle());
+            article.put("open_yn", aVo.getOpenYn());
+            results.add(article);
+            article = new HashMap<>();
+        }
+        articleList.put("total_page", totalPage);
+        articleList.put("page", page);
+        articleList.put("results", results);
+        return articleList;
+    }
+
 
 }

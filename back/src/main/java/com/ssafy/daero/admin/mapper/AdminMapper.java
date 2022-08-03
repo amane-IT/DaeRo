@@ -2,6 +2,7 @@ package com.ssafy.daero.admin.mapper;
 
 
 import com.ssafy.daero.admin.dto.ReportDto;
+import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
@@ -30,4 +31,8 @@ public interface AdminMapper {
     int selectArticleByArticleSeq(int articleSeq);
 
     ReplyVo selectReplyByReplySeq(int replySeq);
+
+    int selectArticleCount();
+
+    ArrayList<ArticleVo> selectArticleList(int page);
 }

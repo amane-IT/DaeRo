@@ -60,4 +60,11 @@ public class AdminController {
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @GetMapping("/article")
+    public ResponseEntity<Map<String, Object>> articleList(@RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.articleList(Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }
