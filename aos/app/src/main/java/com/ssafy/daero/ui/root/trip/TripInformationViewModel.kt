@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
-import com.ssafy.daero.data.dto.trip.Weather
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 
@@ -18,8 +17,6 @@ class TripInformationViewModel : BaseViewModel() {
         get() = _tripInformation
 
     var tripInformationState = MutableLiveData<Int>()
-
-    lateinit var weather: Weather
 
     private val _showProgress = MutableLiveData<Boolean>()
     val showProgress: LiveData<Boolean>

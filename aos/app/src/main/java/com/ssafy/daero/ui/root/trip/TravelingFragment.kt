@@ -7,12 +7,15 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTravelingBinding
+import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
@@ -22,6 +25,7 @@ import kotlin.math.sqrt
 class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling), SensorEventListener {
 
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
+    private val travelingViewModel: TravelingViewModel by viewModels()
     private var placeSeq = 0
     private var tagCollection: TagCollection? = null
     private var tripKind = 0
@@ -69,6 +73,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         } else {
             toast("여행지 정보를 불러오는데 실패했습니다.")
         }
+        travelingViewModel.getTripStamps()
     }
 
     private fun observeData() {
@@ -92,12 +97,19 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             binding.tvTravelingAddress.text = it.address
             latitude = it.latitude
             longitude = it.longitude
-            setBinding()
         }
+        setBinding()
     }
 
     private fun setBinding(){
-
+        commentAdapter = CommentAdapter(3, this@CommentBottomSheetFragment).apply {
+            this.onItemClickListener = commentItemClickListener
+        }
+        commentAdapter.submitData(lifecycle, it)
+        binding.recyclerComment.apply {
+            adapter = commentAdapter
+            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
