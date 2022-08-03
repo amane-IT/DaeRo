@@ -9,6 +9,8 @@ import com.google.firebase.messaging.RemoteMessage
 import com.ssafy.daero.application.App
 import com.ssafy.daero.application.MainActivity
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
+import com.ssafy.daero.data.entity.Notification
+import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.notification.getNotificationBuilder
 
@@ -38,6 +40,11 @@ class FCMService : FirebaseMessagingService() {
             val intent = Intent(this, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+
+            TripRepository.get().insertNotification(
+                Notification(title = it.title ?: "", content = it.body ?: "")
+            ).subscribe({}, { throwable -> Log.d("FCMService_DaeRo", throwable.toString()) })
+
 
             val pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
