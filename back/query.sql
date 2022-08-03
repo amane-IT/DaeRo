@@ -133,6 +133,7 @@ CREATE TABLE `likes`
     constraint primary key (`likes_seq`),
     constraint foreign key (`users_seq`) references `users` (`users_seq`),
     constraint foreign key (`articles_seq`) references `articles` (`articles_seq`)
+        on delete cascade on update cascade
 );
 
 CREATE TABLE `user_achievements`
@@ -161,6 +162,7 @@ CREATE TABLE `article_tags`
     `place_tag_seq`    tinyint NOT NULL,
     constraint primary key (`article_tags_seq`),
     constraint foreign key (`articles_seq`) references `articles` (`articles_seq`)
+        on delete cascade on update cascade
 );
 
 CREATE TABLE `tag_trip_places`
@@ -276,7 +278,8 @@ CREATE TABLE `replies`
     `rereply_count`  int DEFAULT 0,
     `rereply_parent` int          NULL,
     constraint primary key (`replies_seq`),
-    constraint foreign key (`articles_seq`) references `articles` (`articles_seq`),
+    constraint foreign key (`articles_seq`) references `articles` (`articles_seq`)
+        on delete cascade on update cascade,
     constraint foreign key (`users_seq`) references `users` (`users_seq`)
 );
 

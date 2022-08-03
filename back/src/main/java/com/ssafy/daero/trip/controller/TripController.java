@@ -71,22 +71,14 @@ public class TripController {
     }
 
     @PostMapping("/recommend")
-    public ResponseEntity<Map<String, Integer>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody Map<String, ArrayList<Integer>> req) {
+    public ResponseEntity<Map<String, Integer>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody(required=false) Map<String, ArrayList<Integer>> req) {
         Map<String, Integer> resultMap = new HashMap<>();
-        ArrayList<Integer> regionCodes = req.get("regions");
-        ArrayList<Integer> tags = req.get("tags");
         int tripPlaceSeq;
-        // 아무 태그 없이 검색한 경우
-        if (req.isEmpty() || (regionCodes.size() == 0 && tags.size() == 0)) {
-            int userSeq = Integer.parseInt(jwtService.decodeJwt(jwt).get("user_seq"));
-            tripPlaceSeq = tripService.recommendByRandom(userSeq);
-            // 검색된 결과가 없으면 404 Not Found
-            if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            resultMap.put("place_seq", tripPlaceSeq);
-            return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        }
         // 태그로 검색한 경우
-        try {
+        if (req != null && (req.get("regions") != null && req.get("tags") != null) &&
+                (req.get("regions").size() != 0 || req.get("tags").size() != 0)) {
+            ArrayList<Integer> regionCodes = req.get("regions");
+            ArrayList<Integer> tags = req.get("tags");
             if (tags.size() == 0) {
                 tripPlaceSeq = tripService.recommendByRegions(regionCodes);
             } else {
@@ -96,16 +88,20 @@ public class TripController {
             if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             resultMap.put("place_seq", tripPlaceSeq);
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        int userSeq = Integer.parseInt(jwtService.decodeJwt(jwt).get("user_seq"));
+        tripPlaceSeq = tripService.recommendByRandom(userSeq);
+        // 검색된 결과가 없으면 404 Not Found
+        if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        resultMap.put("place_seq", tripPlaceSeq);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/recommend?place-name={trip_places_seq}&time={time}&transportation={transportation}")
+    @GetMapping("/recommend")
     public ResponseEntity<Map<String, Integer>> recommendGet(
-            @PathVariable("trip_places_seq") int tripPlaceSeq,
-            @PathVariable("time") int time,
-            @PathVariable("transportation") String transportation) {
+            @RequestParam("place-seq") int tripPlaceSeq,
+            @RequestParam("time") int time,
+            @RequestParam("transportation") String transportation) {
         int placeSeq = this.tripService.recommendNextPlace(tripPlaceSeq, time, transportation);
         if (placeSeq == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -115,8 +111,8 @@ public class TripController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
-    @GetMapping("/nearby?place-name={trip_places_seq}")
-    public ResponseEntity<List<Map<String, Object>>> nearbyGet(@PathVariable("trip_places_seq") int tripPlaceSeq) {
+    @GetMapping("/nearby")
+    public ResponseEntity<List<Map<String, Object>>> nearbyGet(@RequestParam("place-seq") int tripPlaceSeq) {
         LinkedList<Map<String, Object>> responseList;
         try {
             responseList = this.tripService.nearbyPlace(tripPlaceSeq);
@@ -133,7 +129,7 @@ public class TripController {
         if (resultMap == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/popular")

@@ -21,10 +21,17 @@ public interface TripMapper {
 
     String selectDateByDaySeq(int tripDaySeq);
 
-    ArrayList<TripPlaceDto> selectTripByCoordinate(@Param("minLatitude") double minLatitude,
-                                                   @Param("maxLatitude") double maxLatitude,
-                                                   @Param("minLongitude") double minLongitude,
-                                                   @Param("maxLongitude") double maxLongitude);
+    ArrayList<TripPlaceDto> selectOtherTripByCoordinate(@Param("minLatitude") double minLatitude,
+                                                        @Param("maxLatitude") double maxLatitude,
+                                                        @Param("minLongitude") double minLongitude,
+                                                        @Param("maxLongitude") double maxLongitude,
+                                                        @Param("placeSeq") double placeSeq);
+
+    ArrayList<TripPlaceDto> selectOtherTripByCoordinateLimit(@Param("minLatitude") double minLatitude,
+                                                             @Param("maxLatitude") double maxLatitude,
+                                                             @Param("minLongitude") double minLongitude,
+                                                             @Param("maxLongitude") double maxLongitude,
+                                                             @Param("placeSeq") double placeSeq);
 
     ArrayList<TripPlaceDto> selectPlacesByTripPlaceSeqRange();
 

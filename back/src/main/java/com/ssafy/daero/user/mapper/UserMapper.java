@@ -20,7 +20,7 @@ public interface UserMapper {
 
     int insertEmailVerificationKey(EmailVerificationDto emailVerificationDto);
 
-    int insertUserFavor(int userSeq, int tag);
+    int insertUserFavor(@Param("userSeq") int userSeq, @Param("tag") int tag);
 
     UserDto selectById(String id);
 
@@ -51,7 +51,7 @@ public interface UserMapper {
 
     int updateUserPassword(ChangePasswordVo changePasswordVo);
 
-    int updateUserFavor(int userSeq, int tagSeq);
+    int updateUserFavor(@Param("userSeq") int userSeq, @Param("tagSeq") int tagSeq);
 
     // 유저 프로필 수정
     int updateProfile(@Param("user_seq") int user_seq, @Param("nickname") String nickname, @Param("profileUrl") String url);

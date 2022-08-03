@@ -182,7 +182,7 @@ public class TripService {
         ArrayList<RecommendTagVo> recommendPool = tripMapper.selectPlaceByTag(tag);
         int len = recommendPool.size();
         if (len == 0) return 0;
-        int selected = (int)(Math.random() * len);
+        int selected = (int)(len * Math.random());
         return recommendPool.get(selected).getPlaceSeq();
     }
 
@@ -226,19 +226,20 @@ public class TripService {
             return 0;
         }
         // 이동수단에 따른 거리 계산
-        int distance;
+        double distance;
         if (transportation.equals("car")) {
-            distance = time * CAR_SPEED;
+            distance = time * CAR_SPEED / 60.0;
         } else {
-            distance = time * WALK_SPEED;
+            distance = time * WALK_SPEED / 60.0;
         }
         // 위, 경도 범위 계산
         double[] coordinateRange = DistanceUtil.ReverseHaversine.calculateCoordinate(
                 tripPlaceDto.getLatitude(),tripPlaceDto.getLongitude(), distance);
 
-        ArrayList<TripPlaceDto> recommendPool = tripMapper.selectTripByCoordinate(
-                coordinateRange[0], coordinateRange[1], coordinateRange[2], coordinateRange[3]);
+        ArrayList<TripPlaceDto> recommendPool = tripMapper.selectOtherTripByCoordinate(
+                coordinateRange[0], coordinateRange[1], coordinateRange[2], coordinateRange[3], placeSeq);
         int len = recommendPool.size();
+        System.out.println(len);
         if (len == 0) return 0;
         int selected = (int)(Math.random() * len);
         return recommendPool.get(selected).getTripPlaceSeq();
@@ -252,8 +253,8 @@ public class TripService {
         double[] coordinateRange = DistanceUtil.ReverseHaversine.calculateCoordinate(
                 tripPlaceDto.getLatitude(),tripPlaceDto.getLongitude(), NEARBY_DISTANCE);
 
-        ArrayList<TripPlaceDto> nearbyPool = tripMapper.selectTripByCoordinate(
-                coordinateRange[0], coordinateRange[1], coordinateRange[2], coordinateRange[3]);
+        ArrayList<TripPlaceDto> nearbyPool = tripMapper.selectOtherTripByCoordinateLimit(
+                coordinateRange[0], coordinateRange[1], coordinateRange[2], coordinateRange[3], placeSeq);
         return iteratePlaceInfo(nearbyPool);
     }
 

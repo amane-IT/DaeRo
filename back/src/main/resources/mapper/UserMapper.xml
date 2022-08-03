@@ -16,6 +16,11 @@
         values (#{userSeq}, #{verificationKey})
     </insert>
 
+    <insert id="insertUserFavor">
+        insert into `daero`.`user_favor` (`users_seq`, `tag_seq`, `score`)
+        values (#{userSeq}, #{tag}, 10)
+    </insert>
+
     <select id="selectById" parameterType="String" resultMap="mappingUserDto">
         SELECT *
         FROM users
@@ -110,6 +115,20 @@
         where `users_seq` like #{userSeq}
     </select>
 
+    <select id="selectPlaceTagAll" resultType="_int">
+        select `place_tag_seq`
+        from daero.place_tags
+    </select>
+
+    <select id="selectTagByPlaceSeq" resultType="com.ssafy.daero.trip.vo.RecommendTagVo" parameterType="_int">
+        select `trip_places_seq` as `placeSeq`,
+               `place_name`      as `placeName`,
+               `place_tag_seq`   as `tagSeq`,
+               `region_seq`      as `regionSeq`
+        from `daero`.`tag_region_place`
+        where `trip_places_seq` = #{placeSeq}
+    </select>
+
     <update id="updateProfile">
         UPDATE users
         SET `nickname`=#{nickname},
@@ -145,6 +164,13 @@
         update `daero`.`users`
         set `password` = #{hashedPassword}
         where `users_seq` = #{userSeq}
+    </update>
+
+    <update id="updateUserFavor">
+        update `user_favor`
+        set `score` = `score` + 2
+        where `users_seq` = #{userSeq}
+          and `tag_seq` = #{tagSeq};
     </update>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
