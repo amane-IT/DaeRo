@@ -41,6 +41,9 @@ class MyPageViewModel : BaseViewModel() {
         addDisposable(
             userRepository.getUserProfile(App.prefs.userSeq).subscribe(
                 { response ->
+                    response.body()?.let {
+                        App.prefs.nickname = it.nickname
+                    }
                     _userProfile.postValue(response.body())
                 }, { throwable ->
                     Log.d("ProfileSettingVM_DaeRo", throwable.toString())

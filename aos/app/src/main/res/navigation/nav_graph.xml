@@ -138,6 +138,20 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_rootFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"/>
+        <action
+            android:id="@+id/action_rootFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -316,8 +330,8 @@
         android:label="FollowerFragment"
         tools:layout="@layout/fragment_follower" >
         <action
-            android:id="@+id/action_followerFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment" />
+            android:id="@+id/action_followerFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/followingFragment"
@@ -325,8 +339,8 @@
         android:label="FollowingFragment"
         tools:layout="@layout/fragment_following" >
         <action
-            android:id="@+id/action_followingFragment_to_myPageFragment"
-            app:destination="@id/myPageFragment" />
+            android:id="@+id/action_followingFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment" />
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
@@ -435,12 +449,6 @@
         tools:layout="@layout/fragment_other_page"
         />
     <fragment
-        android:id="@+id/myPageFragment"
-        android:name="com.ssafy.daero.ui.root.mypage.MyPageFragment"
-        android:label="MyPageFragment"
-        tools:layout="@layout/fragment_my_page"
-        />
-    <fragment
         android:id="@+id/searchContentMoreFragment"
         android:name="com.ssafy.daero.ui.root.search.SearchContentMoreFragment"
         android:label="SearchContentMoreFragment"
@@ -450,4 +458,9 @@
         android:name="com.ssafy.daero.ui.root.search.SearchPlaceNameMoreFragment"
         android:label="SearchPlaceNameMoreFragment"
         tools:layout="@layout/fragment_search_place_name_more"/>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.ssafy.daero.ui.setting.NotificationFragment"
+        android:label="NotificationFragment"
+        tools:layout="@layout/fragment_notification"/>
 </navigation>

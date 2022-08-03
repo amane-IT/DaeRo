@@ -86,6 +86,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         }
         binding.imageTripNotification.setOnClickListener {
             // todo: 알림 페이지로 이동
+            findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
     }
 

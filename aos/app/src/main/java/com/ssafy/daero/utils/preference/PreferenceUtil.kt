@@ -46,6 +46,12 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putBoolean(IS_POSTING, value)
         }
 
+    var ftoken: String?
+        get() = prefs.getString(FCM_TOKEN, null)
+        set(value) {
+            prefs.edit().putString(FCM_TOKEN, value).apply()
+        }
+
     fun initAll() {
         jwt = null
         userSeq = 0

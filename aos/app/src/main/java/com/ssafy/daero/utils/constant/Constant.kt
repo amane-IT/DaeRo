@@ -40,3 +40,4 @@ const val TRIP_COMPLETE = 303 // 트립스탬프 완료
 const val DATABASE = "app_database"
 const val TRIP_STAMP = "t_trip_stamp"
 const val TRIP_FOLLOW = "t_trip_follow"
+const val NOTIFICATION = "t_notification"
