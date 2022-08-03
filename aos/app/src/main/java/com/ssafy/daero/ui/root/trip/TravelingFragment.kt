@@ -6,6 +6,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
+import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.tag.TagCollection
@@ -26,6 +29,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
     private val travelingViewModel: TravelingViewModel by viewModels()
+    private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var placeSeq = 0
     private var tagCollection: TagCollection? = null
     private var tripKind = 0
@@ -38,6 +42,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var mShakeTime: Long = 0
     private var shakeCount = 5
     private var mShakeCount = 0
+
+    private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
+        // TODO: 지금까지 여행지 상세 페이지로 이동
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +70,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun initData(){
-        binding.textTravelingUsername.text = App.userName
+        binding.textTravelingUsername.text = "${App.prefs.nickname}님"
 
         placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
         tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
@@ -102,13 +110,34 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun setBinding(){
-        commentAdapter = CommentAdapter(3, this@CommentBottomSheetFragment).apply {
-            this.onItemClickListener = commentItemClickListener
+        val tripUntilNowList = mutableListOf<TripPopularResponseDto>()
+        for(i in travelingViewModel.articleTripStampData){
+            tripUntilNowList.add(TripPopularResponseDto(i.tripPlaceSeq,i.imageUrl,i.placeName))
         }
-        commentAdapter.submitData(lifecycle, it)
-        binding.recyclerComment.apply {
-            adapter = commentAdapter
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+        if(tripUntilNowList.size>0){
+            binding.tvTravelingTripStampSoFarNone.visibility = View.GONE
+            binding.recyclerTravelingTripStampSoFar.visibility = View.VISIBLE
+            tripUntilNowAdapter = TripUntilNowAdapter().apply {
+                onItemClickListener = hotArticleClickListener
+                tripPlaces = tripUntilNowList
+            }
+            binding.recyclerTravelingTripStampSoFar.apply {
+                adapter = tripUntilNowAdapter
+                layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            }
+        }
+        else{
+            binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
+            binding.recyclerTravelingTripStampSoFar.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setOnClickListeners(){
+        binding.buttonTravelingNext.setOnClickListener {
+            //todo : 다른 여행지 추천 화면으로 전환
+        }
+        binding.buttonTravelingStop.setOnClickListener {
+            //todo : 만약 이전에 했던 여행이 있으면 게시글 추가 페이지로, 없으면 홈화면으로
         }
     }
 

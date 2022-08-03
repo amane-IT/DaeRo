@@ -31,7 +31,6 @@ class TripRepository private constructor(context: Context) {
 
     // Trip API
     private val tripApi = RetrofitBuilder.retrofit.create(TripApi::class.java)
-    private val tripApi2 = RetrofitBuilder.retrofit2.create(TripApi::class.java)
 
     fun getMyJourney(
         user_seq: Int,
