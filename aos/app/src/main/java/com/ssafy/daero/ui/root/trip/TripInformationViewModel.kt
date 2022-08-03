@@ -81,30 +81,6 @@ class TripInformationViewModel : BaseViewModel() {
                         tripInformationState.postValue(FAIL)
                     })
         )
-    }
-
-    fun getWeather(
-        dataType: String,
-        numOfRows: Int,
-        pageNo: Int,
-        base_date: String,
-        base_time: String,
-        nx: Double,
-        ny: Double
-    ) {
-        addDisposable(
-            tripRepository.getWeather(dataType,numOfRows,pageNo,base_date,base_time,nx,ny)
-                .subscribe(
-                    { response ->
-                        weather = response.body()!!
-                    },
-                    { throwable ->
-                        Log.d("TripInfoVM_DaeRo", throwable.toString())
-                        tripInformationState.postValue(FAIL)
-                    }
-                )
-        )
-
         // 임시
         //_tripInformation.postValue(tripInfo)
     }

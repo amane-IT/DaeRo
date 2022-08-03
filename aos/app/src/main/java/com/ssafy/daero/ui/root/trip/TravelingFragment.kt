@@ -1,20 +1,25 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import android.os.Bundle
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.WeatherResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
-import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.sqrt
 
-class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling) {
+class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling), SensorEventListener {
 
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
     private var placeSeq = 0
@@ -22,6 +27,29 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var tripKind = 0
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
+    private lateinit var mSensorManager: SensorManager
+    private lateinit var mAccelerometer: Sensor
+    private val SHAKE_THRESHOLD_GRAVITY = 2.7f
+    private val SHAKE_SKIP_TIME = 500
+    private var mShakeTime: Long = 0
+    private var shakeCount = 5
+    private var mShakeCount = 0
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mSensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mSensorManager.unregisterListener(this)
+    }
 
     override fun init() {
         initData()
@@ -69,17 +97,39 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun setBinding(){
-        val cal = Calendar.getInstance()
-        var baseDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)
-        val timeH = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time)
-        val timeM = SimpleDateFormat("HH", Locale.getDefault()).format(cal.time)
-        var baseTime = CommonDate().getBaseTime(timeH, timeM)
-        if (timeH == "00" && baseTime == "2330") {
-            cal.add(Calendar.DATE, -1).toString()
-            baseDate = SimpleDateFormat("yyyyMMdd", Locale.getDefault()).format(cal.time)
+
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if(event!!.sensor.type == Sensor.TYPE_ACCELEROMETER){
+            var axisX = event.values[0]
+            var axisY = event.values[1]
+            var axisZ = event.values[2]
+
+            var gravityX = axisX/SensorManager.GRAVITY_EARTH
+            var gravityY = axisY/SensorManager.GRAVITY_EARTH
+            var gravityZ = axisZ/SensorManager.GRAVITY_EARTH
+
+            var f = gravityX * gravityX + gravityY * gravityY + gravityZ * gravityZ
+            var squared = sqrt(f.toDouble())
+            var gForce: Float = squared.toFloat()
+            if(gForce > SHAKE_THRESHOLD_GRAVITY){
+                var currentTime = System.currentTimeMillis()
+                if(mShakeTime + SHAKE_SKIP_TIME > currentTime){
+                    return
+                }
+                mShakeTime = currentTime
+                mShakeCount++
+                shakeCount -= mShakeCount
+                binding.tvTravelingVerificationCount.text = shakeCount.toString()
+                if(shakeCount < 1){
+                    //todo : 반경 10km 안이면 인증 완료 화면 전환, 아니면 다시 인증해주세요 다이얼로그 -> 현재위치 전송해줘야함
+                }
+            }
         }
-        tripInformationViewModel.getWeather("JSON", 60, 1, baseDate, baseTime, longitude, latitude)
-        val item = tripInformationViewModel.weather.response.body.items.item
-        val weather = WeatherResponseDto(item[0].fcstValue,item[0].fcstValue,item[0].fcstValue,item[0].fcstValue,"지금")
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("Not yet implemented")
     }
 }

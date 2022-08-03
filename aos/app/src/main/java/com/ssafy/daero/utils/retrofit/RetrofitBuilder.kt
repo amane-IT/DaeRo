@@ -14,9 +14,4 @@ object RetrofitBuilder {
         .addConverterFactory(GsonConverterFactory.create())
         .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
         .build()
-
-    val retrofit2 = Retrofit.Builder()
-        .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
 }
