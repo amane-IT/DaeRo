@@ -253,4 +253,13 @@ public class AdminService {
         return searchUserList;
     }
 
+    public int deleteArticle(int articleSeq) {
+        int article = snsMapper.selectArticleByArticleSeq(articleSeq);
+        if (article == 0) { return 0; }
+        int deletedArticle = snsMapper.deleteArticleByArticleSeq(articleSeq);
+        if (deletedArticle == 0) { return 0; }
+        return 1;
+
+    }
+
 }

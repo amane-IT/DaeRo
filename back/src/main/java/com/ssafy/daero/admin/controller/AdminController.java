@@ -74,4 +74,12 @@ public class AdminController {
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @DeleteMapping("/article/{article_seq}")
+    public ResponseEntity<String> deleteArticle(@PathVariable int article_seq) {
+        int deleted = adminService.deleteArticle(article_seq);
+        if (deleted == 0) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
 }
