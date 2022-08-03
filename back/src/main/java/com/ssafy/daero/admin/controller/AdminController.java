@@ -82,4 +82,11 @@ public class AdminController {
         return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
     }
 
+    @DeleteMapping("/reply/{reply_seq}")
+    public ResponseEntity<String> deleteReply(@PathVariable int reply_seq) {
+        int deleted = adminService.deleteReply(reply_seq);
+        if (deleted == 0) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
 }

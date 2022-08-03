@@ -259,7 +259,13 @@ public class AdminService {
         int deletedArticle = snsMapper.deleteArticleByArticleSeq(articleSeq);
         if (deletedArticle == 0) { return 0; }
         return 1;
-
     }
 
+    public int deleteReply(int replySeq) {
+        int reply = snsMapper.selectReplyByReplySeq(replySeq);
+        if (reply == 0) { return 0; }
+        int deletedReply = snsMapper.deleteReplyByReplySeq(replySeq);
+        if (deletedReply == 0) { return 0; }
+        return 1;
+    }
 }
