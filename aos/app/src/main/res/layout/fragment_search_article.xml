@@ -22,19 +22,21 @@
                     android:id="@+id/text_searchArticle_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginBottom="20dp"
                     android:text="내용"
-                    style="@style/HeadBold"
+                    style="@style/SubHeadBold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_content"/>
 
                 <TextView
-                    style="@style/SubHead"
+                    style="@style/Body"
                     android:id="@+id/text_searchArticle_contentMoreData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_marginEnd="16dp"
                     android:text="더보기"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -44,31 +46,33 @@
                     android:id="@+id/recycler_searchArticle_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginBottom="32dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     tools:itemCount="4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_content"/>
+                    app:layout_constraintBottom_toTopOf="@id/text_searchArticle_place"/>
 
                 <TextView
                     android:id="@+id/text_searchArticle_place"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="16dp"
                     android:text="여행지"
-                    style="@style/HeadBold"
+                    style="@style/SubHeadBold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_searchArticle_content"
                     app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_place"/>
 
                 <TextView
-                    style="@style/SubHead"
+                    style="@style/Body"
                     android:id="@+id/text_searchArticle_placeMoreData"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
                     android:text="더보기"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycler_searchArticle_content"
@@ -78,13 +82,12 @@
                     android:id="@+id/recycler_searchArticle_place"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_margin="12dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
                     tools:itemCount="4"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_place"
                     app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <TextView
