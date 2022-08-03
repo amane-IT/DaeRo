@@ -123,6 +123,12 @@
         FROM daero.trip_places
     </select>
 
+    <select id="selectTagsByPlaceSeq" parameterType="_int" resultType="Integer">
+        SELECT place_tag_seq
+        FROM daero.tag_trip_places
+        WHERE trip_places_seq=#{placeSeq}
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

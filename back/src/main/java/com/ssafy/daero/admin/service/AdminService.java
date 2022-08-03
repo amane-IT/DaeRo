@@ -9,6 +9,7 @@ import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
+import com.ssafy.daero.trip.mapper.TripMapper;
 import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,11 @@ import java.util.Map;
 public class AdminService {
     private AdminMapper adminMapper;
     private SnsMapper snsMapper;
-    public AdminService(AdminMapper adminMapper, SnsMapper snsMapper) {
+    private TripMapper tripMapper;
+    public AdminService(AdminMapper adminMapper, SnsMapper snsMapper, TripMapper tripMapper) {
         this.adminMapper=adminMapper;
         this.snsMapper=snsMapper;
+        this.tripMapper=tripMapper;
     }
 
     public Map<String, Object> userList(int page) {
@@ -291,5 +294,21 @@ public class AdminService {
         placeList.put("page", page);
         placeList.put("results", results);
         return placeList;
+    }
+
+    public Map<String, Object> placeDetail(int placeSeq) {
+        TripPlaceDto placeDto = tripMapper.selectPlaceByPlaceSeq(placeSeq);
+        if (placeDto == null) { return null; }
+        ArrayList<Integer> tags = adminMapper.selectTagsByPlaceSeq(placeSeq);
+        if (tags == null) { return null; }
+        Map<String, Object> placeDetail = new HashMap<>();
+        placeDetail.put("place_name", placeDto.getPlaceName());
+        placeDetail.put("address", placeDto.getAddress());
+        placeDetail.put("latitude", placeDto.getLatitude());
+        placeDetail.put("longitude", placeDto.getLongitude());
+        placeDetail.put("tags", tags);
+        placeDetail.put("image_url", placeDto.getImageUrl());
+        placeDetail.put("description", placeDto.getDescription());
+        return placeDetail;
     }
 }

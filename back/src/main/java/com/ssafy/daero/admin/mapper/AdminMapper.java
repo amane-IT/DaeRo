@@ -42,4 +42,6 @@ public interface AdminMapper {
     ArrayList<TripPlaceDto> selectPlaceList(int page);
 
     int selectPlaceCount();
+
+    ArrayList<Integer> selectTagsByPlaceSeq(int placeSeq);
 }

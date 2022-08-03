@@ -90,8 +90,15 @@ public class AdminController {
     }
 
     @GetMapping("/place")
-    public  ResponseEntity<Map<String, Object>> placeList(@RequestParam(required = false, defaultValue = "1") String page) {
+    public ResponseEntity<Map<String, Object>> placeList(@RequestParam(required = false, defaultValue = "1") String page) {
         Map<String, Object> res = adminService.placeList(Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/place/{place_seq}")
+    public ResponseEntity<Map<String, Object>> placeDetail(@PathVariable int place_seq) {
+        Map<String, Object> res = adminService.placeDetail(place_seq);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
