@@ -68,4 +68,6 @@ public interface AdminMapper {
     ArrayList<Map<String, Object>> selectFaqList(int page);
 
     int insertFaq(FaqVo faqVo);
+
+    int updateFaq(@Param("faqSeq") int faqSeq, @Param("title") String title, @Param("content") String content, @Param("author") String author);
 }

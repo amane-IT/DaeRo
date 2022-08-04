@@ -374,7 +374,11 @@ public class AdminService {
     public boolean createFaq(FaqVo faqVo) {
         int created = adminMapper.insertFaq(faqVo);
         return created == 1;
+    }
 
+    public boolean updateFaq(int faqSeq, FaqVo faqVo) {
+        int updated = adminMapper.updateFaq(faqSeq, faqVo.getTitle(), faqVo.getContent(), faqVo.getAuthor());
+        return updated == 1;
     }
 
 }

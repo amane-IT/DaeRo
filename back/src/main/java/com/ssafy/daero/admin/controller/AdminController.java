@@ -154,4 +154,11 @@ public class AdminController {
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
     }
+
+    @PutMapping("/faq/{faq_seq}")
+    public ResponseEntity<String> updateFaq(@PathVariable int faq_seq, @RequestBody FaqVo faqVo) {
+        boolean res = adminService.updateFaq(faq_seq, faqVo);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
 }

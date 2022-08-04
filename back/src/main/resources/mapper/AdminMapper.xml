@@ -235,6 +235,17 @@
                  WHERE a.admin_name = #{author}))
     </insert>
 
+    <update id="updateFaq">
+        UPDATE daero.faq
+        SET `title`=#{title},
+            `content`=#{content},
+            `updated_at`=DATE_FORMAT(now(), '%Y-%m-%d %T'),
+            `admin_seq`=(SELECT admin_seq
+                         FROM daero.admin a
+                         WHERE a.admin_name = #{author})
+        WHERE faq_seq = #{faqSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
