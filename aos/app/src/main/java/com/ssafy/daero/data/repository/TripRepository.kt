@@ -106,6 +106,18 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // 다음 여행지 추천받기
+    fun recommendNextPlace(
+        placeSeq: Int,
+        time: Int,
+        transportation: String
+    ): Single<Response<NextPlaceRecommendResponseDto>> {
+        return tripApi.recommendNextPlace(placeSeq, time, transportation)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 
     companion object {
         private var instance: TripRepository? = null

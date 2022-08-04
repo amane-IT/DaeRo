@@ -39,4 +39,14 @@ interface TripApi {
      */
     @GET("trips/info/{trip_places_seq}")
     fun getTripInformation(@Path("trip_places_seq") placeSeq: Int): Single<Response<TripInformationResponseDto>>
+
+    /**
+     * 다음 여행지 추천
+     * */
+    @GET("trips/recommend")
+    fun recommendNextPlace(
+        @Query("place_seq") placeSeq: Int,
+        @Query("time") time: Int,
+        @Query("transportation") transportation: String
+    ): Single<Response<NextPlaceRecommendResponseDto>>
 }
