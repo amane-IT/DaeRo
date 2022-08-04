@@ -2,7 +2,7 @@ package com.ssafy.daero.data.dto.article
 
 data class ArticleHomeItem(
     val article_seq: Int,
-    val comments: Int,
+    val replies: Int,
     val created_at: String,
     val description: String,
     val end_date: String,
@@ -12,5 +12,6 @@ data class ArticleHomeItem(
     val start_date: String,
     val thumbnail_url: String,
     val title: String,
-    val user_seq: Int
+    val user_seq: Int,
+    var like_yn: Char
 )

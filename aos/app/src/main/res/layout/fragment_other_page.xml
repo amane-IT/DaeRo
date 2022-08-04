@@ -16,6 +16,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:id="@+id/img_otherPage_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black" />
+
             <TextView
                 android:id="@+id/text_otherPage_title"
                 style="@style/HeadBold"
@@ -23,19 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:text="김싸피" />
+                tools:text="김싸피님" />
 
-            <ImageView
-                android:id="@+id/image_otherPage_setting"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_gravity="center_vertical|end"
-                android:layout_marginEnd="16dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="3dp"
-                android:src="@drawable/ic_setting"
-                app:tint="@color/primaryDarkColor" />
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
@@ -78,14 +79,15 @@
             app:layout_constraintStart_toEndOf="@id/text_otherPage_name"
             app:layout_constraintTop_toTopOf="@id/text_otherPage_name" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_otherPage_follow"
             style="@style/BodyWhite"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:padding="0dp"
+            android:background="@drawable/button_regular"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
             android:text="팔로우"
+            android:padding="0dp"
             app:layout_constraintBottom_toBottomOf="@id/text_otherPage_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/text_otherPage_name" />
@@ -144,7 +146,7 @@
             android:id="@+id/tab_otherPage"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/image_otherPage_profile" />
