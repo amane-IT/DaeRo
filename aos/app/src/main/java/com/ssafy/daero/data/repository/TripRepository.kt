@@ -8,6 +8,7 @@ import androidx.paging.rxjava3.flowable
 import androidx.room.Room
 import com.ssafy.daero.data.dto.trip.*
 import com.ssafy.daero.data.entity.Notification
+import com.ssafy.daero.data.entity.TripFollow
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.local.AppDatabase
 import com.ssafy.daero.data.remote.TripApi
@@ -106,6 +107,19 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    //TripFollow 저장
+    fun insertTripFollow(tripFollow: TripFollow): Completable {
+        return database.tripFollowDao().insertTripFollow(tripFollow)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripFollow 모두 가져오기
+    fun getTripFollows(): Single<List<TripFollow>> {
+        return database.tripFollowDao().getTripFollows()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
 
     companion object {
         private var instance: TripRepository? = null
