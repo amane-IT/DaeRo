@@ -58,4 +58,10 @@ interface TripApi {
      */
     @GET("trips/info/{trip_places_seq}")
     fun getTripInformation(@Path("trip_places_seq") placeSeq: Int): Single<Response<TripInformationResponseDto>>
+
+    /**
+     * 인기있는 여행지
+     */
+    @GET("trips/popular")
+    fun getPopularTrips(): Single<Response<List<TripPopularResponseDto>>>
 }

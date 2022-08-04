@@ -94,6 +94,13 @@ class TripRepository private constructor(context: Context) {
         ).flowable
     }
 
+    fun getPopularTrips(): Single<Response<List<TripPopularResponseDto>>> {
+        return tripApi.getPopularTrips()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     // 알림 저장
     fun insertNotification(notification: Notification): Completable {
         return database.notificationDao().insertNotification(notification)
