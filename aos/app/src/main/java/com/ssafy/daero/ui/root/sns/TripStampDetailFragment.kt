@@ -1,11 +1,8 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
-import androidx.core.content.ContextCompat
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampDetailBinding
-import com.ssafy.daero.ui.root.trip.TripStampBottomSheetFragment
 
 class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.layout.fragment_trip_stamp_detail) {
 
@@ -23,17 +20,8 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
     private fun setOnClickListeners(){
         binding.apply {
             buttonTripStampDetailShare.setOnClickListener {
-                // TODO: 트립스탬프 공유 기능 구현
+                // TODO: 트립스탬프 카카오톡으로 공유 기능 구현
             }
-
-
-//          buttonTripStampRetry.setOnClickListener {
-                // TODO: 트립스탬프 재생성
-//                TripStampBottomSheetFragment().show(
-//                    childFragmentManager,
-//                    "TripStampBottomSheetFragment"
-//                )
-//            }
 
             imgTripStampDetailBack.setOnClickListener {
                 requireActivity().onBackPressed()
