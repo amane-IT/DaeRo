@@ -13,4 +13,5 @@ public class ArticleListVo extends ArticleDto {
     private String description;
     private String startDate;
     private String endDate;
+    private String likeYn;
 }

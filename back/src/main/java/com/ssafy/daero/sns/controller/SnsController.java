@@ -227,6 +227,7 @@ public class SnsController {
             map.put("end_date", article.getEndDate());
             map.put("likes", article.getLikeCount());
             map.put("replies", article.getReplyCount());
+            map.put("like_yn", article.getLikeYn());
             result.add(map);
         }
         Map<String, Object> resultMap = new HashMap<>();
