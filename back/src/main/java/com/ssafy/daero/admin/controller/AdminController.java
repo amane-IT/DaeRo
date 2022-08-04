@@ -125,4 +125,11 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/inquiry/{inquiry_seq}")
+    public ResponseEntity<Map<String, Object>> inquiryDetail(@PathVariable int inquiry_seq) {
+        Map<String, Object> res = adminService.inquiryDetail(inquiry_seq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
 }

@@ -57,4 +57,6 @@ public interface AdminMapper {
 
     int selectInquiryCount();
     ArrayList<Map<String, Object>> selectInquiryList(int page);
+
+    Map<String, Object> selectInquiryDetail(int inquirySeq);
 }

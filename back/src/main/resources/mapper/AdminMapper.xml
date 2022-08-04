@@ -155,13 +155,24 @@
     </select>
 
     <select id="selectInquiryList" parameterType="_int" resultType="java.util.Map">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`, `title`, `created_at`, `answer_yn`, `admin_seq`, `answer_at`, (SELECT u.nickname
+        SELECT inquiry.inquires_seq AS inquiry_seq, inquiry.user_name, inquiry.title, inquiry.created_at, inquiry.answer_at, inquiry.answer_yn, inquiry.author
+        FROM (SELECT row_number() over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`, `title`, `created_at`, `answer_yn`, `answer_at`, (SELECT u.nickname
         FROM daero.users u
-        WHERE u.users_seq=i.users_seq) AS nickname
+        WHERE u.users_seq=i.users_seq) AS user_name, (SELECT admin_name
+                                                      FROM daero.admin a
+                                                      WHERE a.admin_seq = i.admin_seq) AS author
         FROM daero.inquires i) AS inquiry
         WHERE (#{page}-1)*10 &lt; inquiry.row
                           AND inquiry.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectInquiryDetail" parameterType="_int" resultType="java.util.Map">
+        SELECT `title`, `created_at`, `answer_yn`, `content`, `answer`, `answer_at`, (SELECT u.nickname
+                                                                              FROM daero.users u
+                                                                              WHERE u.users_seq=i.users_seq) AS user_name, (SELECT admin_name
+                                                                                                                            FROM daero.admin a
+                                                                                                                            WHERE a.admin_seq = i.admin_seq) AS author
+        FROM daero.inquires i
     </select>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">

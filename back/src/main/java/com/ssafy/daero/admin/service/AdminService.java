@@ -12,6 +12,7 @@ import com.ssafy.daero.sns.vo.StampVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.mapper.TripMapper;
 import com.ssafy.daero.user.dto.UserDto;
+import org.junit.platform.commons.util.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -337,15 +338,18 @@ public class AdminService {
         ArrayList<Map<String, Object>> inquires = adminMapper.selectInquiryList(page);
 
         Map<String, Object> inquiryList = new HashMap<>();
-//        ArrayList<Map<String, Object>> results = new ArrayList<>();
-//        Map<String, Object> result = new HashMap<>();
-
-//        for (Map<String, Object> inquire:inquires) {
-//
-//        }
         inquiryList.put("total_page", totalPage);
         inquiryList.put("page", page);
         inquiryList.put("results", inquires);
         return inquiryList;
     }
+
+    public Map<String, Object> inquiryDetail(int inquirySeq) {
+        Map<String, Object> inquiryDetail = adminMapper.selectInquiryDetail(inquirySeq);
+        if (inquiryDetail.isEmpty()) { return null; }
+        return inquiryDetail;
+    }
+
+
+
 }
