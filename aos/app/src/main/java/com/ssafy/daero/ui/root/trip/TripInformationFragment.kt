@@ -1,5 +1,7 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.graphics.Paint
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.ssafy.daero.R
@@ -19,9 +21,14 @@ class TripInformationFragment : BaseFragment<FragmentTripInformationBinding>(R.l
     private var tripKind = 0
 
     override fun init() {
+        initView()
         initData()
         observeData()
         setOnClickListeners()
+    }
+
+    private fun initView() {
+        binding.textTripInformationFold.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun initData() {
@@ -76,6 +83,15 @@ class TripInformationFragment : BaseFragment<FragmentTripInformationBinding>(R.l
                 NEXT_TRIP -> {
                     // todo: 다음 여행지 추천일때, 다시 추천 기능
                 }
+            }
+        }
+        binding.textTripInformationFold.setOnClickListener {
+            if(binding.scrollTripInformationDescription.visibility == View.VISIBLE) {
+                binding.textTripInformationFold.text = "펼치기"
+                binding.scrollTripInformationDescription.visibility = View.GONE
+            } else {
+                binding.textTripInformationFold.text = "접기"
+                binding.scrollTripInformationDescription.visibility = View.VISIBLE
             }
         }
     }

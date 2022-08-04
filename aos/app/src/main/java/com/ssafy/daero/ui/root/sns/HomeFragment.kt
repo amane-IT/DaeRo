@@ -15,6 +15,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 //        binding.textview.setOnClickListener {
 //            findNavController().navigate(R.id.action_rootFragment_to_articleFragment)
 //        }
+        setOnClickListeners()
+    }
+
+    private fun setOnClickListeners() {
+        binding.imageHomeNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
+        }
     }
 
     private fun initAdapter() {
