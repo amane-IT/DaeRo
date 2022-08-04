@@ -56,14 +56,6 @@
         DELETE FROM daero.articles WHERE articles_seq=#{articleSeq}
     </delete>
 
-    <delete id="deleteReplyByArticleSeq" parameterType="_int">
-        DELETE FROM daero.replies WHERE articles_seq=#{articleSeq}
-    </delete>
-
-    <delete id="deleteArticleTagByArticleSeq" parameterType="_int">
-        DELETE FROM daero.article_tags WHERE articles_seq=#{articleSeq}
-    </delete>
-
     <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
         SELECT *
         FROM (SELECT row_number() over (ORDER BY r.created_at ASC) AS row, replies_seq, users_seq, content, created_at, updated_at,
