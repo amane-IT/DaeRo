@@ -175,6 +175,14 @@
         FROM daero.inquires i
     </select>
 
+    <update id="updateInquiryByInquirySeq">
+        UPDATE daero.inquires i
+        SET answer=#{content}, answer_yn='y', answer_at=DATE_FORMAT(now(), '%Y-%m-%d %T'), admin_seq= (SELECT admin_seq
+                                                                                                 FROM daero.admin a
+                                                                                                 WHERE a.admin_name=#{author})
+        WHERE i.inquires_seq=#{inquirySeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

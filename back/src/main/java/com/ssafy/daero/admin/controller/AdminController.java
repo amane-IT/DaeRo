@@ -2,6 +2,7 @@ package com.ssafy.daero.admin.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.admin.service.AdminService;
+import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.service.SnsService;
 import org.springframework.http.HttpStatus;
@@ -131,5 +132,13 @@ public class AdminController {
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @PutMapping("/inquiry/{inquiry_seq}")
+    public ResponseEntity<String> answerInquiry(@PathVariable int inquiry_seq, @RequestBody AnswerVo answerVo) {
+        boolean res = adminService.answerInquiry(inquiry_seq, answerVo);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
+
 
 }

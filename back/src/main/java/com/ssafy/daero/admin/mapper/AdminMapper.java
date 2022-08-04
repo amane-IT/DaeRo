@@ -2,6 +2,7 @@ package com.ssafy.daero.admin.mapper;
 
 
 import com.ssafy.daero.admin.dto.ReportDto;
+import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
@@ -59,4 +60,6 @@ public interface AdminMapper {
     ArrayList<Map<String, Object>> selectInquiryList(int page);
 
     Map<String, Object> selectInquiryDetail(int inquirySeq);
+
+    int updateInquiryByInquirySeq(@Param("inquirySeq") int inquirySeq, @Param("content") String content, @Param("author") String author);
 }

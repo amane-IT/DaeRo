@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
+import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
@@ -350,6 +351,9 @@ public class AdminService {
         return inquiryDetail;
     }
 
-
+    public boolean answerInquiry(int inquirySeq, AnswerVo answerVo) {
+        int updateInquiry = adminMapper.updateInquiryByInquirySeq(inquirySeq, answerVo.getContent(), answerVo.getAuthor());
+        return updateInquiry == 1;
+    }
 
 }
