@@ -328,6 +328,24 @@ public class AdminService {
         return true;
     }
 
+    public boolean updatePlace(int placeSeq, TripPlaceVo tripPlaceVo) {
+        TripPlaceDto placeDto = tripMapper.selectPlaceByPlaceSeq(placeSeq);
+        if (placeDto == null) { return false; }
+        tripPlaceVo.setTripPlaceSeq(placeSeq);
+        // trip_places table update
+        int updated = adminMapper.updatePlace(tripPlaceVo);
+        if (updated == 0) { return false; }
+        // tag_trip_places table update (delete && insert)
+        int deleted = adminMapper.deletePlaceTag(placeSeq);
+        if (deleted == 0) { return false; }
+        for(int tag: tripPlaceVo.getTags()) {
+            int inserted = adminMapper.insertPlaceTag(placeSeq, tag);
+            if (inserted == 0) { return false; }
+        }
+        return true;
+
+    }
+
     public boolean deletePlace(int placeSeq) {
         TripPlaceDto tripPlaceDto = tripMapper.selectPlaceByPlaceSeq(placeSeq);
         if (tripPlaceDto == null) { return false; }

@@ -145,6 +145,16 @@
         VALUES (#{tag}, #{placeSeq})
     </insert>
 
+    <update id="updatePlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
+        UPDATE daero.trip_places
+        SET `place_name`=#{placeName}, `address`=#{address}, `latitude`=#{latitude}, `longitude`=#{longitude}, `image_url`=#{imageUrl}, `description`=#{description}, `region_seq`=#{regionSeq}
+        WHERE trip_places_seq=#{tripPlaceSeq}
+    </update>
+
+    <delete id="deletePlaceTag" parameterType="_int">
+        DELETE FROM daero.tag_trip_places WHERE `trip_places_seq`=#{placeSeq}
+    </delete>
+
     <delete id="deletePlace" parameterType="_int">
         DELETE FROM daero.trip_places WHERE `trip_places_seq`=#{placeSeq}
     </delete>

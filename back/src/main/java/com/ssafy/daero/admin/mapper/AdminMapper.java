@@ -52,9 +52,13 @@ public interface AdminMapper {
 
     int insertPlace(TripPlaceVo tripPlaceVo);
 
-    int insertPlaceTag(int placeSeq, int tag);
+    int insertPlaceTag(@Param("placeSeq") int placeSeq,@Param("tag") int tag);
 
     Integer selectPlaceSeqByPlaceAddress(String address);
+
+    int updatePlace(TripPlaceVo tripPlaceVo);
+
+    int deletePlaceTag(int placeSeq);
 
     int deletePlace(int placeSeq);
 
