@@ -98,7 +98,7 @@ class CommentAdapter(
                 onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
             }
             binding.imgCommentItemUser.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 2, "")
+                onItemClickListener(it, userSeq!!, 2, "")
             }
             binding.tvCommentReCommentAdd.setOnClickListener {
                 mCallback.reCommentAdd(replySeq!!)

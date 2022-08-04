@@ -1,11 +1,14 @@
 package com.ssafy.daero.ui.root.mypage
 
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentMyPageAlbumBinding
 import com.ssafy.daero.ui.adapter.mypage.MyPageAlbumAdapter
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 
 class MyPageAlbumFragment :
     BaseFragment<FragmentMyPageAlbumBinding>(R.layout.fragment_my_page_album) {
@@ -44,5 +47,7 @@ class MyPageAlbumFragment :
 
     private val albumItemClickListener: (View, Int) -> Unit = { _, tripSeq ->
         // todo: tripSeq 이용해서 앨범 상세 페이지로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleFragment, bundleOf(
+            ARTICLE_SEQ to tripSeq))
     }
 }
