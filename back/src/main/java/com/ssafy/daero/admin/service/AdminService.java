@@ -386,4 +386,17 @@ public class AdminService {
         return deleted == 1;
     }
 
+    public Map<String, Object> noticeList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectNoticeCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+        ArrayList<Map<String, Object>> results = adminMapper.selectNoticeList(page);
+
+        Map<String, Object> noticeList = new HashMap<>();
+        noticeList.put("total_page", totalPage);
+        noticeList.put("page", page);
+        noticeList.put("results", results);
+        return noticeList;
+    }
+
 }

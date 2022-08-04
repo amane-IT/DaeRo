@@ -72,4 +72,9 @@ public interface AdminMapper {
     int updateFaq(@Param("faqSeq") int faqSeq, @Param("title") String title, @Param("content") String content, @Param("author") String author);
 
     int deleteFaq(int faqSeq);
+
+    int selectNoticeCount();
+
+    ArrayList<Map<String, Object>> selectNoticeList(int page);
+
 }

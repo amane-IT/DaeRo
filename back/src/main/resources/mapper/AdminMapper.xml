@@ -250,6 +250,21 @@
         DELETE FROM daero.faq WHERE `faq_seq`=#{faqSeq}
     </delete>
 
+    <select id="selectNoticeCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.notice
+    </select>
+
+    <select id="selectNoticeList" parameterType="_int" resultType="java.util.Map">
+        SELECT noti.`notice_seq`, noti.`title`, noti.`content`, noti.`created_at`, noti.`admin_seq`
+        FROM (SELECT row_number()                         over (ORDER BY n.notice_seq ASC) AS row,
+        n.`notice_seq`, n.`title`, n.`content`, n.`created_at`, n.`admin_seq`
+
+        FROM daero.notice n) AS noti
+        WHERE (#{page}-1)*10 &lt; noti.row
+                         AND noti.row &lt; 1+(#{page}*10)
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

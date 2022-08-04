@@ -168,4 +168,11 @@ public class AdminController {
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/notice")
+    public ResponseEntity<Map<String, Object>> noticeList(@RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.noticeList(Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }
