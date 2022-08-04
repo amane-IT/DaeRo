@@ -70,4 +70,6 @@ public interface AdminMapper {
     int insertFaq(FaqVo faqVo);
 
     int updateFaq(@Param("faqSeq") int faqSeq, @Param("title") String title, @Param("content") String content, @Param("author") String author);
+
+    int deleteFaq(int faqSeq);
 }

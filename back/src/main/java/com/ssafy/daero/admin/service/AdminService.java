@@ -381,4 +381,9 @@ public class AdminService {
         return updated == 1;
     }
 
+    public boolean deleteFaq(int faqSeq) {
+        int deleted = adminMapper.deleteFaq(faqSeq);
+        return deleted == 1;
+    }
+
 }

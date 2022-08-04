@@ -246,6 +246,10 @@
         WHERE faq_seq = #{faqSeq}
     </update>
 
+    <delete id="deleteFaq" parameterType="_int">
+        DELETE FROM daero.faq WHERE `faq_seq`=#{faqSeq}
+    </delete>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
