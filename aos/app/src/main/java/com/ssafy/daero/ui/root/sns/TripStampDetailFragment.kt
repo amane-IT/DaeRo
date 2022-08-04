@@ -50,7 +50,7 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 //                    childFragmentManager,
 //                    "TripStampBottomSheetFragment"
 //                )
-            }
+//          }
 
             buttonTripStampShare.setOnClickListener {
                 // TODO: 트립스탬프 카카오톡 공유하기
