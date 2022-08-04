@@ -141,10 +141,14 @@ class SnsRepository private constructor(context: Context) {
 
     fun follow(userSeq: Int): Completable {
         return snsApi.follow(userSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun unFollow(userSeq: Int): Completable {
         return snsApi.unFollow(userSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun searchUserName(searchKeyword: String): Flowable<PagingData<UserNameItem>> {

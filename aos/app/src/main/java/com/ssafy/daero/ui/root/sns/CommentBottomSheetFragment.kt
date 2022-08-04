@@ -21,7 +21,7 @@ import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
 import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
 
-class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int) :
+class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int, private val userProfileClickListener: (Int) -> Unit) :
     BottomSheetDialogFragment(), CommentListener {
     private val commentViewModel: CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
@@ -45,10 +45,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
                     )
                 }
                 2 -> {
-                    findNavController().navigate(
-                        R.id.action_articleFragment_to_otherPageFragment,
-                        bundleOf("UserSeq" to id)
-                    )
+                    userProfileClickListener(id)
                 }
             }
         }
@@ -83,15 +80,9 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         commentViewModel.commentSelect(articleSeq)
     }
 
-    private val userProfileClickListener: (Int) -> Unit = { userSeq ->
-        // todo: OtherPageFragment 로 이동, userSeq 번들로 전달
-        findNavController().navigate(R.id.action_articleFragment_to_otherPageFragment)
-    }
-
-
     private fun observeData() {
         commentViewModel.comment.observe(viewLifecycleOwner) {
-            commentAdapter = CommentAdapter(3, this@CommentBottomSheetFragment).apply {
+            commentAdapter = CommentAdapter(articleSeq, this@CommentBottomSheetFragment).apply {
                 this.onItemClickListener = commentItemClickListener
             }
             commentAdapter.submitData(lifecycle, it)
@@ -148,9 +139,8 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             )
         }, 150)
         binding.textCommentWrite.setOnClickListener {
-            //todo: article_seq
             commentViewModel.reCommentAdd(
-                3,
+                articleSeq,
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -175,9 +165,8 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
     private fun setOnClickListeners() {
         binding.imageCommentClose.setOnClickListener { dismiss() }
         binding.textCommentWrite.setOnClickListener {
-            //todo: article_seq
             commentViewModel.commentAdd(
-                3,
+                articleSeq,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
             binding.editTextCommentAddComment.setText("")

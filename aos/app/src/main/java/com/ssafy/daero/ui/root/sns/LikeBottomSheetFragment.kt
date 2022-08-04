@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -13,10 +14,15 @@ import com.ssafy.daero.databinding.BottomsheetLikeBinding
 import com.ssafy.daero.ui.adapter.sns.LikeAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
 
-class LikeBottomSheetFragment(private val articleSeq: Int, private val likes: Int) : BottomSheetDialogFragment() {
+class LikeBottomSheetFragment(
+    private val articleSeq: Int,
+    private val likes: Int,
+    private val userProfileClickListener: (Int) -> Unit
+) : BottomSheetDialogFragment() {
     private val likeViewModel: LikeViewModel by viewModels()
     private lateinit var likeAdapter: LikeAdapter
 
@@ -55,11 +61,6 @@ class LikeBottomSheetFragment(private val articleSeq: Int, private val likes: In
             onItemClickListener = userProfileClickListener
         }
         binding.recyclerLike.adapter = likeAdapter
-    }
-
-    private val userProfileClickListener: (Int) -> Unit = { userSeq ->
-        // todo: OtherPageFragment 로 이동, userSeq 번들로 전달
-        findNavController().navigate(R.id.action_articleFragment_to_otherPageFragment)
     }
 
     private fun getLikeUsers() {

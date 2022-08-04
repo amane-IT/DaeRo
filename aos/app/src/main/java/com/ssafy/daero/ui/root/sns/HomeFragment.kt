@@ -64,14 +64,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
 
     // 좋아요 갯수 클릭 (좋아요 리스트 보여주기)
     private val onLikesClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
-        LikeBottomSheetFragment(articleSeq, likes)
+        LikeBottomSheetFragment(articleSeq, likes, userProfileClickListener)
             .show(childFragmentManager, LIKE_BOTTOM_SHEET)
     }
 
     // 댓글 버튼 클릭 (댓글 리스트 보여주기)
     private val onCommentClickListener: (Int, Int) -> Unit = { articleSeq, comments ->
-        CommentBottomSheetFragment(articleSeq, comments)
+        CommentBottomSheetFragment(articleSeq, comments, userProfileClickListener)
             .show(childFragmentManager, COMMENT_BOTTOM_SHEET)
+    }
+
+    private val userProfileClickListener: (Int) -> Unit = { userSeq ->
+        findNavController().navigate(R.id.action_rootFragment_to_otherPageFragment, bundleOf(
+            USER_SEQ to userSeq))
     }
 
     // 더보기 버튼 클릭

@@ -152,19 +152,20 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             //todo: 좋아요 리스트 페이지: 좋아요 누른 인원, article_seq 번들로 전달
             LikeBottomSheetFragment(
                 articleSeq,
-                articleViewModel.articleData.likes
+                articleViewModel.articleData.likes,
+                userProfileClickListener
             ).show(childFragmentManager, LIKE_BOTTOM_SHEET)
         }
         binding.LinearArticleComment.setOnClickListener {
             //todo 댓글 리스트 페이지: 댓글수, article_seq 번들로 전달
-            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments).show(
+            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments, userProfileClickListener).show(
                 childFragmentManager,
                 COMMENT_BOTTOM_SHEET
             )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
-            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments).show(
+            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments, userProfileClickListener).show(
                 childFragmentManager,
                 COMMENT_BOTTOM_SHEET
             )
@@ -179,7 +180,11 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         binding.imgArticleBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
+    }
 
+    private val userProfileClickListener: (Int) -> Unit = { userSeq ->
+        findNavController().navigate(R.id.action_articleFragment_to_otherPageFragment, bundleOf(
+            USER_SEQ to userSeq))
     }
 
     private fun likeSetting() {

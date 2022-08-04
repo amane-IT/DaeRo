@@ -12,6 +12,7 @@ import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.local.AppDatabase
 import com.ssafy.daero.data.remote.TripApi
 import com.ssafy.daero.data.repository.paging.TripAlbumDataSource
+import com.ssafy.daero.data.repository.paging.TripMyAlbumDataSource
 import com.ssafy.daero.utils.constant.DATABASE
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -44,6 +45,17 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getJourney(
+        user_seq: Int,
+        startDate: String,
+        endDate: String
+    ): Single<Response<List<List<MyJourneyResponseDto>>>> {
+        return tripApi.getJourney(user_seq, startDate, endDate)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun getFirstTripRecommend(
         firstTripRecommendRequestDto: FirstTripRecommendRequestDto
     ): Single<Response<FirstTripRecommendResponseDto>> {
@@ -67,7 +79,18 @@ class TripRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { TripAlbumDataSource(tripApi) }
+            pagingSourceFactory = { TripMyAlbumDataSource(tripApi) }
+        ).flowable
+    }
+
+    fun getAlbum(userSeq: Int): Flowable<PagingData<TripAlbumItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { TripAlbumDataSource(tripApi, userSeq) }
         ).flowable
     }
 

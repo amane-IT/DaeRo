@@ -18,10 +18,29 @@ interface TripApi {
     ): Single<Response<List<List<MyJourneyResponseDto>>>>
 
     /**
+     * 여정 조회
+     */
+    @GET("trips/user/{user_seq}/journey")
+    fun getJourney(
+        @Path("user_seq") user_seq: Int,
+        @Query("start-date") startDate: String,
+        @Query("end-date") endDate: String
+    ): Single<Response<List<List<MyJourneyResponseDto>>>>
+
+    /**
      * 내 여행 앨범 조회
      */
     @GET("trips/my/{user_seq}/album")
     fun getMyAlbum(
+        @Path("user_seq") userSeq: Int,
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<TripAlbumItem>>
+
+    /**
+     * 여행 앨범 조회
+     */
+    @GET("trips/user/{user_seq}/album")
+    fun getAlbum(
         @Path("user_seq") userSeq: Int,
         @Query("page") page: Int
     ): Single<PagingResponseDto<TripAlbumItem>>
