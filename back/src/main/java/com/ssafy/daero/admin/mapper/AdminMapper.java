@@ -80,4 +80,6 @@ public interface AdminMapper {
 
     int insertNotice(NoticeVo noticeVo);
 
+    int updateNotice(@Param("noticeSeq") int noticeSeq, @Param("title") String title, @Param("content") String content, @Param("adminSeq") int adminSeq);
+
 }

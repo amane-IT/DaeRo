@@ -270,6 +270,12 @@
         VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'), #{adminSeq})
     </insert>
 
+    <update id="updateNotice">
+        UPDATE daero.notice
+        SET `title`=#{title}, `content`=#{content}, `admin_seq`=#{adminSeq}, `updated_at` = DATE_FORMAT(now(), '%Y-%m-%d %T')
+        WHERE `notice_seq`=#{noticeSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

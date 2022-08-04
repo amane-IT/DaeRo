@@ -405,4 +405,9 @@ public class AdminService {
         return created == 1;
     }
 
+    public boolean updateNotice(int noticeSeq, NoticeVo noticeVo) {
+        int updated = adminMapper.updateNotice(noticeSeq, noticeVo.getTitle(), noticeVo.getContent(), noticeVo.getAdminSeq());
+        return updated == 1;
+    }
+
 }

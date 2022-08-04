@@ -183,4 +183,11 @@ public class AdminController {
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @PutMapping("/notice/{notice_seq}")
+    public ResponseEntity<String> updateNotice(@PathVariable int notice_seq, @RequestBody NoticeVo noticeVo) {
+        boolean res = adminService.updateNotice(notice_seq, noticeVo);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
 }
