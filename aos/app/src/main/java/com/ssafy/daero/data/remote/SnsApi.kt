@@ -2,6 +2,7 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
@@ -191,5 +192,12 @@ interface SnsApi {
     fun getTripFollow(
         @Path("article_seq") articleSeq: Int
     ): Single<Response<List<TripFollowSelectResponseDto>>>
-
+    
+    /**
+     * 컬렉션 목록
+     **/
+    @GET("sns/collections")
+    fun getCollections(
+        @Query("page") page: Int
+    ): Single<PagingResponseDto<CollectionItem>>
 }

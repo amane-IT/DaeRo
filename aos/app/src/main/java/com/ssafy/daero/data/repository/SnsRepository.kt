@@ -7,6 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
@@ -14,7 +15,6 @@ import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.*
-import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
@@ -163,7 +163,7 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {SearchContentMoreDataSource(snsApi, searchKeyword) }
+            pagingSourceFactory = { SearchContentMoreDataSource(snsApi, searchKeyword) }
         ).flowable
     }
 
@@ -174,7 +174,18 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {SearchPlaceMoreDataSource(snsApi, searchKeyword) }
+            pagingSourceFactory = { SearchPlaceMoreDataSource(snsApi, searchKeyword) }
+        ).flowable
+    }
+
+    fun getCollection(): Flowable<PagingData<CollectionItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { CollectionDataSource(snsApi) }
         ).flowable
     }
 

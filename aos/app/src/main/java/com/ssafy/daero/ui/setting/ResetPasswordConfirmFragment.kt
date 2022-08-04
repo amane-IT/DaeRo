@@ -19,11 +19,16 @@ class ResetPasswordConfirmFragment : BaseFragment<FragmentResetPasswordConfirmBi
         observeData()
     }
 
-    private fun setOnClickListener(){
+    private fun setOnClickListener() {
         binding.apply {
             buttonResetPasswordConfirmNextStep.setOnClickListener {
-                val dto = ResetPasswordRequestDto(editTextResetPasswordConfirmPasswordVerification.text.toString())
+                val dto =
+                    ResetPasswordRequestDto(editTextResetPasswordConfirmPasswordVerification.text.toString())
                 resetPasswordConfirmViewModel.confirmPassword(dto)
+            }
+
+            imgResetPasswordConfirmBack.setOnClickListener {
+                requireActivity().onBackPressed()
             }
         }
     }

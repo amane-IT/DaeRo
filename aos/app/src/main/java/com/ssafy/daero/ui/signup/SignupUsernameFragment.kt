@@ -45,6 +45,10 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                 }
             }
 
+            imgLoginBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+
             textSignupUsernameEnterTerm.setOnClickListener {
                 findNavController().navigate(R.id.action_signupUsernameFragment_to_termsFragment)
             }

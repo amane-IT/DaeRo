@@ -20,10 +20,11 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         initData()
         initAdapter()
         observeData()
+        setOnClickListeners()
     }
 
     private fun initView(){
-        binding.textSearchPlaceMoreKeyword.text = "\"${App.keyword}\" 검색 결과"
+        binding.toolbarTitle.text = "\"${App.keyword}\" 검색 결과"
     }
 
     private fun initData(){
@@ -50,6 +51,12 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
             when(state){
                 FAIL -> binding.textSearchPlaceMoreNoData.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun setOnClickListeners(){
+        binding.imgSearchPlaceMoreBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 
