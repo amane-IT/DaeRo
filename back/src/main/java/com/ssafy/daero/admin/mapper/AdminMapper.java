@@ -3,6 +3,7 @@ package com.ssafy.daero.admin.mapper;
 
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.vo.AnswerVo;
+import com.ssafy.daero.admin.vo.FaqVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
@@ -65,4 +66,6 @@ public interface AdminMapper {
 
     int selectFaqCount();
     ArrayList<Map<String, Object>> selectFaqList(int page);
+
+    int insertFaq(FaqVo faqVo);
 }

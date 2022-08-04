@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.admin.vo.AnswerVo;
+import com.ssafy.daero.admin.vo.FaqVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
@@ -368,6 +369,12 @@ public class AdminService {
         faqList.put("page", page);
         faqList.put("results", faqs);
         return faqList;
+    }
+
+    public boolean createFaq(FaqVo faqVo) {
+        int created = adminMapper.insertFaq(faqVo);
+        return created == 1;
+
     }
 
 }
