@@ -1,4 +1,4 @@
-package com.ssafy.daero.util;
+package com.ssafy.daero.common.util;
 
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -41,7 +41,7 @@ public class CryptoUtil {
                 MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
                 messageDigest.reset();
                 messageDigest.update(input.getBytes(StandardCharsets.UTF_8));
-                return String.format("%0128x", new BigInteger(1, messageDigest.digest()));
+                return String.format("%064x", new BigInteger(1, messageDigest.digest()));
             } catch (NoSuchAlgorithmException ignored) {
                 throw new UnsupportedOperationException();
             } catch (Exception ignored) {

@@ -7,8 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginVo extends UserDto {
-    private String id;
+public class ChangePasswordVo extends UserDto {
     private String hashedPassword;
 
     @Override
