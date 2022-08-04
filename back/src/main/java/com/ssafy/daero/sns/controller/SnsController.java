@@ -2,17 +2,14 @@ package com.ssafy.daero.sns.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.sns.service.SnsService;
+import com.ssafy.daero.sns.vo.ArticleListVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
-import com.ssafy.daero.sns.vo.UserVo;
 import com.ssafy.daero.user.service.JwtService;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @RestController
 @RequestMapping(value = "/sns")
@@ -22,7 +19,10 @@ public class SnsController {
     private final SnsService snsService;
     private final JwtService jwtService;
 
-    public SnsController(SnsService snsService, JwtService jwtService) { this.snsService = snsService; this.jwtService = jwtService; }
+    public SnsController(SnsService snsService, JwtService jwtService) {
+        this.snsService = snsService;
+        this.jwtService = jwtService;
+    }
 
     @GetMapping("/article/{articleSeq}")
     public ResponseEntity<Map<String, Object>> articleDetail(@RequestHeader("jwt") String jwt, @PathVariable int articleSeq) throws JsonProcessingException {
@@ -204,5 +204,35 @@ public class SnsController {
         } else {
             return new ResponseEntity<>(followingList, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("")
+    public ResponseEntity<Map<String, Object>> listGet(@RequestHeader("jwt") String jwt, @RequestParam("page") int page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        int totalPage = snsService.getTotalArticlePage();
+        if (page > totalPage) page = totalPage;
+        ArrayList<ArticleListVo> articles =  this.snsService.articleList(userSeq, page);
+        LinkedList<Map<String, Object>> result = new LinkedList<>();
+        for (ArticleListVo article : articles) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("article_seq", article.getArticleSeq());
+            map.put("nickname", article.getNickname());
+            map.put("user_seq", article.getUserSeq());
+            map.put("profile_url", article.getProfileUrl());
+            map.put("created_at", article.getCreatedAt());
+            map.put("thumbnail_url", article.getThumbnailUrl());
+            map.put("description", article.getDescription());
+            map.put("title", article.getTitle());
+            map.put("start_date", article.getStartDate());
+            map.put("end_date", article.getEndDate());
+            map.put("likes", article.getLikeCount());
+            map.put("replies", article.getReplyCount());
+            result.add(map);
+        }
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("total_page", totalPage);
+        resultMap.put("page", page);
+        resultMap.put("results", result);
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 }

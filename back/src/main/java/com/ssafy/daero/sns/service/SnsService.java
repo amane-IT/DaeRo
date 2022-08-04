@@ -3,22 +3,22 @@ package com.ssafy.daero.sns.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.sns.mapper.SnsMapper;
-import com.ssafy.daero.sns.vo.ArticleVo;
-import com.ssafy.daero.sns.vo.ReplyVo;
-import com.ssafy.daero.sns.vo.StampVo;
-import com.ssafy.daero.sns.vo.UserVo;
+import com.ssafy.daero.sns.vo.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
+@SuppressWarnings("FieldCanBeLocal")
 @Service
 public class SnsService {
     private final SnsMapper snsMapper;
+    private final int PAGE_SIZE = 10;
+    private final int RECENT_DAY = -3;
 
-    public SnsService(SnsMapper snsMapper) { this.snsMapper = snsMapper; }
+    public SnsService(SnsMapper snsMapper) {
+        this.snsMapper = snsMapper;
+    }
 
     public Map<String, Object> articleDetail(int articleSeq, int userSeq) throws JsonProcessingException {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
@@ -377,5 +377,32 @@ public class SnsService {
         results.put("page", Integer.parseInt(page));
         results.put("results", followingList);
         return results;
+    }
+
+    public int getTotalArticlePage() {
+        int totalCount = this.snsMapper.selectArticleCount();
+        return (totalCount - 1) / PAGE_SIZE + 1;
+    }
+
+    public ArrayList<ArticleListVo> articleList(int userSeq, int page) {
+        Calendar recent = Calendar.getInstance();
+        recent.add(Calendar.DATE, RECENT_DAY);
+        String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
+        int followCount = this.snsMapper.selectArticleCountByFollowCreatedAt(userSeq);
+        int followPage = (followCount - 1) / PAGE_SIZE + 1;
+        ArrayList<ArticleListVo> articleList;
+        if (page < followPage) {
+            articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, PAGE_SIZE, PAGE_SIZE * (page - 1), recentString);
+        } else {
+            int followRemain = followCount % PAGE_SIZE;
+            int other = PAGE_SIZE - followRemain;
+            if (page == followPage) {
+                articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, followRemain, PAGE_SIZE * (page - 1), recentString);
+                articleList.addAll(this.snsMapper.selectArticleByNotFollow(userSeq, other, 0, recentString));
+            } else {
+                articleList = this.snsMapper.selectArticleByNotFollow(userSeq, PAGE_SIZE, PAGE_SIZE * (page - followPage - 1) + other, recentString);
+            }
+        }
+        return articleList;
     }
 }

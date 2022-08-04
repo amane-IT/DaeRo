@@ -1,10 +1,6 @@
 package com.ssafy.daero.sns.mapper;
 
-import com.ssafy.daero.sns.dto.ReplyDto;
-import com.ssafy.daero.sns.vo.ArticleVo;
-import com.ssafy.daero.sns.vo.ReplyVo;
-import com.ssafy.daero.sns.vo.StampVo;
-import com.ssafy.daero.sns.vo.UserVo;
+import com.ssafy.daero.sns.vo.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -81,4 +77,18 @@ public interface SnsMapper {
     int selectReplyByArticleSeq(int articleSeq);
 
     int selectRereplyByReplySeq(int replySeq);
+
+    int selectArticleCount();
+
+    int selectArticleCountByFollowCreatedAt(int userSeq);
+
+    ArrayList<ArticleListVo> selectArticleByFollowCreatedAt(@Param("userSeq") int userSeq,
+                                                            @Param("limit") int limit,
+                                                            @Param("offset") int offSet,
+                                                            @Param("recent") String recent);
+
+    ArrayList<ArticleListVo> selectArticleByNotFollow(@Param("userSeq") int userSeq,
+                                                      @Param("limit") int limit,
+                                                      @Param("offset") int offSet,
+                                                      @Param("recent") String recent);
 }

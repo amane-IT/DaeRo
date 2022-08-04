@@ -9,6 +9,7 @@ import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.dto.UserFavorDto;
 import com.ssafy.daero.user.mapper.UserMapper;
 import com.ssafy.daero.common.util.DistanceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -21,6 +22,7 @@ public class TripService {
     private final int CAR_SPEED = 50;
     private final int WALK_SPEED = 2;
 
+    @Autowired
     public TripService(TripMapper tripMapper, UserMapper userMapper) {
         this.userMapper = userMapper;
         this.tripMapper = tripMapper;
@@ -132,7 +134,7 @@ public class TripService {
         
     }
 
-    private int equalizeFavor(int userSeq) {
+    public int equalizeAndRandomTag(int userSeq) {
         // 태그별 점수 총합 구하기
         ArrayList<UserFavorDto> userFavorDtoArray = tripMapper.selectUserFavorByUserSeq(userSeq);
         int scoreSum = 0;
@@ -155,12 +157,6 @@ public class TripService {
             tripMapper.updateUserFavor(userFavorDto);
             scoreSum += userFavorDto.getScore();
         }
-        return scoreSum;
-    }
-
-    public int recommendByRandom(int userSeq) {
-        // 점수 평준화
-        int scoreSum = equalizeFavor(userSeq);
         // 현재 점수 목록 가져오기
         ArrayList<UserFavorDto> favors = tripMapper.selectUserFavorByUserSeq(userSeq);
         // 태그순 정렬해서 큐에 점수만큼 저장.
@@ -178,6 +174,12 @@ public class TripService {
             select -= favorQueue.poll();
             tag++;
         } while (select > 0 && !favorQueue.isEmpty());
+        return tag;
+    }
+
+    public int recommendByRandom(int userSeq) {
+        // 점수 평준화
+        int tag = equalizeAndRandomTag(userSeq);
         // 선택된 태그에서 여행지 검색
         ArrayList<RecommendTagVo> recommendPool = tripMapper.selectPlaceByTag(tag);
         int len = recommendPool.size();

@@ -252,6 +252,58 @@
         WHERE rereply_parent=#{replySeq}
     </select>
 
+    <select id="selectArticleCount" resultType="_int">
+        select count(0)
+        from articles;
+    </select>
+
+    <select id="selectArticleCountByFollowCreatedAt" parameterType="_int" resultType="_int">
+        select count(0)
+        from `v_users_trips_articles`
+        where `users_seq` in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleByFollowCreatedAt" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`
+        from `v_users_trips_articles`
+        where `users_seq` in
+              (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+          and `created_at` > #{recent}
+        order by `created_at` desc
+    </select>
+
+    <select id="selectArticleByNotFollow" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        <![CDATA[
+        select  `articles_seq`       as `articleSeq`,
+                `nickname`           as `nickname`,
+                `users_seq`          as `userSeq`,
+                `profile_image_link` as `profileUrl`,
+                `created_at`         as `createdAt`,
+                `thumbnail_url`      as `thumbnailUrl`,
+                `trip_comment`       as `description`,
+                `title`              as `title`,
+                `start_date`         as `startDate`,
+                `end_date`           as `endDate`,
+                `like_count`         as `likeCount`,
+                `reply_count`        as `replyCount`
+        from `v_users_trips_articles`
+        where `users_seq` not in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+           or `created_at` < #{recent}
+        order by `created_at` desc
+        ]]>
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />
