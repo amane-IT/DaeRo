@@ -43,18 +43,23 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
                 // TODO: 트립스탬프 저장 기능 구현
             }
 
-            buttonTripStampRetry.setOnClickListener {
-                // TODO: 트립스탬프 재생성
-                TripStampBottomSheetFragment().show(
-                    childFragmentManager,
-                    "TripStampBottomSheetFragment"
-                )
-            }
+//            buttonTripStampRetry.setOnClickListener {
+//                // TODO: 트립스탬프 재생성
+//                TripStampBottomSheetFragment().show(
+//                    childFragmentManager,
+//                    "TripStampBottomSheetFragment"
+//                )
+//            }
 
             buttonTripStampShare.setOnClickListener {
                 // TODO: 트립스탬프 카카오톡 공유하기
                 // 참고: https://youngest-programming.tistory.com/530
             }
+
+            imgSignupEmailBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+
         }
     }
 }

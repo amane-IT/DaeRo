@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -60,30 +61,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_searchContentMore"
-            app:layout_constraintBottom_toTopOf="@id/text_searchContentMore_keyword"/>
-
-        <TextView
-            android:id="@+id/text_searchContentMore_keyword"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/BigTitle"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/line_searchContentMore_divideLine"
-            app:layout_constraintBottom_toTopOf="@id/recycler_searchContentMore"
-            />
+            app:layout_constraintBottom_toTopOf="@id/recycler_searchContentMore"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_searchContentMore"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_searchContentMore_keyword"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/line_searchContentMore_divideLine"
+            tools:listitem="@layout/item_search_article_more"
             />
 
         <TextView

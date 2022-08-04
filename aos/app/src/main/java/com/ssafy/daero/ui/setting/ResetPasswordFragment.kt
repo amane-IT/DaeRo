@@ -30,6 +30,10 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layou
                 val dto = ResetPasswordRequestDto(editTextResetPasswordPasswordVerification.text.toString())
                 resetPasswordViewModel.updatePassword(dto)
             }
+
+            imgResetPasswordBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
     }
 
