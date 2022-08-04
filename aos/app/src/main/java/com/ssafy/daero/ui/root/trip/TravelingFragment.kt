@@ -8,6 +8,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+import android.location.LocationRequest
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
@@ -54,7 +55,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private val REQUEST_PERMISSION_LOCATION = 10
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        // TODO: 지금까지 여행지 상세 페이지로 이동
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
