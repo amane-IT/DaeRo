@@ -7,9 +7,10 @@ import com.ssafy.daero.databinding.FragmentTermsBinding
 class TermsFragment : BaseFragment<FragmentTermsBinding>(R.layout.fragment_terms){
     override fun init() {
         initView()
+        setOnClickListeners()
     }
 
-    fun initView(){
+    fun initView() {
         // 참고: https://www.law.go.kr/%ED%96%89%EC%A0%95%EA%B7%9C%EC%B9%99/%EB%94%94%EC%A7%80%ED%84%B8%EC%BD%98%ED%85%90%EC%B8%A0%20%EC%9D%B4%EC%9A%A9%20%ED%91%9C%EC%A4%80%EC%95%BD%EA%B4%80
         binding.apply {
             textTermDetail2.text = "이 약관에서 사용하는 용어의 정의는 다음과 같습니다.   \n" +
@@ -27,7 +28,14 @@ class TermsFragment : BaseFragment<FragmentTermsBinding>(R.layout.fragment_terms
                     "\n" +
                     "7. \"비밀번호(PASSWORD)\"라 함은 \"회원\"이 부여받은 \"아이디\"와 일치되는 \"회원\"임을 확인하고 비밀보호를 위해 \"회원\" 자신이 정한 문자 또는 숫자의 조합을 말합니다. "
 
-            textTermDetail1.text = "이 약관은 회사가 온라인으로 제공하는 디지털콘텐츠(이하 \"콘텐츠\"라고 한다) 및 제반서비스의 이용과 관련하여 회사와 이용자와의 권리, 의무 및 책임사항 등을 규정함을 목적으로 합니다. "
+            textTermDetail1.text =
+                "이 약관은 회사가 온라인으로 제공하는 디지털콘텐츠(이하 \"콘텐츠\"라고 한다) 및 제반서비스의 이용과 관련하여 회사와 이용자와의 권리, 의무 및 책임사항 등을 규정함을 목적으로 합니다. "
+        }
+    }
+
+    private fun setOnClickListeners(){
+        binding.imgTermBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 }

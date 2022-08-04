@@ -133,17 +133,36 @@
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_following.xml" value="0.22871376811594202" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_root.xml" value="0.25364583333333335" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.264" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_trip_information.xml" value="0.1125" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.1125" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_follow.xml" value="0.4" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_my_page_album.xml" value="0.22871376811594202" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_trip_popular.xml" value="0.22826086956521738" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_camera.xml" value="0.1905" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_gallery.xml" value="0.1885" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_collection.xml" value="0.1392355694227769" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_comment_menu_bottom_sheet.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_home.xml" value="0.1859375" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_reset_password_confirm.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_search.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_search_article.xml" value="1.25" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_search_content_more.xml" value="0.16304347826086957" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_search_place_name_more.xml" value="0.16304347826086957" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_search_username.xml" value="0.2947916666666667" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_signup_email.xml" value="0.14322916666666666" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_terms.xml" value="0.14322916666666666" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_preference.xml" value="0.1875" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp.xml" value="0.14322916666666666" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_bottom_sheet.xml" value="0.1875" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_stamp_detail.xml" value="0.1875" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_collection.xml" value="0.67" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_comment.xml" value="0.28177083333333336" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_follow.xml" value="0.2947916666666667" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_home.xml" value="0.67" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_like.xml" value="0.2947916666666667" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_search_article.xml" value="0.67" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_search_article_more.xml" value="0.47244094488188976" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_search_user.xml" value="0.2947916666666667" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/item_trip_preference.xml" value="0.1859375" />
+        <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1735" />
       </map>
     </option>
   </component>
