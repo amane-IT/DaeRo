@@ -4,6 +4,7 @@ package com.ssafy.daero.admin.mapper;
 import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.FaqVo;
+import com.ssafy.daero.admin.vo.NoticeVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
@@ -76,5 +77,7 @@ public interface AdminMapper {
     int selectNoticeCount();
 
     ArrayList<Map<String, Object>> selectNoticeList(int page);
+
+    int insertNotice(NoticeVo noticeVo);
 
 }

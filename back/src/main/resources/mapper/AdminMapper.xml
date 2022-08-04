@@ -265,6 +265,11 @@
                          AND noti.row &lt; 1+(#{page}*10)
     </select>
 
+    <insert id="insertNotice" parameterType="com.ssafy.daero.admin.vo.NoticeVo">
+        INSERT INTO daero.notice (`title`, `content`, `created_at`, `updated_at`, `admin_seq`)
+        VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'), #{adminSeq})
+    </insert>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

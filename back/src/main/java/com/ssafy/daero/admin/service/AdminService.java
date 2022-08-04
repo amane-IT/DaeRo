@@ -6,6 +6,7 @@ import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.FaqVo;
+import com.ssafy.daero.admin.vo.NoticeVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
@@ -397,6 +398,11 @@ public class AdminService {
         noticeList.put("page", page);
         noticeList.put("results", results);
         return noticeList;
+    }
+
+    public boolean createNotice(NoticeVo noticeVo) {
+        int created = adminMapper.insertNotice(noticeVo);
+        return created == 1;
     }
 
 }

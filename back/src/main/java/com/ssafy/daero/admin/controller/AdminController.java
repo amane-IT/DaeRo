@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.admin.service.AdminService;
 import com.ssafy.daero.admin.vo.AnswerVo;
 import com.ssafy.daero.admin.vo.FaqVo;
+import com.ssafy.daero.admin.vo.NoticeVo;
 import com.ssafy.daero.admin.vo.TripPlaceVo;
 import com.ssafy.daero.sns.service.SnsService;
 import org.springframework.http.HttpStatus;
@@ -174,5 +175,12 @@ public class AdminController {
         Map<String, Object> res = adminService.noticeList(Integer.parseInt(page));
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PostMapping("/notice")
+    public ResponseEntity<String> createNotice(@RequestBody NoticeVo noticeVo) {
+        boolean res = adminService.createNotice(noticeVo);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
