@@ -187,7 +187,14 @@ public class AdminController {
     @PutMapping("/notice/{notice_seq}")
     public ResponseEntity<String> updateNotice(@PathVariable int notice_seq, @RequestBody NoticeVo noticeVo) {
         boolean res = adminService.updateNotice(notice_seq, noticeVo);
-        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @DeleteMapping("/notice/{notice_seq}")
+    public ResponseEntity<String> deleteNotice(@PathVariable int notice_seq) {
+        boolean res = adminService.deleteNotice(notice_seq);
+        if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }

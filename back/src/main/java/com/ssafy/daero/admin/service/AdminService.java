@@ -410,4 +410,9 @@ public class AdminService {
         return updated == 1;
     }
 
+    public boolean deleteNotice(int noticeSeq) {
+        int deleted = adminMapper.deleteNotice(noticeSeq);
+        return deleted == 1;
+    }
+
 }

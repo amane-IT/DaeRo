@@ -82,4 +82,6 @@ public interface AdminMapper {
 
     int updateNotice(@Param("noticeSeq") int noticeSeq, @Param("title") String title, @Param("content") String content, @Param("adminSeq") int adminSeq);
 
+    int deleteNotice(int noticeSeq);
+
 }
