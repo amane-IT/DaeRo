@@ -78,9 +78,10 @@ public interface SnsMapper {
 
     int selectRereplyByReplySeq(int replySeq);
 
-    int selectArticleCount();
+    int selectArticleCount(int userSeq);
 
-    int selectArticleCountByFollowCreatedAt(int userSeq);
+    int selectArticleCountByFollowCreatedAt(@Param("userSeq") int userSeq,
+                                            @Param("recent") String recent);
 
     ArrayList<ArticleListVo> selectArticleByFollowCreatedAt(@Param("userSeq") int userSeq,
                                                             @Param("limit") int limit,

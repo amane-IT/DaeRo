@@ -209,7 +209,7 @@ public class SnsController {
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> listGet(@RequestHeader("jwt") String jwt, @RequestParam("page") int page) {
         int userSeq = this.jwtService.getUserSeq(jwt);
-        int totalPage = snsService.getTotalArticlePage();
+        int totalPage = snsService.getTotalArticlePage(userSeq);
         if (page > totalPage) page = totalPage;
         ArrayList<ArticleListVo> articles =  this.snsService.articleList(userSeq, page);
         LinkedList<Map<String, Object>> result = new LinkedList<>();

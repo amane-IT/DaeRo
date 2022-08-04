@@ -252,15 +252,20 @@
         WHERE rereply_parent=#{replySeq}
     </select>
 
-    <select id="selectArticleCount" resultType="_int">
+    <select id="selectArticleCount" parameterType="_int" resultType="_int">
         select count(0)
-        from articles;
+        from `v_users_trips_articles`
+        where `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
     </select>
 
-    <select id="selectArticleCountByFollowCreatedAt" parameterType="_int" resultType="_int">
+    <select id="selectArticleCountByFollowCreatedAt" resultType="_int">
         select count(0)
         from `v_users_trips_articles`
         where `users_seq` in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+          and `created_at` > #{recent}
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
     </select>
 
     <select id="selectArticleByFollowCreatedAt" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -280,7 +285,10 @@
         where `users_seq` in
               (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
           and `created_at` > #{recent}
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
         order by `created_at` desc
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectArticleByNotFollow" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -298,9 +306,12 @@
                 `like_count`         as `likeCount`,
                 `reply_count`        as `replyCount`
         from `v_users_trips_articles`
-        where `users_seq` not in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
-           or `created_at` < #{recent}
+        where (`users_seq` not in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+                   or `created_at` < #{recent})
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
         order by `created_at` desc
+        limit #{limit} offset #{offset}
         ]]>
     </select>
 

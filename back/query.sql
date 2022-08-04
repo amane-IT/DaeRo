@@ -290,18 +290,19 @@ from `tag_trip_places` as `t`
                    on `t`.`trip_places_seq` = `p`.`trip_places_seq`;
 
 create view `v_users_trips_articles` as
-select `a`.articles_seq,
-       `u`.nickname,
-       `t`.users_seq,
-       `u`.profile_image_link,
-       `a`.created_at,
-       `a`.thumbnail_url,
-       `t`.trip_comment,
-       `a`.title,
-       (select min(`date`) from `trip_days` where trip = `t`.`trips_seq`) as `start_date`,
-       (select max(`date`) from `trip_days` where trip = `t`.`trips_seq`) as `end_date`,
-       `a`.like_count,
-       `a`.reply_count
-from articles as `a`
-         left join daero.trips t on t.trips_seq = a.trips_seq
-         left join users u on t.users_seq = u.users_seq;
+select `a`.`articles_seq`,
+       `u`.`nickname`,
+       `t`.`users_seq`,
+       `u`.`profile_image_link`,
+       `a`.`created_at`,
+       `a`.`thumbnail_url`,
+       `t`.`trip_comment`,
+       `a`.`title`,
+       (select min(`date`) from `trip_days` where `trip` = `t`.`trips_seq`) as `start_date`,
+       (select max(`date`) from `trip_days` where `trip` = `t`.`trips_seq`) as `end_date`,
+       `a`.`like_count`,
+       `a`.`reply_count`,
+       `a`.`open_yn`
+from `daero`.`articles` as `a`
+         left join `daero`.`trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`
+         left join `daero`.`users` `u` on `t`.`users_seq` = `u`.`users_seq`;

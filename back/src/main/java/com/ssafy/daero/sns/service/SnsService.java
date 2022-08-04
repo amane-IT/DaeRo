@@ -379,8 +379,8 @@ public class SnsService {
         return results;
     }
 
-    public int getTotalArticlePage() {
-        int totalCount = this.snsMapper.selectArticleCount();
+    public int getTotalArticlePage(int userSeq) {
+        int totalCount = this.snsMapper.selectArticleCount(userSeq);
         return (totalCount - 1) / PAGE_SIZE + 1;
     }
 
@@ -388,7 +388,7 @@ public class SnsService {
         Calendar recent = Calendar.getInstance();
         recent.add(Calendar.DATE, RECENT_DAY);
         String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
-        int followCount = this.snsMapper.selectArticleCountByFollowCreatedAt(userSeq);
+        int followCount = this.snsMapper.selectArticleCountByFollowCreatedAt(userSeq, recentString);
         int followPage = (followCount - 1) / PAGE_SIZE + 1;
         ArrayList<ArticleListVo> articleList;
         if (page < followPage) {
