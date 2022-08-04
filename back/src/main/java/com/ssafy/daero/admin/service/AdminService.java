@@ -79,7 +79,7 @@ public class AdminService {
             report.put("reporter_user_seq", rDto.getReporterSeq());
             report.put("reported_user_seq", rDto.getReportedSeq());
             report.put("reported_at", rDto.getReportedAt());
-            report.put("report_url", rDto.getReportUrl());
+            report.put("content_seq", rDto.getContentSeq());
             reportList.add(report);
             report = new HashMap<>();
         }

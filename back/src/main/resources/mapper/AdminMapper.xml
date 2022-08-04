@@ -29,7 +29,7 @@
                      reporter_users_seq,
                      reported_users_seq,
                      reported_at,
-                     report_url,
+                     content_seq,
                      report_categories_seq,
                      handled_yn,
                      article_type
@@ -292,7 +292,7 @@
         <result property="reporterSeq" column="reporter_users_seq" />
         <result property="reportedSeq" column="reported_users_seq" />
         <result property="reportedAt" column="reported_at" />
-        <result property="reportUrl" column="reported_url" />
+        <result property="contentSeq" column="content_seq" />
         <result property="reportCategorySeq" column="report_categories_seq" />
         <result property="handledYn" column="handled_yn" />
         <result property="articleType" column="article_type" />

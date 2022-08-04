@@ -10,7 +10,7 @@ public class ReportDto {
     private int reporterSeq;
     private int reportedSeq;
     private String reportedAt;
-    private String reportUrl;
+    private int contentSeq;
     private int reportCategorySeq;
     private char handledYn;
     private String articleType;
