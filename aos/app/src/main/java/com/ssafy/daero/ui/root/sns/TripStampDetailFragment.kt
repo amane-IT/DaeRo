@@ -9,7 +9,6 @@ import com.ssafy.daero.ui.root.trip.TripStampBottomSheetFragment
 
 class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.layout.fragment_trip_stamp_detail) {
 
-    private var isGood = true
     override fun init() {
         initView()
         setOnClickListeners()
@@ -23,24 +22,8 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 
     private fun setOnClickListeners(){
         binding.apply {
-            imageTripStampDetailThumbup.setOnClickListener {
-                isGood = true
-                imageTripStampDetailThumbup.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.primaryColor))
-                imageTripStampDetailThumbDown.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.lightGray))
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ${imageTripStampDetailThumbup.imageTintList.toString()}")
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ${imageTripStampDetailThumbDown.imageTintList.toString()}")
-
-            }
-
-            imageTripStampDetailThumbDown.setOnClickListener {
-                isGood = false
-                imageTripStampDetailThumbDown.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.primaryColor))
-                imageTripStampDetailThumbup.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.lightGray))
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ThumbDown")
-            }
-
-            buttonTripStampSave.setOnClickListener {
-                // TODO: 트립스탬프 저장 기능 구현
+            buttonTripStampDetailShare.setOnClickListener {
+                // TODO: 트립스탬프 공유 기능 구현
             }
 
 
@@ -50,17 +33,11 @@ class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.l
 //                    childFragmentManager,
 //                    "TripStampBottomSheetFragment"
 //                )
-            }
+//            }
 
-            buttonTripStampShare.setOnClickListener {
-                // TODO: 트립스탬프 카카오톡 공유하기
-                // 참고: https://youngest-programming.tistory.com/530
-            }
-
-            imgSignupEmailBack.setOnClickListener {
+            imgTripStampDetailBack.setOnClickListener {
                 requireActivity().onBackPressed()
             }
-
         }
     }
 }
