@@ -27,6 +27,17 @@ class SnsRepository private constructor(context: Context) {
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
 
+    fun getArticles(): Flowable<PagingData<ArticleHomeItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { ArticleDataSource(snsApi)}
+        ).flowable
+    }
+
     fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {
         return snsApi.article(articleSeq)
             .subscribeOn(Schedulers.io())

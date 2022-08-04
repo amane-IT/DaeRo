@@ -23,7 +23,7 @@ import com.ssafy.daero.utils.view.toast
 
 class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int) :
     BottomSheetDialogFragment(), CommentListener {
-    private val articleViewModel: ArticleViewModel by viewModels({ requireParentFragment() })
+    private val commentViewModel: CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
 
     private var _binding: BottomsheetCommentBinding? = null
@@ -36,7 +36,6 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
                 1 -> {
                     val commentMenuBottomSheetFragment = CommentMenuBottomSheetFragment(
                         id,
-                        articleViewModel,
                         content,
                         this@CommentBottomSheetFragment
                     )
@@ -81,7 +80,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
     }
 
     private fun getComment() {
-        articleViewModel.commentSelect(articleSeq)
+        commentViewModel.commentSelect(articleSeq)
     }
 
     private val userProfileClickListener: (Int) -> Unit = { userSeq ->
@@ -91,7 +90,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
 
 
     private fun observeData() {
-        articleViewModel.comment.observe(viewLifecycleOwner) {
+        commentViewModel.comment.observe(viewLifecycleOwner) {
             commentAdapter = CommentAdapter(3, this@CommentBottomSheetFragment).apply {
                 this.onItemClickListener = commentItemClickListener
             }
@@ -115,7 +114,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         }, 150)
         binding.editTextCommentAddComment.setText(content)
         binding.textCommentWrite.setOnClickListener {
-            articleViewModel.commentUpdate(
+            commentViewModel.commentUpdate(
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -134,7 +133,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
     }
 
     override fun commentDelete(sequence: Int) {
-        articleViewModel.commentDelete(sequence)
+        commentViewModel.commentDelete(sequence)
         getComment()
     }
 
@@ -150,12 +149,12 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         }, 150)
         binding.textCommentWrite.setOnClickListener {
             //todo: article_seq
-            articleViewModel.reCommentAdd(
+            commentViewModel.reCommentAdd(
                 3,
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
-            articleViewModel.commentUpdate(
+            commentViewModel.commentUpdate(
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -177,7 +176,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         binding.imageCommentClose.setOnClickListener { dismiss() }
         binding.textCommentWrite.setOnClickListener {
             //todo: article_seq
-            articleViewModel.commentAdd(
+            commentViewModel.commentAdd(
                 3,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
@@ -200,8 +199,8 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         replySeq: Int,
         reCommentAdapter: ReCommentAdapter
     ): ReCommentAdapter {
-        articleViewModel.reCommentSelect(articleSeq, replySeq)
-        articleViewModel.reComment.observe(viewLifecycleOwner) {
+        commentViewModel.reCommentSelect(articleSeq, replySeq)
+        commentViewModel.reComment.observe(viewLifecycleOwner) {
             reCommentAdapter.submitData(lifecycle, it)
         }.run {
             return reCommentAdapter

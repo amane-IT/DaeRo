@@ -1,11 +1,12 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.icu.lang.UCharacter.GraphemeClusterBreak.L
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -23,20 +24,19 @@ import com.naver.maps.map.overlay.PathOverlay
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.article.Expense
-import com.ssafy.daero.data.dto.article.Record
 import com.ssafy.daero.data.dto.article.TripStamp
 import com.ssafy.daero.databinding.FragmentArticleBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleAdapter
 import com.ssafy.daero.ui.adapter.sns.ExpenseAdapter
 import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.tag.categoryTags
 import com.ssafy.daero.utils.view.getPxFromDp
 
 
 class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article),
     OnMapReadyCallback {
 
-    private val articleViewModel : ArticleViewModel by viewModels()
+    private val articleViewModel: ArticleViewModel by viewModels()
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var expenseAdapter: ExpenseAdapter
     private var likeYn: Boolean? = null
@@ -48,6 +48,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private var path: PathOverlay? = null
 
     private lateinit var mapView: ArticleMapView
+
+    private var articleSeq = 0
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
         findNavController().navigate(
@@ -108,33 +110,38 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
 
     override fun init() {
+        initData()
         setOnClickListeners()
         observeData()
+    }
+
+    private fun initData() {
+        articleSeq = arguments!!.getInt(ARTICLE_SEQ, 0)
     }
 
     private fun setOnClickListeners() {
         binding.imgArticleUser.setOnClickListener {
             findNavController().navigate(
                 R.id.action_articleFragment_to_otherPageFragment,
-                bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
+                bundleOf(USER_SEQ to articleViewModel.articleData.user_seq)
             )
         }
         binding.tvArticleUser.setOnClickListener {
             findNavController().navigate(
                 R.id.action_articleFragment_to_otherPageFragment,
-                bundleOf("UserSeq" to articleViewModel.articleData.user_seq)
+                bundleOf(USER_SEQ to articleViewModel.articleData.user_seq)
             )
         }
         binding.imgArticleLike.setOnClickListener {
             // todo articleSeq
-            if(likeYn==true){
-                articleViewModel.likeDelete(App.prefs.userSeq, 3)
-                likes-=1
+            if (likeYn == true) {
+                articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
+                likes -= 1
                 binding.tvArticleLike.text = likes.toString()
-            }else{
-                articleViewModel.likeAdd(App.prefs.userSeq, 3)
-                if(binding.tvArticleLike.text.toString().toInt()>0){
-                    likes+=1
+            } else {
+                articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
+                if (binding.tvArticleLike.text.toString().toInt() > 0) {
+                    likes += 1
                     binding.tvArticleLike.text = likes.toString()
                 }
             }
@@ -143,25 +150,31 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.LinearArticleLike.setOnClickListener {
             //todo: 좋아요 리스트 페이지: 좋아요 누른 인원, article_seq 번들로 전달
-            LikeBottomSheetFragment(3, articleViewModel.articleData.likes).show(childFragmentManager, LIKE_BOTTOM_SHEET)
+            LikeBottomSheetFragment(
+                articleSeq,
+                articleViewModel.articleData.likes
+            ).show(childFragmentManager, LIKE_BOTTOM_SHEET)
         }
         binding.LinearArticleComment.setOnClickListener {
             //todo 댓글 리스트 페이지: 댓글수, article_seq 번들로 전달
-            CommentBottomSheetFragment(3, articleViewModel.articleData.comments).show(childFragmentManager, COMMENT_BOTTOM_SHEET)
-//            findNavController().navigate(
-//                R.id.action_articleFragment_to_commentFragment
-//            )
+            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments).show(
+                childFragmentManager,
+                COMMENT_BOTTOM_SHEET
+            )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
             //todo 댓글, article_seq 번들로 전달
-            CommentBottomSheetFragment(3, articleViewModel.articleData.comments).show(childFragmentManager, COMMENT_BOTTOM_SHEET)
-//            findNavController().navigate(
-//                R.id.action_articleFragment_to_commentFragment
-//            )
+            CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments).show(
+                childFragmentManager,
+                COMMENT_BOTTOM_SHEET
+            )
         }
         binding.imgArticleMenu.setOnClickListener {
             // todo: articleSeq 넘기기
-            ArticleMenuBottomSheetFragment(3).show(childFragmentManager, ARTICLE_MENU_BOTTOM_SHEET)
+            ArticleMenuBottomSheetFragment(articleSeq).show(
+                childFragmentManager,
+                ARTICLE_MENU_BOTTOM_SHEET
+            )
         }
         binding.imgArticleBack.setOnClickListener {
             requireActivity().onBackPressed()
@@ -170,11 +183,11 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     private fun likeSetting() {
-        if(likeYn == true){
+        if (likeYn == true) {
             binding.imgArticleLike.setImageResource(R.drawable.ic_like_full)
-            var fadeScale: Animation  = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
+            var fadeScale: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.scale)
             binding.imgArticleLike.startAnimation(fadeScale)
-        }else{
+        } else {
             binding.imgArticleLike.setImageDrawable(requireActivity().getDrawable(R.drawable.ic_like))
             binding.imgArticleLike.invalidate()
         }
@@ -182,7 +195,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     private fun observeData() {
         articleViewModel.responseState.observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 SUCCESS -> {
                     setBinding()
                     articleViewModel.responseState.value = DEFAULT
@@ -194,7 +207,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             }
         }
         articleViewModel.likeState.observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 SUCCESS -> {
                     articleViewModel.likeState.value = DEFAULT
                 }
@@ -207,6 +220,29 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     private fun setBinding() {
+        bindAdapter()
+        bindTextContent()
+        bindImage()
+        bindTags()
+
+        likes = articleViewModel.articleData.likes
+        likeYn = articleViewModel.articleData.like_yn == 'y'
+        likeSetting()
+
+        deleteMarkers()
+        deletePaths()
+
+        var list = mutableListOf<TripStamp>()
+        for (i in 0 until articleViewModel.articleData.records.size) {
+            for (j in 0 until articleViewModel.articleData.records[i].trip_stamps.size) {
+                list.add(articleViewModel.articleData.records[i].trip_stamps[j])
+            }
+        }
+        drawMarkers(list)
+        drawPolyline(list)
+    }
+
+    private fun bindAdapter() {
         articleAdapter = ArticleAdapter().apply {
             this.onItemClickListener = this@ArticleFragment.onItemClickListener
             this.articleData = articleViewModel.articleData.records
@@ -222,54 +258,45 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             adapter = expenseAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
+    }
+
+    private fun bindTextContent() {
         binding.tvArticleTitle.text = articleViewModel.articleData.title
-        if(articleViewModel.articleData.records.size>1){
+        if (articleViewModel.articleData.records.size > 1) {
             binding.tvArticleDate.text = articleViewModel.articleData.records[0].datetime + " ~ " +
-                    articleViewModel.articleData.records[articleViewModel.articleData.records.size-1].datetime
-        }else{
+                    articleViewModel.articleData.records[articleViewModel.articleData.records.size - 1].datetime
+        } else {
             binding.tvArticleDate.text = articleViewModel.articleData.records[0].datetime
         }
         binding.tvArticleContent.text = articleViewModel.articleData.trip_comment
         binding.ratingArticleSatisfaction.rating = articleViewModel.articleData.rating.toFloat()
         binding.tvArticleUser.text = articleViewModel.articleData.nickname
+        binding.tvArticleComment.text = articleViewModel.articleData.comments.toString()
+        binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
+    }
+
+    private fun bindImage() {
         Glide.with(binding.imgArticleUser)
             .load(articleViewModel.articleData.profile_url)
             .placeholder(R.drawable.ic_back)
             .apply(RequestOptions().centerCrop())
             .error(R.drawable.ic_back)
             .into(binding.imgArticleUser)
-        binding.tvArticleComment.text = articleViewModel.articleData.comments.toString()
-        binding.tvArticleLike.text = articleViewModel.articleData.likes.toString()
-        likes = articleViewModel.articleData.likes
-        for(i in articleViewModel.articleData.tags){
-            var chip: Chip
-            if(i==1){
-                binding.chipArticleTag.addView(Chip(requireContext()).apply {
-                    text = "1번태그"
-                    setTextColor(R.color.primaryTextColor)
-                    setChipBackgroundColorResource(R.color.primaryLightColor)
-                    setOnCloseIconClickListener { binding.chipArticleTag.removeView(this) }
-                })
-            }else if(i==2){
-                binding.chipArticleTag.addView(Chip(requireContext()).apply {
-                    text = "2번태그"
-                    setChipBackgroundColorResource(R.color.primaryLightColor)
-                    setOnCloseIconClickListener { binding.chipArticleTag.removeView(this) }
-                })
-            }
+    }
+
+    private fun bindTags() {
+        articleViewModel.articleData.tags.forEach { tag ->
+            binding.chipArticleTag.addView(
+                Chip(requireContext()).apply {
+                    text = categoryTags[tag - 1].tag
+                    id = tag
+                    isCheckable = false
+                    setTextAppearanceResource(R.style.ChipText)
+                    setTextColor(resources.getColorStateList(R.color.selector_chip_color_text_white))
+                    setChipBackgroundColorResource(R.color.primaryColor)
+                }
+            )
         }
-        likeYn = articleViewModel.articleData.like_yn=='y'
-        likeSetting()
-        deleteMarkers()
-        deletePaths()
-        var list = mutableListOf<TripStamp>()
-        for(i in 0 until articleViewModel.articleData.records.size){
-            for(j in 0 until articleViewModel.articleData.records[i].trip_stamps.size){
-                list.add(articleViewModel.articleData.records[i].trip_stamps[j])
-            }
-        }
-        drawMarkers(list)
-        drawPolyline(list)
     }
 
     private fun deleteMarkers() {
@@ -353,8 +380,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         naverMap = _naverMap
 
         setNaverMapUI()
-        //getMyJourney("", "")
-        articleViewModel.article(3)
+        articleViewModel.article(articleSeq)
     }
 
     private fun setNaverMapUI() {

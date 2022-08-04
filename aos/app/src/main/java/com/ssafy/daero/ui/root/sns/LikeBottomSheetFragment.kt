@@ -17,7 +17,7 @@ import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
 
 class LikeBottomSheetFragment(private val articleSeq: Int, private val likes: Int) : BottomSheetDialogFragment() {
-    private val articleViewModel: ArticleViewModel by viewModels({requireParentFragment()})
+    private val likeViewModel: LikeViewModel by viewModels()
     private lateinit var likeAdapter: LikeAdapter
 
     private var _binding: BottomsheetLikeBinding? = null
@@ -63,19 +63,19 @@ class LikeBottomSheetFragment(private val articleSeq: Int, private val likes: In
     }
 
     private fun getLikeUsers() {
-        articleViewModel.getLikeUsers(articleSeq)
+        likeViewModel.getLikeUsers(articleSeq)
     }
 
     private fun observeData() {
-        articleViewModel.likeUsers.observe(viewLifecycleOwner) {
+        likeViewModel.likeUsers.observe(viewLifecycleOwner) {
             likeAdapter.submitData(lifecycle, it)
         }
 
-        articleViewModel.likeUsersState.observe(viewLifecycleOwner) {
+        likeViewModel.likeUsersState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
                     toast("좋아요 목록을 불러오는데 실패했습니다.")
-                    articleViewModel.likeUsersState.value = DEFAULT
+                    likeViewModel.likeUsersState.value = DEFAULT
                 }
             }
         }

@@ -14,6 +14,12 @@ import retrofit2.http.*
 interface SnsApi {
 
     /**
+     * 게시글 목록 조회
+     */
+    @GET("sns")
+    fun getArticles(@Query("page") page: Int) : Single<PagingResponseDto<ArticleHomeItem>>
+
+    /**
      * 게시글(여행기록) 상세 조회
      */
     @GET("sns/article/{article_seq}")
