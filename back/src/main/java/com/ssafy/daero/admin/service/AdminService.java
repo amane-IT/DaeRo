@@ -372,7 +372,8 @@ public class AdminService {
     }
 
     public boolean answerInquiry(int inquirySeq, AnswerVo answerVo) {
-        int updateInquiry = adminMapper.updateInquiryByInquirySeq(inquirySeq, answerVo.getContent(), answerVo.getAuthor());
+        answerVo.setInquirySeq(inquirySeq);
+        int updateInquiry = adminMapper.updateInquiryByInquirySeq(answerVo);
         return updateInquiry == 1;
     }
 
@@ -396,7 +397,8 @@ public class AdminService {
     }
 
     public boolean updateFaq(int faqSeq, FaqVo faqVo) {
-        int updated = adminMapper.updateFaq(faqSeq, faqVo.getTitle(), faqVo.getContent(), faqVo.getAuthor());
+        faqVo.setFaqSeq(faqSeq);
+        int updated = adminMapper.updateFaq(faqVo);
         return updated == 1;
     }
 

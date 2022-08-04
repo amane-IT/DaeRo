@@ -170,8 +170,7 @@
                inquiry.title,
                inquiry.created_at,
                inquiry.answer_at,
-               inquiry.answer_yn,
-               inquiry.author
+               inquiry.answer_yn
         FROM (SELECT row_number()                         over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`,
                      `title`,
                      `created_at`,
@@ -179,11 +178,7 @@
                      `answer_at`,
                      (SELECT u.nickname
                       FROM daero.users u
-                      WHERE u.users_seq = i.users_seq) AS user_name,
-                     (SELECT admin_name
-                      FROM daero.admin a
-                      WHERE a.admin_seq = i.admin_seq) AS author
-
+                      WHERE u.users_seq = i.users_seq) AS user_name
         FROM daero.inquires i) AS inquiry
         WHERE (#{page}-1)*10 &lt; inquiry.row
                           AND inquiry.row &lt; 1+(#{page}*10)
@@ -211,9 +206,7 @@
         SET answer=#{content},
             answer_yn='y',
             answer_at=DATE_FORMAT(now(), '%Y-%m-%d %T'),
-            admin_seq= (SELECT admin_seq
-                        FROM daero.admin a
-                        WHERE a.admin_name = #{author})
+            admin_seq=#{adminSeq}
         WHERE i.inquires_seq = #{inquirySeq};
 
     </update>
@@ -239,10 +232,7 @@
 
     <insert id="insertFaq" parameterType="com.ssafy.daero.admin.vo.FaqVo">
         INSERT INTO daero.faq (`title`, `content`, `created_at`, `updated_at`, `admin_seq`)
-        VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'),
-                (SELECT admin_seq
-                 FROM daero.admin a
-                 WHERE a.admin_name = #{author}))
+        VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'), #{adminSeq})
     </insert>
 
     <update id="updateFaq">
@@ -250,9 +240,7 @@
         SET `title`=#{title},
             `content`=#{content},
             `updated_at`=DATE_FORMAT(now(), '%Y-%m-%d %T'),
-            `admin_seq`=(SELECT admin_seq
-                         FROM daero.admin a
-                         WHERE a.admin_name = #{author})
+            `admin_seq`=#{adminSeq}
         WHERE faq_seq = #{faqSeq}
     </update>
 

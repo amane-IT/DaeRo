@@ -6,7 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class FaqVo {
+    private int faqSeq;
     private String title;
     private String content;
-    private String author;
+    private int adminSeq;
 }

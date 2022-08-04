@@ -67,14 +67,14 @@ public interface AdminMapper {
 
     Map<String, Object> selectInquiryDetail(int inquirySeq);
 
-    int updateInquiryByInquirySeq(@Param("inquirySeq") int inquirySeq, @Param("content") String content, @Param("author") String author);
+    int updateInquiryByInquirySeq(AnswerVo answerVo);
 
     int selectFaqCount();
     ArrayList<Map<String, Object>> selectFaqList(int page);
 
     int insertFaq(FaqVo faqVo);
 
-    int updateFaq(@Param("faqSeq") int faqSeq, @Param("title") String title, @Param("content") String content, @Param("author") String author);
+    int updateFaq(FaqVo faqVo);
 
     int deleteFaq(int faqSeq);
 

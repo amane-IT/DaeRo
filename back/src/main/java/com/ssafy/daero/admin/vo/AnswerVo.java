@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AnswerVo {
-    private String author;
+    private int inquirySeq;
+    private int adminSeq;
     private String content;
 }
