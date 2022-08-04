@@ -5,6 +5,8 @@ import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
+import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
@@ -181,5 +183,13 @@ interface SnsApi {
         @Query("place-name") place_name: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<ArticleMoreItem>>
+
+    /**
+     * 따라가기
+     */
+    @GET("sns/article/{article_seq}/trace")
+    fun getTripFollow(
+        @Path("article_seq") articleSeq: Int
+    ): Single<Response<List<TripFollowSelectResponseDto>>>
 
 }

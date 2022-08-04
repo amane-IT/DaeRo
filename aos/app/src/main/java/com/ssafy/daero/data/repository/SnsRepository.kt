@@ -9,6 +9,8 @@ import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
+import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.*
@@ -175,6 +177,16 @@ class SnsRepository private constructor(context: Context) {
             pagingSourceFactory = {SearchPlaceMoreDataSource(snsApi, searchKeyword) }
         ).flowable
     }
+
+    fun getTripFollow(
+        articleSeq: Int
+    ): Single<Response<List<TripFollowSelectResponseDto>>> {
+        return snsApi.getTripFollow(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 
     companion object {
         private var instance: SnsRepository? = null
