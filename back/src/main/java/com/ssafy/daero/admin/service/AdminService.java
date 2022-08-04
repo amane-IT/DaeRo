@@ -356,4 +356,18 @@ public class AdminService {
         return updateInquiry == 1;
     }
 
+    public Map<String, Object> faqList(int page) {
+        int totalPage = (int) Math.ceil(adminMapper.selectFaqCount()/10.0);
+        if (totalPage == 0) { totalPage = 1; }
+        if (page > totalPage) { return null; }
+
+        ArrayList<Map<String, Object>> faqs = adminMapper.selectFaqList(page);
+        if (faqs == null) { return null; }
+        Map<String, Object> faqList = new HashMap<>();
+        faqList.put("total_page", totalPage);
+        faqList.put("page", page);
+        faqList.put("results", faqs);
+        return faqList;
+    }
+
 }

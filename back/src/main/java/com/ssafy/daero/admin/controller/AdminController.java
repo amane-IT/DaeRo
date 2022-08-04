@@ -140,5 +140,10 @@ public class AdminController {
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
     }
 
-
+    @GetMapping("/faq")
+    public ResponseEntity<Map<String, Object>> faqList(@RequestParam(required = false, defaultValue = "1") String page) {
+        Map<String, Object> res = adminService.faqList(Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

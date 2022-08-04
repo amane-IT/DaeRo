@@ -62,4 +62,7 @@ public interface AdminMapper {
     Map<String, Object> selectInquiryDetail(int inquirySeq);
 
     int updateInquiryByInquirySeq(@Param("inquirySeq") int inquirySeq, @Param("content") String content, @Param("author") String author);
+
+    int selectFaqCount();
+    ArrayList<Map<String, Object>> selectFaqList(int page);
 }

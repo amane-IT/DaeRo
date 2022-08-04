@@ -155,33 +155,77 @@
     </select>
 
     <select id="selectInquiryList" parameterType="_int" resultType="java.util.Map">
-        SELECT inquiry.inquires_seq AS inquiry_seq, inquiry.user_name, inquiry.title, inquiry.created_at, inquiry.answer_at, inquiry.answer_yn, inquiry.author
-        FROM (SELECT row_number() over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`, `title`, `created_at`, `answer_yn`, `answer_at`, (SELECT u.nickname
-        FROM daero.users u
-        WHERE u.users_seq=i.users_seq) AS user_name, (SELECT admin_name
-                                                      FROM daero.admin a
-                                                      WHERE a.admin_seq = i.admin_seq) AS author
+        SELECT inquiry.inquires_seq AS inquiry_seq,
+               inquiry.user_name,
+               inquiry.title,
+               inquiry.created_at,
+               inquiry.answer_at,
+               inquiry.answer_yn,
+               inquiry.author
+        FROM (SELECT row_number()                         over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`,
+                     `title`,
+                     `created_at`,
+                     `answer_yn`,
+                     `answer_at`,
+                     (SELECT u.nickname
+                      FROM daero.users u
+                      WHERE u.users_seq = i.users_seq) AS user_name,
+                     (SELECT admin_name
+                      FROM daero.admin a
+                      WHERE a.admin_seq = i.admin_seq) AS author
+
         FROM daero.inquires i) AS inquiry
         WHERE (#{page}-1)*10 &lt; inquiry.row
                           AND inquiry.row &lt; 1+(#{page}*10)
     </select>
 
     <select id="selectInquiryDetail" parameterType="_int" resultType="java.util.Map">
-        SELECT `title`, `created_at`, `answer_yn`, `content`, `answer`, `answer_at`, (SELECT u.nickname
-                                                                              FROM daero.users u
-                                                                              WHERE u.users_seq=i.users_seq) AS user_name, (SELECT admin_name
-                                                                                                                            FROM daero.admin a
-                                                                                                                            WHERE a.admin_seq = i.admin_seq) AS author
-        FROM daero.inquires i
+        SELECT `title`,
+               `created_at`,
+               `answer_yn`,
+               `content`,
+               `answer`,
+               `answer_at`,
+               (SELECT u.nickname
+                FROM daero.users u
+                WHERE u.users_seq = i.users_seq) AS user_name,
+               (SELECT admin_name
+                FROM daero.admin a
+                WHERE a.admin_seq = i.admin_seq) AS author
+        FROM daero.inquires i;
+
     </select>
 
     <update id="updateInquiryByInquirySeq">
         UPDATE daero.inquires i
-        SET answer=#{content}, answer_yn='y', answer_at=DATE_FORMAT(now(), '%Y-%m-%d %T'), admin_seq= (SELECT admin_seq
-                                                                                                 FROM daero.admin a
-                                                                                                 WHERE a.admin_name=#{author})
-        WHERE i.inquires_seq=#{inquirySeq}
+        SET answer=#{content},
+            answer_yn='y',
+            answer_at=DATE_FORMAT(now(), '%Y-%m-%d %T'),
+            admin_seq= (SELECT admin_seq
+                        FROM daero.admin a
+                        WHERE a.admin_name = #{author})
+        WHERE i.inquires_seq = #{inquirySeq};
+
     </update>
+
+    <select id="selectFaqCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM faq
+    </select>
+
+    <select id="selectFaqList" parameterType="_int" resultType="java.util.Map">
+        SELECT faqs.`faq_seq`, faqs.`title`, faqs.`content`, faqs.`created_at`, faqs.`admin_name`
+        FROM (SELECT row_number()                         over (ORDER BY f.faq_seq ASC) AS row, `faq_seq`,
+                     `title`,
+                     `content`,
+                     `created_at`,
+                     (SELECT admin_name
+                      FROM daero.admin a
+                      WHERE a.admin_seq = f.admin_seq) AS admin_name
+              FROM daero.faq f) AS faqs
+        WHERE (#{page}-1)*10 &lt; faqs.row
+          AND faqs.row &lt; 1+(#{page}*10)
+    </select>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
