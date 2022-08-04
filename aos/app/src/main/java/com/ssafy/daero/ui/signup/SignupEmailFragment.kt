@@ -9,8 +9,11 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.signup.SignupEmailRequestDto
 import com.ssafy.daero.databinding.FragmentSignupEmailBinding
+import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.view.toast
+import kotlin.math.sign
 
 class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fragment_signup_email){
 
@@ -28,8 +31,10 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
                 signupEmailViewModel.verifyEmail(dto)
             }
             
-            buttonSignupEmailVerification.setOnClickListener { 
+            buttonSignupEmailVerification.setOnClickListener {
+                App.userId = editTextSignupEmailEmailId.text.toString()
                 signupEmailViewModel.verifyUserEmail()
+//                findNavController().navigate(R.id.action_signupEmailFragment_to_signupPasswordFragment)
             }
 
             imgSignupEmailBack.setOnClickListener {
@@ -48,9 +53,12 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
                 SUCCESS -> {
                     binding.textSignupEmailCheckMessage.text = "이메일을 전송했습니다. 메일함을 확인해주세요."
                     binding.editTextSignupEmailEmailId.isEnabled = false
+                    signupEmailViewModel.responseState_verifyEmail.value = DEFAULT
+                    toast("이메일을 전송했습니다.")
                 }
                 FAIL -> {
                     binding.textSignupEmailCheckMessage.text = "이메일 전송에 실패했습니다. 다시 시도해 주세요."
+                    signupEmailViewModel.responseState_verifyEmail.value = DEFAULT
                 }
             }
         }
@@ -59,14 +67,15 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
             when(state){
                 SUCCESS -> {
                     App.userId = binding.editTextSignupEmailEmailId.text.toString()
+                    signupEmailViewModel.responseState_verifyUserEmail.value = DEFAULT
                     findNavController().navigate(R.id.action_signupEmailFragment_to_signupPasswordFragment)
                 }
                 FAIL -> {
                     binding.textSignupEmailCheckMessage.text = "인증에 실패했습니다."
                     binding.editTextSignupEmailEmailId.isEnabled = true
+                    signupEmailViewModel.responseState_verifyUserEmail.value = DEFAULT
                 }
             }
         }
     }
-
 }

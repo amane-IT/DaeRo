@@ -5,6 +5,8 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.data.remote.UserApi
@@ -13,6 +15,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.MultipartBody
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -42,7 +45,7 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getUserProfile(userSeq: Int) : Single<Response<UserProfileResponseDto>> {
+    fun getUserProfile(userSeq: Int): Single<Response<UserProfileResponseDto>> {
         return userApi.getUserProfile(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
@@ -51,6 +54,15 @@ class UserRepository private constructor(context: Context) {
 
     fun editProfile(userSeq: Int, profileEditRequestDto: ProfileEditRequestDto): Completable {
         return userApi.editProfile(userSeq, profileEditRequestDto)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun postImage(image: MultipartBody.Part): Single<Response<ImageUploadResponseDto>> {
+        return userApi.postImage(image)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun findPassword(findPasswordRequestDto: FindPasswordRequestDto): Single<Response<FindPasswordResponseDto>> {
@@ -85,7 +97,7 @@ class UserRepository private constructor(context: Context) {
     }
 
     fun verifyUserEmail(signupEmailResponseDto: SignupEmailResponseDto): Single<Response<VerifyUserEmailResponseDto>> {
-        return userApi.verifyUserEmail(signupEmailResponseDto.userSeq)
+        return userApi.verifyUserEmail(signupEmailResponseDto.user_seq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
@@ -98,24 +110,56 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun signup(signupRequestDto: SignupRequestDto) : Single<Void>{
+    fun signup(signupRequestDto: SignupRequestDto): Single<Response<SignupResponseDto>> {
         return userApi.signup(signupRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getPreference(userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>> {
+    fun getPreference(userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>> {
         return userApi.getPreferences(userSeq)
             .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun confirmPassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>> {
+    fun postPreference(userSeq: Int, result: List<Int>): Single<Void> {
+        return userApi.postPreference(userSeq, result)
+    }
+
+    fun confirmPassword(
+        userSeq: Int,
+        passwordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>> {
         return userApi.confirmPassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun updatePassword(userSeq: Int, passwordRequestDto: ResetPasswordRequestDto): Single<Response<ResetPasswordResponseDto>>{
+    fun updatePassword(
+        userSeq: Int,
+        passwordRequestDto: ResetPasswordRequestDto
+    ): Single<Response<ResetPasswordResponseDto>> {
         return userApi.updatePassword(userSeq, passwordRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun withdrawal(userSeq: Int): Single<Response<Boolean>> {
+        return userApi.withdrawal(userSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun updateFcmToken(
+        userSeq: Int,
+        fcmTokenRequestDto: FCMTokenRequestDto
+    ): Completable {
+        return userApi.updateFcmToken(userSeq, fcmTokenRequestDto)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

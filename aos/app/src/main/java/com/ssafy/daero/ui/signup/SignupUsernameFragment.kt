@@ -51,6 +51,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
             checkboxSignupUsernameTermCheck.setOnCheckedChangeListener { box, isChecked ->
                 flag = isChecked
+                buttonSignupUsernameNextStep.isEnabled = isChecked
             }
         }
     }
@@ -97,10 +98,6 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
         signupUsernameViewModel.responseState_signup.observe(viewLifecycleOwner) { state ->
             when(state){
                 SUCCESS -> {
-//                    App.prefs.setString("emailId", App.userId)
-//                    App.prefs.setString("password", App.password)
-//                    App.prefs.setString("userName", App.userName)
-//                    App.prefs.setUserSeq(App.userSeq)
                     App.userId = ""
                     App.password = ""
                     App.userName = ""

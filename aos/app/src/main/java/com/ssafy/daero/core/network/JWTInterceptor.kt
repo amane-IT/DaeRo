@@ -1,6 +1,5 @@
 package com.ssafy.daero.core.network
 
-import android.util.Log
 import com.ssafy.daero.application.App
 import okhttp3.Interceptor
 import okhttp3.Response

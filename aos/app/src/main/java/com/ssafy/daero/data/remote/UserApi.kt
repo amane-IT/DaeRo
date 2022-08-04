@@ -4,10 +4,13 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -27,7 +30,7 @@ interface UserApi {
     /**
      * 가입 여부 확인
      */
-    @GET("users/{email_address}")
+    @GET("users/{email_address}/duplicate")
     fun findID(@Path("email_address") email: String): Single<Response<FindIDResponseDto>>
 
     /**
@@ -44,6 +47,13 @@ interface UserApi {
         @Path("user_seq") userSeq: Int,
         @Body profileEditRequestDto: ProfileEditRequestDto
     ): Completable
+
+    /**
+     * 단일 이미지 업로드
+     */
+    @Multipart
+    @POST("image/upload")
+    fun postImage(@Part image: MultipartBody.Part): Single<Response<ImageUploadResponseDto>>
 
     /**
      * 비밀번호 찾기 요청
@@ -65,7 +75,6 @@ interface UserApi {
         @Body findPasswordModifyRequestDto: FindPasswordModifyRequestDto,
         @Path("password_reset_seq") reset_seq: String
     ): Single<Response<FindPasswordModifyResponseDto>>
-
 
     /**
      * 이메일 인증 요청
@@ -89,19 +98,19 @@ interface UserApi {
      * 회원가입
      */
     @POST("users/signup")
-    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Void>
+    fun signup(@Body signupRequestDto: SignupRequestDto): Single<Response<SignupResponseDto>>
 
     /**
      * 선호도 조사 정보 요청
      */
     @GET("users/{user_seq}/preference")
-    fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<MutableList<TripPreferenceResponseDto>>>
+    fun getPreferences(@Path("user_seq") userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>>
 
     /**
     선호도 조사 결과 전송
      * */
     @POST("users/{user_seq}/preference")
-    fun postPreferencse(
+    fun postPreference(
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
     ): Single<Void>
@@ -116,7 +125,7 @@ interface UserApi {
     ): Single<Response<ResetPasswordResponseDto>>
 
     /**
-     * 비밀번호 변경 요청
+     * 비밀번호 변경
      */
     @PUT("users/{user_seq}/password")
     fun updatePassword(
@@ -124,4 +133,18 @@ interface UserApi {
         @Body resetPasswordRequestDto: ResetPasswordRequestDto
     ): Single<Response<ResetPasswordResponseDto>>
 
+    /**
+     * 회원 탈퇴
+     */
+    @PUT("users/{user_seq}/quit")
+    fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
+
+    /**
+     * FCM Token 전송
+     */
+    @PUT("users/{user_seq}/fcm-token")
+    fun updateFcmToken(
+        @Path("user_seq") userSeq: Int,
+        @Body fcmTokenRequestDto: FCMTokenRequestDto
+    ): Completable
 }

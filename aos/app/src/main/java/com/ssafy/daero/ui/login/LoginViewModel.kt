@@ -27,10 +27,19 @@ class LoginViewModel : BaseViewModel() {
                         // userSeq 저장
                         App.prefs.userSeq = response.body()?.user_seq ?: 0
 
+                        // nickname 저장
+                        App.prefs.nickname = response.body()?.user_nickname ?: ""
+
                         _showProgress.postValue(false)
                         responseState.postValue(SUCCESS)
                     },
                     {throwable ->
+
+                        // jwt 토큰, user_seq 삭제
+                        App.prefs.jwt = null
+                        App.prefs.userSeq = 0
+                        App.prefs.nickname = null
+
                         _showProgress.postValue(false)
                         responseState.postValue(FAIL)
                     })

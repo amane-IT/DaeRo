@@ -9,6 +9,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentMyPageBinding
+import com.ssafy.daero.ui.adapter.mypage.MyPageViewPagerAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.view.toast
@@ -77,5 +78,13 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             .apply(RequestOptions().centerCrop().circleCrop())
             .error(R.drawable.img_user)
             .into(binding.imageMyPageProfile)
+    }
+
+    fun disableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = false
+    }
+
+    fun enableSlide() {
+        binding.viewPagerMyPage.isUserInputEnabled = true
     }
 }

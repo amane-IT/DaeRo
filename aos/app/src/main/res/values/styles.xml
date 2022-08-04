@@ -23,6 +23,14 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <style name="BigTitle" parent="android:TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <style name="Head" parent="android:TextAppearance">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/primaryTextColor</item>
@@ -179,6 +187,44 @@
 
     <style name="Widget.App.SnackbarButton" parent="Widget.MaterialComponents.Button.TextButton.Snackbar">
         <item name="android:textColor">@color/secondaryColor</item>
+    </style>
+
+    <style name="ChipText" parent="android:TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:fontFamily">@font/notosanskr_medium</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="ArticleMenuBottomSheetFragment" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/ArticleMenuBottomSheetStyle</item>
+    </style>
+
+    <style name="ArticleMenuBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="TripInformationDescription" parent="android:TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="NoticeContent" parent="android:TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
+        <item name="android:includeFontPadding">false</item>
     </style>
 
 </resources>

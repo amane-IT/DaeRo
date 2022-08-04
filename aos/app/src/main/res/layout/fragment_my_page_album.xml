@@ -9,18 +9,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_myPageAlbum"
-            tools:listitem="@layout/item_my_page_album"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="8dp"
+            android:layout_marginHorizontal="4dp"
             android:clipToPadding="false"
-            android:paddingTop="16dp"
+            android:paddingTop="4dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:spanCount="2" />
+            app:spanCount="2"
+            tools:listitem="@layout/item_my_page_album" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
