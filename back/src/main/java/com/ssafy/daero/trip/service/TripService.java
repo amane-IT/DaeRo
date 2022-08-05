@@ -141,21 +141,19 @@ public class TripService {
         for (UserFavorDto userFavorDto : userFavorDtoArray) {
             scoreSum += userFavorDto.getScore();
         }
-        // 총합이 200 미만이면 그냥 사용
-        if (scoreSum < 200) {
-            return scoreSum;
-        }
         // 총합이 200 이상이면 총합 100 수준으로 평준화
-        double ratio = scoreSum / 100.0;
-        for (UserFavorDto userFavorDto : userFavorDtoArray) {
-            int score = (int)(userFavorDto.getScore() / ratio);
-            userFavorDto.setScore(score);
-        }
-        // 평준화한 점수 DB에 갱신하고 총합 반환
-        scoreSum = 0;
-        for (UserFavorDto userFavorDto : userFavorDtoArray) {
-            tripMapper.updateUserFavor(userFavorDto);
-            scoreSum += userFavorDto.getScore();
+        if (scoreSum > 200) {
+            double ratio = scoreSum / 100.0;
+            for (UserFavorDto userFavorDto : userFavorDtoArray) {
+                int score = (int)(userFavorDto.getScore() / ratio);
+                userFavorDto.setScore(score);
+            }
+            // 평준화한 점수 DB에 갱신하고 총합 반환
+            scoreSum = 0;
+            for (UserFavorDto userFavorDto : userFavorDtoArray) {
+                tripMapper.updateUserFavor(userFavorDto);
+                scoreSum += userFavorDto.getScore();
+            }
         }
         // 현재 점수 목록 가져오기
         ArrayList<UserFavorDto> favors = tripMapper.selectUserFavorByUserSeq(userSeq);
