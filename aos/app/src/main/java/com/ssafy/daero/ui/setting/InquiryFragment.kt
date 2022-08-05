@@ -26,7 +26,7 @@ class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_i
     }
 
     private fun setOnClickListeners() {
-        binding.imgNoticeBack.setOnClickListener {
+        binding.imgInquiryBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
     }

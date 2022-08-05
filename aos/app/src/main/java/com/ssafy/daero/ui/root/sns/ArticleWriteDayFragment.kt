@@ -28,10 +28,10 @@ class ArticleWriteDayFragment : BaseFragment<FragmentArticleWriteDayBinding>(R.l
 
     private val tripStampItemClickListener: (View, Int) -> Unit = { _, userSeq ->
         //todo : 트립스탬프 상세보기로 이동, nav_graph에 추가하기
-        findNavController().navigate(
-            R.id.action_followerFragment_to_myPageFragment,
-            bundleOf("UserSeq" to userSeq)
-        )
+//        findNavController().navigate(
+//            R.id.action_followerFragment_to_myPageFragment,
+//            bundleOf("UserSeq" to userSeq)
+//        )
     }
 
     override fun init() {

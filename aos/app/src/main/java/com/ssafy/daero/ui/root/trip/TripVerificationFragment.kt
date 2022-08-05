@@ -146,7 +146,7 @@ class TripVerificationFragment :
                 bundleOf(
                     "tripSeq" to 0,
                     "placeName" to "test",
-                    "dateTime" to dateTime.time,
+                    "dateTime" to 0L,
                     "imagePath" to imagePath
                 )
             )

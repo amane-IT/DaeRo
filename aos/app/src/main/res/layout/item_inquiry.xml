@@ -27,7 +27,7 @@
             android:text="@{inquiry.title}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Q&amp;A 1. 이것은 Q&amp;A 입니다." />
+            tools:text="QnA 1. 이것은 QnA 입니다." />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint_faq_background"
@@ -36,7 +36,7 @@
             android:layout_marginTop="24dp"
             android:background="@drawable/notice_content_background"
             android:padding="16dp"
-            android:visibility="@{faq.isShow ? View.VISIBLE : View.GONE }"
+            android:visibility="@{inquiry.isShow ? View.VISIBLE : View.GONE }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_faq_title"
@@ -50,7 +50,7 @@
                 android:text="@{inquiry.content}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Q&amp;A 내용입니다." />
+                tools:text="QnA 내용입니다." />
 
             <TextView
                 android:id="@+id/text_faq_createdAt"
