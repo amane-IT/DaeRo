@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.sns.mapper.SnsMapper">
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT a.trips_seq, a.title, (SELECT COUNT(*)
-                                     FROM daero.likes l
-                                     WHERE l.articles_seq=a.articles_seq
-                                    ) AS like_count, (SELECT COUNT(*)
-                                                      FROM daero.replies r
-                                                      WHERE r.articles_seq=a.articles_seq) AS reply_count, (SELECT t.users_seq
-                                                                                                            FROM daero.trips t
-                                                                                                            WHERE t.trips_seq=a.trips_seq) AS user_seq,
+        SELECT a.trips_seq, a.title, (SELECT `like_count`
+                                      FROM daero.v_users_trips_articles va
+                                      WHERE va.articles_seq=a.articles_seq) AS like_count,
+               (SELECT `reply_count`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq=a.articles_seq) AS reply_count, (SELECT t.users_seq
+                                                                       FROM daero.trips t
+                                                                       WHERE t.trips_seq=a.trips_seq) AS user_seq,
                (SELECT t.trip_comment
                 FROM daero.trips t
                 WHERE t.trips_seq=a.trips_seq) AS trip_comment, (SELECT t.trip_expenses

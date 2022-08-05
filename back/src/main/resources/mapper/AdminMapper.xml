@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.admin.mapper.AdminMapper">
+
+    <select id="selectAdminByCode" parameterType="String" resultType="java.lang.Integer">
+        SELECT `admin_seq`
+        FROM daero.admin
+        WHERE `code`=#{code}
+    </select>
+
     <select id="selectUserCount" resultType="_int">
         SELECT COUNT(*)
         FROM daero.users
@@ -29,7 +36,7 @@
                      reporter_users_seq,
                      reported_users_seq,
                      reported_at,
-                     report_url,
+                     content_seq,
                      report_categories_seq,
                      handled_yn,
                      article_type
@@ -110,6 +117,180 @@
           AND user.row &lt; 1+(#{page}*10)
     </select>
 
+    <select id="selectPlaceList" parameterType="_int" resultMap="mappingTripPlaceDto">
+        SELECT *
+        FROM (SELECT row_number() over (ORDER BY tp.trip_places_seq ASC) AS row, trip_places_seq, place_name, address
+              FROM daero.trip_places tp) AS place
+        WHERE (#{page} -1)*10 &lt; place.row
+          AND place.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectPlaceCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.trip_places
+    </select>
+
+    <select id="selectTagsByPlaceSeq" parameterType="_int" resultType="Integer">
+        SELECT place_tag_seq
+        FROM daero.tag_trip_places
+        WHERE trip_places_seq=#{placeSeq}
+    </select>
+
+    <insert id="insertPlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
+        INSERT INTO daero.trip_places (`place_name`, `address`, `latitude`, `longitude`, `description`, `region_seq`, `image_url`)
+        VALUES (#{placeName}, #{address}, #{latitude}, #{longitude}, #{description}, #{regionSeq}, #{imageUrl})
+    </insert>
+
+    <select id="selectPlaceSeqByPlaceAddress" parameterType="String" resultType="java.lang.Integer">
+        SELECT `trip_places_seq`
+        FROM trip_places
+        WHERE address=#{address}
+    </select>
+
+    <insert id="insertPlaceTag">
+        INSERT INTO daero.tag_trip_places(`place_tag_seq`, `trip_places_seq`)
+        VALUES (#{tag}, #{placeSeq})
+    </insert>
+
+    <update id="updatePlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
+        UPDATE daero.trip_places
+        SET `place_name`=#{placeName}, `address`=#{address}, `latitude`=#{latitude}, `longitude`=#{longitude}, `image_url`=#{imageUrl}, `description`=#{description}, `region_seq`=#{regionSeq}
+        WHERE trip_places_seq=#{tripPlaceSeq}
+    </update>
+
+    <delete id="deletePlaceTag" parameterType="_int">
+        DELETE FROM daero.tag_trip_places WHERE `trip_places_seq`=#{placeSeq}
+    </delete>
+
+    <delete id="deletePlace" parameterType="_int">
+        DELETE FROM daero.trip_places WHERE `trip_places_seq`=#{placeSeq}
+    </delete>
+
+    <select id="selectInquiryCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.inquires
+    </select>
+
+    <select id="selectInquiryList" parameterType="_int" resultType="java.util.Map">
+        SELECT inquiry.inquires_seq AS inquiry_seq,
+               inquiry.user_name,
+               inquiry.title,
+               inquiry.created_at,
+               inquiry.answer_at,
+               inquiry.answer_yn
+        FROM (SELECT row_number()                         over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`,
+                     `title`,
+                     `created_at`,
+                     `answer_yn`,
+                     `answer_at`,
+                     (SELECT u.nickname
+                      FROM daero.users u
+                      WHERE u.users_seq = i.users_seq) AS user_name
+        FROM daero.inquires i) AS inquiry
+        WHERE (#{page}-1)*10 &lt; inquiry.row
+                          AND inquiry.row &lt; 1+(#{page}*10)
+    </select>
+
+    <select id="selectInquiryDetail" parameterType="_int" resultType="java.util.Map">
+        SELECT `title`,
+               `created_at`,
+               `answer_yn`,
+               `content`,
+               `answer`,
+               `answer_at`,
+               (SELECT u.nickname
+                FROM daero.users u
+                WHERE u.users_seq = i.users_seq) AS user_name,
+               (SELECT admin_name
+                FROM daero.admin a
+                WHERE a.admin_seq = i.admin_seq) AS author
+        FROM daero.inquires i;
+
+    </select>
+
+    <update id="updateInquiryByInquirySeq">
+        UPDATE daero.inquires i
+        SET answer=#{content},
+            answer_yn='y',
+            answer_at=DATE_FORMAT(now(), '%Y-%m-%d %T'),
+            admin_seq=#{adminSeq}
+        WHERE i.inquires_seq = #{inquirySeq};
+
+    </update>
+
+    <select id="selectFaqCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM faq
+    </select>
+
+    <select id="selectFaqList" parameterType="_int" resultType="java.util.Map">
+        SELECT faqs.`faq_seq`, faqs.`title`, faqs.`content`, faqs.`created_at`, faqs.`admin_name`
+        FROM (SELECT row_number()                         over (ORDER BY f.faq_seq ASC) AS row, `faq_seq`,
+                     `title`,
+                     `content`,
+                     `created_at`,
+                     (SELECT admin_name
+                      FROM daero.admin a
+                      WHERE a.admin_seq = f.admin_seq) AS admin_name
+              FROM daero.faq f) AS faqs
+        WHERE (#{page}-1)*10 &lt; faqs.row
+          AND faqs.row &lt; 1+(#{page}*10)
+    </select>
+
+    <insert id="insertFaq" parameterType="com.ssafy.daero.admin.vo.FaqVo">
+        INSERT INTO daero.faq (`title`, `content`, `created_at`, `updated_at`, `admin_seq`)
+        VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'), #{adminSeq})
+    </insert>
+
+    <update id="updateFaq">
+        UPDATE daero.faq
+        SET `title`=#{title},
+            `content`=#{content},
+            `updated_at`=DATE_FORMAT(now(), '%Y-%m-%d %T'),
+            `admin_seq`=#{adminSeq}
+        WHERE faq_seq = #{faqSeq}
+    </update>
+
+    <delete id="deleteFaq" parameterType="_int">
+        DELETE FROM daero.faq WHERE `faq_seq`=#{faqSeq}
+    </delete>
+
+    <select id="selectNoticeCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.notice
+    </select>
+
+    <select id="selectNoticeList" parameterType="_int" resultType="java.util.Map">
+        SELECT noti.`notice_seq`, noti.`title`, noti.`content`, noti.`created_at`, noti.`admin_seq`
+        FROM (SELECT row_number()                         over (ORDER BY n.notice_seq ASC) AS row,
+        n.`notice_seq`, n.`title`, n.`content`, n.`created_at`, n.`admin_seq`
+
+        FROM daero.notice n) AS noti
+        WHERE (#{page}-1)*10 &lt; noti.row
+                         AND noti.row &lt; 1+(#{page}*10)
+    </select>
+
+    <insert id="insertNotice" parameterType="com.ssafy.daero.admin.vo.NoticeVo">
+        INSERT INTO daero.notice (`title`, `content`, `created_at`, `updated_at`, `admin_seq`)
+        VALUES (#{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'), #{adminSeq})
+    </insert>
+
+    <update id="updateNotice">
+        UPDATE daero.notice
+        SET `title`=#{title}, `content`=#{content}, `admin_seq`=#{adminSeq}, `updated_at` = DATE_FORMAT(now(), '%Y-%m-%d %T')
+        WHERE `notice_seq`=#{noticeSeq}
+    </update>
+
+    <delete id="deleteNotice" parameterType="_int">
+        DELETE FROM daero.notice WHERE `notice_seq`=#{noticeSeq}
+    </delete>
+
+    <update id="updateUserSuspension">
+        UPDATE daero.users
+        SET `suspended_yn`='y', `suspended_expiry`=#{date}
+        WHERE `users_seq`=#{userSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
@@ -124,7 +305,7 @@
         <result property="reporterSeq" column="reporter_users_seq" />
         <result property="reportedSeq" column="reported_users_seq" />
         <result property="reportedAt" column="reported_at" />
-        <result property="reportUrl" column="reported_url" />
+        <result property="contentSeq" column="content_seq" />
         <result property="reportCategorySeq" column="report_categories_seq" />
         <result property="handledYn" column="handled_yn" />
         <result property="articleType" column="article_type" />
@@ -147,5 +328,11 @@
         <result property="startDate" column="start_date" />
         <result property="endDate" column="end_date" />
         <result property="openYn" column="open_yn" />
+    </resultMap>
+
+    <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
+        <result property="tripPlaceSeq" column="trip_places_seq" />
+        <result property="placeName" column="place_name" />
+        <result property="address" column="address" />
     </resultMap>
 </mapper>
