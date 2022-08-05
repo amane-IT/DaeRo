@@ -1,11 +1,12 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.data.remote.UserApi
@@ -14,9 +15,9 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.MultipartBody
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.http.Path
 
 class UserRepository private constructor(context: Context) {
 
@@ -53,6 +54,15 @@ class UserRepository private constructor(context: Context) {
 
     fun editProfile(userSeq: Int, profileEditRequestDto: ProfileEditRequestDto): Completable {
         return userApi.editProfile(userSeq, profileEditRequestDto)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun postImage(image: MultipartBody.Part): Single<Response<ImageUploadResponseDto>> {
+        return userApi.postImage(image)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun findPassword(findPasswordRequestDto: FindPasswordRequestDto): Single<Response<FindPasswordResponseDto>> {
@@ -103,7 +113,7 @@ class UserRepository private constructor(context: Context) {
     fun signup(signupRequestDto: SignupRequestDto): Single<Response<SignupResponseDto>> {
         return userApi.signup(signupRequestDto)
             .subscribeOn(Schedulers.io())
-            .map { t -> if(t.isSuccessful) t else throw HttpException(t) }
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
@@ -142,6 +152,15 @@ class UserRepository private constructor(context: Context) {
         return userApi.withdrawal(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun updateFcmToken(
+        userSeq: Int,
+        fcmTokenRequestDto: FCMTokenRequestDto
+    ): Completable {
+        return userApi.updateFcmToken(userSeq, fcmTokenRequestDto)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

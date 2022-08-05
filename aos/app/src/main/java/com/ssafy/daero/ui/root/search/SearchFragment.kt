@@ -1,13 +1,16 @@
 package com.ssafy.daero.ui.root.search
 
 import android.util.Log
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchBinding
 import com.ssafy.daero.ui.adapter.search.SearchViewPagerAdapter
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.view.toast
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search){
     private val searchViewModel : SearchViewModel by viewModels()
@@ -16,6 +19,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
     override fun init() {
         initViews()
         setOnClickListeners()
+        setOnEditorActionListeners()
     }
 
     private fun initViews(){
@@ -30,8 +34,26 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             val keyword = binding.editTextSearchSearchBar.text.toString()
             Log.d("TAG", "setOnClickListeners: $keyword")
             searchViewModel.searchUserName(keyword)
-            // TODO: 게시글 검색 목록 불러오기
-//            searchViewModel.searchArticle(keyword)
+            searchViewModel.searchArticle(keyword)
+            App.keyword = keyword
+        }
+    }
+
+    private fun setOnEditorActionListeners(){
+        binding.editTextSearchSearchBar.setOnEditorActionListener { textView, actionId, keyEvent ->
+            when(actionId){
+                EditorInfo.IME_ACTION_SEARCH ->  {
+                    val keyword = binding.editTextSearchSearchBar.text.toString()
+                    searchViewModel.searchUserName(keyword)
+                    searchViewModel.searchArticle(keyword)
+                    App.keyword = keyword
+                    toast(keyword)
+                    false
+                }
+                else -> {
+                    false
+                }
+            }
         }
     }
 }

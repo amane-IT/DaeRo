@@ -30,7 +30,7 @@ class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.lay
     private fun observeData(){
         searchViewModel.resultUserSearch.observe(viewLifecycleOwner){
             Log.d("TAG", "observeData: 여기")
-//            TODO: API 완성되면 살리기
+//            TODO: 유저 검색 API 완성되면 살리기
 //            searchUserNameAdapter.submitData(lifecycle, it)
             searchUserNameAdapter.submitData(lifecycle, pagingUser)
         }

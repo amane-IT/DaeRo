@@ -7,10 +7,13 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
 import com.ssafy.daero.data.dto.trip.*
+import com.ssafy.daero.data.entity.Notification
+import com.ssafy.daero.data.entity.TripFollow
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.local.AppDatabase
 import com.ssafy.daero.data.remote.TripApi
 import com.ssafy.daero.data.repository.paging.TripAlbumDataSource
+import com.ssafy.daero.data.repository.paging.TripMyAlbumDataSource
 import com.ssafy.daero.utils.constant.DATABASE
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -43,6 +46,17 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getJourney(
+        user_seq: Int,
+        startDate: String,
+        endDate: String
+    ): Single<Response<List<List<MyJourneyResponseDto>>>> {
+        return tripApi.getJourney(user_seq, startDate, endDate)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun getFirstTripRecommend(
         firstTripRecommendRequestDto: FirstTripRecommendRequestDto
     ): Single<Response<FirstTripRecommendResponseDto>> {
@@ -66,8 +80,47 @@ class TripRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { TripAlbumDataSource(tripApi) }
+            pagingSourceFactory = { TripMyAlbumDataSource(tripApi) }
         ).flowable
+    }
+
+    fun getAlbum(userSeq: Int): Flowable<PagingData<TripAlbumItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                enablePlaceholders = false,
+                prefetchDistance = 1
+            ),
+            pagingSourceFactory = { TripAlbumDataSource(tripApi, userSeq) }
+        ).flowable
+    }
+
+    fun getPopularTrips(): Single<Response<List<TripPopularResponseDto>>> {
+        return tripApi.getPopularTrips()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 알림 저장
+    fun insertNotification(notification: Notification): Completable {
+        return database.notificationDao().insertNotification(notification)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 알림 받아오기기
+    fun getNotifications(): Single<List<Notification>> {
+        return database.notificationDao().getNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 알림 전체 삭제
+    fun deleteAllNotifications(): Completable {
+        return database.notificationDao().deleteAllNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     // TripStamp 저장
@@ -80,6 +133,32 @@ class TripRepository private constructor(context: Context) {
     // TripStamp 모두 가져오기
     fun getTripStamps(): Single<List<TripStamp>> {
         return database.tripStampDao().getTripStamps()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 다음 여행지 추천받기
+    fun recommendNextPlace(
+        placeSeq: Int,
+        time: Int,
+        transportation: String
+    ): Single<Response<NextPlaceRecommendResponseDto>> {
+        return tripApi.recommendNextPlace(placeSeq, time, transportation)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    //TripFollow 저장
+    fun insertTripFollow(tripFollow: TripFollow): Completable {
+        return database.tripFollowDao().insertTripFollow(tripFollow)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripFollow 모두 가져오기
+    fun getTripFollows(): Single<List<TripFollow>> {
+        return database.tripFollowDao().getTripFollows()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

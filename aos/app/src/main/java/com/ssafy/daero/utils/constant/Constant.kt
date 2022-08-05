@@ -9,6 +9,8 @@ const val CATEGORY_TAGS = "category_tags"
 const val REGION_TAGS = "region_tags"
 const val TAG_COLLECTION = "tag_collection"
 const val TRIP_KIND = "trip_kind"
+const val ARTICLE_SEQ = "article_seq"
+
 
 
 /**
@@ -40,3 +42,4 @@ const val TRIP_COMPLETE = 303 // 트립스탬프 완료
 const val DATABASE = "app_database"
 const val TRIP_STAMP = "t_trip_stamp"
 const val TRIP_FOLLOW = "t_trip_follow"
+const val NOTIFICATION = "t_notification"

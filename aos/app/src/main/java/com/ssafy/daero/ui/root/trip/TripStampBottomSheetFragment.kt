@@ -4,16 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampBottomSheetBinding
+import com.ssafy.daero.utils.permission.checkPermission
+import com.ssafy.daero.utils.permission.requestPermission
+import com.ssafy.daero.utils.view.toast
 
-
-class TripStampBottomSheetFragment : BottomSheetDialogFragment() {
+class TripStampBottomSheetFragment(val setPhotos: (Boolean) -> Unit) : BottomSheetDialogFragment() {
     private var _binding: FragmentTripStampBottomSheetBinding? = null
     private val binding get() = _binding!!
 
@@ -30,6 +28,7 @@ class TripStampBottomSheetFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         expandFullHeight()
+        setOnClickListeners()
     }
 
     private fun expandFullHeight() {
@@ -42,12 +41,28 @@ class TripStampBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.apply {
             imageTripStampCamera.setOnClickListener {
-                // TODO: 카메라 촬영 기능
+                if(!checkPermission(android.Manifest.permission.CAMERA)){
+                    requestPermission(android.Manifest.permission.CAMERA, {
+                        toast("권한 허용이 확인되었습니다.")
+                        setPhotos(true)
+                        dismiss()
+                    }, {
+                        toast("권한을 허용하지 않으면 트립스탬프를 만들 수 없습니다.")
+                    })
+                } else {
+                    setPhotos(true)
+                }
             }
 
             imageTripStampGallery.setOnClickListener {
-                // TODO: 갤러리 사진 선택 기능
+                setPhotos(false)
+                dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

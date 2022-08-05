@@ -8,13 +8,6 @@ import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.tripInfo
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
-import retrofit2.HttpException
-import java.util.concurrent.TimeUnit
 
 class TripInformationViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
@@ -85,5 +78,7 @@ class TripInformationViewModel : BaseViewModel() {
                         tripInformationState.postValue(FAIL)
                     })
         )
+        // 임시
+        //_tripInformation.postValue(tripInfo)
     }
 }

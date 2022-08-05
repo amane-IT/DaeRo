@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
-import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -23,6 +23,10 @@ class TripViewModel : BaseViewModel() {
     private val _firstTripRecommendResponseDto = MutableLiveData<Int>()
     val firstTripRecommendResponseDto: LiveData<Int>
         get() = _firstTripRecommendResponseDto
+
+    private val _popularTrip = MutableLiveData<List<TripPopularResponseDto>>()
+    val popularTrip: LiveData<List<TripPopularResponseDto>>
+        get() = _popularTrip
 
     var firstTripRecommendState = MutableLiveData<Int>()
 
@@ -72,6 +76,17 @@ class TripViewModel : BaseViewModel() {
             })
 
          */
+    }
+
+    fun getPopularTrips() {
+        addDisposable(
+            tripRepository.getPopularTrips()
+                .subscribe({
+                    _popularTrip.postValue(it.body())
+                }, { throwable ->
+                    Log.d("TripVM_DaeRo", throwable.toString())
+                })
+        )
     }
 
     fun initTripInformation() {

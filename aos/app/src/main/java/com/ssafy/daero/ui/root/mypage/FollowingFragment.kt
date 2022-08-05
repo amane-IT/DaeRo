@@ -23,7 +23,7 @@ class FollowingFragment : BaseFragment<FragmentFollowingBinding>(R.layout.fragme
 
     private val followItemClickListener: (View, Int) -> Unit = { _, userSeq ->
         findNavController().navigate(
-            R.id.action_followingFragment_to_myPageFragment,
+            R.id.action_followingFragment_to_otherPageFragment,
             bundleOf("UserSeq" to userSeq)
         )
     }
