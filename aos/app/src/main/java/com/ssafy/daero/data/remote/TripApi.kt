@@ -74,4 +74,10 @@ interface TripApi {
      */
     @GET("trips/popular")
     fun getPopularTrips(): Single<Response<List<TripPopularResponseDto>>>
+
+    /**
+     * 내 주변 여행지
+     */
+    @GET("trips/nearby")
+    fun getNearByPlaces(@Query("place-seq") placeSeq: Int): Single<Response<List<TripPopularResponseDto>>>
 }

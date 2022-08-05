@@ -1,6 +1,8 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import com.ssafy.daero.application.App
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
@@ -117,8 +119,8 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getPreference(userSeq: Int): Single<Response<List<TripPreferenceResponseDto>>> {
-        return userApi.getPreferences(userSeq)
+    fun getPreference(): Single<Response<List<TripPreferenceResponseDto>>> {
+        return userApi.getPreferences(App.prefs.userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
