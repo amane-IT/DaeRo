@@ -7,6 +7,7 @@ import com.ssafy.daero.user.dto.PasswordResetDto;
 import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.vo.ChangePasswordVo;
 import com.ssafy.daero.user.vo.SignupVo;
+import com.ssafy.daero.user.vo.UserVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,7 +24,7 @@ public interface UserMapper {
 
     int insertUserFavor(@Param("userSeq") int userSeq, @Param("tag") int tag);
 
-    UserDto selectById(String id);
+    UserVo selectById(String id);
 
     UserDto selectByUserSeq(int user_seq);
 
