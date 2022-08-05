@@ -231,7 +231,15 @@
         android:id="@+id/blockUserFragment"
         android:name="com.ssafy.daero.ui.setting.BlockUserFragment"
         android:label="BlockUserFragment"
-        tools:layout="@layout/fragment_block_user" />
+        tools:layout="@layout/fragment_block_user" >
+        <action
+            android:id="@+id/action_blockUserFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/noticeFragment"
         android:name="com.ssafy.daero.ui.setting.NoticeFragment"
