@@ -7,7 +7,7 @@
 
         <variable
             name="tripStamp"
-            type="com.ssafy.daero.data.dto.article.TripStamp" />
+            type="com.ssafy.daero.data.entity.TripStamp" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,14 +21,14 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:background="@drawable/imagebutton_regular"
-            app:imageUrl="@{tripStamp.image_url}"
+            app:imageUrl="@{tripStamp.imageUrl}"
             android:clipToOutline="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:scaleType="fitCenter" />
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_article_user"
+            android:id="@+id/img_article_check"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center_vertical"
