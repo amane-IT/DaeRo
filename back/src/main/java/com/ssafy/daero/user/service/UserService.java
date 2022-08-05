@@ -9,6 +9,7 @@ import com.ssafy.daero.user.vo.ChangePasswordVo;
 import com.ssafy.daero.user.vo.LoginVo;
 import com.ssafy.daero.user.vo.SignupVo;
 import com.ssafy.daero.common.util.CryptoUtil;
+import com.ssafy.daero.user.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,10 +17,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -50,15 +49,27 @@ public class UserService {
         return signupVo;
     }
 
-    public UserDto login(LoginVo loginVO) {
-        UserDto userDto = userMapper.selectById(loginVO.getId());
-        // 존재하는 유저고, 비밀번호도 맞고, 이용정지당한 유저가 아니고, 이메일 인증을 완료한 유저
-        if (userDto.getDelYn() == 'n' && Objects.equals(userDto.getPassword(), loginVO.getHashedPassword())
-                && userDto.getSuspendedYn() == 'n' && userDto.getEmailVerifiedYn() == 'y') {
-            return userDto;
+    public UserVo login(LoginVo loginVO) {
+        UserVo userVo = userMapper.selectById(loginVO.getId());
+        // 아이디가 존재하지 않는 유저일 경우
+        if (userVo == null) { return null; }
+        Date now = new Date();
+        // 탈퇴하지 않는 유저고, 비밀번호도 맞고, 이메일 인증을 완료한 유저
+        if (userVo.getDelYn() == 'n' && Objects.equals(userVo.getPassword(), loginVO.getHashedPassword())
+                && userVo.getEmailVerifiedYn() == 'y') {
+            // 정지당한 유저
+            if (userVo.getSuspendedYn() == 'y' && userVo.getSuspendedExpiry().after(now)) {
+                userVo.setResult(UserVo.UserVoResult.SUSPENDED_USER);
+            }
+            else {
+                // 정지 만료 기간이 지났거나 정지당하지 않은 유저
+                userVo.setResult(UserVo.UserVoResult.SUCCESS);
+            }
         } else {
-            return null;
+            // 비밀번호가 틀린 경우
+            userVo.setResult(UserVo.UserVoResult.FAILURE);
         }
+        return userVo;
     }
 
     public UserDto loginJwt(int userSeq) {
