@@ -22,11 +22,6 @@ public interface SnsMapper {
 
     int deleteArticleByArticleSeq(int articleSeq);
 
-    int deleteReplyByArticleSeq(int articleSeq);
-
-    int deleteArticleTagByArticleSeq(int articleSeq);
-
-
     ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 
     Integer selectUserSeqByReplySeq(int replySeq);

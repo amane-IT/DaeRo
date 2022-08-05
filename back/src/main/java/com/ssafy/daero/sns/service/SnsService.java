@@ -89,19 +89,14 @@ public class SnsService {
     public int deleteArticle(int articleSeq, int userSeq) {
         // 본인 게시글인지 확인
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
-        if (articleUser == null) { return 1; }
+        if (articleUser == null) { return 0; }
         if (articleUser == userSeq) {
-            int deletedTags = snsMapper.deleteArticleTagByArticleSeq(articleSeq);
-            if (deletedTags == 0) { return 1; }
-            int deletedReply = snsMapper.deleteReplyByArticleSeq(articleSeq);
-            if (deletedReply == 0) { return 1; }
             int deletedArticle = snsMapper.deleteArticleByArticleSeq(articleSeq);
-            if (deletedArticle == 0) { return 1;}
-            return 2;
+            if (deletedArticle == 0) {
+                return 1;
+            }
         }
-        else {
-            return 0;
-        }
+        return 2;
     }
 
     public Map<String, Object> replyList(int articleSeq, String page) {
