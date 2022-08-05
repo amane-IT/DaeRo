@@ -16,7 +16,6 @@ import com.ssafy.daero.ui.adapter.trip.TripHotAdapter
 import com.ssafy.daero.ui.adapter.trip.TripPopularAdapter
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.hotArticles
-import com.ssafy.daero.utils.popularTripPlaces
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
 
@@ -40,6 +39,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         observeData()
         setOnClickListeners()
         otherListeners()
+        getPopularTrip()
     }
 
     private fun initData() {
@@ -71,6 +71,18 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private val popularTripPlaceClickListener: (View, Int) -> Unit = { _, tripPlaceSeq ->
         // todo: 여행지 정보 상세 페이지로 이동
+        val bundle = Bundle().apply {
+            putInt(PLACE_SEQ, tripPlaceSeq)
+            putInt(TRIP_KIND, FIRST_TRIP)
+            putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
+        }
+
+        findNavController().navigate(
+            R.id.action_rootFragment_to_tripInformationFragment,
+            bundle
+        )
+
+        tripViewModel.initTripInformation()
     }
 
     private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
@@ -85,7 +97,6 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
             )
         }
         binding.imageTripNotification.setOnClickListener {
-            // todo: 알림 페이지로 이동
             findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
     }
@@ -126,8 +137,10 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     }
 
     private fun observeData() {
-        // todo: 인기있는 여행지 받아오기
-        tripPopularAdapter.tripPlaces = popularTripPlaces
+        tripViewModel.popularTrip.observe(viewLifecycleOwner) {
+            tripPopularAdapter.tripPlaces = it
+            tripPopularAdapter.notifyDataSetChanged()
+        }
 
         // todo: 핫한 여행기 받아오기
         tripHotAdapter.tripHots = hotArticles
@@ -171,6 +184,10 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
             tripViewModel.initTripInformation()
         }
+    }
+
+    private fun getPopularTrip() {
+        tripViewModel.getPopularTrips()
     }
 
     private fun showProgressDialog() {

@@ -6,13 +6,22 @@ import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
+import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
+import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
 import retrofit2.http.*
 
 interface SnsApi {
+
+    /**
+     * 게시글 목록 조회
+     */
+    @GET("sns")
+    fun getArticles(@Query("page") page: Int) : Single<PagingResponseDto<ArticleHomeItem>>
 
     /**
      * 게시글(여행기록) 상세 조회
@@ -184,10 +193,42 @@ interface SnsApi {
     ): Single<PagingResponseDto<ArticleMoreItem>>
 
     /**
+     * 따라가기
+     */
+    @GET("sns/article/{article_seq}/trace")
+    fun getTripFollow(
+        @Path("article_seq") articleSeq: Int
+    ): Single<Response<List<TripFollowSelectResponseDto>>>
+    
+    /**
      * 컬렉션 목록
-     * */
+     **/
     @GET("sns/collections")
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>
+
+    /**
+     * 차단하기
+     */
+    @POST("sns/users/{user_seq}/block")
+    fun blockAdd(
+        @Path("user_seq") userSeq: Int
+    ): Completable
+
+    /**
+     * 차단해제
+     */
+    @DELETE("sns/users/{user_seq}/block")
+    fun blockDelete(
+        @Path("user_seq") userSeq: Int
+    ): Completable
+
+    /**
+     * 차단 목록
+     */
+    @GET("sns/users/{user_seq}/block")
+    fun getBlockUser(
+        @Path("user_seq") userSeq: Int
+    ): Single<Response<List<UserBlockResponseDto>>>
 }

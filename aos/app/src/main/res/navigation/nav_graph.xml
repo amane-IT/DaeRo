@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/rootFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -115,8 +115,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_tripInformationFragment"
             app:destination="@id/tripInformationFragment"
@@ -130,21 +129,21 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_searchPlaceNameMoreFragment"
             app:destination="@id/searchPlaceNameMoreFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_notificationFragment"
             app:destination="@id/notificationFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_otherPageFragment"
             app:destination="@id/otherPageFragment"
@@ -208,7 +207,7 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim"
             app:popUpTo="@id/settingFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/profileSettingFragment"
@@ -219,20 +218,28 @@
         android:id="@+id/resetPasswordConfirmFragment"
         android:name="com.ssafy.daero.ui.setting.ResetPasswordConfirmFragment"
         android:label="ResetPasswordConfirmFragment"
-        tools:layout="@layout/fragment_reset_password_confirm" >
+        tools:layout="@layout/fragment_reset_password_confirm">
         <action
             android:id="@+id/action_resetPasswordConfirmFragment_to_resetPasswordFragment"
             app:destination="@id/resetPasswordFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/blockUserFragment"
         android:name="com.ssafy.daero.ui.setting.BlockUserFragment"
         android:label="BlockUserFragment"
-        tools:layout="@layout/fragment_block_user" />
+        tools:layout="@layout/fragment_block_user" >
+        <action
+            android:id="@+id/action_blockUserFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/noticeFragment"
         android:name="com.ssafy.daero.ui.setting.NoticeFragment"
@@ -312,7 +319,7 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/signupUsernameFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/termsFragment"
@@ -328,7 +335,7 @@
         android:id="@+id/followerFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowerFragment"
         android:label="FollowerFragment"
-        tools:layout="@layout/fragment_follower" >
+        tools:layout="@layout/fragment_follower">
         <action
             android:id="@+id/action_followerFragment_to_otherPageFragment"
             app:destination="@id/otherPageFragment" />
@@ -337,7 +344,7 @@
         android:id="@+id/followingFragment"
         android:name="com.ssafy.daero.ui.root.mypage.FollowingFragment"
         android:label="FollowingFragment"
-        tools:layout="@layout/fragment_following" >
+        tools:layout="@layout/fragment_following">
         <action
             android:id="@+id/action_followingFragment_to_otherPageFragment"
             app:destination="@id/otherPageFragment" />
@@ -358,32 +365,28 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_articleFragment_to_tripFollowFragment"
             app:destination="@id/tripFollowFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_articleFragment_to_articleWriteDayFragment"
             app:destination="@id/articleWriteDayFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_articleFragment_to_reportFragment"
             app:destination="@id/reportFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_articleFragment_to_otherPageFragment"
             app:destination="@id/otherPageFragment" />
@@ -392,13 +395,12 @@
         android:id="@+id/tripStampDetailFragment"
         android:name="com.ssafy.daero.ui.root.sns.TripStampDetailFragment"
         android:label="TripStampDetailFragment"
-        tools:layout="@layout/fragment_trip_stamp_detail"
-        />
+        tools:layout="@layout/fragment_trip_stamp_detail" />
     <fragment
         android:id="@+id/tripFollowFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripFollowFragment"
         android:label="TripFollowFragment"
-        tools:layout="@layout/fragment_trip_follow"/>
+        tools:layout="@layout/fragment_trip_follow" />
     <fragment
         android:id="@+id/articleWriteDayFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleWriteDayFragment"
@@ -410,8 +412,7 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/articleWriteExpenseFragment"
@@ -424,40 +425,60 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"
-            />
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/articleWriteThumbnailFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleWriteThumbnailFragment"
         android:label="ArticleWriteThumbnailFragment"
-        tools:layout="@layout/fragment_article_write_thumbnail"/>
+        tools:layout="@layout/fragment_article_write_thumbnail" />
     <fragment
         android:id="@+id/reportFragment"
         android:name="com.ssafy.daero.ui.setting.ReportFragment"
         android:label="ReportFragment"
-        tools:layout="@layout/fragment_report"/>
+        tools:layout="@layout/fragment_report" />
     <fragment
         android:id="@+id/tripInformationFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"
         android:label="TripInformationFragment"
-        tools:layout="@layout/fragment_trip_information"/>
+        tools:layout="@layout/fragment_trip_information" />
     <fragment
         android:id="@+id/otherPageFragment"
         android:name="com.ssafy.daero.ui.root.mypage.OtherPageFragment"
         android:label="OtherPageFragment"
-        tools:layout="@layout/fragment_other_page"
-        />
+        tools:layout="@layout/fragment_other_page">
+        <action
+            android:id="@+id/action_otherPageFragment_to_followerFragment"
+            app:destination="@id/followerFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherPageFragment_to_followingFragment"
+            app:destination="@id/followingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_otherPageFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/searchContentMoreFragment"
         android:name="com.ssafy.daero.ui.root.search.SearchContentMoreFragment"
         android:label="SearchContentMoreFragment"
-        tools:layout="@layout/fragment_search_content_more"/>
+        tools:layout="@layout/fragment_search_content_more" />
     <fragment
         android:id="@+id/searchPlaceNameMoreFragment"
         android:name="com.ssafy.daero.ui.root.search.SearchPlaceNameMoreFragment"
         android:label="SearchPlaceNameMoreFragment"
-        tools:layout="@layout/fragment_search_place_name_more"/>
+        tools:layout="@layout/fragment_search_place_name_more" />
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.ssafy.daero.ui.setting.NotificationFragment"
