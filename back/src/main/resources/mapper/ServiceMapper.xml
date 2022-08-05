@@ -5,13 +5,38 @@
 <mapper namespace="com.ssafy.daero.service.mapper.ServiceMapper">
     <select id="selectNoticeList" resultMap="mappingNoticeDto">
         SELECT title, content, created_at
-        FROM notice
+        FROM daero.notice
     </select>
 
     <select id="selectFaqList" resultMap="mappingFaqDto">
         SELECT title, content, created_at
-        FROM faq
+        FROM daero.faq
     </select>
+
+    <select id="selectInquiryCountByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.inquires
+        WHERE `users_seq`=#{userSeq}
+    </select>
+
+    <select id="selectInquiryList" resultMap="mappingInquiryDto">
+        SELECT inquiry.title, inquiry.content, inquiry.created_at, inquiry.answer_yn, inquiry.answer, inquiry.answer_at
+        FROM (SELECT row_number() over (ORDER BY i.inquires_seq ASC) AS row, `title`,
+                     `content`,
+                     `created_at`,
+                     `answer_yn`,
+                     `answer`,
+                     `answer_at`
+              FROM daero.inquires i
+              WHERE `users_seq` = #{userSeq}) AS inquiry
+        WHERE (#{page} - 1) * 10 &lt; inquiry.row
+          AND inquiry.row &lt; (#{page} * 10) + 1;
+    </select>
+
+    <insert id="insertInquiry">
+        INSERT INTO daero.inquires (`users_seq`, `title`, `content`, `created_at`)
+        VALUES (#{userSeq}, #{title}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'))
+    </insert>
 
     <resultMap id="mappingNoticeDto" type="com.ssafy.daero.service.dto.NoticeDto">
         <result property="title" column="title" />
@@ -23,5 +48,14 @@
         <result property="title" column="title" />
         <result property="content" column="content" />
         <result property="createdAt" column="created_at" />
+    </resultMap>
+
+    <resultMap id="mappingInquiryDto" type="com.ssafy.daero.service.dto.InquiryDto">
+        <result property="title" column="title" />
+        <result property="content" column="content" />
+        <result property="created_at" column="created_at" />
+        <result property="answer_yn" column="answer_yn" />
+        <result property="answer" column="answer" />
+        <result property="answer_at" column="answer_at" />
     </resultMap>
 </mapper>
