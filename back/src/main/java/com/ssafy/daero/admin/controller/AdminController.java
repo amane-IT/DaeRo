@@ -204,4 +204,10 @@ public class AdminController {
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @PutMapping("/user/{user_seq}/suspension")
+    public ResponseEntity<String> suspendUser(@PathVariable int user_seq, @RequestBody Map<String, Integer> req) {
+        boolean res = adminService.suspendUser(user_seq, req.get("day"));
+        return new ResponseEntity<>(SUCCESS,HttpStatus.OK);
+    }
 }

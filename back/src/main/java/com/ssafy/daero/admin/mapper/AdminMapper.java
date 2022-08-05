@@ -88,4 +88,6 @@ public interface AdminMapper {
 
     int deleteNotice(int noticeSeq);
 
+    int updateUserSuspension(@Param("userSeq") int userSeq, @Param("date") String date);
+
 }

@@ -278,6 +278,12 @@
         DELETE FROM daero.notice WHERE `notice_seq`=#{noticeSeq}
     </delete>
 
+    <update id="updateUserSuspension">
+        UPDATE daero.users
+        SET `suspended_yn`='y', `suspended_expiry`=#{date}
+        WHERE `users_seq`=#{userSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />

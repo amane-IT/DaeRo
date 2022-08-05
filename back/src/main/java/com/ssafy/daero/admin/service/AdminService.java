@@ -15,12 +15,11 @@ import com.ssafy.daero.sns.vo.StampVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.mapper.TripMapper;
 import com.ssafy.daero.user.dto.UserDto;
-import org.junit.platform.commons.util.StringUtils;
+import com.ssafy.daero.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 @Service
@@ -28,10 +27,13 @@ public class AdminService {
     private AdminMapper adminMapper;
     private SnsMapper snsMapper;
     private TripMapper tripMapper;
-    public AdminService(AdminMapper adminMapper, SnsMapper snsMapper, TripMapper tripMapper) {
+
+    private UserMapper userMapper;
+    public AdminService(AdminMapper adminMapper, SnsMapper snsMapper, TripMapper tripMapper, UserMapper userMapper) {
         this.adminMapper=adminMapper;
         this.snsMapper=snsMapper;
         this.tripMapper=tripMapper;
+        this.userMapper=userMapper;
     }
 
     public Map<String, Object> userList(int page) {
@@ -433,6 +435,28 @@ public class AdminService {
     public boolean deleteNotice(int noticeSeq) {
         int deleted = adminMapper.deleteNotice(noticeSeq);
         return deleted == 1;
+    }
+
+    public boolean suspendUser(int userSeq, int day) {
+        UserDto userDto = userMapper.selectUserByUserSeq(userSeq);
+        if (userDto == null) { return false; }
+
+//        Date now = new Date();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        String nowDate = simpleDateFormat.format(now);
+//
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(now);
+//        cal.add(Calendar.DATE, day);
+//        System.out.println(cal.getTime());
+//        return true;
+        Calendar recent = Calendar.getInstance();
+        recent.add(Calendar.DATE, day);
+        String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
+        System.out.println(recentString);
+        int updated = adminMapper.updateUserSuspension(userSeq, recentString);
+        System.out.println(updated);
+        return true;
     }
 
 }
