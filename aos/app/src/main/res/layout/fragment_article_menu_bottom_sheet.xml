@@ -30,6 +30,7 @@
                 android:text="따라가기" />
 
             <View
+                android:id="@+id/view_article_menu_trip_follow"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -44,6 +45,7 @@
                 android:text="공유" />
 
             <View
+                android:id="@+id/view_article_menu_share"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -58,6 +60,7 @@
                 android:text="수정" />
 
             <View
+                android:id="@+id/view_article_menu_modify"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -72,6 +75,22 @@
                 android:text="삭제" />
 
             <View
+                android:id="@+id/view_article_menu_delete"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightGray" />
+
+            <TextView
+                android:id="@+id/tv_article_menu_hide"
+                style="@style/SubHeadSemiBold"
+                android:gravity="center"
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="숨기기" />
+
+            <View
+                android:id="@+id/view_article_menu_hide"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -87,6 +106,7 @@
                 android:text="신고하기" />
 
             <View
+                android:id="@+id/view_article_menu_report"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />

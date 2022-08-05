@@ -13,6 +13,7 @@ import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
+import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import com.ssafy.daero.data.remote.SnsApi
 import com.ssafy.daero.data.repository.paging.*
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
@@ -208,6 +209,27 @@ class SnsRepository private constructor(context: Context) {
         articleSeq: Int
     ): Single<Response<List<TripFollowSelectResponseDto>>> {
         return snsApi.getTripFollow(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun blockAdd(userSeq: Int): Completable {
+        return snsApi.blockAdd(userSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun blockDelete(userSeq: Int): Completable {
+        return snsApi.blockDelete(userSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getBlockUser(
+        userSeq: Int
+    ): Single<Response<List<UserBlockResponseDto>>> {
+        return snsApi.getBlockUser(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
