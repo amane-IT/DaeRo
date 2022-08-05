@@ -9,12 +9,11 @@ import android.widget.ArrayAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentTripNextBottomSheetBinding
-import com.ssafy.daero.utils.view.expandFullHeight
 
 
-class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
+class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Unit) : BottomSheetDialogFragment() {
     private var _binding: FragmentTripNextBottomSheetBinding? = null
     private val binding get() = _binding!!
 
@@ -56,7 +55,8 @@ class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.apply {
             buttonTripNextBottomRecommend.setOnClickListener {
-                // TODO: 다음 여행지 추천
+                applyOptions(time, transportation)
+                dismiss()
             }
         }
     }
@@ -89,9 +89,19 @@ class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
         binding.radioGroupTripNextBottom.setOnCheckedChangeListener { radioGroup, checkedId ->
             when(checkedId){
                 // TODO: tranportation 타입에 맞춰서 변경하기
-                R.id.radioButton_tripNextBottm_walk -> transportation = "도보"
-                R.id.radioButton_tripNextBottm_byCar -> transportation = "차량"
+                R.id.radioButton_tripNextBottm_walk -> transportation = "walk"
+                R.id.radioButton_tripNextBottm_byCar -> transportation = "car"
             }
+        }
+
+        binding.buttonTripNextBottomRecommend.setOnClickListener {
+            // place_seq 가져오기 -> DB 가장 마지막 데이터의 place_seq를 가져오면 되나..?
+            // prefs에 저장해서 가져오기로 결정
+            // TODO: place_seq 가져오기
+            val placeSeq = App.prefs.placeSeq
+
+
+
         }
     }
 
