@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
@@ -28,6 +29,10 @@ class TripNextViewModel : BaseViewModel() {
     private val _tripList = MutableLiveData<List<TripStamp>>()
     val tripList: LiveData<List<TripStamp>>
         get() = _tripList
+
+    private val _nearByPlaces = MutableLiveData<List<TripPopularResponseDto>>()
+    val nearByPlaces: LiveData<List<TripPopularResponseDto>>
+        get() = _nearByPlaces
 
     var nextTripRecommendState = MutableLiveData<Int>()
     var tripListState = MutableLiveData<Int>()
@@ -75,6 +80,18 @@ class TripNextViewModel : BaseViewModel() {
                     _tripList.postValue(response)
                 }, { throwable ->
                     Log.d(TAG, "selectTripStampList: ${throwable.toString()}")
+                    tripListState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun getNearByPlaces(){
+        addDisposable(
+            tripNextRepository.getNearByPlaces()
+                .subscribe({ response ->
+                    _nearByPlaces.postValue(response.body())
+                }, { throwable ->
+                    Log.d(TAG, "getNearByPlaces: ${throwable.toString()}")
                     tripListState.postValue(FAIL)
                 })
         )

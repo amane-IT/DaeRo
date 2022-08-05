@@ -29,7 +29,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         initAdapter()
         observeData()
         setOnClickListeners()
-        getTripStampList()
+        initData()
     }
 
     private fun initAdapter(){
@@ -69,8 +69,9 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         }
     }
 
-    private fun getTripStampList() {
+    private fun initData() {
         tripNextViewModel.selectTripStampList()
+        tripNextViewModel.getNearByPlaces()
     }
 
 
@@ -80,7 +81,20 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
     private fun observeData() {
         // TODO: 주변 여행지 정보 받아오기
-        tripNearByAdapter.tripPlaces = popularTripPlaces
+        tripNextViewModel.nearByPlaces.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()){
+                tripNearByAdapter.tripPlaces = it
+                for(i in it){
+                    Log.d("TAG", "observeData: ${i.toString()}")
+                }
+                tripNearByAdapter.notifyDataSetChanged()
+            }
+            else{
+                Log.d("TAG", "observeData: 없음")
+                tripNearByAdapter.tripPlaces = popularTripPlaces
+            }
+        }
+
 
         // TODO: 지금까지 여행지 상세 정보 받아오기
         tripNextViewModel.tripListState.observe(viewLifecycleOwner) {
