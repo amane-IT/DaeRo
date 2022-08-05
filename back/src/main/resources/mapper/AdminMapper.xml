@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.admin.mapper.AdminMapper">
+
+    <select id="selectAdminByCode" parameterType="String" resultType="java.lang.Integer">
+        SELECT `admin_seq`
+        FROM daero.admin
+        WHERE `code`=#{code}
+    </select>
+
     <select id="selectUserCount" resultType="_int">
         SELECT COUNT(*)
         FROM daero.users

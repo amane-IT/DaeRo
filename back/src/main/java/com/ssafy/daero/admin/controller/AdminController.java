@@ -23,6 +23,13 @@ public class AdminController {
     private final AdminService adminService;
     public AdminController(AdminService adminService) { this.adminService = adminService; }
 
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody Map<String, String> req) {
+        Integer res = adminService.login(req.get("code"));
+        if (res == null) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+    }
+
     @GetMapping("/users")
     public ResponseEntity<Map<String, Object>> userList(@RequestParam(required = false, defaultValue = "1") String page) {
         Map<String, Object> res = adminService.userList(Integer.parseInt(page));

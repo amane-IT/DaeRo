@@ -24,16 +24,20 @@ import java.util.*;
 
 @Service
 public class AdminService {
-    private AdminMapper adminMapper;
-    private SnsMapper snsMapper;
-    private TripMapper tripMapper;
-
-    private UserMapper userMapper;
+    private final AdminMapper adminMapper;
+    private final SnsMapper snsMapper;
+    private final TripMapper tripMapper;
+    private final UserMapper userMapper;
     public AdminService(AdminMapper adminMapper, SnsMapper snsMapper, TripMapper tripMapper, UserMapper userMapper) {
         this.adminMapper=adminMapper;
         this.snsMapper=snsMapper;
         this.tripMapper=tripMapper;
         this.userMapper=userMapper;
+    }
+
+    public Integer login(String code) {
+        Integer adminSeq = adminMapper.selectAdminByCode(code);
+        return adminSeq;
     }
 
     public Map<String, Object> userList(int page) {

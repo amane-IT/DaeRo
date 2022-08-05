@@ -19,6 +19,7 @@ import java.util.Map;
 
 @Mapper
 public interface AdminMapper {
+    Integer selectAdminByCode(String code);
     int selectUserCount();
     ArrayList<UserDto> selectUserList(int page);
 
