@@ -21,5 +21,5 @@ interface TripStampDao {
     fun deleteStamp(tripStamp: TripStamp): Completable
 
     @Query("DELETE FROM $TRIP_STAMP")
-    fun deleteAll(): Completable
+    fun deleteAllStamps(): Completable
 }
