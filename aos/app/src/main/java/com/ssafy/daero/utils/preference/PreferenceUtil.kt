@@ -25,6 +25,20 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putString(NICKNAME, value).apply()
         }
 
+    // 현재 여행중인 여행지 seq
+    var curPlaceSeq : Int
+        get() = prefs.getInt(CUR_TRIP_SEQ, 0)
+        set(value) {
+            prefs.edit().putInt(CUR_TRIP_SEQ, value).apply()
+        }
+
+    // 여행 상세페이지에서 여행 추천 버튼 클릭 여부
+    var isTripStart : Boolean
+        get() = prefs.getBoolean(IS_TRIP_START, false)
+        set(value) {
+            prefs.edit().putBoolean(IS_TRIP_START, value).apply()
+        }
+
     // 여행 상태
     var tripState : Int
         get() = prefs.getInt(TRIP_STATE, TRIP_BEFORE)
@@ -56,5 +70,12 @@ class PreferenceUtil(context: Context) {
         jwt = null
         userSeq = 0
         nickname = null
+    }
+
+    fun initTrip() {
+        curPlaceSeq = 0
+        isTripStart = false
+        isFollow = false
+        isPosting = false
     }
 }

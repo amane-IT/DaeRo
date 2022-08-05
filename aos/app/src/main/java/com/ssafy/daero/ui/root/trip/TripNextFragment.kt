@@ -68,6 +68,6 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         tripNearByAdapter.tripPlaces = popularTripPlaces
 
         // TODO: 지금까지 여행지 상세 정보 받아오기
-        tripUntilNowAdapter.tripPlaces = popularTripPlaces
+        //tripUntilNowAdapter.tripPlaces = popularTripPlaces
     }
 }

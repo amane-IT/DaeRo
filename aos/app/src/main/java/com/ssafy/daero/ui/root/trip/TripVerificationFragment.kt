@@ -50,7 +50,7 @@ class TripVerificationFragment : BaseFragment<FragmentTripVerificationBinding>(R
         }
         tripUntilNowAdapter = TripUntilNowAdapter().apply {
             onItemClickListener = tripUntilNowClickListener
-            tripPlaces = tripUntilNowList
+            //tripPlaces = tripUntilNowList
         }
         binding.recyclerTripVerificationTripStampSoFar.apply {
             adapter = tripUntilNowAdapter

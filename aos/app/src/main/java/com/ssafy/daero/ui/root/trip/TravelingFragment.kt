@@ -11,9 +11,12 @@ import android.location.Location
 
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -25,6 +28,7 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
+import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
@@ -35,12 +39,9 @@ import kotlin.math.sqrt
 class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling),
     SensorEventListener {
 
-    private val tripInformationViewModel: TripInformationViewModel by viewModels()
     private val travelingViewModel: TravelingViewModel by viewModels()
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var placeSeq = 0
-    private var tagCollection: TagCollection? = null
-    private var tripKind = 0
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     private lateinit var mSensorManager: SensorManager
@@ -55,8 +56,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     internal lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
 
-    private val tripUntilNowClickListener: (View, Int) -> Unit = { _, articleSeq ->
-
+    private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
+        // todo: 트립스탬프 상세로 이동
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,12 +77,17 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     override fun init() {
+        checkLocationPermission()
         initData()
+        initView()
+        initAdapter()
         observeData()
         setOnClickListeners()
+        getTripInformation()
+        getTripStamps()
     }
 
-    private fun initData() {
+    private fun checkLocationPermission() {
         if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
             requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, {
                 toast("권한 허용이 확인되었습니다.")
@@ -89,32 +95,36 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 toast("권한을 허용하지 않으면 인증할 수 없습니다.")
             })
         }
+    }
+
+    private fun initData() {
+        placeSeq = App.prefs.curPlaceSeq
+    }
+
+    private fun initView() {
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
+    }
 
-//        placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
-//        tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
-//        tripKind = arguments!!.getInt(TRIP_KIND, 0)
-
-        if (placeSeq > 0) {
-            tripInformationViewModel.getTripInformation(placeSeq)
-        } else {
-            toast("여행지 정보를 불러오는데 실패했습니다.")
+    private fun initAdapter() {
+        tripUntilNowAdapter = TripUntilNowAdapter().apply {
+            onItemClickListener = tripUntilNowClickListener
         }
-        travelingViewModel.getTripStamps()
+        binding.recyclerTravelingTripStampSoFar.adapter = tripUntilNowAdapter
     }
 
     private fun observeData() {
-        tripInformationViewModel.tripInformationState.observe(viewLifecycleOwner) {
+        travelingViewModel.tripInformationState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
                     toast("여행지 정보를 불러오는데 실패했습니다.")
-                    tripInformationViewModel.tripInformationState.value = DEFAULT
+                    travelingViewModel.tripInformationState.value = DEFAULT
                 }
             }
         }
-        tripInformationViewModel.tripInformation.observe(viewLifecycleOwner) {
+        travelingViewModel.tripInformation.observe(viewLifecycleOwner) {
             Glide.with(binding.imgTravelingTripStamp)
                 .load(it.image_url)
+                .skipMemoryCache(false)
                 .placeholder(R.drawable.img_my_page_album)
                 .apply(RequestOptions().centerCrop())
                 .error(R.drawable.img_my_page_album)
@@ -125,28 +135,27 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             latitude = it.latitude
             longitude = it.longitude
         }
-        setBinding()
+        travelingViewModel.tripStamps.observe(viewLifecycleOwner) {
+            if(it.isEmpty()) {
+                binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
+                return@observe
+            }
+            tripUntilNowAdapter.tripStamps = it
+            tripUntilNowAdapter.notifyDataSetChanged()
+        }
     }
 
-    private fun setBinding() {
-        val tripUntilNowList = mutableListOf<TripPopularResponseDto>()
-        for (i in travelingViewModel.articleTripStampData) {
-            tripUntilNowList.add(TripPopularResponseDto(i.tripPlaceSeq, i.imageUrl, i.placeName))
-        }
-        if (tripUntilNowList.size > 0) {
-            binding.tvTravelingTripStampSoFarNone.visibility = View.GONE
-            binding.recyclerTravelingTripStampSoFar.visibility = View.VISIBLE
-            tripUntilNowAdapter = TripUntilNowAdapter().apply {
-                onItemClickListener = tripUntilNowClickListener
-                tripPlaces = tripUntilNowList
-            }
-            binding.recyclerTravelingTripStampSoFar.apply {
-                adapter = tripUntilNowAdapter
-                layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            }
+    private fun getTripStamps() {
+        travelingViewModel.getTripStamps()
+    }
+
+    private fun getTripInformation() {
+        Log.d("Traveling_싸피", "여행지 정보 요청")
+        Log.d("Traveling_싸피", "placeSeq : $placeSeq")
+        if (placeSeq > 0) {
+            travelingViewModel.getTripInformation(placeSeq)
         } else {
-            binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
-            binding.recyclerTravelingTripStampSoFar.visibility = View.INVISIBLE
+            toast("여행지 정보를 불러오는데 실패했습니다.")
         }
     }
 
@@ -155,7 +164,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             //todo : 다른 여행지 추천 화면으로 전환
         }
         binding.buttonTravelingStop.setOnClickListener {
-            //todo : 만약 이전에 했던 여행이 있으면 게시글 추가 페이지로, 없으면 홈화면으로
+            // 이전 여행기록이 없다면
+            if(travelingViewModel.tripStamps.value?.isEmpty() != false) {
+                // todo : 홈화면으로 이동, 캐시 디렉토리 삭제, room tripStamp 삭제, prefs 초기화
+                travelingViewModel.deleteTripStamps()
+                App.prefs.initTrip()
+                (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
+            } else {
+                // todo 게시글 추가 화면으로 이동
+            }
+        }
+        binding.imageTravelingNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
     }
 
@@ -226,6 +246,5 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         mLastLocation = location
         mLastLocation.latitude // 갱신 된 위도
         mLastLocation.longitude // 갱신 된 경도
-
     }
 }

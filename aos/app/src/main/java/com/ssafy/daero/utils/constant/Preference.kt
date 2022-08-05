@@ -11,3 +11,13 @@ const val IS_FOLLOW = "is_follow"
 const val IS_POSTING = "is_posting"
 
 const val FCM_TOKEN = "fcm_token"
+
+/**
+ * 현재 여행중인 여행지 seq
+ */
+const val CUR_TRIP_SEQ = "cur_trip_seq"
+
+/**
+ * 여행 시작 버튼 눌렀는지
+ */
+const val IS_TRIP_START = "is_trip_start"

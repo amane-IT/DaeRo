@@ -433,7 +433,8 @@
         android:id="@+id/tripInformationFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripInformationFragment"
         android:label="TripInformationFragment"
-        tools:layout="@layout/fragment_trip_information" />
+        tools:layout="@layout/fragment_trip_information">
+    </fragment>
     <fragment
         android:id="@+id/otherPageFragment"
         android:name="com.ssafy.daero.ui.root.mypage.OtherPageFragment"

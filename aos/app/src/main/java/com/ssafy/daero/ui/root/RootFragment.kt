@@ -14,10 +14,21 @@ import com.ssafy.daero.ui.root.trip.*
 import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
-    override fun init() {
-        setOnClickListeners()
+    var isTripStart = false
 
+    override fun init() {
+        checkTripStart()
+        setOnClickListeners()
         changeFragment(curFragmentType)
+    }
+
+    // 여행 상세 페이지에서 여행 시작 버튼 눌렀는지 여부
+    private fun checkTripStart() {
+        // 여행 시작 버튼 누름
+        if(App.prefs.isTripStart) {
+            changeTripState(TRIP_ING)
+            App.prefs.isTripStart = false
+        }
     }
 
     private fun setOnClickListeners() {
@@ -25,6 +36,13 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
             val fragmentType = getFragmentType(it.itemId)
             changeFragment(fragmentType)
             true
+        }
+
+        binding.apply {
+            tripBefore.setOnClickListener { changeTripState(TRIP_BEFORE) }
+            tripIng.setOnClickListener { changeTripState(TRIP_ING) }
+            tripVerification.setOnClickListener { changeTripState(TRIP_VERIFICATION) }
+            tripStamp.setOnClickListener { changeTripState(TRIP_COMPLETE) }
         }
     }
 
