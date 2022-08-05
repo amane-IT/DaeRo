@@ -1,9 +1,8 @@
 package com.ssafy.daero.ui.signup
 
-import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -20,7 +19,6 @@ import com.ssafy.daero.utils.view.toast
 class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.layout.fragment_signup_username){
 
     private val signupUsernameViewModel : SignupUsernameViewModel by viewModels()
-    private var flag = false
 
     override fun init() {
         setOnClickListeners()
@@ -31,18 +29,18 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
     private fun setOnClickListeners(){
 
         binding.apply {
-            buttonSignupUsernameNextStep.setOnClickListener{
-                if(buttonSignupUsernameNextStep.text.equals("닉네임 중복 검사")){
-                    val dto = SignupNicknameRequestDto(editTextSignupUsernameUserName.text.toString())
-                    signupUsernameViewModel.verifyNickname(dto)
-                    buttonSignupUsernameNextStep.isEnabled = false
-                }
-                else{
-                    if(flag){
-                        val dto = SignupRequestDto(App.userId, App.password, editTextSignupUsernameUserName.text.toString())
-                        signupUsernameViewModel.signup(dto)
-                    }
-                }
+            buttonSignupUsernameConfirm.setOnClickListener {
+                val dto = SignupNicknameRequestDto(editTextSignupUsernameUserName.text.toString())
+                signupUsernameViewModel.verifyNickname(dto)
+            }
+
+            buttonSignupUsernameNextStep.setOnClickListener {
+                val dto = SignupRequestDto(
+                    App.userId,
+                    App.password,
+                    editTextSignupUsernameUserName.text.toString()
+                )
+                signupUsernameViewModel.signup(dto)
             }
 
             imgLoginBack.setOnClickListener {
@@ -54,8 +52,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
             }
 
             checkboxSignupUsernameTermCheck.setOnCheckedChangeListener { box, isChecked ->
-                flag = isChecked
-                buttonSignupUsernameNextStep.isEnabled = isChecked
+                signupUsernameViewModel.checkOption(isChecked)
             }
         }
     }
@@ -72,9 +69,9 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
                 //텍스트 변화가 있을 시
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if (!App.userName.equals(editTextSignupUsernameUserName.text.toString())) {
-                        buttonSignupUsernameNextStep.text = "닉네임 중복 검사"
-                        flag = false
+                    if (App.userName != editTextSignupUsernameUserName.text.toString()) {
+                        buttonSignupUsernameConfirm.visibility = View.VISIBLE
+                        buttonSignupUsernameNextStep.visibility = View.GONE
                     }
                 }
             })
@@ -90,11 +87,22 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
             when(state){
                 SUCCESS -> {
                     binding.textSignupUsernameCheckMessage.text = "사용가능한 닉네임입니다."
-                    binding.buttonSignupUsernameNextStep.text = "가입하기"
+                    binding.buttonSignupUsernameConfirm.visibility = View.GONE
+                    binding.buttonSignupUsernameNextStep.visibility = View.VISIBLE
                 }
                 FAIL -> {
                     binding.textSignupUsernameCheckMessage.text = "중복된 닉네임입니다."
+                }
+            }
+        }
+
+        signupUsernameViewModel.isChecked.observe(viewLifecycleOwner) { state ->
+            when(state){
+                true -> {
                     binding.buttonSignupUsernameNextStep.isEnabled = true
+                }
+                false -> {
+                    binding.buttonSignupUsernameNextStep.isEnabled = false
                 }
             }
         }
@@ -105,7 +113,6 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                     App.userId = ""
                     App.password = ""
                     App.userName = ""
-                    App.userSeq = -1
 
                     findNavController().navigate(R.id.action_signupUsernameFragment_to_tripPreferenceFragment)
                 }
