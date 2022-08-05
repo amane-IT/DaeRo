@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @RestController
@@ -209,6 +210,12 @@ public class UserController {
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{user_seq}/preference")
+    public ResponseEntity<LinkedList<Map<String, Object>>> preferenceGet() {
+        LinkedList<Map<String, Object>> resultMap = this.userService.sendPreference();
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/{user_seq}/preference")
