@@ -440,23 +440,11 @@ public class AdminService {
     public boolean suspendUser(int userSeq, int day) {
         UserDto userDto = userMapper.selectUserByUserSeq(userSeq);
         if (userDto == null) { return false; }
-
-//        Date now = new Date();
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        String nowDate = simpleDateFormat.format(now);
-//
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(now);
-//        cal.add(Calendar.DATE, day);
-//        System.out.println(cal.getTime());
-//        return true;
         Calendar recent = Calendar.getInstance();
         recent.add(Calendar.DATE, day);
         String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
-        System.out.println(recentString);
         int updated = adminMapper.updateUserSuspension(userSeq, recentString);
-        System.out.println(updated);
-        return true;
+        return updated == 1;
     }
 
 }

@@ -208,6 +208,7 @@ public class AdminController {
     @PutMapping("/user/{user_seq}/suspension")
     public ResponseEntity<String> suspendUser(@PathVariable int user_seq, @RequestBody Map<String, Integer> req) {
         boolean res = adminService.suspendUser(user_seq, req.get("day"));
-        return new ResponseEntity<>(SUCCESS,HttpStatus.OK);
+        if (res) { return new ResponseEntity<>(SUCCESS,HttpStatus.OK); }
+        return new ResponseEntity<>(FAILURE,HttpStatus.BAD_REQUEST);
     }
 }
