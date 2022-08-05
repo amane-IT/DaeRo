@@ -1,5 +1,6 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.Manifest
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,8 @@ import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.view.toast
 
-class TripStampBottomSheetFragment(val setPhotos: (Boolean) -> Unit) : BottomSheetDialogFragment() {
+
+class TripStampBottomSheetFragment(private val onItemClickListener : (Boolean, Boolean) -> Unit) : BottomSheetDialogFragment() {
     private var _binding: FragmentTripStampBottomSheetBinding? = null
     private val binding get() = _binding!!
 
@@ -41,21 +43,22 @@ class TripStampBottomSheetFragment(val setPhotos: (Boolean) -> Unit) : BottomShe
     private fun setOnClickListeners() {
         binding.apply {
             imageTripStampCamera.setOnClickListener {
-                if(!checkPermission(android.Manifest.permission.CAMERA)){
-                    requestPermission(android.Manifest.permission.CAMERA, {
-                        toast("권한 허용이 확인되었습니다.")
-                        setPhotos(true)
-                        dismiss()
+                // TODO: 카메라 촬영 기능
+                if(!checkPermission(Manifest.permission.CAMERA)) {
+                    requestPermission(Manifest.permission.CAMERA, {
+                        onItemClickListener(false, true)
                     }, {
-                        toast("권한을 허용하지 않으면 트립스탬프를 만들 수 없습니다.")
+                        toast("카메라 권한이 거부되었습니다.")
                     })
                 } else {
-                    setPhotos(true)
+                    onItemClickListener(false, true)
                 }
+                dismiss()
             }
 
             imageTripStampGallery.setOnClickListener {
-                setPhotos(false)
+                // TODO: 갤러리 사진 선택 기능
+                onItemClickListener(true, false)
                 dismiss()
             }
         }

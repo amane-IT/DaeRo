@@ -10,7 +10,7 @@ import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
-class TravelingViewModel : BaseViewModel() {
+class TripVerificationViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
 
     val responseState = MutableLiveData<Int>()

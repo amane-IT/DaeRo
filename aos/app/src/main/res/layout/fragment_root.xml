@@ -15,6 +15,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!--        <Button-->
+        <!--            android:id="@+id/tripBefore"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="여행 전"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/bottomnavigation_root"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/tripIng"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="여행 증"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/tripBefore"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/tripVerification"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="인증완료"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/tripIng"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
+        <!--        <Button-->
+        <!--            android:id="@+id/tripStamp"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="트립스탬프완료"-->
+        <!--            app:layout_constraintBottom_toTopOf="@id/tripVerification"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent" />-->
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomnavigation_root"
             android:layout_width="0dp"
