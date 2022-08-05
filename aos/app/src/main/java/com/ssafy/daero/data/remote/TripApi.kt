@@ -64,7 +64,7 @@ interface TripApi {
      * */
     @GET("trips/recommend")
     fun recommendNextPlace(
-        @Query("place_seq") placeSeq: Int,
+        @Query("place-seq") placeSeq: Int,
         @Query("time") time: Int,
         @Query("transportation") transportation: String
     ): Single<Response<NextPlaceRecommendResponseDto>>

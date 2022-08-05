@@ -2,18 +2,17 @@ package com.ssafy.daero.ui.root.trip
 
 
 import android.view.View
-import android.widget.Button
-import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
-import com.ssafy.daero.utils.popularTripPlaces
+import com.ssafy.daero.utils.constant.PLACE_SEQ
 
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
@@ -30,7 +29,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         getAroundTrips()
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         tripNearByAdapter = TripNearByAdapter().apply {
             onItemClickListener = nearByTripPlaceClickListener
         }
@@ -51,10 +50,12 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     }
 
     private val applyOptions: (Int, String) -> Unit = { time, transportation ->
+        App.prefs.tripTime = time
+        App.prefs.tripTransportation = transportation
         tripNextViewModel.recommendNextPlace(time, transportation)
     }
 
-    private fun setOnClickListeners(){
+    private fun setOnClickListeners() {
         binding.apply {
 
             buttonTripNextNextTripRecommend.setOnClickListener {
@@ -90,11 +91,26 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
                 notifyDataSetChanged()
             }
         }
-
         tripNextViewModel.tripStamps.observe(viewLifecycleOwner) {
             tripUntilNowAdapter.apply {
                 tripStamps = it
                 notifyDataSetChanged()
+            }
+        }
+        tripNextViewModel.showProgress.observe(viewLifecycleOwner) {
+            binding.progressBarTripNextLoading.isVisible = it
+        }
+        tripNextViewModel.nextTripRecommendResponseDto.observe(viewLifecycleOwner) { placeSeq ->
+            // 다음 여행지 추천으로 변경
+            if(placeSeq > 0) {
+                App.prefs.isFirstTrip = false
+
+                findNavController().navigate(
+                    R.id.action_rootFragment_to_tripInformationFragment, bundleOf(
+                        PLACE_SEQ to placeSeq
+                    )
+                )
+                tripNextViewModel.initNextTripRecommend()
             }
         }
     }

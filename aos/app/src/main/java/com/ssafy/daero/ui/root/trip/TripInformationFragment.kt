@@ -3,10 +3,8 @@ package com.ssafy.daero.ui.root.trip
 import android.Manifest
 import android.graphics.Paint
 import android.view.View
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -30,9 +28,6 @@ class TripInformationFragment :
     // 첫 여행지 추천 시 선택한 키워드 태그들
     private var tagCollection: TagCollection? = null
 
-    // 첫 여행지 추천인지, 다음 여행지 추천인지
-    private var tripKind = 0
-
     override fun init() {
         initView()
         initData()
@@ -47,8 +42,6 @@ class TripInformationFragment :
     private fun initData() {
         placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
         tagCollection = arguments?.getParcelable<TagCollection>(TAG_COLLECTION)
-        tripKind = arguments!!.getInt(TRIP_KIND, 0)
-
 
         if (placeSeq > 0) {
             tripInformationViewModel.getTripInformation(placeSeq)
@@ -86,7 +79,7 @@ class TripInformationFragment :
         }
         binding.buttonTripInformationStartTrip.setOnClickListener {
             // 권한 체크
-            if(!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
                 // 권한 요청
                 requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, {
                     startTrip()
@@ -98,20 +91,18 @@ class TripInformationFragment :
             }
         }
         binding.buttonTripInformationReRecommend.setOnClickListener {
-            when (tripKind) {
-                // 첫 여행지 다시 추천
-                FIRST_TRIP -> {
-                    tripInformationViewModel.getReFirstTripRecommend(
-                        FirstTripRecommendRequestDto(
-                            regions = tagCollection?.regionTags ?: listOf(),
-                            tags = tagCollection?.categoryTags ?: listOf()
-                        )
+            // 첫 여행지 추천 상태일 경우, 다시 추천
+            if (App.prefs.isFirstTrip) {
+                tripInformationViewModel.getReFirstTripRecommend(
+                    FirstTripRecommendRequestDto(
+                        regions = tagCollection?.regionTags ?: listOf(),
+                        tags = tagCollection?.categoryTags ?: listOf()
                     )
-                }
-                // 다음 여행지 다시 추천
-                NEXT_TRIP -> {
-                    // todo: 다음 여행지 추천일때, 다시 추천 기능
-                }
+                )
+            }
+            // 다음 여행지 추천 상태일 경우
+            else {
+                tripInformationViewModel.getNextTripRecommend()
             }
         }
         binding.textTripInformationFold.setOnClickListener {

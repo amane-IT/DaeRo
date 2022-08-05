@@ -2,38 +2,35 @@ package com.ssafy.daero.ui.root.trip
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.*
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.ui.setting.LogoutDialogFragment
-import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.TRIP_BEFORE
+import com.ssafy.daero.utils.constant.TRIP_VERIFICATION
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
-import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
 import kotlin.math.sqrt
 
@@ -43,6 +40,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private val travelingViewModel: TravelingViewModel by viewModels()
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var placeSeq = 0
+    private var address = ""
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     private lateinit var mSensorManager: SensorManager
@@ -135,9 +133,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             binding.tvTravelingAddress.text = it.address
             latitude = it.latitude
             longitude = it.longitude
+            address = it.address
         }
         travelingViewModel.tripStamps.observe(viewLifecycleOwner) {
-            if(it.isEmpty()) {
+            if (it.isEmpty()) {
                 binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
                 return@observe
             }
@@ -160,7 +159,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun setOnClickListeners() {
         binding.buttonTravelingDirections.setOnClickListener {
-            // todo: 길찾기 기능
+            // 네이버 지도 길찾기
+            findDirectionByNaverMap()
         }
         binding.buttonTravelingNext.setOnClickListener {
             //todo : 다른 여행지 추천 화면으로 전환
@@ -174,7 +174,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         binding.buttonTravelingStop.setOnClickListener {
             // 이전 여행기록이 없다면
-            if(travelingViewModel.tripStamps.value?.isEmpty() != false) {
+            if (travelingViewModel.tripStamps.value?.isEmpty() != false) {
                 // todo : 홈화면으로 이동, 캐시 디렉토리 삭제, room tripStamp 삭제, prefs 초기화
                 travelingViewModel.deleteTripStamps()
                 App.prefs.initTrip()
@@ -186,6 +186,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         binding.imageTravelingNotification.setOnClickListener {
             findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
+    }
+
+    private fun findDirectionByNaverMap() {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
+            ).apply {
+                `package` = "com.nhn.android.nmap"
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        )
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

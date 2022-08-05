@@ -10,16 +10,11 @@ import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class TripNextViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
 
-    val showProgress = MutableLiveData<Int>()
+    val showProgress = MutableLiveData<Boolean>()
 
     private val _nextTripRecommendResponseDto = MutableLiveData<Int>()
     val nextTripRecommendResponseDto: LiveData<Int>
@@ -52,7 +47,7 @@ class TripNextViewModel : BaseViewModel() {
                 .subscribe({
                     _aroundTrips.postValue(it.body())
                 }, { throwable ->
-                    Log.d("TripNextVM_DaeRo", "getAroundTrips: ")
+                    Log.d("TripNextVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -61,36 +56,27 @@ class TripNextViewModel : BaseViewModel() {
         time: Int,
         transportation: String
     ) {
-        showProgress.postValue(SUCCESS)
-
-        // 2.5초 딜레이
-        val delay =
-            Single.just(1).delay(2500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+        showProgress.postValue(true)
 
         // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
         addDisposable(
-            Single.zip(
-                delay,
-                tripRepository.recommendNextPlace(
-                    App.prefs.placeSeq,
-                    time,
-                    transportation
-                ),
-                BiFunction { _, response ->
-                    response
-                }).subscribe(
-                { response ->
-                    // place_seq 저장
-                    _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
-                    showProgress.postValue(FAIL)
-                },
-                { throwable ->
-                    Log.d("TripNextVM_DaeRo", throwable.toString())
-                    showProgress.postValue(FAIL)
-                    nextTripRecommendState.postValue(FAIL)
-                })
+            tripRepository.recommendNextPlace(
+                App.prefs.curPlaceSeq,
+                time,
+                transportation
+            ).subscribe({ response ->
+                // place_seq 저장
+                _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                showProgress.postValue(false)
+            }, { throwable ->
+                Log.d("TripNextVM_DaeRo", throwable.toString())
+                showProgress.postValue(false)
+                nextTripRecommendState.postValue(FAIL)
+            })
         )
     }
 
+    fun initNextTripRecommend() {
+        _nextTripRecommendResponseDto.value = 0
+    }
 }

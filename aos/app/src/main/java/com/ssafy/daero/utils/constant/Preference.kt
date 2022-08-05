@@ -15,6 +15,9 @@ const val FCM_TOKEN = "fcm_token"
 const val PLACE_NAME = "place_name"
 const val IMAGE_PATH = "image_path"
 const val IS_TRIP_STAMP_COMPLETE = "is_trip_stamp_complete"
+const val IS_FIRST_TRIP = "is_first_trip"
+const val TRIP_TRANSPORTATION = "trip_transportation"
+const val TRIP_TIME = "trip_time"
 
 /**
  * 현재 여행중인 여행지 seq

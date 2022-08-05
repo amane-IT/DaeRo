@@ -3,6 +3,7 @@ package com.ssafy.daero.ui.root.trip
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
@@ -35,11 +36,9 @@ class TripInformationViewModel : BaseViewModel() {
                         _tripInformation.postValue(
                             response.body()
                         )
+                        _showProgress.postValue(false)
                     },
-                    { throwable ->
-                        Log.d("TripInfoVM_DaeRo", throwable.toString())
-                        tripInformationState.postValue(FAIL)
-                    }
+                    throwableBlock
                 )
         )
     }
@@ -57,26 +56,34 @@ class TripInformationViewModel : BaseViewModel() {
                     { response ->
                         placeSeq.postValue(response.body()!!.place_seq)
                         // 추천받은 placeSeq 로 여행지 정보 요청
-                        tripRepository.getTripInformation(response.body()!!.place_seq)
-                            .subscribe(
-                                { response ->
-                                    _tripInformation.postValue(
-                                        response.body()
-                                    )
-                                    _showProgress.postValue(false)
-                                },
-                                { throwable ->
-                                    Log.d("TripInfoVM_DaeRo", throwable.toString())
-                                    _showProgress.postValue(false)
-                                    tripInformationState.postValue(FAIL)
-                                }
-                            )
+                        getTripInformation(response.body()!!.place_seq)
                     },
-                    { throwable ->
-                        Log.d("TripInfoVM_DaeRo", throwable.toString())
-                        _showProgress.postValue(false)
-                        tripInformationState.postValue(FAIL)
-                    })
+                    throwableBlock
+                )
         )
+    }
+
+    /**
+     * 다음 여행지 다시 추천
+     */
+    fun getNextTripRecommend() {
+        addDisposable(
+            tripRepository.recommendNextPlace(
+                App.prefs.curPlaceSeq,
+                App.prefs.tripTime,
+                App.prefs.tripTransportation
+            ).subscribe({ response ->
+                placeSeq.postValue(response.body()!!.place_seq)
+
+                // 추천받은 placeSeq 로 여행지 정보 요청
+                getTripInformation(response.body()!!.place_seq)
+            }, throwableBlock)
+        )
+    }
+
+    private val throwableBlock: (Throwable) -> Unit = { throwable ->
+        Log.d("TripInfoVM_DaeRo", throwable.toString())
+        _showProgress.postValue(false)
+        tripInformationState.postValue(FAIL)
     }
 }

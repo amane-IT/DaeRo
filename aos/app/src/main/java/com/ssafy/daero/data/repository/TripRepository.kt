@@ -177,6 +177,13 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // TripFollow 모두 삭제
+    fun deleteAllTripFollow(): Completable {
+        return database.tripFollowDao().deleteAllTripFollow()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     companion object {
         private var instance: TripRepository? = null
 

@@ -73,7 +73,6 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         // todo: 여행지 정보 상세 페이지로 이동
         val bundle = Bundle().apply {
             putInt(PLACE_SEQ, tripPlaceSeq)
-            putInt(TRIP_KIND, FIRST_TRIP)
             putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
         }
 

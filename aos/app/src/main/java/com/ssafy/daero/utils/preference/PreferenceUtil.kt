@@ -25,6 +25,12 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putString(NICKNAME, value).apply()
         }
 
+    var ftoken: String?
+        get() = prefs.getString(FCM_TOKEN, null)
+        set(value) {
+            prefs.edit().putString(FCM_TOKEN, value).apply()
+        }
+
     // 현재 여행중인 여행지 seq
     var curPlaceSeq: Int
         get() = prefs.getInt(CUR_TRIP_SEQ, 0)
@@ -74,20 +80,28 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putBoolean(IS_TRIP_STAMP_COMPLETE, value).apply()
         }
 
-    var ftoken: String?
-        get() = prefs.getString(FCM_TOKEN, null)
+    // 처음 여행인지 여부
+    var isFirstTrip: Boolean
+        get() = prefs.getBoolean(IS_FIRST_TRIP, true)
         set(value) {
-            prefs.edit().putString(FCM_TOKEN, value).apply()
+            prefs.edit().putBoolean(IS_FIRST_TRIP, value).apply()
         }
 
-    var placeSeq: Int
-        get() = prefs.getInt(PLACE_SEQ, 0)
+    // 다음 여행지 옵션: 도보 or 차량
+    var tripTransportation: String
+        get() = prefs.getString(TRIP_TRANSPORTATION, "walk") ?: "walk"
         set(value) {
-            prefs.edit().putInt(PLACE_SEQ, value).apply()
+            prefs.edit().putString(TRIP_TRANSPORTATION, value).apply()
         }
 
+    // 다음 여행지 옵션: 시간
+    var tripTime: Int
+        get() = prefs.getInt(TRIP_TIME, 30)
+        set(value) {
+            prefs.edit().putInt(TRIP_TIME, value).apply()
+        }
 
-    fun initAll() {
+    fun initUser() {
         jwt = null
         userSeq = 0
         nickname = null
@@ -99,5 +113,9 @@ class PreferenceUtil(context: Context) {
         isFollow = false
         isPosting = false
         verificationTime = 0L
+        isTripStampComplete = false
+        isFirstTrip = true
+        tripTransportation = "walk"
+        tripTime = 30
     }
 }
