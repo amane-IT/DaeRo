@@ -236,4 +236,12 @@ public class SnsController {
         resultMap.put("results", result);
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/collection")
+    public ResponseEntity<Map<String, Object>> collectionGet(@RequestHeader("jwt") String jwt, @RequestParam(defaultValue = "1") String page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        Map<String, Object> res = snsService.collection(userSeq, Integer.parseInt(page));
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }

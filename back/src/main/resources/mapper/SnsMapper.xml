@@ -316,6 +316,35 @@
         ]]>
     </select>
 
+    <select id="selectCollectionCountByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(*)
+        FROM daero.likes
+        WHERE `users_seq`=#{userSeq}
+    </select>
+
+    <select id="selectCollectionByUserSeq" resultType="java.util.Map">
+        SELECT collection.`nickname`,
+               collection.`user_seq`,
+               collection.`profile_url`,
+               collection.`thumbnail_url`,
+               collection.`title`,
+               collection.`article_seq`
+        FROM (SELECT row_number()               over ()           AS row, va.`nickname`
+                   , va.`users_seq`          AS user_seq
+                   , va.`profile_image_link` AS profile_url
+                   , va.`thumbnail_url`
+                   , va.`title`;
+
+                   , va.`articles_seq`       AS article_seq
+              FROM daero.v_users_trips_articles va
+              WHERE va.articles_seq IN (SELECT articles_seq
+                                        FROM daero.likes l
+                                        WHERE l.users_seq = #{userSeq})) AS collection
+        WHERE (#{page} - 1) * 10 &lt; collection.row
+          AND collection.row &lt; 1 + (#{page} * 10);
+
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />

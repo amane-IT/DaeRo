@@ -87,4 +87,7 @@ public interface SnsMapper {
                                                       @Param("limit") int limit,
                                                       @Param("offset") int offSet,
                                                       @Param("recent") String recent);
+
+    int selectCollectionCountByUserSeq(int userSeq);
+    ArrayList<Map<String, Object>> selectCollectionByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
 }
