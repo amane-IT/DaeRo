@@ -14,6 +14,7 @@ import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.searchedArticleContentMore
 
 class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more){
+    private val TAG = "SearchContentMore_DaeRo"
     private val searchContentMoreViewModel : SearchContentMoreViewModel by viewModels()
     private lateinit var searchArticleMoreAdapter: SearchArticleMoreAdapter
 
@@ -22,10 +23,11 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
         initData()
         initAdapter()
         observeData()
+        setOnClickListeners()
     }
 
     private fun initView(){
-        binding.textSearchContentMoreKeyword.text = "\"$keyword\" 검색 결과"
+        binding.toolbarTitle.text = "\"$keyword\" 검색 결과"
     }
 
     private fun initData(){
@@ -42,7 +44,7 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
 
     private fun observeData(){
         searchContentMoreViewModel.resultContentSearch.observe(viewLifecycleOwner){
-            Log.d("TAG", "observeData: 여기")
+            Log.d(TAG, "observeData: 여기")
 //            TODO: 내용 검색 API 완성되면 살리기
 //            searchArticleMoreAdapter.submitData(lifecycle, it)
             searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
@@ -52,6 +54,12 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
             when(state){
                 FAIL -> binding.textSearchContentMoreNoData.visibility = View.VISIBLE
             }
+        }
+    }
+
+    private fun setOnClickListeners(){
+        binding.imgSearchContentMoreBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

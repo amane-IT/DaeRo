@@ -8,6 +8,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
+
 import android.os.Bundle
 import android.os.Looper
 import android.view.View
@@ -31,7 +32,8 @@ import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
 import kotlin.math.sqrt
 
-class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling), SensorEventListener {
+class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling),
+    SensorEventListener {
 
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
     private val travelingViewModel: TravelingViewModel by viewModels()
@@ -54,7 +56,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private val REQUEST_PERMISSION_LOCATION = 10
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        // TODO: 지금까지 여행지 상세 페이지로 이동
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,9 +81,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         setOnClickListeners()
     }
 
-    private fun initData(){
-        if(!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)){
-            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION,{
+    private fun initData() {
+        if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, {
                 toast("권한 허용이 확인되었습니다.")
             }, {
                 toast("권한을 허용하지 않으면 인증할 수 없습니다.")
@@ -93,7 +95,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
         tripKind = arguments!!.getInt(TRIP_KIND, 0)
 
-        if(placeSeq > 0) {
+        if (placeSeq > 0) {
             tripInformationViewModel.getTripInformation(placeSeq)
         } else {
             toast("여행지 정보를 불러오는데 실패했습니다.")
@@ -103,7 +105,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun observeData() {
         tripInformationViewModel.tripInformationState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 FAIL -> {
                     toast("여행지 정보를 불러오는데 실패했습니다.")
                     tripInformationViewModel.tripInformationState.value = DEFAULT
@@ -126,12 +128,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         setBinding()
     }
 
-    private fun setBinding(){
+    private fun setBinding() {
         val tripUntilNowList = mutableListOf<TripPopularResponseDto>()
-        for(i in travelingViewModel.articleTripStampData){
-            tripUntilNowList.add(TripPopularResponseDto(i.tripPlaceSeq,i.imageUrl,i.placeName))
+        for (i in travelingViewModel.articleTripStampData) {
+            tripUntilNowList.add(TripPopularResponseDto(i.tripPlaceSeq, i.imageUrl, i.placeName))
         }
-        if(tripUntilNowList.size>0){
+        if (tripUntilNowList.size > 0) {
             binding.tvTravelingTripStampSoFarNone.visibility = View.GONE
             binding.recyclerTravelingTripStampSoFar.visibility = View.VISIBLE
             tripUntilNowAdapter = TripUntilNowAdapter().apply {
@@ -142,14 +144,13 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 adapter = tripUntilNowAdapter
                 layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             }
-        }
-        else{
+        } else {
             binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
             binding.recyclerTravelingTripStampSoFar.visibility = View.INVISIBLE
         }
     }
 
-    private fun setOnClickListeners(){
+    private fun setOnClickListeners() {
         binding.buttonTravelingNext.setOnClickListener {
             //todo : 다른 여행지 추천 화면으로 전환
         }
@@ -159,28 +160,28 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if(event!!.sensor.type == Sensor.TYPE_ACCELEROMETER){
+        if (event!!.sensor.type == Sensor.TYPE_ACCELEROMETER) {
             var axisX = event.values[0]
             var axisY = event.values[1]
             var axisZ = event.values[2]
 
-            var gravityX = axisX/SensorManager.GRAVITY_EARTH
-            var gravityY = axisY/SensorManager.GRAVITY_EARTH
-            var gravityZ = axisZ/SensorManager.GRAVITY_EARTH
+            var gravityX = axisX / SensorManager.GRAVITY_EARTH
+            var gravityY = axisY / SensorManager.GRAVITY_EARTH
+            var gravityZ = axisZ / SensorManager.GRAVITY_EARTH
 
             var f = gravityX * gravityX + gravityY * gravityY + gravityZ * gravityZ
             var squared = sqrt(f.toDouble())
             var gForce: Float = squared.toFloat()
-            if(gForce > SHAKE_THRESHOLD_GRAVITY){
+            if (gForce > SHAKE_THRESHOLD_GRAVITY) {
                 var currentTime = System.currentTimeMillis()
-                if(mShakeTime + SHAKE_SKIP_TIME > currentTime){
+                if (mShakeTime + SHAKE_SKIP_TIME > currentTime) {
                     return
                 }
                 mShakeTime = currentTime
                 mShakeCount++
                 shakeCount -= mShakeCount
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
-                if(shakeCount < 1){
+                if (shakeCount < 1) {
                     startLocationUpdates()
                 }
             }
@@ -192,12 +193,24 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun startLocationUpdates() {
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(requireContext(),Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        mFusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireContext())
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+            && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             return
         }
-        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+        mFusedLocationProviderClient!!.requestLocationUpdates(
+            mLocationRequest,
+            mLocationCallback,
+            Looper.myLooper()
+        )
     }
 
     private val mLocationCallback = object : LocationCallback() {

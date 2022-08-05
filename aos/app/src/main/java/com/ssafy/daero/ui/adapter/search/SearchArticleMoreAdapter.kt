@@ -40,7 +40,7 @@ class SearchArticleMoreAdapter: PagingDataAdapter<ArticleMoreItem, SearchArticle
 
         fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit){
             binding.root.setOnClickListener{
-                onItemClickListener(it, binding.articleMore!!.user_seq)
+                onItemClickListener(it, binding.articleMore!!.article_seq)
             }
         }
     }
