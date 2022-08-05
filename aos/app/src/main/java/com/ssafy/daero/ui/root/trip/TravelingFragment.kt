@@ -91,9 +91,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
 
-        placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
-        tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
-        tripKind = arguments!!.getInt(TRIP_KIND, 0)
+//        placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
+//        tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
+//        tripKind = arguments!!.getInt(TRIP_KIND, 0)
 
         if (placeSeq > 0) {
             tripInformationViewModel.getTripInformation(placeSeq)
@@ -189,7 +189,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     private fun startLocationUpdates() {

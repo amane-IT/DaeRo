@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="56dp"
-            android:text="Day1"
+            tools:text="Day1"
             android:textColor="@color/primaryTextColor"
             android:textSize="24dp"
             app:layout_constraintStart_toEndOf="@id/view_article_end_circle"

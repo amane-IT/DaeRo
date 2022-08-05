@@ -1,16 +1,17 @@
 package com.ssafy.daero.ui.root
 
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentRootBinding
 import com.ssafy.daero.ui.root.collection.CollectionFragment
 import com.ssafy.daero.ui.root.mypage.MyPageFragment
 import com.ssafy.daero.ui.root.search.SearchFragment
-import com.ssafy.daero.ui.root.sns.ArticleFragment
 import com.ssafy.daero.ui.root.sns.HomeFragment
-import com.ssafy.daero.ui.root.trip.TripFragment
-import com.ssafy.daero.utils.constant.FragmentType
+import com.ssafy.daero.ui.root.trip.*
+import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     override fun init() {
@@ -25,6 +26,57 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
             changeFragment(fragmentType)
             true
         }
+    }
+
+    fun finishTrip() {
+        App.prefs.tripState = TRIP_BEFORE
+        App.prefs.isPosting = true
+    }
+
+    /**
+     * 다음 여행 상태를 매개변수로 전달
+     * 각 Fragment 에서 함수 사용방법은 아래와 같음
+     * (requireParentFragment() as RootFragment).changeTripState(다음 여행 상태)  // ex) TRIP_ING
+     *
+     */
+    fun changeTripState(nextTripState: Int) {
+        val curTag = when (App.prefs.tripState) {
+            TRIP_BEFORE -> TRIP_FRAGMENT
+            TRIP_ING -> TRAVELING_FRAGMENT
+            TRIP_VERIFICATION -> TRIP_VERIFICATION_FRAGMENT
+            TRIP_COMPLETE -> {
+                if (App.prefs.isFollow) {
+                    TRIP_FOLLOW_FRAGMENT
+                } else {
+                    TRIP_NEXT_FRAGMENT
+                }
+            }
+            else -> TRIP_FRAGMENT
+        }
+
+        val fragmentType = when (nextTripState) {
+            TRIP_BEFORE -> FragmentType.TripFragment
+            TRIP_ING -> FragmentType.TravelingFragment
+            TRIP_VERIFICATION -> FragmentType.TripVerificationFragment
+            TRIP_COMPLETE -> {
+                if (App.prefs.isFollow) {
+                    FragmentType.TripFollowFragment
+                } else {
+                    FragmentType.TripNextFragment
+                }
+            }
+            else -> FragmentType.TripFragment
+        }
+
+        val transaction = childFragmentManager.beginTransaction()
+        var targetFragment = childFragmentManager.findFragmentByTag(curTag)
+        targetFragment?.let {
+            transaction.remove(targetFragment)
+        }
+        transaction.commitAllowingStateLoss()
+
+        App.prefs.tripState = nextTripState
+        changeFragment(fragmentType)
     }
 
     private fun changeFragment(fragmentType: FragmentType) {
@@ -50,11 +102,26 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
         transaction.commitAllowingStateLoss()
     }
 
+
     private fun getFragmentType(menuItemId: Int): FragmentType {
         return when (menuItemId) {
             R.id.HomeFragment -> FragmentType.HomeFragment
             R.id.SearchFragment -> FragmentType.SearchFragment
-            R.id.TripFragment -> FragmentType.TripFragment
+            R.id.TripFragment -> {
+                when (App.prefs.tripState) {
+                    TRIP_BEFORE -> FragmentType.TripFragment
+                    TRIP_ING -> FragmentType.TravelingFragment
+                    TRIP_VERIFICATION -> FragmentType.TripVerificationFragment
+                    TRIP_COMPLETE -> {
+                        if (App.prefs.isFollow) {
+                            FragmentType.TripFollowFragment
+                        } else {
+                            FragmentType.TripNextFragment
+                        }
+                    }
+                    else -> FragmentType.TripFragment
+                }
+            }
             R.id.CollectionFragment -> FragmentType.CollectionFragment
             R.id.MyPageFragment -> FragmentType.MyPageFragment
             else -> throw IllegalArgumentException("not found menu item id")
@@ -71,6 +138,18 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
             }
             FragmentType.TripFragment -> {
                 return TripFragment()
+            }
+            FragmentType.TravelingFragment -> {
+                return TravelingFragment()
+            }
+            FragmentType.TripVerificationFragment -> {
+                return TripVerificationFragment()
+            }
+            FragmentType.TripNextFragment -> {
+                return TripNextFragment()
+            }
+            FragmentType.TripFollowFragment -> {
+                return TripFollowFragment()
             }
             FragmentType.CollectionFragment -> {
                 return CollectionFragment()
@@ -91,9 +170,9 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
 
     private fun saveCurrentFragment() {
         childFragmentManager.fragments.forEach { fragment ->
-            if(fragment.isVisible) {
+            if (fragment.isVisible) {
                 FragmentType.values().forEach { fragmentType ->
-                    if(fragmentType.tag == fragment.tag!!) {
+                    if (fragmentType.tag == fragment.tag!!) {
                         curFragmentType = fragmentType
                     }
                 }
