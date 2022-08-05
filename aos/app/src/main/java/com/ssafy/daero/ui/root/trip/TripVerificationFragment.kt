@@ -99,7 +99,7 @@ class TripVerificationFragment : BaseFragment<FragmentTripVerificationBinding>(R
             findNavController().navigate(R.id.action_tripVerificationFragment_to_tripStampFragment,
                 bundleOf(
                     "tripSeq" to 0,
-                    "placeName" to "",
+                    "placeName" to "test",
                     "dateTime" to dateTime.time,
                     "imagePath" to imagePath
                 )
