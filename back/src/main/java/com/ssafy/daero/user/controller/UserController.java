@@ -5,6 +5,7 @@ import com.ssafy.daero.user.service.JwtService;
 import com.ssafy.daero.user.service.UserService;
 import com.ssafy.daero.user.vo.LoginVo;
 import com.ssafy.daero.user.vo.SignupVo;
+import com.ssafy.daero.user.vo.UserVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -127,14 +128,18 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginPost(@RequestBody LoginVo loginVO) {
-        UserDto userDto = userService.login(loginVO);
+        UserVo userVo = userService.login(loginVO);
         Map<String, Object> response = new HashMap<>();
-        if (userDto != null) {
-            response.put("user_seq", userDto.getUserSeq());
-            response.put("user_nickname", userDto.getNickname());
-            String jwt = jwtService.create(userDto.getUserSeq(), loginVO.getId());
+        if (userVo == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+
+        if (userVo.getResult() == UserVo.UserVoResult.SUCCESS) {
+            response.put("user_seq", userVo.getUserSeq());
+            response.put("user_nickname", userVo.getNickname());
+            String jwt = jwtService.create(userVo.getUserSeq(), loginVO.getId());
             response.put("jwt", jwt);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

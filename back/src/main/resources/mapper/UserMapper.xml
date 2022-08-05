@@ -186,7 +186,7 @@
           and `tag_seq` = #{tagSeq};
     </update>
 
-    <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
+    <resultMap id="mappingUserDto" type="com.ssafy.daero.user.vo.UserVo">
         <result property="userSeq" column="users_seq"/>
         <result property="userEmail" column="user_email"/>
         <result property="password" column="password"/>
@@ -199,5 +199,6 @@
         <result property="delYn" column="del_yn"/>
         <result property="fcmToken" column="fcm_token"/>
         <result property="passwordFindYn" column="password_find_yn"/>
+        <result property="suspendedExpiry" column="suspended_expiry" />
     </resultMap>
 </mapper>
