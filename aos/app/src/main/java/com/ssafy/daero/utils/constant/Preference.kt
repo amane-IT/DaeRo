@@ -12,6 +12,10 @@ const val IS_POSTING = "is_posting"
 
 const val FCM_TOKEN = "fcm_token"
 
+const val PLACE_NAME = "place_name"
+const val IMAGE_PATH = "image_path"
+const val IS_TRIP_STAMP_COMPLETE = "is_trip_stamp_complete"
+
 /**
  * 현재 여행중인 여행지 seq
  */

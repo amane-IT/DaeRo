@@ -32,7 +32,7 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putInt(CUR_TRIP_SEQ, value).apply()
         }
 
-    // 여행 상세페이지에서 여행 추천 버튼 클릭 여부
+    // 여행 상세페이지에서 여행 시작 버튼 클릭 여부
     var isTripStart: Boolean
         get() = prefs.getBoolean(IS_TRIP_START, false)
         set(value) {
@@ -67,6 +67,13 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putLong(VERIFICATION_TIME, value).apply()
         }
 
+    // 트립스탬프 완료 여부
+    var isTripStampComplete: Boolean
+        get() = prefs.getBoolean(IS_TRIP_STAMP_COMPLETE, false)
+        set(value) {
+            prefs.edit().putBoolean(IS_TRIP_STAMP_COMPLETE, value).apply()
+        }
+
     var ftoken: String?
         get() = prefs.getString(FCM_TOKEN, null)
         set(value) {
@@ -91,5 +98,6 @@ class PreferenceUtil(context: Context) {
         isTripStart = false
         isFollow = false
         isPosting = false
+        verificationTime = 0L
     }
 }

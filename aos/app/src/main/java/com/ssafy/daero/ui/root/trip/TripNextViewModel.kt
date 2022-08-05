@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
+import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -15,8 +17,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class TripNextViewModel : BaseViewModel() {
-    private val tripNextRepository = TripRepository.get()
-    private val TAG = "TripNextVM_DaeRo"
+    private val tripRepository = TripRepository.get()
 
     val showProgress = MutableLiveData<Int>()
 
@@ -25,6 +26,36 @@ class TripNextViewModel : BaseViewModel() {
         get() = _nextTripRecommendResponseDto
 
     var nextTripRecommendState = MutableLiveData<Int>()
+
+    private val _tripStamps = MutableLiveData<List<TripStamp>>()
+    val tripStamps: LiveData<List<TripStamp>>
+        get() = _tripStamps
+
+    private val _aroundTrips = MutableLiveData<List<TripPopularResponseDto>>()
+    val aroundTrips: LiveData<List<TripPopularResponseDto>>
+        get() = _aroundTrips
+
+    fun getTripStamps() {
+        addDisposable(
+            tripRepository.getTripStamps()
+                .subscribe({
+                    _tripStamps.postValue(it)
+                }, { throwable ->
+                    Log.d("TripNextVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
+    fun getAroundTrips(placeSeq: Int) {
+        addDisposable(
+            tripRepository.getAroundTrips(placeSeq)
+                .subscribe({
+                    _aroundTrips.postValue(it.body())
+                }, { throwable ->
+                    Log.d("TripNextVM_DaeRo", "getAroundTrips: ")
+                })
+        )
+    }
 
     fun recommendNextPlace(
         time: Int,
@@ -41,7 +72,7 @@ class TripNextViewModel : BaseViewModel() {
         addDisposable(
             Single.zip(
                 delay,
-                tripNextRepository.recommendNextPlace(
+                tripRepository.recommendNextPlace(
                     App.prefs.placeSeq,
                     time,
                     transportation
@@ -55,7 +86,7 @@ class TripNextViewModel : BaseViewModel() {
                     showProgress.postValue(FAIL)
                 },
                 { throwable ->
-                    Log.d(TAG, throwable.toString())
+                    Log.d("TripNextVM_DaeRo", throwable.toString())
                     showProgress.postValue(FAIL)
                     nextTripRecommendState.postValue(FAIL)
                 })

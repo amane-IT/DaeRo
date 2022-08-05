@@ -22,10 +22,7 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripVerificationBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.TRIP_BEFORE
-import com.ssafy.daero.utils.constant.TRIP_STAMP_BOTTOM_SHEET
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.time.toDate
 import com.ssafy.daero.utils.view.toast
 import java.util.*
@@ -134,23 +131,25 @@ class TripVerificationFragment :
     }
 
     private val customCropImage = registerForActivityResult(CropImageContract()) { it ->
-        var imagePath: String? = null
 
-        it.uriContent?.let { _ ->
-            imagePath = it.getUriFilePath(requireContext().applicationContext, true)
-            Log.d("TAG", ": $imagePath")
+        it.getUriFilePath(requireContext().applicationContext, true)?.let { imagePath ->
+            findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(
+                PLACE_NAME to tripVerificationViewModel.tripInformation.value!!.place_name,
+                IMAGE_PATH to imagePath
+            ))
         }
 
-        imagePath?.let {
-            findNavController().navigate(R.id.action_tripVerificationFragment_to_tripStampFragment,
-                bundleOf(
-                    "tripSeq" to 0,
-                    "placeName" to "test",
-                    "dateTime" to 0L,
-                    "imagePath" to imagePath
-                )
-            )
-        }
+//        imagePath?.let {
+//            findNavController().navigate(R.id.action_tripVerificationFragment_to_tripStampFragment,
+//                bundleOf(
+//                    "tripSeq" to 0,
+//                    "placeName" to "test",
+//                    "dateTime" to 0L,
+//                    "imagePath" to imagePath
+//                )
+//            )
+//        }
     }
 
     private fun startCrop(gallery: Boolean, camera: Boolean) {

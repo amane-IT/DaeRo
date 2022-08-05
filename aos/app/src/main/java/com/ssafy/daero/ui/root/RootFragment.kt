@@ -18,6 +18,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
 
     override fun init() {
         checkTripStart()
+        checkTripStamp()
         setOnClickListeners()
         changeFragment(curFragmentType)
     }
@@ -28,6 +29,14 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
         if(App.prefs.isTripStart) {
             changeTripState(TRIP_ING)
             App.prefs.isTripStart = false
+        }
+    }
+
+    private fun checkTripStamp() {
+        // 트립스탬프 찍음
+        if(App.prefs.isTripStampComplete) {
+            changeTripState(TRIP_COMPLETE)
+            App.prefs.isTripStampComplete = false
         }
     }
 

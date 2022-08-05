@@ -159,6 +159,13 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_rootFragment_to_tripStampFragment"
+            app:destination="@id/tripStampFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -507,44 +514,6 @@
         android:name="com.ssafy.daero.ui.root.trip.TripStampFragment"
         android:label="TripStampFragment"
         tools:layout="@layout/fragment_trip_stamp">
-        <action
-            android:id="@+id/action_tripStampFragment_to_tripNextFragment"
-            app:destination="@id/tripNextFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
     </fragment>
-    <fragment
-        android:id="@+id/travelingFragment"
-        android:name="com.ssafy.daero.ui.root.trip.TravelingFragment"
-        android:label="TravelingFragment"
-        tools:layout="@layout/fragment_traveling">
-        <action
-            android:id="@+id/action_travelingFragment_to_tripVerificationFragment"
-            app:destination="@id/tripVerificationFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
-    </fragment>
-    <fragment
-        android:id="@+id/tripVerificationFragment"
-        android:name="com.ssafy.daero.ui.root.trip.TripVerificationFragment"
-        android:label="TripVerificationFragment"
-        tools:layout="@layout/fragment_trip_verification">
-        <action
-            android:id="@+id/action_tripVerificationFragment_to_tripStampFragment"
-            app:destination="@id/tripStampFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
-    </fragment>
-    <fragment
-        android:id="@+id/tripNextFragment"
-        android:name="com.ssafy.daero.ui.root.trip.TripNextFragment"
-        android:label="TripNextFragment"
-        tools:layout="@layout/fragment_trip_next"
-        />
+
 </navigation>

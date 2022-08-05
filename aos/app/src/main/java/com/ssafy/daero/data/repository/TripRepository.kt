@@ -102,6 +102,13 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getAroundTrips(placeSeq: Int): Single<Response<List<TripPopularResponseDto>>> {
+        return tripApi.getAroundTrips(placeSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     // 알림 저장
     fun insertNotification(notification: Notification): Completable {
         return database.notificationDao().insertNotification(notification)
@@ -131,7 +138,7 @@ class TripRepository private constructor(context: Context) {
     }
 
     // TripStamp 전체 삭제
-    fun deleteAllTripStamps() : Completable {
+    fun deleteAllTripStamps(): Completable {
         return database.tripStampDao().deleteAllStamps()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

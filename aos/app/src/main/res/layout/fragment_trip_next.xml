@@ -12,9 +12,9 @@
             android:layout_width="0dp"
             android:layout_height="56dp"
             app:contentInsetStart="0dp"
+            app:layout_constraintBottom_toTopOf="@id/text_tripNext_title1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/text_tripNext_title1">
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 style="@style/HeadBold"
@@ -24,116 +24,159 @@
                 android:layout_marginStart="16dp"
                 android:text="DaeRo" />
 
+            <ImageView
+                android:id="@+id/image_tripNext_notification"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_notification"
+                app:tint="@color/primaryDarkColor" />
+
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <TextView
-            android:id="@+id/text_tripNext_title1"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="김싸피님 다음"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_tripNext"/>
-
-        <TextView
-            android:id="@+id/text_tripNext_title2"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"
-            android:text="여행을 시작해볼까요?"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNext_title1" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_tripNext_nextTripRecommend"
-            style="@style/BodyWhite"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginVertical="16dp"
-            android:text="다음 여행지 추천"
-            android:background="@drawable/button_regular"
-            app:layout_constraintBottom_toTopOf="@id/text_tripNext_nearBy"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNext_title2" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_tripNext" />
 
-        <TextView
-            android:id="@+id/text_tripNext_nearBy"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="내 주변 여행지"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_tripNext_nextTripRecommend" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_tripNext_nearBy"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingStart="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNext_nearBy"
-            app:layout_constraintBottom_toTopOf="@id/text_tripNext_now"
-            tools:listitem="@layout/item_trip_popular" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_tripNext">
 
-        <TextView
-            android:id="@+id/text_tripNext_now"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:text="지금까지 여행지"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recycler_tripNext_nearBy"
-            app:layout_constraintBottom_toTopOf="@id/recycler_tripNext_now"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_tripNext_now"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="240dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal"
-            android:paddingHorizontal="8dp"
-            android:paddingStart="12dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNext_now"
-            tools:listitem="@layout/item_trip_popular" />
+                <TextView
+                    android:id="@+id/text_tripNext_title1"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="김싸피님 다음"
+                    android:textSize="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_tripNext_stop"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="16dp"
-            style="@style/BodyWhite"
-            android:backgroundTint="@color/lightGray"
-            android:background="@drawable/button_disabled"
-            android:text="그만하기"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+                <TextView
+                    android:id="@+id/text_tripNext_title2"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="여행을 시작해볼까요?"
+                    android:textSize="24dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_tripNext_title1" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_plane"
+                    app:layout_constraintBottom_toBottomOf="@id/text_tripNext_title2"
+                    app:layout_constraintStart_toEndOf="@id/text_tripNext_title2"
+                    app:layout_constraintTop_toTopOf="@id/text_tripNext_title2" />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_tripNext_nextTripRecommend"
+                    style="@style/BodyWhite"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="32dp"
+                    android:background="@drawable/button_regular"
+                    android:text="다음 여행지 추천"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_tripNext_title2" />
+
+                <TextView
+                    android:id="@+id/text_tripNext_nearBy"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="40dp"
+                    android:text="내 주변 여행지"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/button_tripNext_nextTripRecommend" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_tripNext_nearBy"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp"
+                    android:paddingStart="12dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_tripNext_nearBy"
+                    tools:listitem="@layout/item_trip_popular" />
+
+                <TextView
+                    android:id="@+id/text_tripNext_now"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="40dp"
+                    android:text="지금까지 여행지"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_tripNext_nearBy" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_tripNext_now"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="32dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="8dp"
+                    android:paddingStart="12dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toTopOf="@id/button_tripNext_stop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_tripNext_now"
+                    tools:listitem="@layout/item_trip_popular" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/button_tripNext_stop"
+                    style="@style/BodyWhite"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/button_disabled"
+                    android:backgroundTint="@color/hintGray"
+                    android:text="여행 그만하기"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

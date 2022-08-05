@@ -5,8 +5,10 @@ import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
@@ -24,6 +26,8 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         initAdapter()
         observeData()
         setOnClickListeners()
+        getTripStamps()
+        getAroundTrips()
     }
 
     private fun initAdapter(){
@@ -33,7 +37,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         binding.recyclerTripNextNearBy.adapter = tripNearByAdapter
 
         tripUntilNowAdapter = TripUntilNowAdapter().apply {
-            onItemClickListener = hotArticleClickListener
+            onItemClickListener = tripStampClickListener
         }
         binding.recyclerTripNextNow.adapter = tripUntilNowAdapter
     }
@@ -42,8 +46,12 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         // TODO: 주변 여행지 정보 상세 페이지로 이동
     }
 
-    private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        // TODO: 지금까지 여행지 상세 페이지로 이동
+    private val tripStampClickListener: (View, Int) -> Unit = { _, tripStampId ->
+        // TODO: 트립스탬프 페이지로 이동
+    }
+
+    private val applyOptions: (Int, String) -> Unit = { time, transportation ->
+        tripNextViewModel.recommendNextPlace(time, transportation)
     }
 
     private fun setOnClickListeners(){
@@ -56,22 +64,38 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
                 )
             }
 
-            // TODO: 여행 그만두기 기능
+            // TODO: 여행 그만두기 기능 = 게시글 작성
             buttonTripNextStop.setOnClickListener {
 
+            }
+
+            imageTripNextNotification.setOnClickListener {
+                findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
             }
         }
     }
 
-    private val applyOptions: (Int, String) -> Unit = { time, transportation ->
-        tripNextViewModel.recommendNextPlace(time, transportation)
+    private fun getTripStamps() {
+        tripNextViewModel.getTripStamps()
+    }
+
+    private fun getAroundTrips() {
+        tripNextViewModel.getAroundTrips(App.prefs.curPlaceSeq)
     }
 
     private fun observeData() {
-        // TODO: 주변 여행지 정보 받아오기
-        tripNearByAdapter.tripPlaces = popularTripPlaces
+        tripNextViewModel.aroundTrips.observe(viewLifecycleOwner) {
+            tripNearByAdapter.apply {
+                tripPlaces = it
+                notifyDataSetChanged()
+            }
+        }
 
-        // TODO: 지금까지 여행지 상세 정보 받아오기
-        //tripUntilNowAdapter.tripPlaces = popularTripPlaces
+        tripNextViewModel.tripStamps.observe(viewLifecycleOwner) {
+            tripUntilNowAdapter.apply {
+                tripStamps = it
+                notifyDataSetChanged()
+            }
+        }
     }
 }
