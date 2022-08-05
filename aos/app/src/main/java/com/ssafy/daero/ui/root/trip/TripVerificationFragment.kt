@@ -3,8 +3,13 @@ package com.ssafy.daero.ui.root.trip
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.canhub.cropper.CropImageContract
@@ -12,6 +17,7 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripVerificationBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
@@ -128,23 +134,31 @@ class TripVerificationFragment :
     }
 
     private val customCropImage = registerForActivityResult(CropImageContract()) { it ->
-//        it.uriContent?.let { uri ->
-//            Glide.with(requireContext())
-//                .load(uri)
-//                .placeholder(R.drawable.img_user)
-//                .apply(RequestOptions().centerCrop().circleCrop())
-//                .error(R.drawable.img_user)
-//                .into(binding.imageProfileSettingProfileImage)
-//        }
-//        imagePath = it.getUriFilePath(requireContext().applicationContext, true)
+        var imagePath: String? = null
+
+        it.uriContent?.let { _ ->
+            imagePath = it.getUriFilePath(requireContext().applicationContext, true)
+            Log.d("TAG", ": $imagePath")
+        }
+
+        imagePath?.let {
+            findNavController().navigate(R.id.action_tripVerificationFragment_to_tripStampFragment,
+                bundleOf(
+                    "tripSeq" to 0,
+                    "placeName" to "test",
+                    "dateTime" to dateTime.time,
+                    "imagePath" to imagePath
+                )
+            )
+        }
     }
 
     private fun startCrop(gallery: Boolean, camera: Boolean) {
-        customCropImage.launch(
-            options {
-                setImageSource(
-                    includeGallery = gallery,  // 갤러리만 허용
-                    includeCamera = camera   // 카메라는 허용 X
+    customCropImage.launch(
+        options {
+            setImageSource(
+                includeGallery = gallery,  // 갤러리만 허용
+                includeCamera = camera   // 카메라는 허용 X
                 )
                 // Normal Settings
                 setScaleType(CropImageView.ScaleType.FIT_CENTER)

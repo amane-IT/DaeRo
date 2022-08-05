@@ -2,7 +2,9 @@ package com.ssafy.daero.ui.root.trip
 
 
 import android.view.View
+import android.widget.Button
 import androidx.cardview.widget.CardView
+import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
@@ -14,11 +16,9 @@ import com.ssafy.daero.utils.popularTripPlaces
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
 
-    //private val tripNextViewModel: TripNextViewModel by viewModels()
+    private val tripNextViewModel: TripNextViewModel by viewModels()
     private lateinit var tripNearByAdapter: TripNearByAdapter
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
-
-    private lateinit var bottomSheet: BottomSheetBehavior<CardView>
 
     override fun init() {
         initAdapter()
@@ -50,7 +50,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         binding.apply {
 
             buttonTripNextNextTripRecommend.setOnClickListener {
-                TripNextBottomSheetFragment().show(
+                TripNextBottomSheetFragment(applyOptions).show(
                     childFragmentManager,
                     "TripNextBottomSheetFragment"
                 )
@@ -61,6 +61,10 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
             }
         }
+    }
+
+    private val applyOptions: (Int, String) -> Unit = { time, transportation ->
+        tripNextViewModel.recommendNextPlace(time, transportation)
     }
 
     private fun observeData() {

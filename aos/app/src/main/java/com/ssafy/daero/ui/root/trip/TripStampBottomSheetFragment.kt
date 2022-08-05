@@ -5,12 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampBottomSheetBinding
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
@@ -66,5 +62,10 @@ class TripStampBottomSheetFragment(private val onItemClickListener : (Boolean, B
                 dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

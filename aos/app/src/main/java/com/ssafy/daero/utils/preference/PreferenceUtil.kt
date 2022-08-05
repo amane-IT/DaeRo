@@ -73,6 +73,13 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putString(FCM_TOKEN, value).apply()
         }
 
+    var placeSeq: Int
+        get() = prefs.getInt(PLACE_SEQ, 0)
+        set(value) {
+            prefs.edit().putInt(PLACE_SEQ, value).apply()
+        }
+
+
     fun initAll() {
         jwt = null
         userSeq = 0
