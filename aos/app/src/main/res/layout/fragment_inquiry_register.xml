@@ -6,6 +6,122 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_inquiry_register"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_inquiry_register_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black" />
+
+            <TextView
+                style="@style/HeadBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:text="1:1 문의" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_inquiry_register" />
+
+        <TextView
+            android:id="@+id/text_inquiry_register_title"
+            style="@style/SubHeadSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_inquiry_register"
+            android:text="문의 제목" />
+
+        <EditText
+            android:id="@+id/editText_inquiry_register_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="12dp"
+            android:inputType="text"
+            android:hint="제목을 입력하세요"
+            android:maxLines="1"
+            android:textColorHint="@color/gray"
+            style="@style/Body"
+            android:maxLength="100"
+            android:scrollHorizontally="false"
+            android:background="@drawable/edittext_regular"
+            android:imeOptions="actionDone"
+            app:layout_constraintTop_toBottomOf="@id/text_inquiry_register_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/text_inquiry_register_content"
+            style="@style/SubHeadSemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editText_inquiry_register_title"
+            android:text="문의 내용" />
+
+        <EditText
+            android:id="@+id/editText_inquiry_register_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:ems="10"
+            android:layout_marginVertical="8dp"
+            android:layout_marginHorizontal="12dp"
+            android:inputType="textMultiLine"
+            android:hint="내용을 입력하세요"
+            android:maxLines="30"
+            android:padding="16dp"
+            android:gravity="top"
+            android:textColorHint="@color/gray"
+            style="@style/Body"
+            android:scrollHorizontally="false"
+            android:background="@drawable/edittext_regular"
+            android:imeOptions="actionDone"
+            app:layout_constraintTop_toBottomOf="@id/text_inquiry_register_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/button_inquiry_register"
+            />
+
+        <Button
+            android:id="@+id/button_inquiry_register"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="등록하기"
+            android:background="@drawable/button_regular"
+            style="@style/BodyWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

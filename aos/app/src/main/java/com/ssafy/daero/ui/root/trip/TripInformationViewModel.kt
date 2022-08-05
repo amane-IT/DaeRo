@@ -22,6 +22,8 @@ class TripInformationViewModel : BaseViewModel() {
     val showProgress: LiveData<Boolean>
         get() = _showProgress
 
+    val placeSeq = MutableLiveData<Int>()
+
     /**
      * 여행지 정보
      */
@@ -40,9 +42,6 @@ class TripInformationViewModel : BaseViewModel() {
                     }
                 )
         )
-
-        // 임시
-        //_tripInformation.postValue(tripInfo)
     }
 
     /**
@@ -56,6 +55,7 @@ class TripInformationViewModel : BaseViewModel() {
             tripRepository.getFirstTripRecommend(firstTripRecommendRequestDto)
                 .subscribe(
                     { response ->
+                        placeSeq.postValue(response.body()!!.place_seq)
                         // 추천받은 placeSeq 로 여행지 정보 요청
                         tripRepository.getTripInformation(response.body()!!.place_seq)
                             .subscribe(
@@ -78,7 +78,5 @@ class TripInformationViewModel : BaseViewModel() {
                         tripInformationState.postValue(FAIL)
                     })
         )
-        // 임시
-        //_tripInformation.postValue(tripInfo)
     }
 }

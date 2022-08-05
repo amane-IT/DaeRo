@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.ssafy.daero.utils.constant.*
 
 class PreferenceUtil(context: Context) {
-    private val prefs : SharedPreferences = context.getSharedPreferences(DAERO, Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences = context.getSharedPreferences(DAERO, Context.MODE_PRIVATE)
 
     var jwt: String?
         get() = prefs.getString(JWT, null)
@@ -25,25 +25,46 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putString(NICKNAME, value).apply()
         }
 
+    // 현재 여행중인 여행지 seq
+    var curPlaceSeq: Int
+        get() = prefs.getInt(CUR_TRIP_SEQ, 0)
+        set(value) {
+            prefs.edit().putInt(CUR_TRIP_SEQ, value).apply()
+        }
+
+    // 여행 상세페이지에서 여행 추천 버튼 클릭 여부
+    var isTripStart: Boolean
+        get() = prefs.getBoolean(IS_TRIP_START, false)
+        set(value) {
+            prefs.edit().putBoolean(IS_TRIP_START, value).apply()
+        }
+
     // 여행 상태
-    var tripState : Int
+    var tripState: Int
         get() = prefs.getInt(TRIP_STATE, TRIP_BEFORE)
         set(value) {
             prefs.edit().putInt(TRIP_STATE, value).apply()
         }
 
     // 따라가기 여부
-    var isFollow : Boolean
+    var isFollow: Boolean
         get() = prefs.getBoolean(IS_FOLLOW, false)
         set(value) {
-            prefs.edit().putBoolean(IS_FOLLOW, value)
+            prefs.edit().putBoolean(IS_FOLLOW, value).apply()
         }
 
     // 작성중 여부
-    var isPosting : Boolean
+    var isPosting: Boolean
         get() = prefs.getBoolean(IS_POSTING, false)
         set(value) {
-            prefs.edit().putBoolean(IS_POSTING, value)
+            prefs.edit().putBoolean(IS_POSTING, value).apply()
+        }
+
+    // 최근 여행지 인증 완료 시간
+    var verificationTime: Long
+        get() = prefs.getLong(VERIFICATION_TIME, 0L)
+        set(value) {
+            prefs.edit().putLong(VERIFICATION_TIME, value).apply()
         }
 
     var ftoken: String?
@@ -63,5 +84,12 @@ class PreferenceUtil(context: Context) {
         jwt = null
         userSeq = 0
         nickname = null
+    }
+
+    fun initTrip() {
+        curPlaceSeq = 0
+        isTripStart = false
+        isFollow = false
+        isPosting = false
     }
 }

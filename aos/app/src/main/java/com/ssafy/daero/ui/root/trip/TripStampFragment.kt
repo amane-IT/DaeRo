@@ -128,8 +128,8 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
         }
     }
 
-    private val setPhotos: (Boolean) -> Unit = {isCamera ->
-        startCrop(isCamera)
+    private val setPhotos: (Boolean, Boolean) -> Unit = {gallery, camera ->
+        startCrop(gallery, camera)
     }
 
     private val customCropImage = registerForActivityResult(CropImageContract()) { it ->
@@ -145,12 +145,12 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
         imagePath = it.getUriFilePath(requireContext().applicationContext, true)
     }
 
-    private fun startCrop(isCamera: Boolean){
+    private fun startCrop(gallery: Boolean, camera: Boolean) {
         customCropImage.launch(
             options {
                 setImageSource(
-                    includeGallery = !isCamera,  // 갤러리만 허용
-                    includeCamera = isCamera   // 카메라는 허용 X
+                    includeGallery = gallery,  // 갤러리만 허용
+                    includeCamera = camera   // 카메라는 허용 X
                 )
                 // Normal Settings
                 setScaleType(CropImageView.ScaleType.FIT_CENTER)

@@ -4,16 +4,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
-import com.ssafy.daero.databinding.ItemTripPopularBinding
+import com.ssafy.daero.data.entity.TripStamp
+import com.ssafy.daero.databinding.ItemUntilTripstampBinding
 
 class TripUntilNowAdapter : RecyclerView.Adapter<TripUntilNowAdapter.TripUntilNowViewAdapter>() {
-    var tripPlaces: List<TripPopularResponseDto> = emptyList()
+    var tripStamps: List<TripStamp> = emptyList()
     lateinit var onItemClickListener: (View, Int) -> Unit
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TripUntilNowAdapter.TripUntilNowViewAdapter {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): TripUntilNowAdapter.TripUntilNowViewAdapter {
         return TripUntilNowAdapter.TripUntilNowViewAdapter(
-            ItemTripPopularBinding.inflate(
+            ItemUntilTripstampBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -23,22 +26,25 @@ class TripUntilNowAdapter : RecyclerView.Adapter<TripUntilNowAdapter.TripUntilNo
         }
     }
 
-    override fun onBindViewHolder(holder: TripUntilNowAdapter.TripUntilNowViewAdapter, position: Int) {
-        holder.bind(tripPlaces[position])
+    override fun onBindViewHolder(
+        holder: TripUntilNowAdapter.TripUntilNowViewAdapter,
+        position: Int
+    ) {
+        holder.bind(tripStamps[position])
     }
 
-    override fun getItemCount(): Int = tripPlaces.size
+    override fun getItemCount(): Int = tripStamps.size
 
-    class TripUntilNowViewAdapter(private val binding: ItemTripPopularBinding) :
+    class TripUntilNowViewAdapter(private val binding: ItemUntilTripstampBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(tripPlace: TripPopularResponseDto) {
-            binding.tripPlace = tripPlace
+        fun bind(tripStamp: TripStamp) {
+            binding.tripStamp = tripStamp
         }
 
         fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit) {
             binding.root.setOnClickListener {
-                onItemClickListener(it, binding.tripPlace!!.trip_place_seq)
+                onItemClickListener(it, binding.tripStamp?.id ?: 0)
             }
         }
     }

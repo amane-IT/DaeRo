@@ -126,7 +126,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
 //            binding.tvTripTripFollowTripName.text = it.place_name
 //            binding.tvTripTripFollowAddress.text = it.address
 //        }
-        tripUntilNowAdapter.tripPlaces = popularTripPlaces
+//        tripUntilNowAdapter.tripPlaces = popularTripPlaces
     }
 
     private  fun setBinding(){

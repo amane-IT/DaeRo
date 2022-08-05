@@ -131,6 +131,13 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // TripStamp 전체 삭제
+    fun deleteAllTripStamps() : Completable {
+        return database.tripStampDao().deleteAllStamps()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     // TripStamp 모두 가져오기
     fun getTripStamps(): Single<List<TripStamp>> {
         return database.tripStampDao().getTripStamps()
