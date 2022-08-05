@@ -33,7 +33,7 @@ class TripInformationFragment : BaseFragment<FragmentTripInformationBinding>(R.l
 
     private fun initData() {
         placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
-        tagCollection = arguments!!.getParcelable<TagCollection>(TAG_COLLECTION)
+        tagCollection = arguments?.getParcelable<TagCollection>(TAG_COLLECTION)
         tripKind = arguments!!.getInt(TRIP_KIND, 0)
 
 

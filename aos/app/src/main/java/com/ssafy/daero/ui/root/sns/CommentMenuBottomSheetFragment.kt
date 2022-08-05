@@ -19,7 +19,6 @@ import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 class CommentMenuBottomSheetFragment(
     val replySeq: Int,
-    val articleViewModel: ArticleViewModel,
     val content: String,
     listener: CommentListener
 ) : BottomSheetDialogFragment() {

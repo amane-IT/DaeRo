@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.navigation.fragment.findNavController
@@ -11,6 +12,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSignupPasswordBinding
+import com.ssafy.daero.utils.view.toast
 import java.util.regex.Pattern
 
 class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.layout.fragment_signup_password){
@@ -20,10 +22,25 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
     }
 
     private fun setOnClickListeners(){
-        binding.buttonSignupPasswordNextStep.setOnClickListener {
-            App.password = binding.editTextSignupPasswordPassword.text.toString()
-            findNavController().navigate(R.id.action_signupPasswordFragment_to_signupUsernameFragment)
+        binding.apply {
+            buttonSignupPasswordNextStep.setOnClickListener {
+                val pwd = editTextSignupPasswordPassword.text.toString()
+                val pwd_verification = editTextSignupEmailPasswordVerification.text.toString()
+
+                if(pwd != "" && pwd_verification != "" && pwd == pwd_verification) {
+                    App.password = binding.editTextSignupPasswordPassword.text.toString()
+                    findNavController().navigate(R.id.action_signupPasswordFragment_to_signupUsernameFragment)
+                } else if(pwd == "" || pwd_verification == "")
+                    toast("비밀번호를 입력해 주세요.")
+                else
+                    toast("비밀번호가 일치하지 않습니다.")
+            }
+
+            imgLoginBack.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
         }
+
     }
 
     private fun addTextChangedListeners(){

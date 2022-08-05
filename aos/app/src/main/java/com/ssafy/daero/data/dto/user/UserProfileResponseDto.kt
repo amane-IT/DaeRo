@@ -5,7 +5,8 @@ data class UserProfileResponseDto(
     val profile_url : String,
     val follower : Int,
     val following : Int,
-    val follow_yn : Char,
-    val badge_count : Int
+    val followYn : Char,
+    val badge_count : Int,
+    val del_yn: Char
 )
 
