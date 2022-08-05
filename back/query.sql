@@ -298,6 +298,7 @@ from `tag_trip_places` as `t`
 
 create view `v_users_trips_articles` as
 select `a`.`articles_seq`,
+       `t`.`trips_seq`,
        `u`.`nickname`,
        `t`.`users_seq`,
        `u`.`profile_image_link`,

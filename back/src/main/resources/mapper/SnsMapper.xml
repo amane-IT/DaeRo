@@ -264,6 +264,7 @@
         select `articles_seq`       as `articleSeq`,
                `nickname`           as `nickname`,
                `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
                `profile_image_link` as `profileUrl`,
                `created_at`         as `createdAt`,
                `thumbnail_url`      as `thumbnailUrl`,
@@ -293,6 +294,7 @@
         select `articles_seq`       as `articleSeq`,
                `nickname`           as `nickname`,
                `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
                `profile_image_link` as `profileUrl`,
                `created_at`         as `createdAt`,
                `thumbnail_url`      as `thumbnailUrl`,
@@ -314,6 +316,104 @@
           and `users_seq` != 8
         order by `created_at` desc
         ]]>
+    </select>
+
+    <select id="selectUserCountByNickname" parameterType="String" resultType="_int">
+        select count(0)
+        from `users`
+        where binary(`nickname`) like concat('%', #{nickname}, '%')
+    </select>
+    
+    <select id="selectUserByNickname" resultType="com.ssafy.daero.user.dto.UserDto">
+        select `users_seq`          as `userSeq`,
+               `user_email`         as `userEmail`,
+               `password`           as `password`,
+               `nickname`           as `nickname`,
+               `email_verified_yn`  as `emailVerifiedYn`,
+               `suspended_yn`       as `suspendedYn`,
+               `profile_image_link` as `profileImageLink`,
+               `reported_count`     as `reportedCount`,
+               `created_at`         as `createdAt`,
+               `del_yn`             as `delYn`,
+               `fcm_token`          as `fcmToken`,
+               `password_reset_yn`  as `passwordResetYn`
+        from `users`
+        where binary(`nickname`) like concat('%', #{nickname}, '%')
+        order by `users_seq` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleCountByContent" parameterType="String" resultType="_int">
+        select count(0)
+        from `articles` as `a`
+                 left join `trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`
+                 left join `trip_days` `d` on `d`.trip = `t`.`trips_seq`
+        where binary(`a`.`title`) like concat('%', #{content}, '%')
+           or binary(`t`.`trip_comment`) like concat('%', #{content}, '%')
+           or binary(`d`.`day_comment`) like concat('%', #{content}, '%')
+    </select>
+
+    <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `a`.`articles_seq`       as `articleSeq`,
+               `a`.`nickname`           as `nickname`,
+               `a`.`users_seq`          as `userSeq`,
+               `a`.`trips_seq`          as `tripSeq`,
+               `a`.`profile_image_link` as `profileUrl`,
+               `a`.`created_at`         as `createdAt`,
+               `a`.`thumbnail_url`      as `thumbnailUrl`,
+               `a`.`trip_comment`       as `description`,
+               `a`.`title`              as `title`,
+               `a`.`start_date`         as `startDate`,
+               `a`.`end_date`           as `endDate`,
+               `a`.`like_count`         as `likeCount`,
+               `a`.`reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = `a`.`articles_seq`
+                     and `users_seq` = 8) = 0,
+                  'n', 'y')             as `likeYn`
+        from `v_users_trips_articles` `a`
+                 left join `trip_days` `d` on `d`.`trip` = `a`.`trips_seq`
+        where binary(`a`.`title`) like concat('%', #{content}, '%')
+           or binary(`a`.`trip_comment`) like concat('%', #{content}, '%')
+           or binary(`d`.`day_comment`) like concat('%', #{content}, '%')
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleCountByPlace" parameterType="String" resultType="_int">
+        select count(0)
+        from `articles` as `a`
+                 left join `trip_stamps` `s` on `a`.`trips_seq` = `s`.`trip_seq`
+                 left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
+        where binary(`p`.`place_name`) like concat('%', #{placeName}, '%')
+    </select>
+
+    <select id="selectArticleByPlace" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `a`.`articles_seq`       as `articleSeq`,
+               `a`.`nickname`           as `nickname`,
+               `a`.`users_seq`          as `userSeq`,
+               `a`.`trips_seq`          as `tripSeq`,
+               `a`.`profile_image_link` as `profileUrl`,
+               `a`.`created_at`         as `createdAt`,
+               `a`.`thumbnail_url`      as `thumbnailUrl`,
+               `a`.`trip_comment`       as `description`,
+               `a`.`title`              as `title`,
+               `a`.`start_date`         as `startDate`,
+               `a`.`end_date`           as `endDate`,
+               `a`.`like_count`         as `likeCount`,
+               `a`.`reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = `a`.`articles_seq`
+                     and `users_seq` = 8) = 0,
+                  'n', 'y')             as `likeYn`
+        from `v_users_trips_articles` as `a`
+                 left join `trip_stamps` `s` on `a`.`trips_seq` = `s`.`trip_seq`
+                 left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
+        where binary(`p`.`place_name`) like concat('%', #{placeName}, '%')
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
     </select>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">

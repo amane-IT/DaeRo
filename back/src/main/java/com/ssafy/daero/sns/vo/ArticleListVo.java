@@ -9,6 +9,7 @@ import lombok.Setter;
 public class ArticleListVo extends ArticleDto {
     private String nickname;
     private int userSeq;
+    private int tripSeq;
     private String profileUrl;
     private String description;
     private String startDate;
