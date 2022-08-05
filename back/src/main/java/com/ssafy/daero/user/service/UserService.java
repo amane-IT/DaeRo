@@ -1,5 +1,6 @@
 package com.ssafy.daero.user.service;
 
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.vo.RecommendTagVo;
 import com.ssafy.daero.user.dto.EmailVerificationDto;
 import com.ssafy.daero.user.dto.PasswordResetDto;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -205,5 +203,18 @@ public class UserService {
                 userMapper.updateUserFavor(userSeq, tag);
             }
         }
+    }
+
+    public LinkedList<Map<String, Object>> sendPreference() {
+        ArrayList<TripPlaceDto> tripPlaceDtos = this.userMapper.selectPreferencePlace();
+        LinkedList<Map<String, Object>> result = new LinkedList<>();
+        for (TripPlaceDto tripPlaceDto : tripPlaceDtos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("place_seq", tripPlaceDto.getTripPlaceSeq());
+            map.put("place_name", tripPlaceDto.getPlaceName());
+            map.put("image_url", tripPlaceDto.getImageUrl());
+            result.add(map);
+        }
+        return result;
     }
 }

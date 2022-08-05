@@ -283,6 +283,13 @@ CREATE TABLE `replies`
     constraint foreign key (`users_seq`) references `users` (`users_seq`)
 );
 
+create table `preference_places`
+(
+    `place_seq` int not null,
+    constraint foreign key (`place_seq`) references `trip_places` (`trip_places_seq`)
+        on delete cascade on update cascade
+);
+
 create view `tag_region_place` as
 select `p`.`trip_places_seq`, `p`.`place_name`, `t`.`place_tag_seq`, `p`.`region_seq`
 from `tag_trip_places` as `t`
@@ -298,10 +305,10 @@ select `a`.`articles_seq`,
        `a`.`thumbnail_url`,
        `t`.`trip_comment`,
        `a`.`title`,
-       (select min(`date`) from `trip_days` where `trip` = `t`.`trips_seq`) as `start_date`,
-       (select max(`date`) from `trip_days` where `trip` = `t`.`trips_seq`) as `end_date`,
-       `a`.`like_count`,
-       `a`.`reply_count`,
+       (select min(`date`) from `trip_days` where `trip` = `t`.`trips_seq`)       as `start_date`,
+       (select max(`date`) from `trip_days` where `trip` = `t`.`trips_seq`)       as `end_date`,
+       (select count(0) from `likes` where `articles_seq` = `a`.`articles_seq`)   as `like_count`,
+       (select count(0) from `replies` where `articles_seq` = `a`.`articles_seq`) as `reply_count`,
        `a`.`open_yn`
 from `daero`.`articles` as `a`
          left join `daero`.`trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`

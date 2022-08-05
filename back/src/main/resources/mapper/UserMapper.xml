@@ -129,6 +129,19 @@
         where `trip_places_seq` = #{placeSeq}
     </select>
 
+    <select id="selectPreferencePlace" resultType="com.ssafy.daero.trip.dto.TripPlaceDto" parameterType="_int">
+        select `trip_places_seq` as `tripPlaceSeq`,
+               `place_name`      as `placeName`,
+               `address`         as `address`,
+               `latitude`        as `latitude`,
+               `longitude`       as `longitude`,
+               `description`     as `description`,
+               `region_seq`      as `regionSeq`,
+               `image_url`       as `imageUrl`
+        from `daero`.`trip_places`
+        where `trip_places_seq` in (select `place_seq` from `preference_places`)
+    </select>
+
     <update id="updateProfile">
         UPDATE users
         SET `nickname`=#{nickname},

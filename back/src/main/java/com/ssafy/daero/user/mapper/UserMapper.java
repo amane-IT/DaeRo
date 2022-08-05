@@ -1,5 +1,6 @@
 package com.ssafy.daero.user.mapper;
 
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.vo.RecommendTagVo;
 import com.ssafy.daero.user.dto.EmailVerificationDto;
 import com.ssafy.daero.user.dto.PasswordResetDto;
@@ -46,6 +47,8 @@ public interface UserMapper {
     ArrayList<Integer> selectPlaceTagAll();
 
     ArrayList<RecommendTagVo> selectTagByPlaceSeq(int placeSeq);
+
+    ArrayList<TripPlaceDto> selectPreferencePlace();
 
     int updateUser(SignupVo signupVo);
 
