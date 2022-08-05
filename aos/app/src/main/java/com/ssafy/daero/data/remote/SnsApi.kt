@@ -9,6 +9,7 @@ import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
+import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
@@ -206,4 +207,28 @@ interface SnsApi {
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>
+
+    /**
+     * 차단하기
+     */
+    @POST("sns/users/{user_seq}/block")
+    fun blockAdd(
+        @Path("user_seq") userSeq: Int
+    ): Completable
+
+    /**
+     * 차단해제
+     */
+    @DELETE("sns/users/{user_seq}/block")
+    fun blockDelete(
+        @Path("user_seq") userSeq: Int
+    ): Completable
+
+    /**
+     * 차단 목록
+     */
+    @GET("sns/users/{user_seq}/block")
+    fun getBlockUser(
+        @Path("user_seq") userSeq: Int
+    ): Single<Response<List<UserBlockResponseDto>>>
 }
