@@ -3,14 +3,12 @@ package com.ssafy.daero.ui.signup
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.bumptech.glide.Glide.init
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.signup.TripPreferenceResponseDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import retrofit2.HttpException
-import kotlin.coroutines.EmptyCoroutineContext.plus
 
 class TripPreferenceViewModel : BaseViewModel() {
 
@@ -33,11 +31,11 @@ class TripPreferenceViewModel : BaseViewModel() {
         _count.value = 0
     }
 
-    fun getPreferences(userSeq: Int) {
+    fun getPreferences() {
         _showProgress.postValue(true)
 
         addDisposable(
-            tripPreferenceRepository.getPreference(userSeq)
+            tripPreferenceRepository.getPreference()
                 .subscribe({ response ->
                     if (response.body()!!.isNotEmpty()) {
                         responseState_getPreference.postValue(SUCCESS)

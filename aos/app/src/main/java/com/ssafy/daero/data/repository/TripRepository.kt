@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
+import com.ssafy.daero.application.App
 import com.ssafy.daero.data.dto.trip.*
 import com.ssafy.daero.data.entity.Notification
 import com.ssafy.daero.data.entity.TripFollow
@@ -167,6 +168,15 @@ class TripRepository private constructor(context: Context) {
     fun getTripFollows(): Single<List<TripFollow>> {
         return database.tripFollowDao().getTripFollows()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getNearByPlaces(): Single<Response<List<TripPopularResponseDto>>>{
+        return tripApi.getNearByPlaces(
+            // App.prefs.placeSeq
+            1)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

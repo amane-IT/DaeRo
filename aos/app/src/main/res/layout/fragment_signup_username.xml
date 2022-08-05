@@ -96,8 +96,7 @@
                 style="@style/SubHeadBold"
                 android:id="@+id/checkbox_signupUsername_termCheck"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
 
             <TextView
                 style="@style/Body"
@@ -112,7 +111,7 @@
 
 
         <Button
-            android:id="@+id/button_signupUsername_nextStep"
+            android:id="@+id/button_signupUsername_confirm"
             style="@style/BodyWhite"
             android:layout_width="0dp"
             android:layout_height="48dp"
@@ -120,6 +119,21 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/button_regular"
             android:text="닉네임 중복 검사"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/button_signupUsername_nextStep"
+            style="@style/BodyWhite"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/button_regular"
+            android:text="가입하기"
+            android:visibility="gone"
+            android:enabled="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
