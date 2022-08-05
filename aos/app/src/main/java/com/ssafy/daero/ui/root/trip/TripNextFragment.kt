@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.root.trip
 
 
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
@@ -8,10 +9,14 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.popularTripPlaces
+import com.ssafy.daero.utils.view.toast
 
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
@@ -24,6 +29,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         initAdapter()
         observeData()
         setOnClickListeners()
+        getTripStampList()
     }
 
     private fun initAdapter(){
@@ -63,6 +69,11 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         }
     }
 
+    private fun getTripStampList() {
+        tripNextViewModel.selectTripStampList()
+    }
+
+
     private val applyOptions: (Int, String) -> Unit = { time, transportation ->
         tripNextViewModel.recommendNextPlace(time, transportation)
     }
@@ -72,6 +83,27 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         tripNearByAdapter.tripPlaces = popularTripPlaces
 
         // TODO: 지금까지 여행지 상세 정보 받아오기
-        tripUntilNowAdapter.tripPlaces = popularTripPlaces
+        tripNextViewModel.tripListState.observe(viewLifecycleOwner) {
+            when(it){
+                FAIL -> {
+                    toast("여행 목록을 가져오는데 실패했습니다.")
+                    tripNextViewModel.tripListState.value = DEFAULT
+                }
+            }
+        }
+
+        tripNextViewModel.tripList.observe(viewLifecycleOwner) {
+            if(it.isNotEmpty()){
+                val list = mutableListOf<TripPopularResponseDto>()
+                for(stamp in it){
+                    val dto = TripPopularResponseDto(stamp.tripPlaceSeq, stamp.imageUrl, stamp.placeName)
+                    list.add(dto)
+                    Log.d("TripNextFragment", "observeData: ${dto.toString()}")
+                }
+
+                tripUntilNowAdapter.tripPlaces = list
+                tripUntilNowAdapter.notifyDataSetChanged()
+            }
+        }
     }
 }
