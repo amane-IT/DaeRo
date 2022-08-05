@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.service.FAQResponseDto
+import com.ssafy.daero.data.dto.service.InquiryRequestDto
 import com.ssafy.daero.data.dto.service.InquiryResponseDto
 import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.utils.constant.FAIL
@@ -31,9 +32,9 @@ class InquiryViewModel : BaseViewModel() {
         )
     }
 
-    fun insertInquiry(userSeq: Int) {
+    fun insertInquiry(userSeq: Int, inquiryRequestDto: InquiryRequestDto) {
         addDisposable(
-            serviceRepository.insertInquiry(userSeq)
+            serviceRepository.insertInquiry(userSeq, inquiryRequestDto)
                 .subscribe({
                     inquiryState.postValue(SUCCESS)
                 }, { throwable ->

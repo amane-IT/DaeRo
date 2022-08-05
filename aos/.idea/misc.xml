@@ -83,11 +83,17 @@
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/dialog_backgound.xml" value="0.2015" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/dlg_bottomsheet.xml" value="0.2015" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/edittext_comment.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/edittext_inquiry.xml" value="0.192" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.193" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/imagebutton_regular.xml" value="0.2015" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/drawable/imagebutton_selected.xml" value="0.2015" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/bottomsheet_comment.xml" value="0.18489583333333334" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.16168478260869565" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_menu_bottom_sheet.xml" value="0.3491847826086957" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_day.xml" value="0.18489583333333334" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_thumbnail.xml" value="0.18489583333333334" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_block_user.xml" value="0.358695652173913" />
+        <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_comment_menu_bottom_sheet.xml" value="0.18489583333333334" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_faq.xml" value="0.358695652173913" />
         <entry key="..\:/GONGTONG/S07P12D110/aos/app/src/main/res/layout/fragment_follower.xml" value="0.358695652173913" />

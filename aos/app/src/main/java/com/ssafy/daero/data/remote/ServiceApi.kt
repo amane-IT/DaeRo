@@ -1,11 +1,13 @@
 package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.service.FAQResponseDto
+import com.ssafy.daero.data.dto.service.InquiryRequestDto
 import com.ssafy.daero.data.dto.service.InquiryResponseDto
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -31,6 +33,7 @@ interface ServiceApi {
      */
     @POST("sns/inquiry")
     fun insertInquiry(
-        @Query("follow-user") userSeq: Int
+        @Query("follow-user") userSeq: Int,
+        @Body inquiryRequestDto: InquiryRequestDto
     ): Completable
 }

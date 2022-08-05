@@ -3,6 +3,7 @@ package com.ssafy.daero.data.repository
 import android.content.Context
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.data.dto.service.FAQResponseDto
+import com.ssafy.daero.data.dto.service.InquiryRequestDto
 import com.ssafy.daero.data.dto.service.InquiryResponseDto
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import com.ssafy.daero.data.remote.ServiceApi
@@ -41,8 +42,8 @@ class ServiceRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun insertInquiry(userSeq: Int): Completable {
-        return serviceApi.insertInquiry(userSeq)
+    fun insertInquiry(userSeq: Int, inquiryRequestDto: InquiryRequestDto): Completable {
+        return serviceApi.insertInquiry(userSeq, inquiryRequestDto)
     }
 
     companion object {
