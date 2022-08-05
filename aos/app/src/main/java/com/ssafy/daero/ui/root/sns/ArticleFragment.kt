@@ -1,13 +1,14 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +50,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     private lateinit var mapView: ArticleMapView
 
-    private var articleSeq = 0
+    private var articleSeq = 10
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
         findNavController().navigate(
@@ -172,7 +173,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleMenu.setOnClickListener {
             // todo: articleSeq 넘기기
-            ArticleMenuBottomSheetFragment(articleSeq).show(
+            ArticleMenuBottomSheetFragment(articleSeq, articleViewModel.articleData.user_seq).show(
                 childFragmentManager,
                 ARTICLE_MENU_BOTTOM_SHEET
             )
@@ -383,7 +384,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     override fun onMapReady(_naverMap: NaverMap) {
         naverMap = _naverMap
-
+        articleSeq = arguments!!.getInt(ARTICLE_SEQ)
         setNaverMapUI()
         articleViewModel.article(articleSeq)
     }
