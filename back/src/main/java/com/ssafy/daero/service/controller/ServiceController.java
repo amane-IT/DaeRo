@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -51,6 +52,13 @@ public class ServiceController {
         boolean res = serviceService.createInquiry(Integer.parseInt(currentUser.get("user_seq")), req.get("title"), req.get("content"));
         if (res) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/version")
+    public ResponseEntity<Map<String, String>> latestVersion() {
+        Map<String, String> res = new HashMap<>();
+        res.put("version", "1.0");
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 
