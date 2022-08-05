@@ -1,5 +1,6 @@
 package com.ssafy.daero.utils.time
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,4 +23,10 @@ fun calendarToStringOnceYearAgo(cal: Calendar) : String {
 
 fun stringToDate(dateText: String): Date {
     return SimpleDateFormat("yyyy-MM-dd").parse(dateText)
+}
+
+// System.time.System.currentTimeMillis() to String
+fun Long.toDate() : String {
+    var dateFormat = SimpleDateFormat("yyyy.MM.dd (E)")
+    return dateFormat.format(Date(this))
 }

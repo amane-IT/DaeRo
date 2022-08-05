@@ -63,11 +63,15 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_email.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_password.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_signup_username.xml" value="0.25" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.67" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_terms.xml" value="0.24375" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.2" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip.xml" value="0.5" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_information.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_preference.xml" value="0.36614583333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_stamp.xml" value="0.2677083333333333" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_stamp_bottom_sheet.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_stamp_detail.xml" value="0.36614583333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.27760416666666665" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_day.xml" value="0.221875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_day_trip_stamp.xml" value="0.221875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_expense.xml" value="0.221875" />

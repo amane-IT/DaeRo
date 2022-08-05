@@ -29,6 +29,7 @@ import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.ui.setting.LogoutDialogFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
@@ -122,12 +123,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             }
         }
         travelingViewModel.tripInformation.observe(viewLifecycleOwner) {
-            Glide.with(binding.imgTravelingTripStamp)
+            Glide.with(requireContext())
                 .load(it.image_url)
                 .skipMemoryCache(false)
-                .placeholder(R.drawable.img_my_page_album)
+                .placeholder(R.drawable.placeholder_trip_album)
                 .apply(RequestOptions().centerCrop())
-                .error(R.drawable.img_my_page_album)
+                .error(R.drawable.placeholder_trip_album)
                 .into(binding.imgTravelingTripStamp)
             placeSeq = it.place_seq
             binding.tvTravelingTripName.text = it.place_name
@@ -150,8 +151,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun getTripInformation() {
-        Log.d("Traveling_싸피", "여행지 정보 요청")
-        Log.d("Traveling_싸피", "placeSeq : $placeSeq")
         if (placeSeq > 0) {
             travelingViewModel.getTripInformation(placeSeq)
         } else {
@@ -160,8 +159,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun setOnClickListeners() {
+        binding.buttonTravelingDirections.setOnClickListener {
+            // todo: 길찾기 기능
+        }
         binding.buttonTravelingNext.setOnClickListener {
             //todo : 다른 여행지 추천 화면으로 전환
+        }
+        binding.buttonTravelingTemporary.setOnClickListener {
+            // todo: 임시 인증 버튼, 추후에 삭제
+
+            // 인증 완료한 시각 기록
+            App.prefs.verificationTime = System.currentTimeMillis()
+            (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
         }
         binding.buttonTravelingStop.setOnClickListener {
             // 이전 여행기록이 없다면
