@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.*;
+import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -15,6 +16,8 @@ public class SnsService {
     private final SnsMapper snsMapper;
     private final int PAGE_SIZE = 10;
     private final int RECENT_DAY = -3;
+    private final int SEARCH_USER_PAGE_SIZE = 10;
+    private final int SEARCH_ARTICLE_PAGE_SIZE = 4;
 
     public SnsService(SnsMapper snsMapper) {
         this.snsMapper = snsMapper;
@@ -379,7 +382,29 @@ public class SnsService {
         return (totalCount - 1) / PAGE_SIZE + 1;
     }
 
-    public ArrayList<ArticleListVo> articleList(int userSeq, int page) {
+    private LinkedList<Map<String, Object>> createArticleMap(ArrayList<ArticleListVo> articleListVos) {
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
+        for (ArticleListVo article : articleListVos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("article_seq", article.getArticleSeq());
+            map.put("nickname", article.getNickname());
+            map.put("user_seq", article.getUserSeq());
+            map.put("profile_url", article.getProfileUrl());
+            map.put("created_at", article.getCreatedAt());
+            map.put("thumbnail_url", article.getThumbnailUrl());
+            map.put("description", article.getDescription());
+            map.put("title", article.getTitle());
+            map.put("start_date", article.getStartDate());
+            map.put("end_date", article.getEndDate());
+            map.put("likes", article.getLikeCount());
+            map.put("replies", article.getReplyCount());
+            map.put("like_yn", article.getLikeYn());
+            list.add(map);
+        }
+        return list;
+    }
+
+    public LinkedList<Map<String, Object>> articleList(int userSeq, int page) {
         Calendar recent = Calendar.getInstance();
         recent.add(Calendar.DATE, RECENT_DAY);
         String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
@@ -398,6 +423,65 @@ public class SnsService {
                 articleList = this.snsMapper.selectArticleByNotFollow(userSeq, PAGE_SIZE, PAGE_SIZE * (page - followPage - 1) + other, recentString);
             }
         }
-        return articleList;
+        return createArticleMap(articleList);
+    }
+
+    public int getSearchUserTotalPage(String nickname) {
+        int totalCount = this.snsMapper.selectUserCountByNickname(nickname);
+        return (totalCount - 1) / SEARCH_USER_PAGE_SIZE + 1;
+    }
+
+    public LinkedList<Map<String, Object>> searchUser(String nickname, int page) {
+        ArrayList<UserDto> searchResult = this.snsMapper.selectUserByNickname(nickname, SEARCH_USER_PAGE_SIZE, SEARCH_USER_PAGE_SIZE * (page - 1));
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
+        for (UserDto userDto : searchResult) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("user_seq", userDto.getUserSeq());
+            map.put("nickname", userDto.getNickname());
+            map.put("profile_url", userDto.getProfileImageLink());
+            list.add(map);
+        }
+        return list;
+    }
+
+    private LinkedList<Map<String, Object>> createBriefArticleMap(ArrayList<ArticleListVo> articleListVos) {
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
+        for (ArticleListVo articleListVo : articleListVos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("article_seq", articleListVo.getArticleSeq());
+            map.put("image_url", articleListVo.getArticleSeq());
+            map.put("title", articleListVo.getArticleSeq());
+            list.add(map);
+        }
+        return list;
+    }
+
+    public Map<String, LinkedList<Map<String, Object>>> searchArticle(String article) {
+        Map<String, LinkedList<Map<String, Object>>> resultMap = new HashMap<>();
+        ArrayList<ArticleListVo> searchByContent = this.snsMapper.selectArticleByContent(article, SEARCH_ARTICLE_PAGE_SIZE, 0);
+        resultMap.put("content", createBriefArticleMap(searchByContent));
+        ArrayList<ArticleListVo> searchByPlace = this.snsMapper.selectArticleByPlace(article, SEARCH_ARTICLE_PAGE_SIZE, 0);
+        resultMap.put("place", createBriefArticleMap(searchByPlace));
+        return resultMap;
+    }
+
+    public int getSearchContentTotalPage(String content) {
+        int totalCount = this.snsMapper.selectArticleCountByContent(content);
+        return (totalCount - 1) / PAGE_SIZE + 1;
+    }
+
+    public LinkedList<Map<String, Object>> searchContent(String content, int page) {
+        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByContent(content, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        return createArticleMap(searchResult);
+    }
+
+    public int getSearchPlaceTotalPage(String place) {
+        int totalCount = this.snsMapper.selectArticleCountByPlace(place);
+        return (totalCount - 1) / PAGE_SIZE + 1;
+    }
+
+    public LinkedList<Map<String, Object>> searchPlace(String place, int page) {
+        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByPlace(place, PAGE_SIZE, PAGE_SIZE * (page - 1));
+        return createArticleMap(searchResult);
     }
 }
