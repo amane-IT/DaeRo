@@ -24,10 +24,10 @@ public class AdminController {
     public AdminController(AdminService adminService) { this.adminService = adminService; }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> req) {
+    public ResponseEntity<Integer> login(@RequestBody Map<String, String> req) {
         Integer res = adminService.login(req.get("code"));
-        if (res == null) { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
-        return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @GetMapping("/users")
