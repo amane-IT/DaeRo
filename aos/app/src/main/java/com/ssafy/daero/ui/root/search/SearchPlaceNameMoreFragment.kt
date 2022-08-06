@@ -43,8 +43,8 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         searchPlaceMoreViewModel.resultPlaceNameSearch.observe(viewLifecycleOwner){
             Log.d("TAG", "observeData: 여기")
 //            TODO: 여행지 검색 API 완성되면 살리기
-//            searchArticleMoreAdapter.submitData(lifecycle, it)
-            searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
+            searchArticleMoreAdapter.submitData(lifecycle, it)
+//            searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
         }
 
         searchPlaceMoreViewModel.responseState.observe(viewLifecycleOwner){ state ->

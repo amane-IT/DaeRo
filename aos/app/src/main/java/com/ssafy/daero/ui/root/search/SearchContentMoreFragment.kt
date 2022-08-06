@@ -46,8 +46,8 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
         searchContentMoreViewModel.resultContentSearch.observe(viewLifecycleOwner){
             Log.d(TAG, "observeData: 여기")
 //            TODO: 내용 검색 API 완성되면 살리기
-//            searchArticleMoreAdapter.submitData(lifecycle, it)
-            searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
+            searchArticleMoreAdapter.submitData(lifecycle, it)
+//            searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
         }
 
         searchContentMoreViewModel.responseState.observe(viewLifecycleOwner){ state ->
