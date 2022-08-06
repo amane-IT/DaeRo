@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.*;
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -483,5 +484,18 @@ public class SnsService {
     public LinkedList<Map<String, Object>> searchPlace(String place, int page) {
         ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByPlace(place, PAGE_SIZE, PAGE_SIZE * (page - 1));
         return createArticleMap(searchResult);
+    }
+
+    public LinkedList<Map<String, Object>> traceArticle(int articleSeq) {
+        ArrayList<TripPlaceDto> tripPlaceDtos = this.snsMapper.selectTripPlacesByArticle(articleSeq);
+        LinkedList<Map<String, Object>> list = new LinkedList<>();
+        for (TripPlaceDto tripPlaceDto : tripPlaceDtos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("image_url", tripPlaceDto.getImageUrl());
+            map.put("trip_place_seq", tripPlaceDto.getTripPlaceSeq());
+            map.put("place_name", tripPlaceDto.getPlaceName());
+            list.add(map);
+        }
+        return list;
     }
 }
