@@ -35,7 +35,8 @@ class TripVerificationFragment :
     private var placeSeq = 0
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        // TODO: 트립스탬프 상세로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
     }
 
     override fun init() {
@@ -131,7 +132,6 @@ class TripVerificationFragment :
     }
 
     private val customCropImage = registerForActivityResult(CropImageContract()) { it ->
-
         it.getUriFilePath(requireContext().applicationContext, true)?.let { imagePath ->
             findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
             bundleOf(
@@ -139,17 +139,6 @@ class TripVerificationFragment :
                 IMAGE_PATH to imagePath
             ))
         }
-
-//        imagePath?.let {
-//            findNavController().navigate(R.id.action_tripVerificationFragment_to_tripStampFragment,
-//                bundleOf(
-//                    "tripSeq" to 0,
-//                    "placeName" to "test",
-//                    "dateTime" to 0L,
-//                    "imagePath" to imagePath
-//                )
-//            )
-//        }
     }
 
     private fun startCrop(gallery: Boolean, camera: Boolean) {

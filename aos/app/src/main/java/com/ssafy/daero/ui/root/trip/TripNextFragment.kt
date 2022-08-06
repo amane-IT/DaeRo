@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.root.trip
 
 
+import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -54,7 +55,8 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     }
 
     private val tripStampClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        // TODO: 트립스탬프 페이지로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
     }
 
     private val applyOptions: (Int, String) -> Unit = { time, transportation ->

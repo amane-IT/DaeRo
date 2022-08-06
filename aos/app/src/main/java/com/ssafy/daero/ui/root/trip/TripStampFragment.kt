@@ -2,6 +2,7 @@ package com.ssafy.daero.ui.root.trip
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
@@ -19,39 +20,44 @@ import com.ssafy.daero.utils.time.toDate
 import com.ssafy.daero.utils.view.toast
 
 class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragment_trip_stamp) {
-    private val TAG = "TripStampFragment_DaeRo"
     private val tripStampViewModel: TripStampViewModel by viewModels()
     private var isGood = 'T'
 
     private var placeSeq = 0
     private var imagePath: String? = null
     private var placeName: String? = null
-    private var dateTime: Long = 0
+    private var isUpdate: Boolean = false
+    private var tripStampId: Int = 0
 
     override fun init() {
         initData()
         initView()
         setOnClickListeners()
         observeData()
+        getTripStamp()
     }
 
     private fun initData() {
         placeSeq = App.prefs.curPlaceSeq
         imagePath = arguments?.getString(IMAGE_PATH)
         placeName = arguments?.getString(PLACE_NAME)
+        isUpdate = arguments?.getBoolean(IS_TRIP_STAMP_UPDATE, false) ?: false
+        tripStampId = arguments?.getInt(TRIP_STAMP_ID, 0) ?: 0
     }
 
     private fun initView() {
-        binding.apply {
-            textItemTripStampTitle.text = placeName ?: ""
-            textItemTripStampDate.text = App.prefs.verificationTime.toDate()
+        if (!isUpdate) {
+            binding.apply {
+                textItemTripStampTitle.text = placeName ?: ""
+                textItemTripStampDate.text = App.prefs.verificationTime.toDate()
 
-            Glide.with(requireContext())
-                .load(imagePath)
-                .placeholder(R.drawable.placeholder_trip_album)
-                .apply(RequestOptions().centerCrop())
-                .error(R.drawable.placeholder_trip_album)
-                .into(binding.imageTripStampStamp)
+                Glide.with(requireContext())
+                    .load(imagePath)
+                    .placeholder(R.drawable.placeholder_trip_album)
+                    .apply(RequestOptions().centerCrop())
+                    .error(R.drawable.placeholder_trip_album)
+                    .into(binding.imageTripStampStamp)
+            }
         }
     }
 
@@ -90,7 +96,21 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
             }
 
             buttonTripStampSave.setOnClickListener {
-                if (isGood != 'T') {
+                if (isGood == 'T') {
+                    toast("만족도를 선택해 주세요")
+                    return@setOnClickListener
+                }
+
+                if (isUpdate) {
+                    // 트립스탬프 수정
+                    tripStampViewModel.updateTripStamp(
+                        tripStampId,
+                        imagePath ?: tripStampViewModel.tripStamp.value?.imageUrl ?: "",
+                        isGood
+                    )
+
+                } else {
+                    //  트립스탬프 새로 등록
                     tripStampViewModel.insertTripStamp(
                         TripStamp(
                             placeName = placeName ?: "",
@@ -100,8 +120,6 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
                             satisfaction = isGood
                         )
                     )
-                } else {
-                    toast("만족도를 선택해 주세요")
                 }
             }
 
@@ -128,7 +146,9 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
             when (state) {
                 SUCCESS -> {
                     // 트립스탬프 완료 처리
-                    App.prefs.isTripStampComplete = true
+                    if(!isUpdate) {
+                        App.prefs.isTripStampComplete = true
+                    }
                     requireActivity().onBackPressed()
                     tripStampViewModel.responseState.value = DEFAULT
                 }
@@ -137,6 +157,62 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
                     toast("저장에 실패했습니다. 다시 시도해 주세요.")
                 }
             }
+        }
+        tripStampViewModel.tripStampState.observe(viewLifecycleOwner) {
+            when(it) {
+                FAIL -> {
+                    toast("트립스탬프 정보를 불러오는데 실패했습니다.")
+                    tripStampViewModel.tripStampState.value = DEFAULT
+                }
+            }
+        }
+        tripStampViewModel.tripStamp.observe(viewLifecycleOwner) {
+            binding.apply {
+                textItemTripStampTitle.text = it.placeName
+                textItemTripStampDate.text = it.dateTime.toDate()
+                if(it.satisfaction == 'Y') {
+                    isGood = 'Y'
+                    imageTripStampThumbup.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity().applicationContext,
+                            R.color.primaryColor
+                        )
+                    )
+                    imageTripStampThumbDown.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity().applicationContext,
+                            R.color.lightGray
+                        )
+                    )
+                } else {
+                    isGood = 'N'
+                    imageTripStampThumbup.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity().applicationContext,
+                            R.color.lightGray
+                        )
+                    )
+                    imageTripStampThumbDown.setColorFilter(
+                        ContextCompat.getColor(
+                            requireActivity().applicationContext,
+                            R.color.primaryColor
+                        )
+                    )
+                }
+
+                Glide.with(requireContext())
+                    .load(it.imageUrl)
+                    .placeholder(R.drawable.placeholder_trip_album)
+                    .apply(RequestOptions().centerCrop())
+                    .error(R.drawable.placeholder_trip_album)
+                    .into(binding.imageTripStampStamp)
+            }
+        }
+    }
+
+    private fun getTripStamp() {
+        if(isUpdate) {
+            tripStampViewModel.getTripStamp(tripStampId)
         }
     }
 

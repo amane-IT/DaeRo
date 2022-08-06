@@ -13,8 +13,6 @@ import com.ssafy.daero.ui.root.trip.*
 import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
-    var isTripStart = false
-
     override fun init() {
         checkTripStart()
         checkTripStamp()
@@ -45,19 +43,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
             changeFragment(fragmentType)
             true
         }
-
-//        binding.apply {
-//            tripBefore.setOnClickListener { changeTripState(TRIP_BEFORE) }
-//            tripIng.setOnClickListener { changeTripState(TRIP_ING) }
-//            tripVerification.setOnClickListener { changeTripState(TRIP_VERIFICATION) }
-//            tripStamp.setOnClickListener { changeTripState(TRIP_COMPLETE) }
-//        }
     }
-
-//    fun finishTrip() {
-//        App.prefs.tripState = TRIP_BEFORE
-//        App.prefs.isPosting = true
-//    }
 
     /**
      * 다음 여행 상태를 매개변수로 전달

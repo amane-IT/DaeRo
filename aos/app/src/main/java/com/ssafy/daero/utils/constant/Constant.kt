@@ -11,15 +11,8 @@ const val TAG_COLLECTION = "tag_collection"
 const val ARTICLE_SEQ = "article_seq"
 const val IS_RECOMMEND = "is_recommend"
 const val IS_RE_RECOMMEND = "is_re_recommend"
-
-
-
-/**
- * 여행 추천 상태, (첫 여행, 다음 여행)
- */
-const val FIRST_TRIP = 100
-const val NEXT_TRIP = 101
-
+const val IS_TRIP_STAMP_UPDATE = "is_trip_stamp_update"
+const val TRIP_STAMP_ID = "trip_stamp_id"
 
 /**
  * 신고 유형

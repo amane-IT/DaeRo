@@ -12,6 +12,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -60,7 +61,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var regionTags = listOf<Int>()
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        // todo: 트립스탬프 상세로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
+        bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

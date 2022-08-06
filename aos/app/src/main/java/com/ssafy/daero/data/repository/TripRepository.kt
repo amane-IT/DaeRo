@@ -144,6 +144,21 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // TripStamp 수정
+    fun updateTripStamp(id: Int, imageUrl: String, satisfaction: Char): Completable {
+        return database.tripStampDao().updateTripStamp(id, imageUrl, satisfaction)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripStamp 한개 가져오기
+    fun getTripStamp(id: Int): Single<TripStamp> {
+        return database.tripStampDao().getTripStamp(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+
     // TripStamp 모두 가져오기
     fun getTripStamps(): Single<List<TripStamp>> {
         return database.tripStampDao().getTripStamps()
