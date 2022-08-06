@@ -162,7 +162,7 @@ interface SnsApi {
      * */
     @GET("sns/search")
     fun searchUserName(
-        @Query("user_nickname") userNickname: String,
+        @Query("user") userNickname: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<UserNameItem>>
 

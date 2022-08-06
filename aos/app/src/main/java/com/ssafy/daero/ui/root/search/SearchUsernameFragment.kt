@@ -7,8 +7,11 @@ import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchUsernameBinding
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
+import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.pagingUser
+import com.ssafy.daero.utils.view.toast
 
 class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.layout.fragment_search_username){
     private val searchViewModel : SearchViewModel by viewModels({ requireParentFragment() })
@@ -29,15 +32,16 @@ class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.lay
 
     private fun observeData(){
         searchViewModel.resultUserSearch.observe(viewLifecycleOwner){
-            Log.d("TAG", "observeData: 여기")
-//            TODO: 유저 검색 API 완성되면 살리기
-//            searchUserNameAdapter.submitData(lifecycle, it)
-            searchUserNameAdapter.submitData(lifecycle, pagingUser)
+            searchUserNameAdapter.submitData(lifecycle, it)
         }
 
         searchViewModel.responseState_userName.observe(viewLifecycleOwner){ state ->
             when(state){
-                FAIL -> binding.textSearchUserNoData.visibility = View.VISIBLE
+                FAIL -> {
+                    toast("유저 목록을 불러오는데 실패했습니다.")
+                    searchViewModel.responseState_userName.value = DEFAULT
+                    binding.textSearchUserNoData.visibility = View.VISIBLE
+                }
             }
         }
     }
