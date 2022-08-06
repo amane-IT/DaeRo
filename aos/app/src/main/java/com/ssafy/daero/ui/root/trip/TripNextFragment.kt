@@ -108,14 +108,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
         tripNextViewModel.tripList.observe(viewLifecycleOwner) {
             if(it.isNotEmpty()){
-                val list = mutableListOf<TripPopularResponseDto>()
-                for(stamp in it){
-                    val dto = TripPopularResponseDto(stamp.tripPlaceSeq, stamp.imageUrl, stamp.placeName)
-                    list.add(dto)
-                    Log.d("TripNextFragment", "observeData: ${dto.toString()}")
-                }
-
-                tripUntilNowAdapter.tripPlaces = list
+                tripUntilNowAdapter.tripStamps = it
                 tripUntilNowAdapter.notifyDataSetChanged()
             }
         }
