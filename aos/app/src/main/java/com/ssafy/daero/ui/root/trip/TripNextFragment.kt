@@ -12,7 +12,8 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
-import com.ssafy.daero.utils.constant.PLACE_SEQ
+import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.view.toast
 
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
@@ -22,11 +23,17 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
 
     override fun init() {
+        setTripState()
         initAdapter()
         observeData()
         setOnClickListeners()
         getTripStamps()
         getAroundTrips()
+    }
+
+    private fun setTripState() {
+        // 다음 여행지 추천 화면으로 온경우 다음 여행지 추천상태로 변경
+        App.prefs.isFirstTrip = false
     }
 
     private fun initAdapter() {
@@ -42,7 +49,8 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     }
 
     private val nearByTripPlaceClickListener: (View, Int) -> Unit = { _, tripPlaceSeq ->
-        // TODO: 주변 여행지 정보 상세 페이지로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_tripInformationFragment,
+        bundleOf(PLACE_SEQ to tripPlaceSeq, IS_RECOMMEND to false))
     }
 
     private val tripStampClickListener: (View, Int) -> Unit = { _, tripStampId ->
@@ -101,16 +109,25 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             binding.progressBarTripNextLoading.isVisible = it
         }
         tripNextViewModel.nextTripRecommendResponseDto.observe(viewLifecycleOwner) { placeSeq ->
-            // 다음 여행지 추천으로 변경
             if(placeSeq > 0) {
-                App.prefs.isFirstTrip = false
-
                 findNavController().navigate(
                     R.id.action_rootFragment_to_tripInformationFragment, bundleOf(
                         PLACE_SEQ to placeSeq
                     )
                 )
                 tripNextViewModel.initNextTripRecommend()
+            }
+        }
+        tripNextViewModel.nextTripRecommendState.observe(viewLifecycleOwner) {
+            when(it) {
+                FAIL -> {
+                    toast("여행지 추천을 받는데 실패했습니다.")
+                    tripNextViewModel.nextTripRecommendState.value = DEFAULT
+                }
+                EMPTY -> {
+                    toast("해당 조건에 맞는 여행지가 없습니다.")
+                    tripNextViewModel.nextTripRecommendState.value = DEFAULT
+                }
             }
         }
     }

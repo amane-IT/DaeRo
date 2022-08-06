@@ -3,12 +3,13 @@ package com.ssafy.daero.ui.root.trip
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 
 class TravelingViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
@@ -17,7 +18,7 @@ class TravelingViewModel : BaseViewModel() {
     var articleTripStampData = listOf<TripStamp>()
 
     private val _tripStamps = MutableLiveData<List<TripStamp>>()
-    val tripStamps : LiveData<List<TripStamp>>
+    val tripStamps: LiveData<List<TripStamp>>
         get() = _tripStamps
 
     private val _tripInformation = MutableLiveData<TripInformationResponseDto>()
@@ -26,6 +27,8 @@ class TravelingViewModel : BaseViewModel() {
 
     var tripInformationState = MutableLiveData<Int>()
 
+    var placeSeq = MutableLiveData<Int>()
+    var tripRecommendState = MutableLiveData<Int>()
 
     fun getTripStamps() {
         addDisposable(
@@ -64,21 +67,43 @@ class TravelingViewModel : BaseViewModel() {
             tripRepository.deleteAllTripStamps()
                 .subscribe({
 
-                }, { throwable->
+                }, { throwable ->
                     Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }
 
-    fun insertTripStamp(tripStamp: TripStamp) {
+    fun getFirstTripRecommend(firstTripRecommend: FirstTripRecommendRequestDto) {
         addDisposable(
-            tripRepository.insertTripStamp(tripStamp)
-                .subscribe({
-                    responseState.postValue(SUCCESS)
+            tripRepository.getFirstTripRecommend(firstTripRecommend)
+                .subscribe({ response ->
+                    if (response.body()!!.place_seq != 0) {
+                        placeSeq.postValue(response.body()!!.place_seq)
+                    } else {
+                        tripRecommendState.postValue(FAIL)
+                    }
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                    tripRecommendState.postValue(FAIL)
                 })
+        )
+    }
+
+    fun recommendNextPlace(time: Int, transportation: String) {
+        addDisposable(
+            tripRepository.recommendNextPlace(
+                App.prefs.curPlaceSeq,
+                time, transportation
+            ).subscribe({ response ->
+                if (response.body()!!.place_seq != 0) {
+                    placeSeq.postValue(response.body()!!.place_seq)
+                } else {
+                    tripRecommendState.postValue(FAIL)
+                }
+            }, { throwable ->
+                Log.d("TripInfoVM_DaeRo", throwable.toString())
+                tripRecommendState.postValue(FAIL)
+            })
         )
     }
 }

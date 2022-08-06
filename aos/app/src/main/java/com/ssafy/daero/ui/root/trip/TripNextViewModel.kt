@@ -8,6 +8,7 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
+import com.ssafy.daero.utils.constant.EMPTY
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
@@ -58,7 +59,6 @@ class TripNextViewModel : BaseViewModel() {
     ) {
         showProgress.postValue(true)
 
-        // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
         addDisposable(
             tripRepository.recommendNextPlace(
                 App.prefs.curPlaceSeq,
@@ -66,7 +66,12 @@ class TripNextViewModel : BaseViewModel() {
                 transportation
             ).subscribe({ response ->
                 // place_seq 저장
-                _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                Log.d("TripNextVM_DaeRo", response.body().toString())
+                if(response.body()!!.place_seq == 0) {
+                    nextTripRecommendState.postValue(EMPTY)
+                } else {
+                    _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                }
                 showProgress.postValue(false)
             }, { throwable ->
                 Log.d("TripNextVM_DaeRo", throwable.toString())

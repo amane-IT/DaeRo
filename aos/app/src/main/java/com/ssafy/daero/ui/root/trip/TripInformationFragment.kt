@@ -25,28 +25,41 @@ class TripInformationFragment :
     // 여행지 정보 seq
     private var placeSeq = 0
 
+    // 여행지 추천받았는지 여부 (추천안받고 내 주변 여행지 또는 인기있는 여행지 경우 false
+    private var isRecommend = true
+
+    // 여행 중 화면에서 다시 추천받기 눌러서 온경우
+    private var isReRecommend = false
+
     // 첫 여행지 추천 시 선택한 키워드 태그들
     private var tagCollection: TagCollection? = null
 
     override fun init() {
-        initView()
         initData()
+        initView()
         observeData()
         setOnClickListeners()
-    }
-
-    private fun initView() {
-        binding.textTripInformationFold.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun initData() {
         placeSeq = arguments!!.getInt(PLACE_SEQ, 0)
         tagCollection = arguments?.getParcelable<TagCollection>(TAG_COLLECTION)
+        isRecommend = arguments?.getBoolean(IS_RECOMMEND, true) ?: true
+        isReRecommend = arguments?.getBoolean(IS_RE_RECOMMEND, false) ?: false
+
 
         if (placeSeq > 0) {
             tripInformationViewModel.getTripInformation(placeSeq)
         } else {
             toast("여행지 정보를 불러오는데 실패했습니다.")
+        }
+    }
+
+
+    private fun initView() {
+        binding.textTripInformationFold.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        if (!isRecommend) {
+            binding.buttonTripInformationReRecommend.text = "돌아가기"
         }
     }
 
@@ -91,6 +104,12 @@ class TripInformationFragment :
             }
         }
         binding.buttonTripInformationReRecommend.setOnClickListener {
+            // 여행지 추천받고온 상태가 아니라면
+            if (!isRecommend) {
+                requireActivity().onBackPressed()
+                return@setOnClickListener
+            }
+
             // 첫 여행지 추천 상태일 경우, 다시 추천
             if (App.prefs.isFirstTrip) {
                 tripInformationViewModel.getReFirstTripRecommend(
@@ -117,11 +136,12 @@ class TripInformationFragment :
     }
 
     private fun startTrip() {
-        // todo : 여행 시작하기 기능
         // 현재 추천받은 여행지 seq 저장
         App.prefs.curPlaceSeq = placeSeq
-        // 여행 시작 했는지 체크
-        App.prefs.isTripStart = true
+        if (!isReRecommend) {
+            // 여행 시작 했는지 체크 -> RootFragment 에서 체크 후 여행 중 화면으로 전환
+            App.prefs.isTripStart = true
+        }
 
         requireActivity().onBackPressed()
     }

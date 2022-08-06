@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.os.Looper
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -22,15 +23,16 @@ import com.google.android.gms.location.*
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.TRIP_BEFORE
-import com.ssafy.daero.utils.constant.TRIP_VERIFICATION
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
+import com.ssafy.daero.utils.tag.TagCollection
+import com.ssafy.daero.utils.tag.categoryTags
+import com.ssafy.daero.utils.tag.regionTags
 import com.ssafy.daero.utils.view.toast
 import kotlin.math.sqrt
 
@@ -54,6 +56,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     lateinit var mLastLocation: Location
     internal lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
+    private var categoryTags = listOf<Int>()
+    private var regionTags = listOf<Int>()
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
         // todo: 트립스탬프 상세로 이동
@@ -143,6 +147,30 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             tripUntilNowAdapter.tripStamps = it
             tripUntilNowAdapter.notifyDataSetChanged()
         }
+        travelingViewModel.tripRecommendState.observe(viewLifecycleOwner) {
+            when (it) {
+                FAIL -> {
+                    toast("해당 조건에 맞는 여행지가 없습니다.")
+                    travelingViewModel.tripRecommendState.value = DEFAULT
+                }
+            }
+        }
+        travelingViewModel.placeSeq.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                val bundle = Bundle().apply {
+                    putInt(PLACE_SEQ, it)
+                    putBoolean(IS_RE_RECOMMEND, true)
+                    if(App.prefs.isFirstTrip) {
+                        putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
+                    }
+                }
+                findNavController().navigate(
+                    R.id.action_rootFragment_to_tripInformationFragment,
+                    bundle
+                )
+                travelingViewModel.placeSeq.value = 0
+            }
+        }
     }
 
     private fun getTripStamps() {
@@ -157,6 +185,22 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
     }
 
+    private val applyFilter: (List<Int>, List<Int>) -> Unit = { categoryTags, regionTags ->
+        this.categoryTags = categoryTags
+        this.regionTags = regionTags
+        travelingViewModel.getFirstTripRecommend(
+            FirstTripRecommendRequestDto(
+                categoryTags, regionTags
+            )
+        )
+    }
+
+    private val applyOptions: (Int, String) -> Unit = { time, transportation ->
+        App.prefs.tripTime = time
+        App.prefs.tripTransportation = transportation
+        travelingViewModel.recommendNextPlace(time, transportation)
+    }
+
     private fun setOnClickListeners() {
         binding.buttonTravelingDirections.setOnClickListener {
             // 네이버 지도 길찾기
@@ -164,6 +208,21 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         binding.buttonTravelingNext.setOnClickListener {
             //todo : 다른 여행지 추천 화면으로 전환
+
+            // 첫 여행지 추천상태라면 여행지 태그 바텀싯 띄우기
+            if (App.prefs.isFirstTrip) {
+                TagBottomSheetFragment(categoryTags, regionTags, applyFilter).show(
+                    childFragmentManager,
+                    "TagBottomSheetFragment"
+                )
+            }
+            // 다음 여행지 추천상태라면 다음 여행지 추천 옵션 띄우기
+            else {
+                TripNextBottomSheetFragment(applyOptions).show(
+                    childFragmentManager,
+                    "TripNextBottomSheetFragment"
+                )
+            }
         }
         binding.buttonTravelingTemporary.setOnClickListener {
             // todo: 임시 인증 버튼, 추후에 삭제

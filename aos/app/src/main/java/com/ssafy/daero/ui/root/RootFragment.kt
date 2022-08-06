@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.root
 
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -26,7 +25,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     // 여행 상세 페이지에서 여행 시작 버튼 눌렀는지 여부
     private fun checkTripStart() {
         // 여행 시작 버튼 누름
-        if(App.prefs.isTripStart) {
+        if (App.prefs.isTripStart) {
             changeTripState(TRIP_ING)
             App.prefs.isTripStart = false
         }
@@ -34,7 +33,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
 
     private fun checkTripStamp() {
         // 트립스탬프 찍음
-        if(App.prefs.isTripStampComplete) {
+        if (App.prefs.isTripStampComplete) {
             changeTripState(TRIP_COMPLETE)
             App.prefs.isTripStampComplete = false
         }

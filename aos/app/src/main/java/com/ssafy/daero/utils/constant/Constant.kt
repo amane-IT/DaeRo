@@ -8,8 +8,9 @@ const val PLACE_SEQ = "trip_seq"
 const val CATEGORY_TAGS = "category_tags"
 const val REGION_TAGS = "region_tags"
 const val TAG_COLLECTION = "tag_collection"
-const val TRIP_KIND = "trip_kind"
 const val ARTICLE_SEQ = "article_seq"
+const val IS_RECOMMEND = "is_recommend"
+const val IS_RE_RECOMMEND = "is_re_recommend"
 
 
 
