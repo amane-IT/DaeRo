@@ -2,38 +2,38 @@ package com.ssafy.daero.ui.root.trip
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
-
+import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.location.*
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
 import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.ui.setting.LogoutDialogFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.tag.TagCollection
+import com.ssafy.daero.utils.tag.categoryTags
+import com.ssafy.daero.utils.tag.regionTags
 import com.ssafy.daero.utils.view.toast
 import kotlin.math.sqrt
 
@@ -43,6 +43,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private val travelingViewModel: TravelingViewModel by viewModels()
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var placeSeq = 0
+    private var address = ""
     private var longitude: Double = 0.0
     private var latitude: Double = 0.0
     private lateinit var mSensorManager: SensorManager
@@ -56,9 +57,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     lateinit var mLastLocation: Location
     internal lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
+    private var categoryTags = listOf<Int>()
+    private var regionTags = listOf<Int>()
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        // todo: 트립스탬프 상세로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
+        bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -135,14 +139,39 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             binding.tvTravelingAddress.text = it.address
             latitude = it.latitude
             longitude = it.longitude
+            address = it.address
         }
         travelingViewModel.tripStamps.observe(viewLifecycleOwner) {
-            if(it.isEmpty()) {
+            if (it.isEmpty()) {
                 binding.tvTravelingTripStampSoFarNone.visibility = View.VISIBLE
                 return@observe
             }
             tripUntilNowAdapter.tripStamps = it
             tripUntilNowAdapter.notifyDataSetChanged()
+        }
+        travelingViewModel.tripRecommendState.observe(viewLifecycleOwner) {
+            when (it) {
+                FAIL -> {
+                    toast("해당 조건에 맞는 여행지가 없습니다.")
+                    travelingViewModel.tripRecommendState.value = DEFAULT
+                }
+            }
+        }
+        travelingViewModel.placeSeq.observe(viewLifecycleOwner) {
+            if (it > 0) {
+                val bundle = Bundle().apply {
+                    putInt(PLACE_SEQ, it)
+                    putBoolean(IS_RE_RECOMMEND, true)
+                    if(App.prefs.isFirstTrip) {
+                        putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
+                    }
+                }
+                findNavController().navigate(
+                    R.id.action_rootFragment_to_tripInformationFragment,
+                    bundle
+                )
+                travelingViewModel.placeSeq.value = 0
+            }
         }
     }
 
@@ -158,12 +187,44 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
     }
 
+    private val applyFilter: (List<Int>, List<Int>) -> Unit = { categoryTags, regionTags ->
+        this.categoryTags = categoryTags
+        this.regionTags = regionTags
+        travelingViewModel.getFirstTripRecommend(
+            FirstTripRecommendRequestDto(
+                categoryTags, regionTags
+            )
+        )
+    }
+
+    private val applyOptions: (Int, String) -> Unit = { time, transportation ->
+        App.prefs.tripTime = time
+        App.prefs.tripTransportation = transportation
+        travelingViewModel.recommendNextPlace(time, transportation)
+    }
+
     private fun setOnClickListeners() {
         binding.buttonTravelingDirections.setOnClickListener {
-            // todo: 길찾기 기능
+            // 네이버 지도 길찾기
+            findDirectionByNaverMap()
         }
         binding.buttonTravelingNext.setOnClickListener {
             //todo : 다른 여행지 추천 화면으로 전환
+
+            // 첫 여행지 추천상태라면 여행지 태그 바텀싯 띄우기
+            if (App.prefs.isFirstTrip) {
+                TagBottomSheetFragment(categoryTags, regionTags, applyFilter).show(
+                    childFragmentManager,
+                    "TagBottomSheetFragment"
+                )
+            }
+            // 다음 여행지 추천상태라면 다음 여행지 추천 옵션 띄우기
+            else {
+                TripNextBottomSheetFragment(applyOptions).show(
+                    childFragmentManager,
+                    "TripNextBottomSheetFragment"
+                )
+            }
         }
         binding.buttonTravelingTemporary.setOnClickListener {
             // todo: 임시 인증 버튼, 추후에 삭제
@@ -174,7 +235,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         binding.buttonTravelingStop.setOnClickListener {
             // 이전 여행기록이 없다면
-            if(travelingViewModel.tripStamps.value?.isEmpty() != false) {
+            if (travelingViewModel.tripStamps.value?.isEmpty() != false) {
                 // todo : 홈화면으로 이동, 캐시 디렉토리 삭제, room tripStamp 삭제, prefs 초기화
                 travelingViewModel.deleteTripStamps()
                 App.prefs.initTrip()
@@ -186,6 +247,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         binding.imageTravelingNotification.setOnClickListener {
             findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
+    }
+
+    private fun findDirectionByNaverMap() {
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
+            ).apply {
+                `package` = "com.nhn.android.nmap"
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        )
     }
 
     override fun onSensorChanged(event: SensorEvent?) {

@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.root
 
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -14,10 +13,9 @@ import com.ssafy.daero.ui.root.trip.*
 import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
-    var isTripStart = false
-
     override fun init() {
         checkTripStart()
+        checkTripStamp()
         setOnClickListeners()
         changeFragment(curFragmentType)
     }
@@ -25,9 +23,17 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     // 여행 상세 페이지에서 여행 시작 버튼 눌렀는지 여부
     private fun checkTripStart() {
         // 여행 시작 버튼 누름
-        if(App.prefs.isTripStart) {
+        if (App.prefs.isTripStart) {
             changeTripState(TRIP_ING)
             App.prefs.isTripStart = false
+        }
+    }
+
+    private fun checkTripStamp() {
+        // 트립스탬프 찍음
+        if (App.prefs.isTripStampComplete) {
+            changeTripState(TRIP_COMPLETE)
+            App.prefs.isTripStampComplete = false
         }
     }
 
@@ -37,19 +43,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
             changeFragment(fragmentType)
             true
         }
-
-//        binding.apply {
-//            tripBefore.setOnClickListener { changeTripState(TRIP_BEFORE) }
-//            tripIng.setOnClickListener { changeTripState(TRIP_ING) }
-//            tripVerification.setOnClickListener { changeTripState(TRIP_VERIFICATION) }
-//            tripStamp.setOnClickListener { changeTripState(TRIP_COMPLETE) }
-//        }
     }
-
-//    fun finishTrip() {
-//        App.prefs.tripState = TRIP_BEFORE
-//        App.prefs.isPosting = true
-//    }
 
     /**
      * 다음 여행 상태를 매개변수로 전달

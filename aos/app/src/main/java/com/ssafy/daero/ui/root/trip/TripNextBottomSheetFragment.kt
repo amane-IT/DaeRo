@@ -12,13 +12,13 @@ import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentTripNextBottomSheetBinding
 
-
-class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Unit) : BottomSheetDialogFragment() {
+class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Unit) :
+    BottomSheetDialogFragment() {
     private var _binding: FragmentTripNextBottomSheetBinding? = null
     private val binding get() = _binding!!
 
-    private var time = 0
-    private var transportation = ""
+    private var time = 30
+    private var transportation = "walk"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,13 +35,16 @@ class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Uni
         initView()
         expandFullHeight()
         setOnClickListeners()
-        setOnItemSelectedListener()
-        setOnCheckedChangeListener()
+        setOtherListeners()
     }
 
-    private fun initView(){
+    private fun initView() {
         binding.apply {
-            spinnerTripNextBottomTime.adapter = ArrayAdapter.createFromResource(requireContext(), R.array.spinner_time_list, android.R.layout.simple_spinner_dropdown_item)
+            spinnerTripNextBottomTime.adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.spinner_time_list,
+                android.R.layout.simple_spinner_dropdown_item
+            )
         }
     }
 
@@ -61,47 +64,32 @@ class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Uni
         }
     }
 
-    private fun setOnItemSelectedListener(){
+    private fun setOtherListeners() {
         binding.spinnerTripNextBottomTime.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
-
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    when (position) {
+                    time = when (position) {
                         // TODO: 이동시간 리스트 재설정하기
-                        0 -> time = 30
-                        1 -> time = 60
-                        2 -> time = 90
-                        3 -> time = 120
-                        4 -> time = 180
-                        else -> time = 0
+                        0 -> 30
+                        1 -> 60
+                        2 -> 90
+                        3 -> 120
+                        4 -> 180
+                        else -> 30
                     }
                 }
             }
-    }
-
-    private fun setOnCheckedChangeListener() {
-        binding.radioGroupTripNextBottom.setOnCheckedChangeListener { radioGroup, checkedId ->
-            when(checkedId){
-                // TODO: tranportation 타입에 맞춰서 변경하기
+        binding.radioGroupTripNextBottom.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
                 R.id.radioButton_tripNextBottm_walk -> transportation = "walk"
                 R.id.radioButton_tripNextBottm_byCar -> transportation = "car"
             }
-        }
-
-        binding.buttonTripNextBottomRecommend.setOnClickListener {
-            // place_seq 가져오기 -> DB 가장 마지막 데이터의 place_seq를 가져오면 되나..?
-            // prefs에 저장해서 가져오기로 결정
-            // TODO: place_seq 가져오기
-            val placeSeq = App.prefs.placeSeq
-
-
-
         }
     }
 

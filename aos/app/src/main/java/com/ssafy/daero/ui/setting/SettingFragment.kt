@@ -11,10 +11,8 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSettingBinding
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.FragmentType
-import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.checkPermissions
 import com.ssafy.daero.utils.view.toast
@@ -33,7 +31,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             when (it) {
                 SUCCESS -> {
                     settingViewModel.withdrawalState.value = DEFAULT
-                    App.prefs.initAll()
+                    deleteAllInformation()
                     RootFragment.curFragmentType = FragmentType.HomeFragment
                     findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
                 }
@@ -134,7 +132,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private val logoutListener: () -> Unit = {
-        App.prefs.initAll()
+        deleteAllInformation()
         RootFragment.curFragmentType = FragmentType.HomeFragment
         findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
     }
@@ -145,5 +143,16 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private val withdrawalListener: () -> Unit = {
         settingViewModel.withdrawal()
+    }
+
+    private fun deleteAllInformation() {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        settingViewModel.deleteAllTripRecord()
+        App.prefs.initUser()
+        App.prefs.initTrip()
+        App.prefs.tripState = TRIP_BEFORE
     }
 }

@@ -254,7 +254,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
 
-                <android.widget.Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_traveling_stop"
                     style="@style/BodyWhite"
                     android:layout_width="0dp"
