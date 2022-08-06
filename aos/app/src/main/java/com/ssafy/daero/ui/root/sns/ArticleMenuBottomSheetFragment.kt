@@ -20,7 +20,7 @@ import com.ssafy.daero.utils.constant.COMMENT
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
-class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: Int) : BottomSheetDialogFragment() {
+class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: Int, val listener: ArticleListener) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
 
@@ -73,6 +73,7 @@ class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: I
             findNavController().navigate(
                 R.id.action_articleFragment_to_tripFollowFragment
             )
+            dismiss()
         }
         binding.tvArticleMenuShare.setOnClickListener {
             //todo: 공유하기
@@ -82,9 +83,12 @@ class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: I
             findNavController().navigate(
                 R.id.action_articleFragment_to_articleWriteDayFragment
             )
+            dismiss()
         }
         binding.tvArticleMenuDelete.setOnClickListener {
             //todo: 삭제하기
+            listener.articleDelete(articleSeq)
+            dismiss()
         }
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기, album_seq
@@ -93,6 +97,8 @@ class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: I
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //todo: 차단하기
+            listener.blockAdd(userSeq)
+            dismiss()
         }
         binding.tvArticleMenuCancel.setOnClickListener {
             dismiss()

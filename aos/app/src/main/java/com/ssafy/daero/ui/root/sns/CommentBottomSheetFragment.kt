@@ -18,25 +18,32 @@ import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.databinding.BottomsheetCommentBinding
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
+import com.ssafy.daero.ui.setting.BlockUserViewModel
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
 
 class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int, private val userProfileClickListener: (Int) -> Unit) :
     BottomSheetDialogFragment(), CommentListener {
+
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val commentViewModel: CommentViewModel by viewModels()
     private lateinit var commentAdapter: CommentAdapter
 
     private var _binding: BottomsheetCommentBinding? = null
     private val binding get() = _binding!!
 
-    private val commentItemClickListener: (View, Int, Int, String) -> Unit =
-        { _, id, index, content ->
+    private val commentItemClickListener: (View, Int, Int, Int, String) -> Unit =
+        { _, id, index, userSeq, content ->
             //todo 1. 햄버거 2. 유저 사진
             when (index) {
                 1 -> {
                     val commentMenuBottomSheetFragment = CommentMenuBottomSheetFragment(
                         id,
                         content,
+                        userSeq,
                         this@CommentBottomSheetFragment
                     )
                     commentMenuBottomSheetFragment.show(
@@ -193,6 +200,22 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             reCommentAdapter.submitData(lifecycle, it)
         }.run {
             return reCommentAdapter
+        }
+    }
+
+    override fun blockAdd(userSeq: Int) {
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+            }
         }
     }
 

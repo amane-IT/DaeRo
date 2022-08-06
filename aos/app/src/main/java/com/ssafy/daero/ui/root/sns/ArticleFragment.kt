@@ -29,14 +29,18 @@ import com.ssafy.daero.data.dto.article.TripStamp
 import com.ssafy.daero.databinding.FragmentArticleBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleAdapter
 import com.ssafy.daero.ui.adapter.sns.ExpenseAdapter
+import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.tag.categoryTags
 import com.ssafy.daero.utils.view.getPxFromDp
+import com.ssafy.daero.utils.view.toast
 
 
 class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article),
+    ArticleListener,
     OnMapReadyCallback {
 
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
     private lateinit var articleAdapter: ArticleAdapter
     private lateinit var expenseAdapter: ExpenseAdapter
@@ -50,7 +54,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
 
     private lateinit var mapView: ArticleMapView
 
-    private var articleSeq = 10
+    private var articleSeq = 0
 
     private val onItemClickListener: (View, Int) -> Unit = { _, id ->
         findNavController().navigate(
@@ -137,14 +141,14 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             // todo articleSeq
             if (likeYn == true) {
                 articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
-                likes -= 1
-                binding.tvArticleLike.text = likes.toString()
-            } else {
-                articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
                 if (binding.tvArticleLike.text.toString().toInt() > 0) {
-                    likes += 1
+                    likes -= 1
                     binding.tvArticleLike.text = likes.toString()
                 }
+            } else {
+                articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
+                likes += 1
+                binding.tvArticleLike.text = likes.toString()
             }
             likeYn = !likeYn!!
             likeSetting()
@@ -173,7 +177,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleMenu.setOnClickListener {
             // todo: articleSeq 넘기기
-            ArticleMenuBottomSheetFragment(articleSeq, articleViewModel.articleData.user_seq).show(
+            ArticleMenuBottomSheetFragment(articleSeq, articleViewModel.articleData.user_seq, this@ArticleFragment).show(
                 childFragmentManager,
                 ARTICLE_MENU_BOTTOM_SHEET
             )
@@ -400,5 +404,42 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 isLocationButtonEnabled = false // 기본 내 위치 버튼 비활성화
             }
         }
+    }
+
+    override fun articleDelete(articleSeq: Int) {
+        articleViewModel.articleDelete(articleSeq)
+        articleViewModel.deleteState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 삭제했습니다.")
+                    requireActivity().onBackPressed()
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 삭제를 실패했습니다.")
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun blockAdd(userSeq: Int) {
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    private fun deleteArticle(){
+
     }
 }

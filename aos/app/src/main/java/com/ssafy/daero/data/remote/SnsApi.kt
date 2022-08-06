@@ -30,6 +30,14 @@ interface SnsApi {
     fun article(@Path("article_seq") articleSeq: Int): Single<Response<ArticleResponseDto>>
 
     /**
+     * 게시글 삭제
+     */
+    @DELETE("sns/article/{article_seq}")
+    fun articleDelete(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
+
+    /**
      * 댓글 조회
      */
     @GET("sns/article/{article_seq}/reply")

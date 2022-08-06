@@ -269,7 +269,15 @@
         android:id="@+id/inquiryFragment"
         android:name="com.ssafy.daero.ui.setting.InquiryFragment"
         android:label="InquiryFragment"
-        tools:layout="@layout/fragment_inquiry" />
+        tools:layout="@layout/fragment_inquiry" >
+        <action
+            android:id="@+id/action_inquiryFragment_to_inquiryRegisterFragment"
+            app:destination="@id/inquiryRegisterFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/findIdFragment"
         android:name="com.ssafy.daero.ui.login.FindIdFragment"
@@ -525,5 +533,11 @@
         android:label="TripStampFragment"
         tools:layout="@layout/fragment_trip_stamp">
     </fragment>
+    <fragment
+        android:id="@+id/inquiryRegisterFragment"
+        android:name="com.ssafy.daero.ui.setting.InquiryRegisterFragment"
+        android:label="InquiryRegisterFragment"
+        tools:layout="@layout/fragment_inquiry_register"
+        />
 
 </navigation>

@@ -20,6 +20,7 @@ import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 class CommentMenuBottomSheetFragment(
     val replySeq: Int,
     val content: String,
+    val userSeq: Int,
     listener: CommentListener
 ) : BottomSheetDialogFragment() {
 
@@ -67,6 +68,8 @@ class CommentMenuBottomSheetFragment(
         }
         binding.tvCommentMenuBlock.setOnClickListener {
             //todo: 차단하기
+            mCallback.blockAdd(userSeq)
+            dismiss()
         }
         binding.tvCommentMenuCancel.setOnClickListener {
             dismiss()
