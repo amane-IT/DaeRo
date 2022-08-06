@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter

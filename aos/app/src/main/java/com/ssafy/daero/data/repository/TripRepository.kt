@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
+import com.ssafy.daero.application.App
 import com.ssafy.daero.data.dto.trip.*
 import com.ssafy.daero.data.entity.Notification
 import com.ssafy.daero.data.entity.TripFollow

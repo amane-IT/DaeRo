@@ -21,7 +21,16 @@ class TripNextViewModel : BaseViewModel() {
     val nextTripRecommendResponseDto: LiveData<Int>
         get() = _nextTripRecommendResponseDto
 
+    private val _tripList = MutableLiveData<List<TripStamp>>()
+    val tripList: LiveData<List<TripStamp>>
+        get() = _tripList
+
+    private val _nearByPlaces = MutableLiveData<List<TripPopularResponseDto>>()
+    val nearByPlaces: LiveData<List<TripPopularResponseDto>>
+        get() = _nearByPlaces
+
     var nextTripRecommendState = MutableLiveData<Int>()
+    var tripListState = MutableLiveData<Int>()
 
     private val _tripStamps = MutableLiveData<List<TripStamp>>()
     val tripStamps: LiveData<List<TripStamp>>
