@@ -416,6 +416,21 @@
         limit #{limit} offset #{offset}
     </select>
 
+    <select id="selectTripPlacesByArticle" parameterType="_int" resultType="com.ssafy.daero.trip.dto.TripPlaceDto">
+        select `tp`.`trip_places_seq` as `tripPlaceSeq`,
+               `tp`.`place_name`      as `placeName`,
+               `tp`.`address`         as `address`,
+               `tp`.`latitude`        as `latitude`,
+               `tp`.`longitude`       as `longitude`,
+               `tp`.`description`     as `description`,
+               `tp`.`region_seq`      as `regionSeq`,
+               `tp`.`image_url`       as `imageUrl`
+        from `articles` `a`
+            left join `trip_stamps` `ts` on `a`.`trips_seq` = `ts`.`trip_seq`
+            left join `trip_places` `tp` on `ts`.`trip_places_seq` = `tp`.`trip_places_seq`
+        where `a`.`articles_seq` = #{articleSeq}
+    </select>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
         <result property="userSeq" column="user_seq" />

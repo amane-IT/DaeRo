@@ -256,4 +256,13 @@ public class SnsController {
         }
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
+
+    @GetMapping("/article/{article_seq}/trace")
+    public ResponseEntity<LinkedList<Map<String, Object>>> traceGet(@PathVariable("article_seq") int articleSeq) {
+        LinkedList<Map<String, Object>> resultList = this.snsService.traceArticle(articleSeq);
+        if (resultList.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
 }
