@@ -4,102 +4,101 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/dlg_bottomsheet">
 
         <TextView
-            style="@style/HeadBold"
             android:id="@+id/text_tripNextBottom_time"
+            style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="이동시간"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/spinner_tripNextBottom_time"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/spinner_tripNextBottom_time"
             style="@style/SubHead"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="48dp"
-            android:layout_marginVertical="16dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/bg_spinner_time"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNextBottom_time"
-            app:layout_constraintBottom_toTopOf="@id/text_tripNextBottom_transfer"/>
+            app:layout_constraintTop_toBottomOf="@id/text_tripNextBottom_time" />
 
         <TextView
-            style="@style/HeadBold"
             android:id="@+id/text_tripNextBottom_transfer"
+            style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="32dp"
             android:text="이동 수단"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/spinner_tripNextBottom_time"
-            app:layout_constraintTop_toBottomOf="@id/spinner_tripNextBottom_time"/>
+            app:layout_constraintTop_toBottomOf="@id/spinner_tripNextBottom_time" />
 
 
         <RadioGroup
             android:id="@+id/radioGroup_tripNextBottom"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginStart="16dp"
             android:gravity="center"
+
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_tripNextBottom_transfer">
 
             <RadioButton
-                style="@style/SubHeadBold"
                 android:id="@+id/radioButton_tripNextBottm_walk"
+                style="@style/SubHeadBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
                 android:layout_marginHorizontal="32dp"
-                android:text="도보"/>
+                android:layout_marginVertical="16dp"
+                android:checked="true"
+                android:text="도보" />
 
             <RadioButton
-                style="@style/SubHeadBold"
                 android:id="@+id/radioButton_tripNextBottm_byCar"
+                style="@style/SubHeadBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="16dp"
                 android:layout_marginHorizontal="32dp"
-                android:text="차량"/>
+                android:layout_marginVertical="16dp"
+                android:text="차량" />
         </RadioGroup>
 
         <TextView
-            style="@style/Body"
             android:id="@+id/text_tripNextBottom_warning"
+            style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginVertical="16dp"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
             android:text="실제 이동시간과 차이가 있을 수 있습니다."
-            app:layout_constraintStart_toStartOf="parent"
+            android:textColor="@color/gray"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/radioGroup_tripNextBottom"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radioGroup_tripNextBottom" />
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/BodyWhite"
             android:id="@+id/button_tripNextBottom_recommend"
-            android:layout_width="match_parent"
+            style="@style/BodyWhite"
+            android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginVertical="16dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="다음 여행지 추천"
+            android:layout_marginVertical="16dp"
             android:background="@drawable/button_regular"
-            app:layout_constraintTop_toBottomOf="@id/text_tripNextBottom_warning"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            android:text="다음 여행지 추천"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripNextBottom_warning" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

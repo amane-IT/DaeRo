@@ -103,6 +103,13 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getAroundTrips(placeSeq: Int): Single<Response<List<TripPopularResponseDto>>> {
+        return tripApi.getAroundTrips(placeSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     // 알림 저장
     fun insertNotification(notification: Notification): Completable {
         return database.notificationDao().insertNotification(notification)
@@ -132,11 +139,26 @@ class TripRepository private constructor(context: Context) {
     }
 
     // TripStamp 전체 삭제
-    fun deleteAllTripStamps() : Completable {
+    fun deleteAllTripStamps(): Completable {
         return database.tripStampDao().deleteAllStamps()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
+
+    // TripStamp 수정
+    fun updateTripStamp(id: Int, imageUrl: String, satisfaction: Char): Completable {
+        return database.tripStampDao().updateTripStamp(id, imageUrl, satisfaction)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripStamp 한개 가져오기
+    fun getTripStamp(id: Int): Single<TripStamp> {
+        return database.tripStampDao().getTripStamp(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 
     // TripStamp 모두 가져오기
     fun getTripStamps(): Single<List<TripStamp>> {
@@ -171,12 +193,10 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getNearByPlaces(): Single<Response<List<TripPopularResponseDto>>>{
-        return tripApi.getNearByPlaces(
-            // App.prefs.placeSeq
-            1)
+    // TripFollow 모두 삭제
+    fun deleteAllTripFollow(): Completable {
+        return database.tripFollowDao().deleteAllTripFollow()
             .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

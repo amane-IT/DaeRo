@@ -21,5 +21,5 @@ interface TripFollowDao {
     fun deleteFollow(tripFollow: TripFollow): Completable
 
     @Query("DELETE FROM $TRIP_FOLLOW")
-    fun deleteAll(): Completable
+    fun deleteAllTripFollow(): Completable
 }
