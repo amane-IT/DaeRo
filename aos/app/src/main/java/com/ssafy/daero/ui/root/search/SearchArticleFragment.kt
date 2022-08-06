@@ -44,16 +44,6 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
     }
 
     private fun observeData(){
-
-        // TODO: 게시글 API 연결하면 변경하기
-//        searchViewModel.responseState_articles.observe(viewLifecycleOwner){
-//            Log.d(TAG, "observeData: 여기")
-//            searchArticlePlaceAdapter.resultList = searchedArticlePlace
-//            searchArticleContentAdapter.resultList = searchedArticleContent
-//            searchArticleContentAdapter.notifyDataSetChanged()
-//            searchArticlePlaceAdapter.notifyDataSetChanged()
-//        }
-
         searchViewModel.resultArticleSearch.observe(viewLifecycleOwner){
             Log.d(TAG, "observeData: 여기")
             searchArticleContentAdapter.resultList = it.content
