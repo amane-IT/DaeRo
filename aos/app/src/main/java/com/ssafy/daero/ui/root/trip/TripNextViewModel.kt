@@ -8,19 +8,14 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
+import com.ssafy.daero.utils.constant.EMPTY
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 
 class TripNextViewModel : BaseViewModel() {
-    private val tripNextRepository = TripRepository.get()
-    private val TAG = "TripNextVM_DaeRo"
+    private val tripRepository = TripRepository.get()
 
-    val showProgress = MutableLiveData<Int>()
+    val showProgress = MutableLiveData<Boolean>()
 
     private val _nextTripRecommendResponseDto = MutableLiveData<Int>()
     val nextTripRecommendResponseDto: LiveData<Int>
@@ -37,63 +32,65 @@ class TripNextViewModel : BaseViewModel() {
     var nextTripRecommendState = MutableLiveData<Int>()
     var tripListState = MutableLiveData<Int>()
 
+    private val _tripStamps = MutableLiveData<List<TripStamp>>()
+    val tripStamps: LiveData<List<TripStamp>>
+        get() = _tripStamps
+
+    private val _aroundTrips = MutableLiveData<List<TripPopularResponseDto>>()
+    val aroundTrips: LiveData<List<TripPopularResponseDto>>
+        get() = _aroundTrips
+
+    fun getTripStamps() {
+        addDisposable(
+            tripRepository.getTripStamps()
+                .subscribe({
+                    _tripStamps.postValue(it)
+                }, { throwable ->
+                    Log.d("TripNextVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
+    fun getAroundTrips(placeSeq: Int) {
+        addDisposable(
+            tripRepository.getAroundTrips(placeSeq)
+                .subscribe({
+                    _aroundTrips.postValue(it.body())
+                }, { throwable ->
+                    Log.d("TripNextVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
     fun recommendNextPlace(
         time: Int,
         transportation: String
     ) {
-        showProgress.postValue(SUCCESS)
+        showProgress.postValue(true)
 
-        // 2.5초 딜레이
-        val delay =
-            Single.just(1).delay(2500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-
-        // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
         addDisposable(
-            Single.zip(
-                delay,
-                tripNextRepository.recommendNextPlace(
-                    App.prefs.placeSeq,
-                    time,
-                    transportation
-                ),
-                BiFunction { _, response ->
-                    response
-                }).subscribe(
-                { response ->
-                    // place_seq 저장
+            tripRepository.recommendNextPlace(
+                App.prefs.curPlaceSeq,
+                time,
+                transportation
+            ).subscribe({ response ->
+                // place_seq 저장
+                Log.d("TripNextVM_DaeRo", response.body().toString())
+                if(response.body()!!.place_seq == 0) {
+                    nextTripRecommendState.postValue(EMPTY)
+                } else {
                     _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
-                    showProgress.postValue(FAIL)
-                },
-                { throwable ->
-                    Log.d(TAG, throwable.toString())
-                    showProgress.postValue(FAIL)
-                    nextTripRecommendState.postValue(FAIL)
-                })
+                }
+                showProgress.postValue(false)
+            }, { throwable ->
+                Log.d("TripNextVM_DaeRo", throwable.toString())
+                showProgress.postValue(false)
+                nextTripRecommendState.postValue(FAIL)
+            })
         )
     }
 
-    fun selectTripStampList(){
-        addDisposable(
-            tripNextRepository.getTripStamps()
-                .subscribe({ response ->
-                    _tripList.postValue(response)
-                }, { throwable ->
-                    Log.d(TAG, "selectTripStampList: ${throwable.toString()}")
-                    tripListState.postValue(FAIL)
-                })
-        )
-    }
-
-    fun getNearByPlaces(){
-        addDisposable(
-            tripNextRepository.getNearByPlaces()
-                .subscribe({ response ->
-                    _nearByPlaces.postValue(response.body())
-                }, { throwable ->
-                    Log.d(TAG, "getNearByPlaces: ${throwable.toString()}")
-                    tripListState.postValue(FAIL)
-                })
-        )
+    fun initNextTripRecommend() {
+        _nextTripRecommendResponseDto.value = 0
     }
 }

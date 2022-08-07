@@ -10,13 +10,12 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_tripStamp"
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            app:contentInsetStart="0dp"
+            android:layout_height="56dp"
             android:layout_marginBottom="32dp"
+            app:contentInsetStart="0dp"
             app:layout_constraintBottom_toTopOf="@id/card_item_TripStamp_img"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageView
                 android:id="@+id/img_tripStamp_back"
@@ -40,11 +39,18 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_tripStamp" />
+
         <androidx.cardview.widget.CardView
             android:id="@+id/card_item_TripStamp_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
             android:layout_marginVertical="32dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
@@ -52,13 +58,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_tripStamp">
 
-
             <ImageView
                 android:id="@+id/image_tripStamp_stamp"
                 android:layout_width="360dp"
                 android:layout_height="360dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bg_login" />
+                tools:src="@drawable/bg_login" />
 
             <View
                 android:layout_width="360dp"
@@ -75,11 +80,6 @@
                 android:layout_marginBottom="32dp"
                 android:text="강릉 여행" />
 
-            <View
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                />
-
             <TextView
                 android:id="@+id/text_item_tripStamp_date"
                 style="@style/BodyWhite"
@@ -88,43 +88,41 @@
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="22.08.01" />
-
+                tools:text="22.08.01" />
 
         </androidx.cardview.widget.CardView>
 
         <TextView
-            style="@style/HeadBold"
             android:id="@+id/text_tripStamp_recognize"
-            android:layout_width="match_parent"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="24dp"
             android:text="여행지 추천 만족도"
-            android:layout_margin="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/card_item_TripStamp_img"/>
-
+            app:layout_constraintTop_toBottomOf="@id/card_item_TripStamp_img" />
 
         <ImageView
             android:id="@+id/image_tripStamp_thumbup"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:src="@drawable/ic_thumbup"
-            android:layout_marginVertical="20dp"
             android:layout_marginHorizontal="100dp"
+            android:layout_marginVertical="20dp"
+            android:src="@drawable/ic_thumbup"
+            app:layout_constraintRight_toLeftOf="@id/image_tripStamp_thumbDown"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_recognize"
-            app:layout_constraintRight_toLeftOf="@id/image_tripStamp_thumbDown"/>
+            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_recognize" />
 
         <ImageView
             android:id="@+id/image_tripStamp_thumbDown"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginVertical="20dp"
             android:layout_marginHorizontal="60dp"
+            android:layout_marginVertical="20dp"
             android:src="@drawable/ic_thumbdown"
-            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_recognize"
-            app:layout_constraintLeft_toRightOf="@id/image_tripStamp_thumbup"/>
+            app:layout_constraintLeft_toRightOf="@id/image_tripStamp_thumbup"
+            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_recognize" />
 
         <Button
             android:id="@+id/button_tripStamp_save"
@@ -132,9 +130,10 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginVertical="16dp"
             android:background="@drawable/button_regular"
             android:text="트립스탬프 저장하기"
+            app:layout_constraintTop_toBottomOf="@+id/image_tripStamp_thumbDown"
             app:layout_constraintBottom_toTopOf="@id/button_tripStamp_retry"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -149,8 +148,8 @@
             android:background="@drawable/button_disabled"
             android:text="다시 찍기"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/button_tripStamp_share"/>
+            app:layout_constraintRight_toLeftOf="@id/button_tripStamp_share"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_tripStamp_share"
@@ -163,7 +162,7 @@
             android:text="공유하기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/button_tripStamp_retry"/>
+            app:layout_constraintLeft_toRightOf="@id/button_tripStamp_retry" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -20,7 +20,7 @@ class CommentAdapter(
     , listener: CommentListener
     ) : PagingDataAdapter<CommentItem, CommentAdapter.CommentViewHolder>(COMPARATOR) {
 
-    lateinit var onItemClickListener : (View, Int, Int, String) -> Unit
+    lateinit var onItemClickListener : (View, Int, Int, Int, String) -> Unit
     var mCallback = listener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -76,7 +76,7 @@ class CommentAdapter(
             userSeq = data.user_seq
             modified = data.modified
         }
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit) {
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, Int, String) -> Unit) {
             binding.LinearCommentReComment.setOnClickListener {
                 var adapter: ReCommentAdapter = mCallback.reCommentSelect(articleSeq,replySeq!!,ReCommentAdapter(onItemClickListener))
                 binding.LinearCommentReComment.visibility = View.GONE
@@ -95,10 +95,10 @@ class CommentAdapter(
                 }, 500L)
             }
             binding.imgCommentMenu.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
+                onItemClickListener(it, replySeq!!, 1, userSeq!!, binding.tvCommentContent.text.toString())
             }
             binding.imgCommentItemUser.setOnClickListener {
-                onItemClickListener(it, userSeq!!, 2, "")
+                onItemClickListener(it, userSeq!!, 2, userSeq!!, "")
             }
             binding.tvCommentReCommentAdd.setOnClickListener {
                 mCallback.reCommentAdd(replySeq!!)

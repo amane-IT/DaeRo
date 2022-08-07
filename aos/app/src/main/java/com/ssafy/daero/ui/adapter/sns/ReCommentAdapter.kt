@@ -12,7 +12,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.ReCommentItem
 import com.ssafy.daero.databinding.ItemReCommentBinding
 
-class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
+class ReCommentAdapter(onItemClickListener : (View, Int, Int, Int, String) -> Unit) :
     PagingDataAdapter<ReCommentItem, ReCommentAdapter.ReCommentViewHolder>
         (COMPARATOR) {
 
@@ -59,12 +59,12 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
             modified = data.modified
         }
 
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit ) {
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, Int, String) -> Unit ) {
             binding.imgReCommentMenu.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
+                onItemClickListener(it, replySeq!!, 1, userSeq!!, binding.tvCommentContent.text.toString())
             }
             binding.imgReCommentUser.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 2, "")
+                onItemClickListener(it, replySeq!!, 2, userSeq!!, "")
             }
         }
     }

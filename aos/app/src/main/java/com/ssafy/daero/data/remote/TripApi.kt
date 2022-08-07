@@ -64,7 +64,7 @@ interface TripApi {
      * */
     @GET("trips/recommend")
     fun recommendNextPlace(
-        @Query("place_seq") placeSeq: Int,
+        @Query("place-seq") placeSeq: Int,
         @Query("time") time: Int,
         @Query("transportation") transportation: String
     ): Single<Response<NextPlaceRecommendResponseDto>>
@@ -79,5 +79,5 @@ interface TripApi {
      * 내 주변 여행지
      */
     @GET("trips/nearby")
-    fun getNearByPlaces(@Query("place-seq") placeSeq: Int): Single<Response<List<TripPopularResponseDto>>>
+    fun getAroundTrips(@Query("place-seq") placeSeq: Int): Single<Response<List<TripPopularResponseDto>>>
 }

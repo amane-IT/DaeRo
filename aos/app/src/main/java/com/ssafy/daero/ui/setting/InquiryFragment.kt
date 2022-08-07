@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.setting
 
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentInquiryBinding
@@ -15,9 +16,9 @@ class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_i
 
     override fun init() {
         initAdapter()
+        getInquiry()
         setOnClickListeners()
         observeData()
-        getInquiry()
     }
 
     private fun initAdapter() {
@@ -28,6 +29,9 @@ class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_i
     private fun setOnClickListeners() {
         binding.imgInquiryBack.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+        binding.buttonInquiry.setOnClickListener {
+            findNavController().navigate(R.id.action_inquiryFragment_to_inquiryRegisterFragment)
         }
     }
 

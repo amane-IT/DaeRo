@@ -46,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar_trip_verification" />
 
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -179,7 +179,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_trip_verification_trip_stamp_so_far"
                     tools:visibility="visible" />
 
-                <android.widget.Button
+                <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/button_trip_verification_stop"
                     style="@style/BodyWhite"
                     android:layout_width="0dp"

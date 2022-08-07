@@ -23,8 +23,8 @@ class InquiryViewModel : BaseViewModel() {
     fun getInquiry() {
         addDisposable(
             serviceRepository.getInquiry()
-                .subscribe({ response ->
-                    _inquiry.postValue(response.body()!!)
+                .subscribe({
+                    _inquiry.postValue(it.body()!!)
                 }, { throwable ->
                     Log.d("FaqVM", throwable.toString())
                     inquiryState.postValue(FAIL)

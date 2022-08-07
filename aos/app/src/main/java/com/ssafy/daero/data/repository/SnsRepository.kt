@@ -48,6 +48,10 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun articleDelete(articleSeq: Int): Completable {
+        return snsApi.articleDelete(articleSeq)
+    }
+
     fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentItem>> {
         return Pager(
             config = PagingConfig(
