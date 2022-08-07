@@ -17,7 +17,7 @@ public interface ServiceMapper {
 
     int selectInquiryCountByUserSeq(int userSeq);
 
-    ArrayList<InquiryDto> selectInquiryList(@Param("userSeq") int userSeq, @Param("page") int page);
+    ArrayList<InquiryDto> selectInquiryList(int userSeq);
 
     int insertInquiry(@Param("userSeq") int userSeq, @Param("title") String title, @Param("content") String content);
 }
