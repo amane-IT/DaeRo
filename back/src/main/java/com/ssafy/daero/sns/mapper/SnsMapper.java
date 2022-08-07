@@ -90,6 +90,9 @@ public interface SnsMapper {
                                                       @Param("offset") int offSet,
                                                       @Param("recent") String recent);
 
+    int selectCollectionCountByUserSeq(int userSeq);
+    ArrayList<Map<String, Object>> selectCollectionByUserSeq(@Param("userSeq") int userSeq, @Param("limit") int limit, @Param("offset") int offset);
+
     int selectUserCountByNickname(String nickname);
 
     ArrayList<UserDto> selectUserByNickname(@Param("nickname") String nickname,
@@ -109,4 +112,5 @@ public interface SnsMapper {
                                                   @Param("offset") int offset);
 
     ArrayList<TripPlaceDto> selectTripPlacesByArticle(int articleSeq);
+
 }
