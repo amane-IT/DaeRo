@@ -177,7 +177,11 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
         binding.imgArticleMenu.setOnClickListener {
             // todo: articleSeq 넘기기
-            ArticleMenuBottomSheetFragment(articleSeq, articleViewModel.articleData.user_seq, this@ArticleFragment).show(
+            ArticleMenuBottomSheetFragment(
+                articleSeq,
+                articleViewModel.articleData.user_seq,
+                this@ArticleFragment
+            ).show(
                 childFragmentManager,
                 ARTICLE_MENU_BOTTOM_SHEET
             )

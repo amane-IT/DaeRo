@@ -20,7 +20,11 @@ import com.ssafy.daero.utils.constant.COMMENT
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
-class ArticleMenuBottomSheetFragment(private val articleSeq: Int, val userSeq: Int, val listener: ArticleListener) : BottomSheetDialogFragment() {
+class ArticleMenuBottomSheetFragment(
+    private val articleSeq: Int,
+    val userSeq: Int,
+    val listener: ArticleListener
+) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
 

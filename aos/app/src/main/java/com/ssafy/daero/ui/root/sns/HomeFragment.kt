@@ -4,14 +4,18 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentHomeBinding
 import com.ssafy.daero.ui.adapter.sns.HomeAdapter
+import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), ArticleListener {
     private val homeViewModel: HomeViewModel by viewModels()
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
+    private val articleViewModel: ArticleViewModel by viewModels()
     private lateinit var homeAdapter: HomeAdapter
 
     override fun init() {
@@ -34,7 +38,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
             onCommentClickListener,
             onMoreClickListener,
             onArticleClickListener,
-            onUserClickListener
+            onUserClickListener,
+            requireContext(),
+            requireActivity()
         )
         binding.recyclerHome.adapter = homeAdapter
     }
@@ -58,8 +64,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     // 좋아요 버튼 클릭
-    private val onLikeClickListener: (Int) -> Unit = {
-
+    private val onLikeClickListener: (Int, Boolean) -> Unit = { articleSeq, likeYn->
+        when(likeYn){
+            true -> articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
+            false -> articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
+        }
     }
 
     // 좋아요 갯수 클릭 (좋아요 리스트 보여주기)
@@ -80,8 +89,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     }
 
     // 더보기 버튼 클릭
-    private val onMoreClickListener: (Int) -> Unit = {
-
+    private val onMoreClickListener: (Int, Int) -> Unit = { articleSeq, userSeq->
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq,this@HomeFragment).show(
+            childFragmentManager,
+            ARTICLE_MENU_BOTTOM_SHEET
+        )
     }
 
     // 게시글 클릭 (게시글 상세로 이동)
@@ -99,5 +111,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home) {
                 USER_SEQ to userSeq
             )
         )
+    }
+
+    override fun articleDelete(articleSeq: Int) {
+        articleViewModel.articleDelete(articleSeq)
+        articleViewModel.deleteState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 삭제했습니다.")
+                    homeViewModel.getArticles()
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 삭제를 실패했습니다.")
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun blockAdd(userSeq: Int) {
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
     }
 }
