@@ -97,19 +97,22 @@ public interface SnsMapper {
 
     ArrayList<UserDto> selectUserByNickname(@Param("nickname") String nickname,
                                             @Param("limit") int limit,
-                                            @Param("offset") int offset);
+                                            @Param("offset") int offset,
+                                            @Param("userSeq") int userSeq);
 
     int selectArticleCountByContent(String content);
 
     ArrayList<ArticleListVo> selectArticleByContent(@Param("content") String content,
                                                     @Param("limit") int limit,
-                                                    @Param("offset") int offset);
+                                                    @Param("offset") int offset,
+                                                    @Param("userSeq") int userSeq);
 
     int selectArticleCountByPlace(String placeName);
 
     ArrayList<ArticleListVo> selectArticleByPlace(@Param("placeName") String placeName,
                                                   @Param("limit") int limit,
-                                                  @Param("offset") int offset);
+                                                  @Param("offset") int offset,
+                                                  @Param("userSeq") int userSeq);
 
     ArrayList<TripPlaceDto> selectTripPlacesByArticle(int articleSeq);
 

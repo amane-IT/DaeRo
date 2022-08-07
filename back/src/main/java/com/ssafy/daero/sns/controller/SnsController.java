@@ -232,7 +232,8 @@ public class SnsController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String, Object>> searchGet(SearchVo searchVo) {
+    public ResponseEntity<Map<String, Object>> searchGet(@RequestHeader("jwt") String jwt, SearchVo searchVo) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
         int page = searchVo.getPage();
         if (page < 1) page = 1;
         Map<String, Object> resultMap = new HashMap<>();
@@ -240,25 +241,25 @@ public class SnsController {
         if (searchVo.getUser() != null) {
             totalPage = this.snsService.getSearchUserTotalPage(searchVo.getUser());
             if (page > totalPage) page = totalPage;
-            LinkedList<Map<String, Object>> searchResult = this.snsService.searchUser(searchVo.getUser(), page);
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchUser(searchVo.getUser(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
             resultMap.put("results", searchResult);
         } else if (searchVo.getArticle() != null) {
-            Map<String, LinkedList<Map<String, Object>>> result = this.snsService.searchArticle(searchVo.getArticle());
+            Map<String, LinkedList<Map<String, Object>>> result = this.snsService.searchArticle(searchVo.getArticle(), userSeq);
             resultMap.put("content", result.get("content"));
             resultMap.put("place", result.get("place"));
         } else if (searchVo.getContent() != null) {
             totalPage = this.snsService.getSearchContentTotalPage(searchVo.getContent());
             if (page > totalPage) page = totalPage;
-            LinkedList<Map<String, Object>> searchResult = this.snsService.searchContent(searchVo.getContent(), page);
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchContent(searchVo.getContent(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
             resultMap.put("results", searchResult);
         } else if (searchVo.getPlace() != null) {
             totalPage = this.snsService.getSearchPlaceTotalPage(searchVo.getPlace());
             if (page > totalPage) page = totalPage;
-            LinkedList<Map<String, Object>> searchResult = this.snsService.searchPlace(searchVo.getPlace(), page);
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchPlace(searchVo.getPlace(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
             resultMap.put("results", searchResult);

@@ -166,7 +166,7 @@
         SELECT COUNT(*)
         FROM daero.reports
         WHERE reporter_users_seq = #{userSeq}
-          AND content_seq = #{articleSeq};
+          AND content_seq = #{articleSeq}
     </select>
 
     <select id="selectReportReplyByUserSeq" resultType="_int">
@@ -277,11 +277,10 @@
                if((select count(0)
                    from `likes`
                    where `articles_seq` = v_users_trips_articles.articles_seq
-                     and `users_seq` = 8) = 0,
+                     and `users_seq` = #{userSeq}) = 0,
                   'n', 'y')         as `likeYn`
         from `v_users_trips_articles`
-        where `users_seq` in
-              (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+        where `users_seq` in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
           and `created_at` > #{recent}
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
@@ -307,17 +306,16 @@
                if((select count(0)
                    from `likes`
                    where `articles_seq` = v_users_trips_articles.articles_seq
-                     and `users_seq` = 8) = 0,
+                     and `users_seq` = #{userSeq}) = 0,
                   'n', 'y')         as `likeYn`
         from `v_users_trips_articles`
-        where `users_seq` in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = 8)
-          and `created_at` > '2022-08-01'
+        where (`users_seq` not in (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+                   or `created_at` < #{recent})
           and `open_yn` = 'y'
-          and `users_seq` != 8
+          and `users_seq` != #{userSeq}
         order by `created_at` desc
         ]]>
     </select>
-
 
     <select id="selectCollectionCountByUserSeq" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
@@ -398,7 +396,7 @@
                if((select count(0)
                    from `likes`
                    where `articles_seq` = `a`.`articles_seq`
-                     and `users_seq` = 8) = 0,
+                     and `users_seq` = #{userSeq}) = 0,
                   'n', 'y')             as `likeYn`
         from `v_users_trips_articles` `a`
                  left join `trip_days` `d` on `d`.`trip` = `a`.`trips_seq`
@@ -434,7 +432,7 @@
                if((select count(0)
                    from `likes`
                    where `articles_seq` = `a`.`articles_seq`
-                     and `users_seq` = 8) = 0,
+                     and `users_seq` = #{userSeq}) = 0,
                   'n', 'y')             as `likeYn`
         from `v_users_trips_articles` as `a`
                  left join `trip_stamps` `s` on `a`.`trips_seq` = `s`.`trip_seq`
