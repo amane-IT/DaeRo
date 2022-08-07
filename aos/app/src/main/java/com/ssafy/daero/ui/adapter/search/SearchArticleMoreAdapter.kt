@@ -9,10 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.databinding.ItemSearchArticleMoreBinding
 
-class SearchArticleMoreAdapter: PagingDataAdapter<ArticleMoreItem, SearchArticleMoreAdapter.SearchArticleMoreViewHolder>(
+class SearchArticleMoreAdapter(
+    private val onArticleClickListener: (Int) -> Unit, // 게시글 클릭
+    private val onUserClickListener: (Int) -> Unit, // 유저 클릭
+    private val onCommentClickListener: (Int, Int) -> Unit, // 코멘트 클릭
+    private val onLikeClickListener: (Int, Int) -> Unit, // 좋아요 클릭
+    private val onMenuClickListener: (Int) -> Unit // 더보기 클릭
+): PagingDataAdapter<ArticleMoreItem, SearchArticleMoreAdapter.SearchArticleMoreViewHolder>(
     COMPARATOR
 ) {
-    lateinit var onItemClickListener: (View, Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchArticleMoreAdapter.SearchArticleMoreViewHolder {
         return SearchArticleMoreAdapter.SearchArticleMoreViewHolder(
@@ -22,7 +27,11 @@ class SearchArticleMoreAdapter: PagingDataAdapter<ArticleMoreItem, SearchArticle
                 false
             )
         ).apply {
-            bindOnItemClickListener(onItemClickListener)
+            bindOnArticleClickListener(onArticleClickListener)
+            bindOnUserClickListener(onUserClickListener)
+            bindOnCommentClickListener(onCommentClickListener)
+            bindOnLikeClickListener(onLikeClickListener)
+            bindOnMenuClickListener(onMenuClickListener)
         }
     }
 
@@ -38,10 +47,40 @@ class SearchArticleMoreAdapter: PagingDataAdapter<ArticleMoreItem, SearchArticle
             binding.articleMore = articleMore
         }
 
-        fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit){
-            binding.root.setOnClickListener{
-                onItemClickListener(it, binding.articleMore!!.article_seq)
+        fun bindOnArticleClickListener(onArticleClickListener:(Int) -> Unit) {
+            binding.imageViewArticleMoreTripStamp.setOnClickListener{
+                onArticleClickListener(binding.articleMore?.article_seq ?: 0)
             }
+        }
+
+        fun bindOnUserClickListener(onUserClickListener: (Int) -> Unit) {
+            binding.imageArticleMoreUserImg.setOnClickListener{
+                onUserClickListener(binding.articleMore?.user_seq ?: 0)
+            }
+        }
+        fun bindOnCommentClickListener(onCommentClickListener: (Int, Int) -> Unit) {
+            // TODO: 코멘트 클릭 이벤트 추가
+            binding.imageViewArticleMoreComment.setOnClickListener {
+                onCommentClickListener(
+                    binding.articleMore?.article_seq ?: 0,
+                    binding.articleMore?.comments ?: 0
+                )
+            }
+
+            binding.textArticleMoreComment.setOnClickListener {
+                onCommentClickListener(
+                    binding.articleMore?.article_seq ?: 0,
+                    binding.articleMore?.comments ?: 0
+                )
+            }
+        }
+
+        fun bindOnLikeClickListener(onLikeClickListener: (Int, Int) -> Unit) {
+            // TODO: 좋아요 클릭 이벤트 추가
+        }
+
+        fun bindOnMenuClickListener(onMenuClickListener: (Int) -> Unit){
+            // TODO: 더보기 메뉴 클릭 이벤트 추가
         }
     }
 
