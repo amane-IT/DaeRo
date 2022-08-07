@@ -1,6 +1,7 @@
 package com.ssafy.daero.service.controller;
 
 import com.ssafy.daero.service.dto.FaqDto;
+import com.ssafy.daero.service.dto.InquiryDto;
 import com.ssafy.daero.service.dto.NoticeDto;
 import com.ssafy.daero.service.service.ServiceService;
 import com.ssafy.daero.user.service.JwtService;
@@ -39,9 +40,9 @@ public class ServiceController {
     }
 
     @GetMapping("/inquiry")
-    public ResponseEntity<Map<String, Object>> inquiryList(@RequestHeader("jwt") String jwt, @RequestParam(defaultValue = "1") String page) {
+    public ResponseEntity<ArrayList<InquiryDto>> inquiryList(@RequestHeader("jwt") String jwt) {
         Map<String, String> currentUser = jwtService.decodeJwt(jwt);
-        Map<String, Object> res = serviceService.inquiryList(Integer.parseInt(currentUser.get("user_seq")), Integer.parseInt(page));
+        ArrayList<InquiryDto> res = serviceService.inquiryList(Integer.parseInt(currentUser.get("user_seq")));
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
