@@ -103,10 +103,10 @@ public class TripController {
             @RequestParam("time") int time,
             @RequestParam("transportation") String transportation) {
         int placeSeq = this.tripService.recommendNextPlace(tripPlaceSeq, time, transportation);
-        if (placeSeq == 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         Map<String, Integer> resultMap = new HashMap<>();
+        if (placeSeq == 0) {
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
+        }
         resultMap.put("place_seq", placeSeq);
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }

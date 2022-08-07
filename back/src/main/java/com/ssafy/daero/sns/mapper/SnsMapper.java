@@ -1,6 +1,8 @@
 package com.ssafy.daero.sns.mapper;
 
 import com.ssafy.daero.sns.vo.*;
+import com.ssafy.daero.trip.dto.TripPlaceDto;
+import com.ssafy.daero.user.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -90,4 +92,25 @@ public interface SnsMapper {
 
     int selectCollectionCountByUserSeq(int userSeq);
     ArrayList<Map<String, Object>> selectCollectionByUserSeq(@Param("userSeq") int userSeq, @Param("limit") int limit, @Param("offset") int offset);
+
+    int selectUserCountByNickname(String nickname);
+
+    ArrayList<UserDto> selectUserByNickname(@Param("nickname") String nickname,
+                                            @Param("limit") int limit,
+                                            @Param("offset") int offset);
+
+    int selectArticleCountByContent(String content);
+
+    ArrayList<ArticleListVo> selectArticleByContent(@Param("content") String content,
+                                                    @Param("limit") int limit,
+                                                    @Param("offset") int offset);
+
+    int selectArticleCountByPlace(String placeName);
+
+    ArrayList<ArticleListVo> selectArticleByPlace(@Param("placeName") String placeName,
+                                                  @Param("limit") int limit,
+                                                  @Param("offset") int offset);
+
+    ArrayList<TripPlaceDto> selectTripPlacesByArticle(int articleSeq);
+
 }

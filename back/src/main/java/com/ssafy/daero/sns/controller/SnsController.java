@@ -2,8 +2,8 @@ package com.ssafy.daero.sns.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.sns.service.SnsService;
-import com.ssafy.daero.sns.vo.ArticleListVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
+import com.ssafy.daero.sns.vo.SearchVo;
 import com.ssafy.daero.user.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -207,29 +207,12 @@ public class SnsController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> listGet(@RequestHeader("jwt") String jwt, @RequestParam("page") int page) {
+    public ResponseEntity<Map<String, Object>> listGet(@RequestHeader("jwt") String jwt, @RequestParam(value="page", defaultValue="1") int page) {
         int userSeq = this.jwtService.getUserSeq(jwt);
         int totalPage = snsService.getTotalArticlePage(userSeq);
+        if (page < 1) page = 1;
         if (page > totalPage) page = totalPage;
-        ArrayList<ArticleListVo> articles =  this.snsService.articleList(userSeq, page);
-        LinkedList<Map<String, Object>> result = new LinkedList<>();
-        for (ArticleListVo article : articles) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("article_seq", article.getArticleSeq());
-            map.put("nickname", article.getNickname());
-            map.put("user_seq", article.getUserSeq());
-            map.put("profile_url", article.getProfileUrl());
-            map.put("created_at", article.getCreatedAt());
-            map.put("thumbnail_url", article.getThumbnailUrl());
-            map.put("description", article.getDescription());
-            map.put("title", article.getTitle());
-            map.put("start_date", article.getStartDate());
-            map.put("end_date", article.getEndDate());
-            map.put("likes", article.getLikeCount());
-            map.put("replies", article.getReplyCount());
-            map.put("like_yn", article.getLikeYn());
-            result.add(map);
-        }
+        LinkedList<Map<String, Object>> result = this.snsService.articleList(userSeq, page);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("total_page", totalPage);
         resultMap.put("page", page);
@@ -237,11 +220,60 @@ public class SnsController {
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
+
     @GetMapping("/collection")
     public ResponseEntity<Map<String, Object>> collectionGet(@RequestHeader("jwt") String jwt, @RequestParam(defaultValue = "1") String page) {
         int userSeq = this.jwtService.getUserSeq(jwt);
         Map<String, Object> res = snsService.collection(userSeq, Integer.parseInt(page));
-        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        if (res == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Map<String, Object>> searchGet(SearchVo searchVo) {
+        int page = searchVo.getPage();
+        if (page < 1) page = 1;
+        Map<String, Object> resultMap = new HashMap<>();
+        int totalPage;
+        if (searchVo.getUser() != null) {
+            totalPage = this.snsService.getSearchUserTotalPage(searchVo.getUser());
+            if (page > totalPage) page = totalPage;
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchUser(searchVo.getUser(), page);
+            resultMap.put("total_page", totalPage);
+            resultMap.put("page", page);
+            resultMap.put("results", searchResult);
+        } else if (searchVo.getArticle() != null) {
+            Map<String, LinkedList<Map<String, Object>>> result = this.snsService.searchArticle(searchVo.getArticle());
+            resultMap.put("content", result.get("content"));
+            resultMap.put("place", result.get("place"));
+        } else if (searchVo.getContent() != null) {
+            totalPage = this.snsService.getSearchContentTotalPage(searchVo.getContent());
+            if (page > totalPage) page = totalPage;
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchContent(searchVo.getContent(), page);
+            resultMap.put("total_page", totalPage);
+            resultMap.put("page", page);
+            resultMap.put("results", searchResult);
+        } else if (searchVo.getPlace() != null) {
+            totalPage = this.snsService.getSearchPlaceTotalPage(searchVo.getPlace());
+            if (page > totalPage) page = totalPage;
+            LinkedList<Map<String, Object>> searchResult = this.snsService.searchPlace(searchVo.getPlace(), page);
+            resultMap.put("total_page", totalPage);
+            resultMap.put("page", page);
+            resultMap.put("results", searchResult);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/article/{article_seq}/trace")
+    public ResponseEntity<LinkedList<Map<String, Object>>> traceGet(@PathVariable("article_seq") int articleSeq) {
+        LinkedList<Map<String, Object>> resultList = this.snsService.traceArticle(articleSeq);
+        if (resultList.size() == 0) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 }
