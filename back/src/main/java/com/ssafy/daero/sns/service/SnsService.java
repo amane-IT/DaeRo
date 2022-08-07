@@ -405,7 +405,7 @@ public class SnsService {
         int totalPage = (int) Math.ceil((snsMapper.selectCollectionCountByUserSeq(userSeq))/10.0);
         if (totalPage == 0) { totalPage = 1; }
         if (page > totalPage) { return null; }
-        ArrayList<Map<String, Object>> results = snsMapper.selectCollectionByUserSeq(userSeq, page);
+        ArrayList<Map<String, Object>> results = snsMapper.selectCollectionByUserSeq(userSeq, PAGE_SIZE, (page-1)*PAGE_SIZE);
         Map<String, Object> collection = new HashMap<>();
         collection.put("total_page", totalPage);
         collection.put("page", page);
