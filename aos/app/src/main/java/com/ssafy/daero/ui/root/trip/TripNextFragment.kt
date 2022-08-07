@@ -91,7 +91,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             }
             else{
                 Log.d("TAG", "observeData: 없음")
-                tripNearByAdapter.tripPlaces = popularTripPlaces
+                //tripNearByAdapter.tripPlaces = popularTripPlaces
             }
         }
 

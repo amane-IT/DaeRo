@@ -501,12 +501,46 @@
         android:id="@+id/searchContentMoreFragment"
         android:name="com.ssafy.daero.ui.root.search.SearchContentMoreFragment"
         android:label="SearchContentMoreFragment"
-        tools:layout="@layout/fragment_search_content_more" />
+        tools:layout="@layout/fragment_search_content_more">
+
+        <action
+            android:id="@+id/action_searchContentMoreFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_searchContentMoreFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+
+    </fragment>
     <fragment
         android:id="@+id/searchPlaceNameMoreFragment"
         android:name="com.ssafy.daero.ui.root.search.SearchPlaceNameMoreFragment"
         android:label="SearchPlaceNameMoreFragment"
-        tools:layout="@layout/fragment_search_place_name_more" />
+        tools:layout="@layout/fragment_search_place_name_more">
+        <action
+            android:id="@+id/action_searchPlaceNameMoreFragment_to_articleFragment"
+            app:destination="@id/articleFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+
+        <action
+            android:id="@+id/action_searchPlaceNameMoreFragment_to_otherPageFragment"
+            app:destination="@id/otherPageFragment"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+    </fragment>
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.ssafy.daero.ui.setting.NotificationFragment"

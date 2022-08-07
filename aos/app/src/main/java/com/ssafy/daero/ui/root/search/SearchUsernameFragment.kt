@@ -2,7 +2,9 @@ package com.ssafy.daero.ui.root.search
 
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchUsernameBinding
@@ -10,6 +12,7 @@ import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.view.toast
 
@@ -48,5 +51,9 @@ class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.lay
 
     private val searchUserItemClickListener: (
         View, Int) -> Unit = { _, userSeq ->
+        findNavController().navigate(
+            R.id.action_rootFragment_to_otherPageFragment,
+            bundleOf(USER_SEQ to userSeq)
+        )
     }
 }
