@@ -2,14 +2,20 @@ package com.ssafy.daero.ui.root.search
 
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App.Companion.keyword
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.search.SearchArticleMoreAdapter
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
+import com.ssafy.daero.ui.root.sns.CommentBottomSheetFragment
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
+import com.ssafy.daero.utils.constant.COMMENT_BOTTOM_SHEET
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.searchedArticleContentMore
 
@@ -35,9 +41,13 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
     }
 
     private fun initAdapter(){
-        searchArticleMoreAdapter = SearchArticleMoreAdapter().apply {
-            onItemClickListener = searchArticleItemClickListener
-        }
+        searchArticleMoreAdapter = SearchArticleMoreAdapter(
+            onArticleClickListener,
+            onUserClickListener,
+            onCommentClickListener,
+            onLikeClickListener,
+            onMenuClickListener
+        )
 
         binding.recyclerSearchContentMore.adapter = searchArticleMoreAdapter
     }
@@ -63,7 +73,29 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
         }
     }
 
-    private val searchArticleItemClickListener: (
-        View, Int) -> Unit = { _, articleSeq ->
+    private val onArticleClickListener: (Int) -> Unit = { articleSeq ->
+        findNavController().navigate(
+            R.id.action_searchContentMoreFragment_to_articleFragment,
+            bundleOf(ARTICLE_SEQ to articleSeq)
+        )
+
+    }
+
+    private val onUserClickListener: (Int) -> Unit = { userSeq ->
+        findNavController().navigate(
+            R.id.action_searchContentMoreFragment_to_otherPageFragment,
+            bundleOf(USER_SEQ to userSeq)
+        )
+    }
+
+    private val onCommentClickListener: (Int, Int) -> Unit = { articleSeq, comments ->
+        CommentBottomSheetFragment(articleSeq, comments, onUserClickListener)
+            .show(childFragmentManager, COMMENT_BOTTOM_SHEET)
+    }
+    private val onLikeClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
+
+    }
+    private val onMenuClickListener: (Int) -> Unit = {
+
     }
 }
