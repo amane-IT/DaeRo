@@ -24,7 +24,7 @@ data class ArticleMoreItem(
     val replies: Int,
     val nickname: String,
     val article_seq: Int,
-    val like_yn: Char,
+    var like_yn: Char,
     val start_date: String,
     val likes: Int
 )
