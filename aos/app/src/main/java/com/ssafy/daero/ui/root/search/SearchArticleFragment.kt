@@ -11,6 +11,7 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchArticleBinding
 import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.searchedArticleContent
@@ -79,6 +80,9 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
 
     private val searchArticleItemClickListener: (
         View, Int) -> Unit = { _, article_seq ->
-
+        findNavController().navigate(
+            R.id.action_rootFragment_to_articleFragment,
+            bundleOf(ARTICLE_SEQ to article_seq)
+        )
     }
 }
