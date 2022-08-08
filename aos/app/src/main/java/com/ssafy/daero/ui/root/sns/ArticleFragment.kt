@@ -181,8 +181,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 articleSeq,
                 articleViewModel.articleData.user_seq,
                 2,
-                articleViewModel.articleData.expose,
-                this@ArticleFragment
+                this@ArticleFragment,
+                articleViewModel.articleData.expose
             ).show(
                 childFragmentManager,
                 ARTICLE_MENU_BOTTOM_SHEET

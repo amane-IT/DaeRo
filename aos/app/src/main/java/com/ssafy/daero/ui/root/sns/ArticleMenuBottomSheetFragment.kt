@@ -26,20 +26,12 @@ class ArticleMenuBottomSheetFragment(
     private var articleSeq: Int,
     var userSeq: Int,
     var fragmentSeq: Int,
-    var listener: ArticleListener
+    var listener: ArticleListener,
+    var expose: Char = 'y',
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
-    private var expose: Char = 'y'
 
-    constructor(articleSeq: Int, userSeq: Int, fragmentSeq: Int, expose: Char, listener: ArticleListener) :
-            this(articleSeq, userSeq, fragmentSeq, listener) {
-        this.articleSeq = articleSeq
-        this.userSeq = userSeq
-        this.fragmentSeq = fragmentSeq
-        this.expose = expose
-        this.listener = listener
-    }
 
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {

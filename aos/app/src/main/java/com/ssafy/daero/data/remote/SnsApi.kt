@@ -241,7 +241,7 @@ interface SnsApi {
     /**
      * 댓글 수정
      */
-    @PUT("sns/articles/{article_seq}/public/close")
+    @PUT("sns/article/{article_seq}/public/close")
     fun articleClose(
         @Path("article_seq") articleSeq: Int
     ): Completable
