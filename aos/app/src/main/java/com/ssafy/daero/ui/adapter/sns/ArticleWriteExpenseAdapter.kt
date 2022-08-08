@@ -1,70 +1,81 @@
 package com.ssafy.daero.ui.adapter.sns
 
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.databinding.ItemArticleWriteExpenseBinding
+import com.ssafy.daero.ui.root.sns.ExpenseDto
+import java.util.*
+import kotlin.concurrent.schedule
 
-class ArticleWriteExpenseAdapter : RecyclerView.Adapter<ArticleWriteExpenseAdapter.ArticleWriteExpenseViewHolder>() {
+class ArticleWriteExpenseAdapter(
+    private val removeExpenseListener: (Int) -> Unit,
+    private val expenseChangeListener: (Int, String) -> Unit,
+    private val nameChangeListener: (Int, String) -> Unit
+) : RecyclerView.Adapter<ArticleWriteExpenseAdapter.ArticleWriteExpenseViewHolder>() {
+    var expenses = mutableListOf<ExpenseDto>()
+    private var timer1 = Timer()
+    private var timer2 = Timer()
 
-    var index: List<Int> = emptyList()
-    var title = mutableMapOf<Int,String>()
-    var expense = mutableMapOf<Int,String>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleWriteExpenseViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ArticleWriteExpenseViewHolder {
         return ArticleWriteExpenseViewHolder(
             ItemArticleWriteExpenseBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),
-            title,
-            expense
-        )
+            )
+        ).apply {
+            bindListener(
+                removeExpenseListener,
+                expenseChangeListener,
+                nameChangeListener
+            )
+        }
     }
 
     override fun onBindViewHolder(holder: ArticleWriteExpenseViewHolder, position: Int) {
-        holder.bind(index[position]!!)
+        holder.bind(expenses[position])
     }
 
-    override fun getItemCount() = index.size
+    override fun getItemCount() = expenses.size
 
-    class ArticleWriteExpenseViewHolder(
+    inner class ArticleWriteExpenseViewHolder(
         private val binding: ItemArticleWriteExpenseBinding,
-        val title: MutableMap<Int, String>,
-        val expense: MutableMap<Int, String>
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Int) {
-            binding.viewArticleExpenseTitle.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        fun bindListener(
+            removeExpenseListener: (Int) -> Unit,
+            expenseChangeListener: (Int, String) -> Unit,
+            nameChangeListener: (Int, String) -> Unit
+        ) {
+            binding.imageItemArticleWriteExpenseRemove.setOnClickListener {
+                removeExpenseListener(bindingAdapterPosition)
+            }
+            binding.editTextArticleExpenseContent.addTextChangedListener {
+                timer2.cancel()
 
+                timer2 = Timer()
+                timer2.schedule(1000L) {
+                    expenseChangeListener(bindingAdapterPosition, it.toString())
                 }
+            }
+            binding.editTextArticleExpenseTitle.doAfterTextChanged {
+                timer1.cancel()
 
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
+                timer1 = Timer()
+                timer1.schedule(1000L) {
+                    nameChangeListener(bindingAdapterPosition, it.toString())
                 }
+            }
+        }
 
-                override fun afterTextChanged(p0: Editable?) {
-                    title[data] = binding.viewArticleExpenseTitle.text.toString()
-                }
-            })
-            binding.viewArticleExpenseContent.addTextChangedListener(object: TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                }
-
-                override fun afterTextChanged(p0: Editable?) {
-                    expense[data] = binding.viewArticleExpenseContent.text.toString()
-                }
-            })
+        fun bind(data: ExpenseDto) {
+            binding.expense = data
         }
     }
 }

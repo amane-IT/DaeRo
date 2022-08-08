@@ -115,8 +115,21 @@ class TripVerificationFragment :
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
                 // todo 게시글 추가 화면으로 이동
+                TripCompleteBottomSheetFragment(finishTrip)
+                    .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
+    }
+
+    private val finishTrip : () -> Unit = {
+        // 게시글 작성 상태로 변경
+        App.prefs.isPosting = true
+
+        // 상태 잠시 변경
+        App.isDone = true
+
+        // 게시글 추가 화면으로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
     }
 
     private fun getTripStamps() {

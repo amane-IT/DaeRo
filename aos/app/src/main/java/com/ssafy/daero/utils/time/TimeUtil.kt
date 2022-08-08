@@ -30,3 +30,8 @@ fun Long.toDate() : String {
     var dateFormat = SimpleDateFormat("yyyy.MM.dd (E)")
     return dateFormat.format(Date(this))
 }
+
+fun Long.toServerDate() : String {
+    var dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    return dateFormat.format(Date(this))
+}
