@@ -32,6 +32,12 @@ class InquiryAdapter : RecyclerView.Adapter<InquiryAdapter.InquiryViewHolder>() 
 
         fun bind(inquiry: InquiryResponseDto) {
             binding.inquiry = inquiry
+            if(inquiry.answer_yn.equals('y')){
+                binding.textInquiryAnswer.text = "답변완료"
+            }else{
+                binding.textInquiryAnswer.text = ""
+            }
+
         }
 
         fun setOnClickListeners() {

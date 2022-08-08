@@ -30,7 +30,7 @@
             tools:text="QnA 1. 이것은 QnA 입니다." />
 
         <TextView
-            android:id="@+id/text_faq_answer"
+            android:id="@+id/text_inquiry_answer"
             style="@style/SubHeadSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

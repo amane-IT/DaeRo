@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -16,17 +17,22 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
 import com.ssafy.daero.utils.constant.ARTICLE
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.COMMENT
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
 class ArticleMenuBottomSheetFragment(
-    private val articleSeq: Int,
-    val userSeq: Int,
-    val listener: ArticleListener
+    private var articleSeq: Int,
+    var userSeq: Int,
+    var fragmentSeq: Int,
+    var listener: ArticleListener,
+    var expose: Char = 'y',
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
+
+
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,32 +69,49 @@ class ArticleMenuBottomSheetFragment(
             binding.viewArticleMenuReport.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
+            if(expose=='y'){
+                binding.tvArticleMenuTripGoPublic.text = "게시글 비공개"
+            }else{
+                binding.tvArticleMenuTripGoPublic.text = "게시글 공개"
+            }
         }else{
             binding.tvArticleMenuModify.visibility = View.GONE
             binding.viewArticleMenuModify.visibility = View.GONE
             binding.tvArticleMenuDelete.visibility = View.GONE
             binding.viewArticleMenuDelete.visibility = View.GONE
+            binding.tvArticleMenuTripGoPublic.visibility = View.GONE
+            binding.viewArticleMenuTripGoPublic.visibility = View.GONE
         }
     }
 
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
-            //todo: 따라가기
-            findNavController().navigate(
-                R.id.action_articleFragment_to_tripFollowFragment
-            )
+            //따라가기
+            when(fragmentSeq){
+                1->findNavController().navigate(
+                    R.id.action_rootFragment_to_tripFollowSelectFragment,
+                    bundleOf(ARTICLE_SEQ to articleSeq)
+                )
+                2->findNavController().navigate(
+                    R.id.action_articleFragment_to_tripFollowSelectFragment,
+                    bundleOf(ARTICLE_SEQ to articleSeq)
+                )
+            }
+
             dismiss()
         }
         binding.tvArticleMenuShare.setOnClickListener {
             //todo: 공유하기
         }
         binding.tvArticleMenuModify.setOnClickListener {
-            //todo: 수정하기
-
+            //수정하기
+            findNavController().navigate(
+                R.id.action_articleFragment_to_articleWriteDayFragment
+            )
             dismiss()
         }
         binding.tvArticleMenuDelete.setOnClickListener {
-            //todo: 삭제하기
+            //삭제하기
             listener.articleDelete(articleSeq)
             dismiss()
         }
@@ -98,9 +121,24 @@ class ArticleMenuBottomSheetFragment(
             ReportBottomSheetFragment(ARTICLE, articleSeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvArticleMenuBlock.setOnClickListener {
-            //todo: 차단하기
+            //차단하기
             listener.blockAdd(userSeq)
             dismiss()
+        }
+        binding.tvArticleMenuTripGoPublic.setOnClickListener {
+            //공개,비공개
+            if(expose=='y'){
+                //비공개하기
+                listener.articleClose(articleSeq)
+            }else{
+                //공개하기
+                listener.articleOpen(articleSeq)
+            }
+            dismiss()
+        }
+        binding.tvArticleMenuHide.setOnClickListener {
+            //숨기기
+
         }
         binding.tvArticleMenuCancel.setOnClickListener {
             dismiss()

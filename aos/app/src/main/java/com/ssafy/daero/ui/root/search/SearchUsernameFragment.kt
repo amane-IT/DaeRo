@@ -6,6 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchUsernameBinding
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
@@ -25,7 +26,18 @@ class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.lay
         observeData()
     }
 
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden){
+            if(App.keyword != null)
+                binding.recyclerSearchUserName.visibility = View.VISIBLE
+            else
+                binding.recyclerSearchUserName.visibility = View.INVISIBLE
+        }
+    }
+
     private fun initAdapter(){
+        binding.recyclerSearchUserName.visibility = View.VISIBLE
         searchUserNameAdapter = SearchUserNameAdapter().apply {
             onItemClickListener = searchUserItemClickListener
         }
@@ -35,6 +47,7 @@ class SearchUsernameFragment : BaseFragment<FragmentSearchUsernameBinding>(R.lay
 
     private fun observeData(){
         searchViewModel.resultUserSearch.observe(viewLifecycleOwner){
+            binding.recyclerSearchUserName.visibility = View.VISIBLE
             searchUserNameAdapter.submitData(lifecycle, it)
         }
 

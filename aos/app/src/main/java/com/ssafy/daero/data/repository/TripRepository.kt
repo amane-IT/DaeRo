@@ -124,7 +124,7 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    // 알림 받아오기기
+    // 알림 받아오기
     fun getNotifications(): Single<List<Notification>> {
         return database.notificationDao().getNotifications()
             .subscribeOn(Schedulers.io())
@@ -204,6 +204,13 @@ class TripRepository private constructor(context: Context) {
     fun deleteAllTripFollow(): Completable {
         return database.tripFollowDao().deleteAllTripFollow()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getTripStampDetail(tripStampSeq: Int): Single<Response<TripStampDetailResponseDto>> {
+        return tripApi.getTripStampDetail(tripStampSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

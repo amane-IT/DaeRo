@@ -11,16 +11,16 @@ import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.search.SearchArticleMoreAdapter
-import com.ssafy.daero.ui.root.sns.CommentBottomSheetFragment
-import com.ssafy.daero.ui.root.sns.LikeBottomSheetFragment
-import com.ssafy.daero.utils.constant.ARTICLE_SEQ
-import com.ssafy.daero.utils.constant.COMMENT_BOTTOM_SHEET
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.USER_SEQ
-import com.ssafy.daero.utils.searchedArticleContentMore
+import com.ssafy.daero.ui.root.sns.*
+import com.ssafy.daero.ui.setting.BlockUserViewModel
+import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.view.toast
 
-class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBinding>(R.layout.fragment_search_place_name_more){
+class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBinding>(R.layout.fragment_search_place_name_more),
+    ArticleListener {
     private val searchPlaceMoreViewModel : SearchPlaceNameMoreViewModel by viewModels()
+    private val articleViewModel: ArticleViewModel by viewModels()
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private lateinit var searchArticleMoreAdapter: SearchArticleMoreAdapter
 
     override fun init() {
@@ -36,7 +36,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     private fun initData(){
-        searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword)
+        searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword!!)
     }
 
     private fun initAdapter(){
@@ -45,6 +45,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
             onUserClickListener,
             onCommentClickListener,
             onLikeClickListener,
+            onLikeTextClickListener,
             onMenuClickListener
         )
         binding.recyclerSearchPlaceMore.adapter = searchArticleMoreAdapter
@@ -88,10 +89,81 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         CommentBottomSheetFragment(articleSeq, comments, onUserClickListener)
             .show(childFragmentManager, COMMENT_BOTTOM_SHEET)
     }
-    private val onLikeClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
 
+    private val onLikeClickListener: (Int, Boolean) -> Unit = { articleSeq, likeYn ->
+        when(likeYn){
+            true -> articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
+            false -> articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
+        }
     }
-    private val onMenuClickListener: (Int) -> Unit = {
 
+    private val onLikeTextClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
+        LikeBottomSheetFragment(articleSeq, likes, onUserClickListener)
+            .show(childFragmentManager, LIKE_BOTTOM_SHEET)
+    }
+
+    private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,this@SearchPlaceNameMoreFragment).show(
+            childFragmentManager,
+            ARTICLE_MENU_BOTTOM_SHEET
+        )
+    }
+
+    override fun articleDelete(articleSeq: Int){
+        articleViewModel.articleDelete(articleSeq)
+        articleViewModel.responseState.observe(viewLifecycleOwner){
+            when(it){
+                SUCCESS -> {
+                    toast("해당 게시글을 삭제했습니다.")
+                    searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword!!)
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글을 삭제했습니다.")
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun blockAdd(userSeq: Int){
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner){
+            when(it){
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+
+            }
+        }
+    }
+
+    override fun setPublic() {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleOpen(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleClose(articleSeq: Int) {
+        articleViewModel.articleClose(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 비공개하였습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
     }
 }

@@ -12,12 +12,13 @@ class BlockUserViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
 
     val responseState = MutableLiveData<Int>()
+    val blockState = MutableLiveData<Int>()
     var userBlockData = listOf<UserBlockResponseDto>()
 
 
-    fun getBlockUser(userSeq: Int) {
+    fun getBlockUser() {
         addDisposable(
-            snsRepository.getBlockUser(userSeq)
+            snsRepository.getBlockUser()
                 .subscribe({
                     userBlockData = it.body()!!
                     responseState.postValue(SUCCESS)
@@ -32,10 +33,10 @@ class BlockUserViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.blockAdd(userSeq)
                 .subscribe({
-                    responseState.postValue(SUCCESS)
+                    blockState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    blockState.postValue(FAIL)
                 })
         )
     }
@@ -44,10 +45,10 @@ class BlockUserViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.blockDelete(userSeq)
                 .subscribe({
-                    responseState.postValue(SUCCESS)
+                    blockState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    blockState.postValue(FAIL)
                 })
         )
     }

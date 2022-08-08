@@ -36,6 +36,21 @@
                 android:background="@color/lightGray" />
 
             <TextView
+                android:id="@+id/tv_article_menu_trip_go_public"
+                style="@style/SubHeadSemiBold"
+                android:gravity="center"
+                android:layout_margin="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="공개하기" />
+
+            <View
+                android:id="@+id/view_article_menu_trip_go_public"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/lightGray" />
+
+            <TextView
                 android:id="@+id/tv_article_menu_share"
                 style="@style/SubHeadSemiBold"
                 android:gravity="center"

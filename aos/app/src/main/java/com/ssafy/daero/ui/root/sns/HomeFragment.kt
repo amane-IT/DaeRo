@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     // 더보기 버튼 클릭
     private val onMoreClickListener: (Int, Int) -> Unit = { articleSeq, userSeq->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq,this@HomeFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,this@HomeFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
@@ -119,7 +119,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
             when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
-                    homeViewModel.getArticles()
+                    homeAdapter.refresh()
                     articleViewModel.deleteState.value = DEFAULT
                 }
                 FAIL -> {
@@ -144,5 +144,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
                 }
             }
         }
+    }
+
+    override fun setPublic() {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleOpen(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleClose(articleSeq: Int) {
+        TODO("Not yet implemented")
     }
 }

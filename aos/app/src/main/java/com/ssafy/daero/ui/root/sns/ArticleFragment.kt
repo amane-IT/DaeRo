@@ -180,7 +180,9 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             ArticleMenuBottomSheetFragment(
                 articleSeq,
                 articleViewModel.articleData.user_seq,
-                this@ArticleFragment
+                2,
+                this@ArticleFragment,
+                articleViewModel.articleData.expose
             ).show(
                 childFragmentManager,
                 ARTICLE_MENU_BOTTOM_SHEET
@@ -443,7 +445,42 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    private fun deleteArticle(){
-
+    override fun setPublic() {
+        blockUserViewModel
     }
+
+    override fun articleOpen(articleSeq: Int) {
+        articleViewModel.articleOpen(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 공개하였습니다.")
+                    articleViewModel.article(articleSeq)
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun articleClose(articleSeq: Int) {
+        articleViewModel.articleClose(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 비공개하였습니다.")
+                    articleViewModel.article(articleSeq)
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
+    }
+
 }

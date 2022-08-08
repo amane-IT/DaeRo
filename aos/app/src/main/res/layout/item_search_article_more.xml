@@ -123,7 +123,7 @@
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="12dp"
                     android:padding="4dp"
-                    android:text="@{String.valueOf(articleMore.comments)}"
+                    android:text="@{String.valueOf(articleMore.replies)}"
                     app:layout_constraintBottom_toBottomOf="@id/imageView_articleMore_tripStamp"
                     app:layout_constraintEnd_toEndOf="@id/imageView_articleMore_tripStamp"
                     tools:text="159" />
@@ -156,12 +156,13 @@
                     android:id="@+id/imageView_articleMore_like"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_like"
                     android:layout_marginEnd="2dp"
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/imageView_articleMore_tripStamp"
                     app:layout_constraintEnd_toStartOf="@id/text_articleMore_like"
-                    app:tint="@color/white" />
+                    app:tint="@color/white"
+                    app:likeState="@{articleMore.like_yn}"
+                    tools:src="@drawable/ic_like"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>

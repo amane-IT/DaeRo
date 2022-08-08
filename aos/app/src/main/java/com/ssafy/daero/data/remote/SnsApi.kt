@@ -211,7 +211,7 @@ interface SnsApi {
     /**
      * 컬렉션 목록
      **/
-    @GET("sns/collections")
+    @GET("sns/collection")
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>
@@ -235,8 +235,22 @@ interface SnsApi {
     /**
      * 차단 목록
      */
-    @GET("sns/users/{user_seq}/block")
-    fun getBlockUser(
-        @Path("user_seq") userSeq: Int
-    ): Single<Response<List<UserBlockResponseDto>>>
+    @GET("sns/users/block")
+    fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>>
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/article/{article_seq}/public/close")
+    fun articleClose(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/article/{article_seq}/public/open")
+    fun articleOpen(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
 }

@@ -11,6 +11,7 @@ import com.ssafy.daero.databinding.FragmentInquiryRegisterBinding
 import com.ssafy.daero.ui.adapter.setting.InquiryAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
 class InquiryRegisterFragment : BaseFragment<FragmentInquiryRegisterBinding>(R.layout.fragment_inquiry_register) {
@@ -44,16 +45,14 @@ class InquiryRegisterFragment : BaseFragment<FragmentInquiryRegisterBinding>(R.l
     private fun observeData() {
         inquiryViewModel.inquiryState.observe(viewLifecycleOwner) {
             when(it) {
+                SUCCESS -> {
+                    toast("해당 문의를 등록했습니다.")
+                    requireActivity().onBackPressed()
+                }
                 FAIL -> {
-                    toast("1:1문의 목록을 조회하는데 실패했습니다.")
+                    toast("1:1문의 등록에 실패했습니다.")
                     inquiryViewModel.inquiryState.value = DEFAULT
                 }
-            }
-        }
-        inquiryViewModel.inquiry.observe(viewLifecycleOwner) {
-            inquiryAdapter.apply {
-                inquiry = it
-                notifyDataSetChanged()
             }
         }
     }

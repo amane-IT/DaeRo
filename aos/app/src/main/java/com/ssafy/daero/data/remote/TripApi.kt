@@ -10,6 +10,14 @@ import retrofit2.http.*
 
 interface TripApi {
     /**
+     * 트립스탬프 상세 조회
+     * */
+    @GET("trips/trip-stamp/{trip_stamp_seq}")
+    fun getTripStampDetail(
+        @Path("trip_stamp_seq") tripStampSeq: Int
+    ): Single<Response<TripStampDetailResponseDto>>
+
+    /**
      * 내 여정 조회
      */
     @GET("trips/my/{user_seq}/journey")

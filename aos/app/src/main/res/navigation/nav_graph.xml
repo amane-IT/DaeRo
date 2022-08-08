@@ -166,6 +166,13 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_rootFragment_to_tripFollowSelectFragment"
+            app:destination="@id/tripFollowSelectFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -400,8 +407,8 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_articleFragment_to_tripFollowFragment"
-            app:destination="@id/tripFollowFragment"
+            android:id="@+id/action_articleFragment_to_tripFollowSelectFragment"
+            app:destination="@id/tripFollowSelectFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
@@ -415,11 +422,6 @@
         android:name="com.ssafy.daero.ui.root.sns.TripStampDetailFragment"
         android:label="TripStampDetailFragment"
         tools:layout="@layout/fragment_trip_stamp_detail" />
-    <fragment
-        android:id="@+id/tripFollowFragment"
-        android:name="com.ssafy.daero.ui.root.trip.TripFollowFragment"
-        android:label="TripFollowFragment"
-        tools:layout="@layout/fragment_trip_follow" />
     <fragment
         android:id="@+id/articleWriteDayFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleWriteDayFragment"
@@ -559,5 +561,18 @@
         android:name="com.ssafy.daero.ui.setting.InquiryRegisterFragment"
         android:label="InquiryRegisterFragment"
         tools:layout="@layout/fragment_inquiry_register" />
+        />
+    <fragment
+        android:id="@+id/tripFollowSelectFragment"
+        android:name="com.ssafy.daero.ui.root.trip.TripFollowSelectFragment"
+        android:label="TripFollowSelectFragment"
+        tools:layout="@layout/fragment_trip_follow_select"
+        >
+        <action
+            android:id="@+id/action_tripFollowSelectFragment_to_rootFragment"
+            app:destination="@id/rootFragment"
+            app:popUpTo="@id/tripFollowSelectFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
 
 </navigation>

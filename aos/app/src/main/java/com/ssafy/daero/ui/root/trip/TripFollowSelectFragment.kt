@@ -2,15 +2,18 @@ package com.ssafy.daero.ui.root.trip
 
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.entity.TripFollow
 import com.ssafy.daero.databinding.FragmentTripFollowSelectBinding
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.ui.adapter.trip.TripFollowSelectAdapter
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -44,8 +47,8 @@ class TripFollowSelectFragment : BaseFragment<FragmentTripFollowSelectBinding>(R
     }
 
     private fun initView(){
-        // todo : bundle로 articleSeq 넘겨받기
-        tripFollowViewModel.getTripFollow(3)
+
+        tripFollowViewModel.getTripFollow(arguments!!.getInt(ARTICLE_SEQ, 0))
     }
 
     private fun setOnClickListener(){
@@ -53,7 +56,15 @@ class TripFollowSelectFragment : BaseFragment<FragmentTripFollowSelectBinding>(R
             for(i in result){
                 tripFollowViewModel.insertTripFollow(TripFollow(i))
             }
-            //todo : 여행중으로 이동
+            App.prefs.isFollow = true
+            App.prefs.curPlaceSeq = result[0]
+            App.prefs.isTripStart = true
+            findNavController().navigate(
+                R.id.action_tripFollowSelectFragment_to_rootFragment
+            )
+        }
+        binding.imgTripFollowSelectBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

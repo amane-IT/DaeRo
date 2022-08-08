@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.trip.TripAlbumItem
@@ -13,6 +14,7 @@ import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import io.reactivex.rxjava3.core.Completable
 
 class ArticleViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
@@ -20,6 +22,7 @@ class ArticleViewModel : BaseViewModel() {
     val responseState = MutableLiveData<Int>()
     val likeState = MutableLiveData<Int>()
     val deleteState = MutableLiveData<Int>()
+    val exposeState = MutableLiveData<Int>()
     lateinit var articleData: ArticleResponseDto
 
     fun article(articleSeq: Int) {
@@ -29,7 +32,7 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     articleData = ArticleResponseDto(response.body()!!.user_seq,
                         response.body()!!.nickname, response.body()!!.profile_url,
-                        response.body()!!.like_yn, response.body()!!.title,
+                        response.body()!!.like_yn, response.body()!!.title, response.body()!!.expose,
                         response.body()!!.trip_comment, response.body()!!.trip_expenses,
                         response.body()!!.rating, response.body()!!.likes,
                         response.body()!!.comments, response.body()!!.tags,
@@ -78,6 +81,30 @@ class ArticleViewModel : BaseViewModel() {
                 }, { throwable ->
                     Log.d("ArticleVM_DaeRo", throwable.toString())
                     likeState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun articleClose(articleSeq: Int) {
+        addDisposable(
+            snsRepository.articleClose(articleSeq)
+                .subscribe({
+                    exposeState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
+                    exposeState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun articleOpen(articleSeq: Int) {
+        addDisposable(
+            snsRepository.articleOpen(articleSeq)
+                .subscribe({
+                    exposeState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
+                    exposeState.postValue(FAIL)
                 })
         )
     }
