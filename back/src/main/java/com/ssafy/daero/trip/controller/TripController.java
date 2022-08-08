@@ -1,11 +1,15 @@
 package com.ssafy.daero.trip.controller;
 
 
+import com.ssafy.daero.image.service.ImageService;
+import com.ssafy.daero.image.vo.ImageVo;
 import com.ssafy.daero.trip.service.TripService;
+import com.ssafy.daero.trip.vo.TripVo;
 import com.ssafy.daero.user.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -14,10 +18,12 @@ import java.util.*;
 public class TripController {
     private final TripService tripService;
     private final JwtService jwtService;
+    private final ImageService imageService;
 
-    public TripController(TripService tripService, JwtService jwtService) {
+    public TripController(TripService tripService, JwtService jwtService, ImageService imageService) {
         this.tripService = tripService;
         this.jwtService = jwtService;
+        this.imageService = imageService;
     }
 
 
@@ -139,5 +145,31 @@ public class TripController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Map<String, Object>> finishTrip(@RequestHeader("jwt") String jwt,
+                                                          @RequestParam("json") TripVo tripVo,
+                                                          @RequestParam("files") ArrayList<MultipartFile> files) {
+        int fileNum = files.size();
+        System.out.println("files 크기" + files.size());
+        System.out.println("제목 : " + tripVo.getTitle());
+        String[] urls = new String[fileNum];
+        for (int i = 0; i < fileNum; i++) {
+            ImageVo imageVo = this.imageService.uploadFile(files.get(i));
+            if (imageVo.getResult() != ImageVo.ImageResult.SUCCESS) {
+                System.out.println("ERROR : " + i + "번째 사진 업로드 실패");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            urls[i] = imageVo.getDownloadUrl();
+        }
+        tripVo.setUserSeq(this.jwtService.getUserSeq(jwt));
+        try {
+            this.tripService.writeArticle(tripVo, urls);
+        } catch (Exception e) {
+            System.out.println("ERROR : DB 에러");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

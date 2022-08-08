@@ -2,9 +2,7 @@ package com.ssafy.daero.trip.service;
 
 import com.ssafy.daero.trip.dto.*;
 import com.ssafy.daero.trip.mapper.TripMapper;
-import com.ssafy.daero.trip.vo.AlbumVo;
-import com.ssafy.daero.trip.vo.JourneyVo;
-import com.ssafy.daero.trip.vo.RecommendTagVo;
+import com.ssafy.daero.trip.vo.*;
 import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.dto.UserFavorDto;
 import com.ssafy.daero.user.mapper.UserMapper;
@@ -12,6 +10,7 @@ import com.ssafy.daero.common.util.DistanceUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -288,5 +287,24 @@ public class TripService {
             resultList.add(map);
         }
         return resultList;
+    }
+
+    public void writeArticle(TripVo tripVo, String[] urls) {
+        int index = 0;
+        int tripSeq = this.tripMapper.insertTrip(tripVo);
+        tripVo.setTripSeq(tripSeq);
+        tripVo.setThumbnailUrl(urls[tripVo.getThumbnailIndex()]);
+        tripVo.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        for (TripDayVo tripDayVo : tripVo.getRecords()) {
+            tripDayVo.setTripSeq(tripSeq);
+            int tripDaySeq = this.tripMapper.insertTripDay(tripDayVo);
+            for (TripStampVo tripStampVo : tripDayVo.getTripStamps()) {
+                tripStampVo.setTripSeq(tripSeq);
+                tripStampVo.setTripDaySeq(tripDaySeq);
+                tripStampVo.setUrl(urls[index]);
+                this.tripMapper.insertTripStamp(tripStampVo);
+            }
+        }
+        this.tripMapper.insertArticle(tripVo);
     }
 }
