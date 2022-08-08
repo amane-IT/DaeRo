@@ -228,4 +228,11 @@ public class UserController {
         userService.setPreference(userSeq, placeArray);
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/{user_seq}/badges")
+    public ResponseEntity<Map<String, Object>> badgeGet(@PathVariable("user_seq") int userSeq) {
+        Map<String, Object> res = userService.badgeGet(userSeq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
 }
