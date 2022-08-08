@@ -1,9 +1,6 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +11,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
 import com.ssafy.daero.utils.constant.ARTICLE
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
-import com.ssafy.daero.utils.constant.COMMENT
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
@@ -33,7 +28,6 @@ class ArticleMenuBottomSheetFragment(
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
 
 
-
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.ArticleMenuBottomSheetFragment)
@@ -44,7 +38,12 @@ class ArticleMenuBottomSheetFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_menu_bottom_sheet, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_article_menu_bottom_sheet,
+            container,
+            false
+        )
         return binding.root
     }
 
@@ -59,8 +58,8 @@ class ArticleMenuBottomSheetFragment(
         setOnClickListeners()
     }
 
-    private fun initView(){
-        if(userSeq== App.prefs.userSeq){
+    private fun initView() {
+        if (userSeq == App.prefs.userSeq) {
             binding.tvArticleMenuTripFollow.visibility = View.GONE
             binding.viewArticleMenuTripFollow.visibility = View.GONE
             binding.tvArticleMenuHide.visibility = View.GONE
@@ -69,12 +68,12 @@ class ArticleMenuBottomSheetFragment(
             binding.viewArticleMenuReport.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
-            if(expose=='y'){
+            if (expose == 'y') {
                 binding.tvArticleMenuTripGoPublic.text = "게시글 비공개"
-            }else{
+            } else {
                 binding.tvArticleMenuTripGoPublic.text = "게시글 공개"
             }
-        }else{
+        } else {
             binding.tvArticleMenuModify.visibility = View.GONE
             binding.viewArticleMenuModify.visibility = View.GONE
             binding.tvArticleMenuDelete.visibility = View.GONE
@@ -87,12 +86,12 @@ class ArticleMenuBottomSheetFragment(
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
             //따라가기
-            when(fragmentSeq){
-                1->findNavController().navigate(
+            when (fragmentSeq) {
+                1 -> findNavController().navigate(
                     R.id.action_rootFragment_to_tripFollowSelectFragment,
                     bundleOf(ARTICLE_SEQ to articleSeq)
                 )
-                2->findNavController().navigate(
+                2 -> findNavController().navigate(
                     R.id.action_articleFragment_to_tripFollowSelectFragment,
                     bundleOf(ARTICLE_SEQ to articleSeq)
                 )
@@ -105,7 +104,11 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuModify.setOnClickListener {
             //수정하기
-
+            App.isEdit = true
+            findNavController().navigate(
+                R.id.action_articleFragment_to_articleEditDayFragment,
+                bundleOf(ARTICLE_SEQ to articleSeq)
+            )
             dismiss()
         }
         binding.tvArticleMenuDelete.setOnClickListener {
@@ -116,7 +119,10 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기, album_seq
             dismiss()
-            ReportBottomSheetFragment(ARTICLE, articleSeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
+            ReportBottomSheetFragment(ARTICLE, articleSeq).show(
+                parentFragmentManager,
+                REPORT_BOTTOM_SHEET
+            )
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기
@@ -125,10 +131,10 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {
             //공개,비공개
-            if(expose=='y'){
+            if (expose == 'y') {
                 //비공개하기
                 listener.articleClose(articleSeq)
-            }else{
+            } else {
                 //공개하기
                 listener.articleOpen(articleSeq)
             }

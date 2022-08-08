@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
@@ -29,16 +28,14 @@ class ArticleWriteDayFragment :
     private fun initAdapter() {
         articleWriteTripStampAdapter = ArticleWriteTripStampAdapter()
         binding.recyclerArticleWriteTripStamp.adapter = articleWriteTripStampAdapter
-
-        if (articleWriteViewModel.dayIndex >= 0 && articleWriteViewModel.tripStamps.isNotEmpty()) {
-            articleWriteTripStampAdapter.tripStamps =
-                articleWriteViewModel.tripStamps[articleWriteViewModel.dayIndex]
-            articleWriteTripStampAdapter.notifyDataSetChanged()
-        }
     }
 
     private fun initView() {
         if (articleWriteViewModel.dayIndex >= 0 && articleWriteViewModel.tripStamps.isNotEmpty()) {
+            articleWriteTripStampAdapter.tripStamps =
+                articleWriteViewModel.tripStamps[articleWriteViewModel.dayIndex]
+            articleWriteTripStampAdapter.notifyDataSetChanged()
+
             binding.editTextCommentAddComment.setText(
                 articleWriteViewModel.articleWriteRequest!!.records[articleWriteViewModel.dayIndex].dayComment
             )

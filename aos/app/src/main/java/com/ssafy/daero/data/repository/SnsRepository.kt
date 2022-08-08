@@ -5,13 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
-import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import com.ssafy.daero.data.remote.SnsApi
@@ -37,7 +37,7 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { ArticleDataSource(snsApi)}
+            pagingSourceFactory = { ArticleDataSource(snsApi) }
         ).flowable
     }
 
@@ -90,6 +90,7 @@ class SnsRepository private constructor(context: Context) {
     fun likeDelete(userSeq: Int, articleSeq: Int): Completable {
         return snsApi.likeDelete(userSeq, articleSeq)
     }
+
     fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
@@ -165,7 +166,7 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
+            pagingSourceFactory = { SearchUserNameDataSource(snsApi, searchKeyword) }
         ).flowable
     }
 
@@ -239,10 +240,28 @@ class SnsRepository private constructor(context: Context) {
 
     fun articleClose(articleSeq: Int): Completable {
         return snsApi.articleClose(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun articleOpen(articleSeq: Int): Completable {
         return snsApi.articleOpen(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getHotArticles(): Single<Response<List<TripHotResponseDto>>> {
+        return snsApi.getHotArticles()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun editArticle(articleSeq: Int, articleEditRequestDto: ArticleEditRequestDto): Single<Response<Unit>> {
+        return snsApi.editArticle(articleSeq, articleEditRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
 
