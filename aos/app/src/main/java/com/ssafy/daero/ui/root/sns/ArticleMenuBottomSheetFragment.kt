@@ -129,11 +129,12 @@ class ArticleMenuBottomSheetFragment(
             //공개,비공개
             if(expose=='y'){
                 //비공개하기
-                listener.articleClose(userSeq)
+                listener.articleClose(articleSeq)
             }else{
                 //공개하기
-                listener.articleOpen(userSeq)
+                listener.articleOpen(articleSeq)
             }
+            dismiss()
         }
         binding.tvArticleMenuHide.setOnClickListener {
             //숨기기
