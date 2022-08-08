@@ -2,6 +2,7 @@ package com.ssafy.daero.ui.adapter.sns
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.ArticleHomeItem
 import com.ssafy.daero.databinding.ItemHomeBinding
+import com.ssafy.daero.utils.view.setTint
 
 class HomeAdapter(
     private val onLikeClickListener: (Int, Boolean) -> Unit,     // 좋아요 버튼 클릭
@@ -71,7 +73,8 @@ class HomeAdapter(
                             binding.textHomeItemLike.text = likes.toString()
                         }
                         binding.article?.like_yn = 'n'
-                        binding.imageHomeItemLike.setImageDrawable(activity.getDrawable(R.drawable.ic_like))
+                        binding.imageHomeItemLike.setImageResource(R.drawable.ic_like)
+                        binding.imageHomeItemLike.setTint(Color.WHITE)
                         binding.imageHomeItemLike.invalidate()
                     }
                     'n' -> onLikeClickListener(binding.article?.article_seq ?: 0, false).apply {

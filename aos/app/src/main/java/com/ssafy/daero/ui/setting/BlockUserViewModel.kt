@@ -15,9 +15,9 @@ class BlockUserViewModel : BaseViewModel() {
     var userBlockData = listOf<UserBlockResponseDto>()
 
 
-    fun getBlockUser(userSeq: Int) {
+    fun getBlockUser() {
         addDisposable(
-            snsRepository.getBlockUser(userSeq)
+            snsRepository.getBlockUser()
                 .subscribe({
                     userBlockData = it.body()!!
                     responseState.postValue(SUCCESS)

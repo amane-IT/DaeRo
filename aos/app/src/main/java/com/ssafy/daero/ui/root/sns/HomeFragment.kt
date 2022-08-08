@@ -119,7 +119,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
             when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
-                    homeViewModel.getArticles()
+                    homeAdapter.refresh()
                     articleViewModel.deleteState.value = DEFAULT
                 }
                 FAIL -> {
@@ -144,5 +144,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
                 }
             }
         }
+    }
+
+    override fun setPublic() {
+        TODO("Not yet implemented")
     }
 }

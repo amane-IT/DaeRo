@@ -37,7 +37,7 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
 
     private fun initData(){
         //todo : bundle로 넘겨받은 유저시퀀스 처리
-        blockUserViewModel.getBlockUser(2)
+        blockUserViewModel.getBlockUser()
     }
 
     private fun observeData(){
@@ -67,7 +67,9 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
     }
 
     private fun setOnClickListeners(){
-
+        binding.imgUserBlockBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
     override fun blockDelete(sequence: Int) {

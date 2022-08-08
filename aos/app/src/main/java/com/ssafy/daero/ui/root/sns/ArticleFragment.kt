@@ -443,7 +443,8 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    private fun deleteArticle(){
-
+    override fun setPublic() {
+        blockUserViewModel
     }
+
 }

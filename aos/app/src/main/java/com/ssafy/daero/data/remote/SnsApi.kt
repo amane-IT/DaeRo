@@ -235,8 +235,6 @@ interface SnsApi {
     /**
      * 차단 목록
      */
-    @GET("sns/users/{user_seq}/block")
-    fun getBlockUser(
-        @Path("user_seq") userSeq: Int
-    ): Single<Response<List<UserBlockResponseDto>>>
+    @GET("sns/users/block")
+    fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>>
 }

@@ -230,10 +230,8 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getBlockUser(
-        userSeq: Int
-    ): Single<Response<List<UserBlockResponseDto>>> {
-        return snsApi.getBlockUser(userSeq)
+    fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>> {
+        return snsApi.getBlockUser()
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())

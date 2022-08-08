@@ -31,7 +31,7 @@ interface ServiceApi {
     /**
      * 문의하기
      */
-    @POST("sns/inquiry")
+    @POST("service/inquiry")
     fun insertInquiry(
         @Query("follow-user") userSeq: Int,
         @Body inquiryRequestDto: InquiryRequestDto

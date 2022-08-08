@@ -8,6 +8,7 @@ import com.ssafy.daero.databinding.FragmentInquiryBinding
 import com.ssafy.daero.ui.adapter.setting.InquiryAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
 class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_inquiry) {
@@ -15,14 +16,15 @@ class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_i
     private lateinit var inquiryAdapter: InquiryAdapter
 
     override fun init() {
-        initAdapter()
         getInquiry()
         setOnClickListeners()
         observeData()
     }
 
     private fun initAdapter() {
-        inquiryAdapter = InquiryAdapter()
+        inquiryAdapter = InquiryAdapter().apply {
+            inquiry = inquiryViewModel.inquiryList
+        }
         binding.recyclerInquiry.adapter = inquiryAdapter
     }
 
@@ -38,16 +40,13 @@ class InquiryFragment : BaseFragment<FragmentInquiryBinding>(R.layout.fragment_i
     private fun observeData() {
         inquiryViewModel.inquiryState.observe(viewLifecycleOwner) {
             when(it) {
+                SUCCESS -> {
+                    initAdapter()
+                }
                 FAIL -> {
                     toast("1:1문의 목록을 조회하는데 실패했습니다.")
                     inquiryViewModel.inquiryState.value = DEFAULT
                 }
-            }
-        }
-        inquiryViewModel.inquiry.observe(viewLifecycleOwner) {
-            inquiryAdapter.apply {
-                inquiry = it
-                notifyDataSetChanged()
             }
         }
     }

@@ -14,17 +14,16 @@ import com.ssafy.daero.utils.constant.SUCCESS
 class InquiryViewModel : BaseViewModel() {
     private val serviceRepository = ServiceRepository.get()
 
-    private val _inquiry = MutableLiveData<List<InquiryResponseDto>>()
-    val inquiry: LiveData<List<InquiryResponseDto>>
-        get() = _inquiry
+    var inquiryList = listOf<InquiryResponseDto>()
 
     val inquiryState = MutableLiveData<Int>()
 
     fun getInquiry() {
         addDisposable(
             serviceRepository.getInquiry()
-                .subscribe({
-                    _inquiry.postValue(it.body()!!)
+                .subscribe({ response ->
+                    inquiryList = response.body()!!
+                    inquiryState.postValue(SUCCESS)
                 }, { throwable ->
                     Log.d("FaqVM", throwable.toString())
                     inquiryState.postValue(FAIL)
