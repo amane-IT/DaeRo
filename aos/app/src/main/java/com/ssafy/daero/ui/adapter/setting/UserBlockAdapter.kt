@@ -68,7 +68,7 @@ class UserBlockAdapter(listener: BlockUserListener) : RecyclerView.Adapter<UserB
             if(followYn){
                 binding.buttonFollow.setBackgroundResource(R.drawable.button_unfollow)
                 binding.buttonFollow.text = "차단 해제"
-                binding.buttonFollow.setTextColor(Color.GRAY)
+                binding.buttonFollow.setTextColor(Color.WHITE)
             }else{
                 binding.buttonFollow.setBackgroundResource(R.drawable.button_follow)
                 binding.buttonFollow.text = "차단하기"

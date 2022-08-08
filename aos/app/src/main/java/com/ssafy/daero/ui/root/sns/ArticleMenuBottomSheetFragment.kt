@@ -79,7 +79,7 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuTripFollow.setOnClickListener {
             //따라가기
             findNavController().navigate(
-                R.id.action_articleFragment_to_tripFollowFragment,
+                R.id.action_rootFragment_to_tripFollowSelectFragment,
                 bundleOf(ARTICLE_SEQ to articleSeq)
             )
             dismiss()
