@@ -257,6 +257,13 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun editArticle(articleSeq: Int, articleEditRequestDto: ArticleEditRequestDto): Single<Response<Unit>> {
+        return snsApi.editArticle(articleSeq, articleEditRequestDto)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
 
     companion object {
         private var instance: SnsRepository? = null

@@ -6,7 +6,7 @@
 
         <variable
             name="expense"
-            type="com.ssafy.daero.ui.root.sns.ExpenseDto" />
+            type="com.ssafy.daero.data.dto.article.Expense" />
     </data>
 
 
@@ -35,7 +35,7 @@
             android:background="@android:color/transparent"
             android:hint="여행 경비명"
             android:inputType="text"
-            android:text="@{expense.expense_name}"
+            android:text="@{expense.expenses_name}"
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/gray"
             app:layout_constraintBottom_toBottomOf="parent"

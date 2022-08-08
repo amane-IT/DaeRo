@@ -72,6 +72,7 @@ class App : Application() {
         var userName: String = ""
         var userSeq: Int = 0
         var isDone = false
+        var isEdit = false
         var keyword: String? = null
 
         lateinit var prefs: PreferenceUtil

@@ -32,6 +32,9 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_trip_complete.xml" value="0.264" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_Terms.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article.xml" value="0.31910112359550563" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_edit_day.xml" value="0.2" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_edit_expense.xml" value="0.24114583333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_edit_thumbnail.xml" value="0.24114583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_menu_bottom_sheet.xml" value="0.2708333333333333" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_Thumbnail.xml" value="0.36614583333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_article_write_day.xml" value="0.176" />
@@ -84,6 +87,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.27760416666666665" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_day.xml" value="0.221875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_day_trip_stamp.xml" value="0.221875" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_edit_day_trip_stamp.xml" value="0.2176143651132963" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_expense.xml" value="0.221875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_write_day_trip_stamp.xml" value="0.16875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_article_write_expense.xml" value="0.264" />

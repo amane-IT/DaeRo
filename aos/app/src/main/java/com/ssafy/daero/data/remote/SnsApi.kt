@@ -261,4 +261,10 @@ interface SnsApi {
      */
     @GET("sns/article/popular")
     fun getHotArticles() : Single<Response<List<TripHotResponseDto>>>
+
+    /**
+     * 게시글 수정
+     */
+    @PUT("sns/article/{article_seq}")
+    fun editArticle(@Path("article_seq") articleSeq: Int, @Body articleEditRequestDto: ArticleEditRequestDto) : Single<Response<Unit>>
 }

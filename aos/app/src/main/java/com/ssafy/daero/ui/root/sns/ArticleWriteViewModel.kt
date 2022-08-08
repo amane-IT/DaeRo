@@ -6,6 +6,7 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ArticleWriteDayItem
 import com.ssafy.daero.data.dto.article.ArticleWriteRequestDto
 import com.ssafy.daero.data.dto.article.ArticleWriteTripStampItem
+import com.ssafy.daero.data.dto.article.Expense
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -27,7 +28,7 @@ class ArticleWriteViewModel : BaseViewModel() {
     val tripStampState = MutableLiveData<Int>()
     var tripStamps: List<List<TripStampDto>> = listOf()
     var linearTripStamps: List<TripStampDto> = listOf()
-    var expenses = mutableListOf<ExpenseDto>()
+    var expenses = mutableListOf<Expense>()
     var dayIndex = 0
 
     var showProgress = MutableLiveData<Boolean>()
@@ -47,8 +48,8 @@ class ArticleWriteViewModel : BaseViewModel() {
 
        val json = Json.encodeToString(articleWriteRequest!!)
 
-        Log.d("ArticleVM_싸피", files.toString())
-        Log.d("ArticleVM_싸피", json)
+        Log.d("ArticleWriteVM_싸피", files.toString())
+        Log.d("ArticleWriteVM_싸피", json)
         addDisposable(
             tripRepository.postArticle(
                 files = files,
@@ -154,12 +155,3 @@ data class TripStampDto(
     var id: Int,
     var isThumbnail: Boolean
 )
-
-data class ExpenseDto(
-    var expense_name: String,
-    var expenses: String
-) {
-    override fun toString(): String {
-        return """"expense_name" : "$expense_name", "expenses" : "${expenses}원""""
-    }
-}

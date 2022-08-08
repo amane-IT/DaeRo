@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.article.Expense
 import com.ssafy.daero.databinding.FragmentArticleWriteExpenseBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleWriteExpenseAdapter
 
@@ -40,7 +41,7 @@ class ArticleWriteExpenseFragment :
 
     private val nameChangeListener: (Int, String) -> Unit = { index, name ->
         requireActivity().runOnUiThread {
-            articleWriteViewModel.expenses[index].expense_name = name
+            articleWriteViewModel.expenses[index].expenses_name = name
         }
     }
 
@@ -60,7 +61,7 @@ class ArticleWriteExpenseFragment :
             findNavController().navigate(R.id.action_articleWriteExpenseFragment_to_articleWriteThumbnailFragment)
         }
         binding.imgArticleWritePlus.setOnClickListener {
-            articleWriteViewModel.expenses.add(ExpenseDto("", ""))
+            articleWriteViewModel.expenses.add(Expense("", ""))
             articleWriteExpenseAdapter.notifyDataSetChanged()
         }
         binding.imgArticleWriteBack.setOnClickListener {
