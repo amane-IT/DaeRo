@@ -291,9 +291,9 @@ public class SnsController {
     public ResponseEntity<String> blockDelete(@PathVariable("user_seq") int userSeq, @RequestHeader("jwt") String jwt) {
         int blocker = this.jwtService.getUserSeq(jwt);
         if (this.snsService.unblockUser(userSeq, blocker) == 0) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/users/block")
