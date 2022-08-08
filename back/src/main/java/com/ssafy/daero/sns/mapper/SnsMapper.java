@@ -120,4 +120,21 @@ public interface SnsMapper {
     ArrayList<UserDto> selectBlockedUserByBlocker(int userSeq);
 
     int deleteBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
+
+    int updateArticle(@Param("articleSeq") int articleSeq,
+                      @Param("title") String title,
+                      @Param("tripComment") String tripComment,
+                      @Param("tripExpenses") String tripExpenses,
+                      @Param("rating") int rating,
+                      @Param("expose") String expose);
+
+    int selectTripSeqByArticleSeq(int articleSeq);
+    int updateDayComment(@Param("tripSeq") int tripSeq,
+                         @Param("dayComment") String dayComment,
+                         @Param("rowNum") int rowNum);
+
+
+
+
+
 }

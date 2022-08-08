@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -301,5 +302,14 @@ public class SnsController {
         int blocker = this.jwtService.getUserSeq(jwt);
         LinkedList<Map<String, Object>> resultList = this.snsService.blockList(blocker);
         return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
+
+    @PutMapping("/article/{article_seq}")
+    public ResponseEntity<String> updateArticle(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq, @RequestBody Map<String, Object> req) {
+        int currentUser = this.jwtService.getUserSeq(jwt);
+        boolean updated = this.snsService.updateArticle(currentUser, articleSeq, req);
+        if (updated) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+
     }
 }
