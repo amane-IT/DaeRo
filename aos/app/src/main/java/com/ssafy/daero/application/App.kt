@@ -70,7 +70,7 @@ class App : Application() {
         lateinit var password: String
         var userName: String = ""
         var userSeq: Int = 0
-        var keyword = ""
+        var keyword: String? = null
 
         lateinit var prefs: PreferenceUtil
     }

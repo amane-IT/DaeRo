@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.databinding.ItemCollectionBinding
 
-class CollectionAdapter: PagingDataAdapter<CollectionItem, CollectionAdapter.CollectionViewHolder>(
+class CollectionAdapter(
+    private val onUserClickListener: (Int) -> Unit, // 유저 프로필 선택
+    private val onLikeClickListener: (Int, Int) -> Unit, // 좋아요 버튼 클릭
+    private val onImageClickListener: (Int) -> Unit // 이미지 클릭
+): PagingDataAdapter<CollectionItem, CollectionAdapter.CollectionViewHolder>(
     COMPARATOR
 ) {
-    lateinit var onItemClickListener: (View, Int) -> Unit
+    var idx = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollectionAdapter.CollectionViewHolder {
         return CollectionAdapter.CollectionViewHolder(
@@ -22,13 +26,23 @@ class CollectionAdapter: PagingDataAdapter<CollectionItem, CollectionAdapter.Col
                 false
             )
         ).apply {
-            bindOnItemClickListener(onItemClickListener)
+            bindOnLikeClickListener(onLikeClickListener)
+            bindOnUserClickListener(onUserClickListener)
+            bindOnImageClickListener(onImageClickListener)
         }
     }
 
+    fun getPosition(): Int{
+        return idx
+    }
+
+    fun setPosition(position: Int) {
+        idx = position
+    }
     override fun onBindViewHolder(holder: CollectionAdapter.CollectionViewHolder, position: Int) {
         getItem(position)?.let{
             holder.bind(it)
+            setPosition(position)
         }
     }
 
@@ -38,9 +52,21 @@ class CollectionAdapter: PagingDataAdapter<CollectionItem, CollectionAdapter.Col
             binding.collection = collection
         }
 
-        fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit){
-            binding.root.setOnClickListener{
-                onItemClickListener(it, binding.collection!!.article_seq)
+        fun bindOnUserClickListener(onUserClickListener: (Int) -> Unit) {
+            binding.imageItemCollectionUserImg.setOnClickListener {
+                onUserClickListener(binding.collection?.user_seq ?: 0)
+            }
+        }
+
+        fun bindOnLikeClickListener(onLikeClickListener: (Int, Int) -> Unit) {
+            binding.imageItemCollectionLike.setOnClickListener {
+                onLikeClickListener(binding.collection?.article_seq ?: 0, bindingAdapterPosition)
+            }
+        }
+
+        fun bindOnImageClickListener(onImageClickListener: (Int) -> Unit) {
+            binding.imageItemCollectionImg.setOnClickListener {
+                onImageClickListener(binding.collection?.article_seq ?: 0)
             }
         }
     }

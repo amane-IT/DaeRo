@@ -211,7 +211,7 @@ interface SnsApi {
     /**
      * 컬렉션 목록
      **/
-    @GET("sns/collections")
+    @GET("sns/collection")
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>

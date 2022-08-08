@@ -22,6 +22,8 @@ class SearchViewModel : BaseViewModel() {
 
     val responseState_userName = MutableLiveData<Int>()
     val responseState_articles = MutableLiveData<Int>()
+    val state_article_content = MutableLiveData<Int>()
+    val state_article_placeName = MutableLiveData<Int>()
 
     private val _resultUserSearch = MutableLiveData<PagingData<UserNameItem>>()
     val resultUserSearch: LiveData<PagingData<UserNameItem>>
@@ -49,7 +51,17 @@ class SearchViewModel : BaseViewModel() {
             snsRepository.searchArticle(searchKeyWord)
                 .subscribe({response ->
                     _resultArticleSearch.postValue(response.body())
-                    responseState_articles.postValue(SUCCESS)
+                    Log.d(TAG, "content is: ${response.body()!!.content.isEmpty()}")
+                    when(response.body()!!.content.isEmpty()){
+                        false -> state_article_content.postValue(SUCCESS)
+                        true -> state_article_content.postValue(FAIL)
+                    }
+
+                    when(response.body()!!.place.isEmpty()){
+                        false -> state_article_placeName.postValue(SUCCESS)
+                        true -> state_article_placeName.postValue(FAIL)
+                    }
+
                 }, {throwable ->
                     Log.d(TAG, "searchArticle: ${throwable.toString()}")
                     responseState_articles.postValue(FAIL)
