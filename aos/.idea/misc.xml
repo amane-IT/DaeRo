@@ -101,6 +101,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_other_page_album.xml" value="0.2947916666666667" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_re_comment.xml" value="0.2786458333333333" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_trip_follow_select.xml" value="0.22552083333333334" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_trip_hot.xml" value="0.15353260869565216" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_trip_popular.xml" value="0.28958333333333336" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/item_until_tripstamp.xml" value="0.30885416666666665" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/view_item_trip_preference.xml" value="0.1634963768115942" />
@@ -158,11 +159,9 @@
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml.xml" value="0.2465" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.12335359675785208" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_menu_bottom_sheet.xml" value="0.4" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_day.xml" value="0.22871376811594202" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_expense.xml" value="0.22871376811594202" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_thumbnail.xml" value="0.22871376811594202" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_block_user.xml" value="0.1" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_email_login.xml" value="0.2" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_find_id.xml" value="0.152" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_follower.xml" value="0.22871376811594202" />
@@ -170,16 +169,11 @@
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_login.xml" value="0.25364583333333335" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_root.xml" value="0.25364583333333335" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.264" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_trip_follow.xml" value="0.12158054711246201" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_trip_information.xml" value="0.1125" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_trip_verification.xml" value="0.1125" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_follow.xml" value="0.4" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_home.xml" value="0.29508196721311475" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_inquiry.xml" value="0.2196478220574606" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_my_page_album.xml" value="0.22871376811594202" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_trip_follow_select.xml" value="0.10989583333333333" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_trip_popular.xml" value="0.22826086956521738" />
-        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/item_user_block.xml" value="0.1" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_camera.xml" value="0.1905" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/drawable/ic_gallery.xml" value="0.1885" />
         <entry key="..\:/Users/multicampus/Desktop/SSAFY_PROJECT/Common/aos/S07P12D110/S07P12D110/aos/app/src/main/res/layout/fragment_trip_preference.xml" value="0.1875" />

@@ -69,6 +69,16 @@
             app:layout_constraintStart_toEndOf="@id/view_article_expense_line"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="원"
+            android:layout_marginStart="8dp"
+            app:layout_constraintTop_toTopOf="@id/editText_article_expense_content"
+            app:layout_constraintBottom_toBottomOf="@+id/editText_article_expense_content"
+            app:layout_constraintStart_toEndOf="@+id/editText_article_expense_content"/>
+
         <ImageView
             android:id="@+id/image_item_article_write_expense_remove"
             android:layout_width="24dp"

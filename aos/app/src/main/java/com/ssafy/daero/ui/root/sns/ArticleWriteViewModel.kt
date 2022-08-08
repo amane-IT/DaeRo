@@ -160,6 +160,6 @@ data class ExpenseDto(
     var expenses: String
 ) {
     override fun toString(): String {
-        return """"expense_name" : "$expense_name", "expenses" : "$expenses""""
+        return """"expense_name" : "$expense_name", "expenses" : "${expenses}원""""
     }
 }

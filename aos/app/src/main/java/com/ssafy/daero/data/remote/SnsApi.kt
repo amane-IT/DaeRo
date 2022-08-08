@@ -8,6 +8,8 @@ import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import io.reactivex.rxjava3.core.Completable
@@ -253,4 +255,10 @@ interface SnsApi {
     fun articleOpen(
         @Path("article_seq") articleSeq: Int
     ): Completable
+
+    /**
+     * 핫한 여행기
+     */
+    @GET("sns/article/popular")
+    fun getHotArticles() : Single<Response<List<TripHotResponseDto>>>
 }
