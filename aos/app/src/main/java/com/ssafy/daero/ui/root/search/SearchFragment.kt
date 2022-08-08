@@ -10,6 +10,7 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchBinding
 import com.ssafy.daero.ui.adapter.search.SearchViewPagerAdapter
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_search){
@@ -20,6 +21,14 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         initViews()
         setOnClickListeners()
         setOnEditorActionListeners()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden){
+            App.keyword = null
+            binding.editTextSearchSearchBar.setText("")
+        }
     }
 
     private fun initViews(){
@@ -44,10 +53,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             when(actionId){
                 EditorInfo.IME_ACTION_SEARCH ->  {
                     val keyword = binding.editTextSearchSearchBar.text.toString()
-                    searchViewModel.searchUserName(keyword)
-                    searchViewModel.searchArticle(keyword)
+                    if(searchViewModel.state_article_content.value == SUCCESS)
+                        searchViewModel.searchUserName(keyword)
+                    else
+                        toast("검색 결과가 없습니다.")
+
+                    if(searchViewModel.state_article_placeName.value == SUCCESS)
+                        searchViewModel.searchArticle(keyword)
+                    else
+                        toast("검색 결과가 없습니다.")
+
                     App.keyword = keyword
-                    toast(keyword)
                     false
                 }
                 else -> {

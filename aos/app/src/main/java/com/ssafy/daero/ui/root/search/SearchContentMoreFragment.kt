@@ -6,22 +6,21 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.application.App.Companion.keyword
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.search.SearchArticleMoreAdapter
-import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
-import com.ssafy.daero.ui.root.sns.CommentBottomSheetFragment
-import com.ssafy.daero.utils.constant.ARTICLE_SEQ
-import com.ssafy.daero.utils.constant.COMMENT_BOTTOM_SHEET
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.USER_SEQ
-import com.ssafy.daero.utils.pagingUser
-import com.ssafy.daero.utils.searchedArticleContentMore
+import com.ssafy.daero.ui.root.sns.*
+import com.ssafy.daero.ui.setting.BlockUserViewModel
+import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.view.toast
 
-class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more){
+class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more), ArticleListener {
     private val TAG = "SearchContentMore_DaeRo"
     private val searchContentMoreViewModel : SearchContentMoreViewModel by viewModels()
+    private val articleViewModel: ArticleViewModel by viewModels()
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private lateinit var searchArticleMoreAdapter: SearchArticleMoreAdapter
 
     override fun init() {
@@ -37,7 +36,7 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
     }
 
     private fun initData(){
-        searchContentMoreViewModel.searchContentMore(keyword)
+        searchContentMoreViewModel.searchContentMore(keyword!!)
     }
 
     private fun initAdapter(){
@@ -46,6 +45,7 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
             onUserClickListener,
             onCommentClickListener,
             onLikeClickListener,
+            onLikeTextClickListener,
             onMenuClickListener
         )
 
@@ -55,14 +55,23 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
     private fun observeData(){
         searchContentMoreViewModel.resultContentSearch.observe(viewLifecycleOwner){
             Log.d(TAG, "observeData: 여기")
-//            TODO: 내용 검색 API 완성되면 살리기
             searchArticleMoreAdapter.submitData(lifecycle, it)
-//            searchArticleMoreAdapter.submitData(lifecycle, searchedArticleContentMore)
         }
 
         searchContentMoreViewModel.responseState.observe(viewLifecycleOwner){ state ->
             when(state){
                 FAIL -> binding.textSearchContentMoreNoData.visibility = View.VISIBLE
+            }
+        }
+
+        articleViewModel.likeState.observe(viewLifecycleOwner){
+            when(it){
+                SUCCESS -> {
+                    articleViewModel.likeState.value = DEFAULT
+                }
+                FAIL -> {
+                    articleViewModel.likeState.value = DEFAULT
+                }
             }
         }
     }
@@ -92,10 +101,57 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
         CommentBottomSheetFragment(articleSeq, comments, onUserClickListener)
             .show(childFragmentManager, COMMENT_BOTTOM_SHEET)
     }
-    private val onLikeClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
 
+    private val onLikeClickListener: (Int, Boolean) -> Unit = { articleSeq, likeYn ->
+        when(likeYn){
+            true -> articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
+            false -> articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
+        }
     }
-    private val onMenuClickListener: (Int) -> Unit = {
 
+    private val onLikeTextClickListener: (Int, Int) -> Unit = { articleSeq, likes ->
+        LikeBottomSheetFragment(articleSeq, likes, onUserClickListener)
+            .show(childFragmentManager, LIKE_BOTTOM_SHEET)
+    }
+
+    private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq, this@SearchContentMoreFragment).show(
+            childFragmentManager,
+            ARTICLE_MENU_BOTTOM_SHEET
+        )
+    }
+
+    override fun articleDelete(articleSeq: Int){
+        articleViewModel.articleDelete(articleSeq)
+        articleViewModel.responseState.observe(viewLifecycleOwner){
+            when(it){
+                SUCCESS -> {
+                    toast("해당 게시글을 삭제했습니다.")
+                    searchContentMoreViewModel.searchContentMore(keyword!!)
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글을 삭제했습니다.")
+                    articleViewModel.deleteState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun blockAdd(userSeq: Int){
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner){
+            when(it){
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+
+            }
+        }
     }
 }
