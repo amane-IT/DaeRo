@@ -1,13 +1,11 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
-import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
-import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
-import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
-import com.ssafy.daero.data.dto.user.UserProfileResponseDto
+import com.ssafy.daero.data.dto.user.*
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
@@ -147,4 +145,12 @@ interface UserApi {
         @Path("user_seq") userSeq: Int,
         @Body fcmTokenRequestDto: FCMTokenRequestDto
     ): Completable
+
+    /**
+     * 배지 관리
+     * */
+    @GET("users/{user_seq}/badges")
+    fun getBadges(
+        @Path("user_seq") userSeq: Int
+    ): Single<Response<StampResponseDto>>
 }
