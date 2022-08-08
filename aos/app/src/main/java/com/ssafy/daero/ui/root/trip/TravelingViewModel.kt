@@ -62,9 +62,17 @@ class TravelingViewModel : BaseViewModel() {
         )
     }
 
-    fun deleteTripStamps() {
+    fun deleteAllTripRecord() {
         addDisposable(
             tripRepository.deleteAllTripStamps()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
+        )
+        addDisposable(
+            tripRepository.deleteAllTripFollow()
                 .subscribe({
 
                 }, { throwable ->

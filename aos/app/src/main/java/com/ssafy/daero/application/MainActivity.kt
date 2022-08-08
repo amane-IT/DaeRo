@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.ssafy.daero.R
 import com.ssafy.daero.ui.login.LoginFragment
 import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.ui.root.sns.ArticleWriteDayFragment
 import com.ssafy.daero.utils.constant.FragmentType
 import com.ssafy.daero.utils.view.toast
 
@@ -41,6 +42,13 @@ class MainActivity : AppCompatActivity() {
             } else {
                 toast("뒤로가기 버튼을 한 번 더 누르면 종료됩니다.")
             }
+        } else if(curFragment is ArticleWriteDayFragment) {
+            if(curFragment.articleWriteViewModel.dayIndex > 0) {
+                curFragment.articleWriteViewModel.dayIndex -= 1
+            } else {
+                curFragment.articleWriteViewModel.initArticleWriteRequest()
+            }
+            super.onBackPressed()
         } else {
             super.onBackPressed()
         }

@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.repository.ServiceRepository
@@ -71,6 +72,7 @@ class App : Application() {
         var userName: String = ""
         var userSeq: Int = 0
         var keyword = ""
+        var isDone = false
 
         lateinit var prefs: PreferenceUtil
     }

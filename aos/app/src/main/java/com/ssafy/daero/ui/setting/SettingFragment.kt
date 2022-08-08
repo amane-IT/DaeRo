@@ -151,6 +151,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
         // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
         settingViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
         App.prefs.initUser()
         App.prefs.initTrip()
         App.prefs.tripState = TRIP_BEFORE

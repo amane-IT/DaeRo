@@ -2,7 +2,9 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.trip.*
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import io.reactivex.rxjava3.core.Single
+import okhttp3.MultipartBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -80,4 +82,11 @@ interface TripApi {
      */
     @GET("trips/nearby")
     fun getAroundTrips(@Query("place-seq") placeSeq: Int): Single<Response<List<TripPopularResponseDto>>>
+
+    /**
+     * 여행 마무리하기
+     */
+    @Multipart
+    @POST("trips")
+    fun postArticle(@Part files: List<MultipartBody.Part>, @Part("json")json: String) : Single<Response<Unit>>
 }

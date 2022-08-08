@@ -84,9 +84,7 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuModify.setOnClickListener {
             //todo: 수정하기
-            findNavController().navigate(
-                R.id.action_articleFragment_to_articleWriteDayFragment
-            )
+
             dismiss()
         }
         binding.tvArticleMenuDelete.setOnClickListener {

@@ -12,7 +12,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -29,11 +28,10 @@ import com.ssafy.daero.databinding.FragmentTravelingBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.tag.TagCollection
-import com.ssafy.daero.utils.tag.categoryTags
-import com.ssafy.daero.utils.tag.regionTags
 import com.ssafy.daero.utils.view.toast
 import kotlin.math.sqrt
 
@@ -41,6 +39,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     SensorEventListener {
 
     private val travelingViewModel: TravelingViewModel by viewModels()
+
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var placeSeq = 0
     private var address = ""
@@ -209,8 +208,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             findDirectionByNaverMap()
         }
         binding.buttonTravelingNext.setOnClickListener {
-            //todo : 다른 여행지 추천 화면으로 전환
-
             // 첫 여행지 추천상태라면 여행지 태그 바텀싯 띄우기
             if (App.prefs.isFirstTrip) {
                 TagBottomSheetFragment(categoryTags, regionTags, applyFilter).show(
@@ -236,17 +233,34 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         binding.buttonTravelingStop.setOnClickListener {
             // 이전 여행기록이 없다면
             if (travelingViewModel.tripStamps.value?.isEmpty() != false) {
-                // todo : 홈화면으로 이동, 캐시 디렉토리 삭제, room tripStamp 삭제, prefs 초기화
-                travelingViewModel.deleteTripStamps()
+                // 캐시 디렉토리 전체 삭제
+                deleteCache(requireContext())
+
+                // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+                travelingViewModel.deleteAllTripRecord()
+
+                // Prefs 초기화
                 App.prefs.initTrip()
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
-                // todo 게시글 추가 화면으로 이동
+                TripCompleteBottomSheetFragment(finishTrip)
+                    .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
         binding.imageTravelingNotification.setOnClickListener {
             findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
+    }
+
+    private val finishTrip : () -> Unit = {
+        // 게시글 작성 상태로 변경
+        App.prefs.isPosting = true
+
+        // 상태 잠시 변경
+        App.isDone = true
+
+        // 게시글 추가 화면으로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
     }
 
     private fun findDirectionByNaverMap() {

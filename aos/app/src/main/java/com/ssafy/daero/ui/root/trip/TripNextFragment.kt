@@ -1,7 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -10,13 +8,11 @@ import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
-
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
 
@@ -26,6 +22,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
     override fun init() {
         setTripState()
+        initView()
         initAdapter()
         observeData()
         setOnClickListeners()
@@ -36,6 +33,10 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     private fun setTripState() {
         // 다음 여행지 추천 화면으로 온경우 다음 여행지 추천상태로 변경
         App.prefs.isFirstTrip = false
+    }
+
+    private fun initView() {
+        binding.textTripNextTitle1.text = "${App.prefs.nickname}님"
     }
 
     private fun initAdapter() {
@@ -51,13 +52,17 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     }
 
     private val nearByTripPlaceClickListener: (View, Int) -> Unit = { _, tripPlaceSeq ->
-        findNavController().navigate(R.id.action_rootFragment_to_tripInformationFragment,
-        bundleOf(PLACE_SEQ to tripPlaceSeq, IS_RECOMMEND to false))
+        findNavController().navigate(
+            R.id.action_rootFragment_to_tripInformationFragment,
+            bundleOf(PLACE_SEQ to tripPlaceSeq, IS_RECOMMEND to false)
+        )
     }
 
     private val tripStampClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
-            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
+        findNavController().navigate(
+            R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true)
+        )
     }
 
     private val applyOptions: (Int, String) -> Unit = { time, transportation ->
@@ -78,13 +83,25 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
             // TODO: 여행 그만두기 기능 = 게시글 작성
             buttonTripNextStop.setOnClickListener {
-
+                TripCompleteBottomSheetFragment(finishTrip)
+                    .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
 
             imageTripNextNotification.setOnClickListener {
                 findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
             }
         }
+    }
+
+    private val finishTrip : () -> Unit = {
+        // 게시글 작성 상태로 변경
+        App.prefs.isPosting = true
+
+        // 상태 잠시 변경
+        App.isDone = true
+
+        // 게시글 추가 화면으로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
     }
 
     private fun getTripStamps() {
@@ -97,9 +114,14 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
     private fun observeData() {
         tripNextViewModel.aroundTrips.observe(viewLifecycleOwner) {
-            tripNearByAdapter.apply {
-                tripPlaces = it
-                notifyDataSetChanged()
+            if (it.isEmpty()) {
+                binding.textTripNextNoNearBy.visibility = View.VISIBLE
+            } else {
+                binding.textTripNextNoNearBy.visibility = View.GONE
+                tripNearByAdapter.apply {
+                    tripPlaces = it
+                    notifyDataSetChanged()
+                }
             }
         }
         tripNextViewModel.tripStamps.observe(viewLifecycleOwner) {
@@ -112,7 +134,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             binding.progressBarTripNextLoading.isVisible = it
         }
         tripNextViewModel.nextTripRecommendResponseDto.observe(viewLifecycleOwner) { placeSeq ->
-            if(placeSeq > 0) {
+            if (placeSeq > 0) {
                 findNavController().navigate(
                     R.id.action_rootFragment_to_tripInformationFragment, bundleOf(
                         PLACE_SEQ to placeSeq
@@ -122,7 +144,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             }
         }
         tripNextViewModel.nextTripRecommendState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 FAIL -> {
                     toast("여행지 추천을 받는데 실패했습니다.")
                     tripNextViewModel.nextTripRecommendState.value = DEFAULT

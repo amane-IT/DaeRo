@@ -6,7 +6,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
-import com.ssafy.daero.application.App
 import com.ssafy.daero.data.dto.trip.*
 import com.ssafy.daero.data.entity.Notification
 import com.ssafy.daero.data.entity.TripFollow
@@ -22,6 +21,7 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.MultipartBody
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -105,6 +105,13 @@ class TripRepository private constructor(context: Context) {
 
     fun getAroundTrips(placeSeq: Int): Single<Response<List<TripPopularResponseDto>>> {
         return tripApi.getAroundTrips(placeSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun postArticle(files: List<MultipartBody.Part>, json: String): Single<Response<Unit>> {
+        return tripApi.postArticle(files, json)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
