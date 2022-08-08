@@ -115,7 +115,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
     }
 
     private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq, this@SearchContentMoreFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,this@SearchContentMoreFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )

@@ -103,7 +103,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq, this@SearchPlaceNameMoreFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,this@SearchPlaceNameMoreFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )

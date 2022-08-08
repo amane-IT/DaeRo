@@ -90,7 +90,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     // 더보기 버튼 클릭
     private val onMoreClickListener: (Int, Int) -> Unit = { articleSeq, userSeq->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq,this@HomeFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,this@HomeFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )

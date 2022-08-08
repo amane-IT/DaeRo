@@ -180,6 +180,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             ArticleMenuBottomSheetFragment(
                 articleSeq,
                 articleViewModel.articleData.user_seq,
+                2,
                 this@ArticleFragment
             ).show(
                 childFragmentManager,

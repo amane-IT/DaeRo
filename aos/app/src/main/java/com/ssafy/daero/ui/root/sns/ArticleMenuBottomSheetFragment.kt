@@ -25,6 +25,7 @@ import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 class ArticleMenuBottomSheetFragment(
     private val articleSeq: Int,
     val userSeq: Int,
+    val fragmentSeq: Int,
     val listener: ArticleListener
 ) : BottomSheetDialogFragment() {
 
@@ -78,10 +79,17 @@ class ArticleMenuBottomSheetFragment(
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
             //따라가기
-            findNavController().navigate(
-                R.id.action_rootFragment_to_tripFollowSelectFragment,
-                bundleOf(ARTICLE_SEQ to articleSeq)
-            )
+            when(fragmentSeq){
+                1->findNavController().navigate(
+                    R.id.action_rootFragment_to_tripFollowSelectFragment,
+                    bundleOf(ARTICLE_SEQ to articleSeq)
+                )
+                2->findNavController().navigate(
+                    R.id.action_articleFragment_to_tripFollowSelectFragment,
+                    bundleOf(ARTICLE_SEQ to articleSeq)
+                )
+            }
+
             dismiss()
         }
         binding.tvArticleMenuShare.setOnClickListener {

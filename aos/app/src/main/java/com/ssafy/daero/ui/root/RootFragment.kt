@@ -14,10 +14,14 @@ import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     override fun init() {
+        if(!App.prefs.isFollow){
+            changeFragment(curFragmentType)
+        }else{
+            binding.bottomnavigationRoot.selectedItemId = R.id.TripFragment
+        }
         checkTripStart()
         checkTripStamp()
         setOnClickListeners()
-        changeFragment(curFragmentType)
     }
 
     // 여행 상세 페이지에서 여행 시작 버튼 눌렀는지 여부
