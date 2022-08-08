@@ -181,6 +181,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 articleSeq,
                 articleViewModel.articleData.user_seq,
                 2,
+                articleViewModel.articleData.expose,
                 this@ArticleFragment
             ).show(
                 childFragmentManager,
@@ -449,11 +450,35 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     }
 
     override fun articleOpen(articleSeq: Int) {
-        TODO("Not yet implemented")
+        articleViewModel.articleOpen(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 공개하였습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
     }
 
     override fun articleClose(articleSeq: Int) {
-        TODO("Not yet implemented")
+        articleViewModel.articleClose(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 비공개하였습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
     }
 
 }

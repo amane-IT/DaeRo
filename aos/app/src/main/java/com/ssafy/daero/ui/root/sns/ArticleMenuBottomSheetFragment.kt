@@ -77,6 +77,11 @@ class ArticleMenuBottomSheetFragment(
             binding.viewArticleMenuReport.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
+            if(expose=='y'){
+                binding.tvArticleMenuTripGoPublic.text = "게시글 비공개"
+            }else{
+                binding.tvArticleMenuTripGoPublic.text = "게시글 공개"
+            }
         }else{
             binding.tvArticleMenuModify.visibility = View.GONE
             binding.viewArticleMenuModify.visibility = View.GONE
@@ -131,8 +136,10 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuTripGoPublic.setOnClickListener {
             //공개,비공개
             if(expose=='y'){
+                //비공개하기
                 listener.articleClose(userSeq)
             }else{
+                //공개하기
                 listener.articleOpen(userSeq)
             }
         }

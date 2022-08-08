@@ -152,6 +152,18 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     override fun articleClose(articleSeq: Int) {
-        TODO("Not yet implemented")
+        articleViewModel.articleClose(articleSeq)
+        articleViewModel.exposeState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 게시글을 비공개하였습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("게시글 공개 처리를 실패했습니다.")
+                    articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
     }
 }
