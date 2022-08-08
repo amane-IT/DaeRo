@@ -119,5 +119,9 @@ public interface SnsMapper {
 
     ArrayList<UserDto> selectBlockedUserByBlocker(int userSeq);
 
+    int selectArticleCountByArticleSeqUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
     int deleteBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
+
+    int updateArticleOpen(@Param("articleSeq") int articleSeq, @Param("openYn") char openYn);
 }

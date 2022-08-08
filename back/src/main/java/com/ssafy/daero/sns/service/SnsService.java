@@ -533,4 +533,26 @@ public class SnsService {
     public LinkedList<Map<String, Object>> blockList(int userSeq) {
         return createBriefUserMap(this.snsMapper.selectBlockedUserByBlocker(userSeq));
     }
+
+    public int closeArticle(int articleSeq, int userSeq) {
+        if (this.snsMapper.selectArticleCountByArticleSeqUserSeq(articleSeq, userSeq) == 0) {
+            return 0;
+        }
+        try {
+            return this.snsMapper.updateArticleOpen(articleSeq, 'n');
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int openArticle(int articleSeq, int userSeq) {
+        if (this.snsMapper.selectArticleCountByArticleSeqUserSeq(articleSeq, userSeq) == 0) {
+            return 0;
+        }
+        try {
+            return this.snsMapper.updateArticleOpen(articleSeq, 'y');
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 }

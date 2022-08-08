@@ -482,12 +482,25 @@
         where blocker_users_seq = #{userSeq}
     </select>
 
+    <select id="selectArticleCountByArticleSeqUserSeq" resultType="_int">
+        select count(0)
+        from v_users_trips_articles
+        where users_seq = #{userSeq}
+          and articles_seq = #{articleSeq}
+    </select>
+
     <delete id="deleteBlock">
         delete
         from blocks
         where blocked_users_seq = #{userSeq}
           and blocker_users_seq = #{blocker}
     </delete>
+
+    <update id="updateArticleOpen">
+        update articles
+        set open_yn = #{openYn}
+        where articles_seq = #{articleSeq};
+    </update>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
