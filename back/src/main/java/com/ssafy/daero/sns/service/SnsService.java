@@ -87,6 +87,7 @@ public class SnsService {
         articleDetail.put("trip_expenses", expenses);
         articleDetail.put("records", records);
         articleDetail.put("like_yn", like);
+        articleDetail.put("expose", articleVo.getOpenYn());
         return articleDetail;
     }
 
