@@ -534,6 +534,25 @@ public class SnsService {
         return createBriefUserMap(this.snsMapper.selectBlockedUserByBlocker(userSeq));
     }
 
+    public boolean updateArticle(int userSeq, int articleSeq, Map<String, Object> req) {
+        // user가 article의 user가 맞는지 확인
+        Integer articleUser = this.snsMapper.selectUserSeqByArticleSeq(articleSeq);
+        if (articleUser != userSeq) {
+            return false;
+        }
+        // article + trip update
+        int updatedarticle = this.snsMapper.updateArticle(articleSeq, (String) req.get("title"), (String) req.get("tripComment"), (String) req.get("tripExpenses"), (int) req.get("rating"), (String) req.get("expose"));
+        int tripSeq = this.snsMapper.selectTripSeqByArticleSeq(articleSeq);
+        ArrayList<String> days = (ArrayList<String>) req.get("records");
+        // days update
+        int rowNum = 1;
+        for (String dayComment : days) {
+            int updatedDay = this.snsMapper.updateDayComment(tripSeq, dayComment, rowNum);
+            rowNum++;
+        }
+        return true;
+    }
+
     public int closeArticle(int articleSeq, int userSeq) {
         if (this.snsMapper.selectArticleCountByArticleSeqUserSeq(articleSeq, userSeq) == 0) {
             return 0;

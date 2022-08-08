@@ -520,10 +520,41 @@
           and blocker_users_seq = #{blocker}
     </delete>
 
+    <update id="updateArticle">
+        update articles a, trips t
+        set a.`title`=#{title},
+            t.`trip_comment`=#{tripComment},
+            t.`trip_expenses`=#{tripExpenses},
+            t.`trip_rating`=#{rating},
+            a.open_yn=#{expose},
+            a.updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')
+        where a.articles_seq=#{articleSeq} and
+            t.trips_seq=a.trips_seq
+    </update>
+
+    <select id="selectTripSeqByArticleSeq" parameterType="_int" resultType="_int">
+        select trips_seq
+        from daero.articles
+        where articles_seq=#{articleSeq}
+    </select>
+
+    <update id="updateDayComment">
+        <![CDATA[
+        update daero.trip_days t
+        set t.`day_comment`=#{dayComment}
+        where t.`trip_days_seq` in (select trip_days_seq
+                                      from (SELECT row_number() over ()           AS row, trip_days_seq
+                                            from daero.trip_days
+                                            where trip = #{tripSeq}) as td
+                                      where td.row = #{rowNum})
+    ]]>
+    </update>
+
     <update id="updateArticleOpen">
         update articles
         set open_yn = #{openYn}
         where articles_seq = #{articleSeq};
+
     </update>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
