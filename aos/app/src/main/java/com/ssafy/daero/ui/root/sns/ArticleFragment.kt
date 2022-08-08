@@ -455,6 +455,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 공개하였습니다.")
+                    articleViewModel.article(articleSeq)
                     articleViewModel.exposeState.value = DEFAULT
                 }
                 FAIL -> {
@@ -471,6 +472,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 비공개하였습니다.")
+                    articleViewModel.article(articleSeq)
                     articleViewModel.exposeState.value = DEFAULT
                 }
                 FAIL -> {
