@@ -186,6 +186,15 @@
           and `tag_seq` = #{tagSeq};
     </update>
 
+    <select id="selectBadgeByUserSeq" parameterType="_int" resultType="java.util.Map">
+        select (select region_name
+                from region_tags t
+                where t.`region_seq`= a.`region_seq`) as region_name, `count`
+        from user_achievements a
+        where `users_seq`=#{userSeq}
+        order by `region_seq`
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.vo.UserVo">
         <result property="userSeq" column="users_seq"/>
         <result property="userEmail" column="user_email"/>

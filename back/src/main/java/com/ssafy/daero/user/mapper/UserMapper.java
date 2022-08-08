@@ -12,6 +12,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 @SuppressWarnings("UnusedReturnValue")
 @Mapper
@@ -62,4 +63,6 @@ public interface UserMapper {
 
     // 회원 탈퇴
     int deleteUser(int user_seq);
+
+    ArrayList<Map<String, Object>> selectBadgeByUserSeq(int userSeq);
 }

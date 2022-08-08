@@ -230,4 +230,23 @@ public class UserService {
         }
         return result;
     }
+
+    public Map<String, Object> badgeGet(int userSeq) {
+        UserDto userDto = userMapper.selectByUserSeq(userSeq);
+        if (userDto == null) { return null; }
+        ArrayList<Map<String, Object>> badges = userMapper.selectBadgeByUserSeq(userSeq);
+        Map<String, Object> badgeList = new HashMap<>();
+        String[] regions = {"seoul", "incheon", "busan", "daegu", "gwangju", "jeonbuk", "daejeon", "chungbuk", "gangwon", "jeju"};
+        int cnt = 0;
+        for(String region:regions) {
+            if (cnt < badges.size() && Objects.equals((String) badges.get(cnt).get("region_name"), region)) {
+                badgeList.put(region, badges.get(cnt).get("count"));
+                cnt++;
+            }
+            else {
+                badgeList.put(region, 0);
+            }
+        }
+        return badgeList;
+    }
 }
