@@ -5,7 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
+import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -17,6 +19,7 @@ import java.util.concurrent.TimeUnit
 
 class TripViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
+    private val snsRepository = SnsRepository.get()
 
     val showProgress = MutableLiveData<Int>()
 
@@ -27,6 +30,11 @@ class TripViewModel : BaseViewModel() {
     private val _popularTrip = MutableLiveData<List<TripPopularResponseDto>>()
     val popularTrip: LiveData<List<TripPopularResponseDto>>
         get() = _popularTrip
+
+
+    private val _hotArticles = MutableLiveData<List<TripHotResponseDto>>()
+    val hotArticle: LiveData<List<TripHotResponseDto>>
+        get() = _hotArticles
 
     var firstTripRecommendState = MutableLiveData<Int>()
 
@@ -83,6 +91,17 @@ class TripViewModel : BaseViewModel() {
             tripRepository.getPopularTrips()
                 .subscribe({
                     _popularTrip.postValue(it.body())
+                }, { throwable ->
+                    Log.d("TripVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
+    fun getHotArticle() {
+        addDisposable(
+            snsRepository.getHotArticles()
+                .subscribe({
+                    _hotArticles.postValue(it.body())
                 }, { throwable ->
                     Log.d("TripVM_DaeRo", throwable.toString())
                 })

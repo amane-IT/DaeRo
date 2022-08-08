@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.ssafy.daero.data.dto.article.Expense
 import com.ssafy.daero.databinding.ItemArticleWriteExpenseBinding
-import com.ssafy.daero.ui.root.sns.ExpenseDto
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -15,7 +15,7 @@ class ArticleWriteExpenseAdapter(
     private val expenseChangeListener: (Int, String) -> Unit,
     private val nameChangeListener: (Int, String) -> Unit
 ) : RecyclerView.Adapter<ArticleWriteExpenseAdapter.ArticleWriteExpenseViewHolder>() {
-    var expenses = mutableListOf<ExpenseDto>()
+    var expenses = mutableListOf<Expense>()
     private var timer1 = Timer()
     private var timer2 = Timer()
 
@@ -74,7 +74,7 @@ class ArticleWriteExpenseAdapter(
             }
         }
 
-        fun bind(data: ExpenseDto) {
+        fun bind(data: Expense) {
             binding.expense = data
         }
     }

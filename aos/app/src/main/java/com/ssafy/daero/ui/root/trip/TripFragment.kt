@@ -4,6 +4,7 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -40,6 +41,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         setOnClickListeners()
         otherListeners()
         getPopularTrip()
+        getHotArticle()
     }
 
     private fun initData() {
@@ -85,6 +87,8 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
         // todo: 상세 게시글로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleFragment, bundleOf(
+            ARTICLE_SEQ to articleSeq))
     }
 
     private fun setOnClickListeners() {
@@ -139,9 +143,10 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
             tripPopularAdapter.tripPlaces = it
             tripPopularAdapter.notifyDataSetChanged()
         }
-
-        // todo: 핫한 여행기 받아오기
-        tripHotAdapter.tripHots = hotArticles
+        tripViewModel.hotArticle.observe(viewLifecycleOwner) {
+            tripHotAdapter.tripHots = it
+            tripHotAdapter.notifyDataSetChanged()
+        }
 
         tripViewModel.showProgress.observe(viewLifecycleOwner) {
             when (it) {
@@ -185,6 +190,10 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private fun getPopularTrip() {
         tripViewModel.getPopularTrips()
+    }
+
+    private fun getHotArticle() {
+        tripViewModel.getHotArticle()
     }
 
     private fun showProgressDialog() {
