@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -9,11 +10,12 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_article_write"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="58dp"
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/img_article_write_back"
                 android:layout_width="32dp"
@@ -28,7 +30,7 @@
 
             <TextView
                 android:id="@+id/tv_article_write_user"
-                style="@style/SubHeadBold"
+                style="@style/HeadBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -37,13 +39,21 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_article_write" />
+
         <TextView
             android:id="@+id/text_article_write_day"
             style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="Day1"
             android:textColor="@color/primaryTextColor"
             android:textSize="24dp"
@@ -54,25 +64,26 @@
             android:id="@+id/recycler_article_write_tripStamp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
             android:layout_marginTop="8dp"
+            android:clipToPadding="false"
+            android:paddingStart="16dp"
+            android:layout_marginBottom="12dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_article_write_day" />
+            app:layout_constraintTop_toBottomOf="@id/text_article_write_day"
+            tools:listitem="@layout/item_article_write_day_trip_stamp" />
 
         <TextView
             android:id="@+id/tv_article_write_date"
             style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="날짜"
             android:textColor="@color/primaryTextColor"
-            android:textSize="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recycler_article_write_tripStamp" />
 
@@ -81,8 +92,9 @@
             style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:text="2022.07.16"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            tools:text="2022.07.16"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_article_write_date" />
@@ -92,44 +104,44 @@
             style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="내용"
             android:textColor="@color/primaryTextColor"
-            android:textSize="24dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_article_write_date" />
 
         <EditText
             android:id="@+id/editText_comment_addComment"
+            style="@style/ArticleWrite"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginVertical="24dp"
-            android:layout_marginHorizontal="12dp"
-            android:inputType="textMultiLine"
-            android:hint="내용 작성하기..."
-            android:maxLines="8"
-            android:textColorHint="@color/gray"
-            style="@style/Body"
-            android:maxLength="100"
-            android:scrollHorizontally="false"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="32dp"
             android:background="@drawable/edittext_comment"
+            android:gravity="start"
+            android:hint="Day Comment를 작성해주세요!"
             android:imeOptions="actionDone"
-            app:layout_constraintTop_toBottomOf="@id/tv_article_write_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:inputType="textMultiLine"
+            android:maxLength="100"
+            android:padding="8dp"
+            android:scrollHorizontally="false"
+            android:textColorHint="@color/gray"
+            app:layout_constraintBottom_toTopOf="@id/button_article_write_next"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_article_write_content" />
 
         <Button
             android:id="@+id/button_article_write_next"
+            style="@style/BodyWhite"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
-            android:text="다음"
             android:background="@drawable/button_regular"
-            style="@style/BodyWhite"
+            android:text="다음"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

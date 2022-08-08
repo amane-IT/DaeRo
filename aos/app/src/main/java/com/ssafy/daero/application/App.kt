@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.repository.ServiceRepository
@@ -70,6 +71,7 @@ class App : Application() {
         lateinit var password: String
         var userName: String = ""
         var userSeq: Int = 0
+        var isDone = false
         var keyword: String? = null
 
         lateinit var prefs: PreferenceUtil
