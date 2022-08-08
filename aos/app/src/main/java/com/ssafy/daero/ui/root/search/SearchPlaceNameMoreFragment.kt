@@ -36,7 +36,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     private fun initData(){
-        searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword)
+        searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword!!)
     }
 
     private fun initAdapter(){
@@ -115,7 +115,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
             when(it){
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
-                    searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword)
+                    searchPlaceMoreViewModel.searchPlaceNameMore(App.keyword!!)
                     articleViewModel.deleteState.value = DEFAULT
                 }
                 FAIL -> {

@@ -36,7 +36,7 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
     }
 
     private fun initData(){
-        searchContentMoreViewModel.searchContentMore(keyword)
+        searchContentMoreViewModel.searchContentMore(keyword!!)
     }
 
     private fun initAdapter(){
@@ -127,7 +127,7 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
             when(it){
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
-                    searchContentMoreViewModel.searchContentMore(keyword)
+                    searchContentMoreViewModel.searchContentMore(keyword!!)
                     articleViewModel.deleteState.value = DEFAULT
                 }
                 FAIL -> {

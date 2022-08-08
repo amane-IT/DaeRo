@@ -13,6 +13,7 @@ import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.pagingUser
 import com.ssafy.daero.utils.searchedArticleContent
 import com.ssafy.daero.utils.searchedArticlePlace
@@ -28,6 +29,19 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
         initAdapter()
         observeData()
         setOnClickListeners()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if(!hidden){
+            if(App.keyword != null) {
+                binding.recyclerSearchArticleContent.visibility = View.VISIBLE
+                binding.recyclerSearchArticlePlace.visibility = View.VISIBLE
+            }
+            else
+                binding.recyclerSearchArticleContent.visibility = View.GONE
+                binding.recyclerSearchArticlePlace.visibility = View.GONE
+        }
     }
 
     private fun initAdapter(){
@@ -46,7 +60,9 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
 
     private fun observeData(){
         searchViewModel.resultArticleSearch.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeData: 여기")
+            binding.recyclerSearchArticleContent.visibility = View.VISIBLE
+            binding.recyclerSearchArticlePlace.visibility = View.VISIBLE
+
             searchArticleContentAdapter.resultList = it.content
             searchArticlePlaceAdapter.resultList = it.place
             searchArticleContentAdapter.notifyDataSetChanged()
@@ -63,14 +79,14 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
     private fun setOnClickListeners(){
         binding.apply {
             textSearchArticleContentMoreData.setOnClickListener {
-                if(App.keyword != "")
+                if(searchViewModel.state_article_content.value == SUCCESS)
                     findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
                 else
                     toast("검색 결과가 없습니다.")
             }
 
             textSearchArticlePlaceMoreData.setOnClickListener {
-                if(App.keyword != "")
+                if(searchViewModel.state_article_placeName.value == SUCCESS)
                     findNavController().navigate(R.id.action_rootFragment_to_searchPlaceNameMoreFragment)
                 else
                     toast("검색 결과가 없습니다.")
