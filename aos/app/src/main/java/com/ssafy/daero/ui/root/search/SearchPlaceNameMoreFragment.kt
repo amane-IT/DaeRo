@@ -142,4 +142,8 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
             }
         }
     }
+
+    override fun setPublic() {
+        TODO("Not yet implemented")
+    }
 }

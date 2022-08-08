@@ -16,7 +16,7 @@ import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more), ArticleListener {
+class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more), ArticleListener {
     private val TAG = "SearchContentMore_DaeRo"
     private val searchContentMoreViewModel : SearchContentMoreViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
@@ -153,5 +153,9 @@ class SearchContentMoreFragment() : BaseFragment<FragmentSearchContentMoreBindin
 
             }
         }
+    }
+
+    override fun setPublic() {
+        TODO("Not yet implemented")
     }
 }
