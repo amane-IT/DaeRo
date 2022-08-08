@@ -1,9 +1,7 @@
 package com.ssafy.daero.trip.mapper;
 
 import com.ssafy.daero.trip.dto.*;
-import com.ssafy.daero.trip.vo.AlbumVo;
-import com.ssafy.daero.trip.vo.JourneyVo;
-import com.ssafy.daero.trip.vo.RecommendTagVo;
+import com.ssafy.daero.trip.vo.*;
 import com.ssafy.daero.user.dto.UserFavorDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,6 +12,14 @@ import java.util.LinkedList;
 @SuppressWarnings("UnusedReturnValue")
 @Mapper
 public interface TripMapper {
+
+    int insertArticle(TripVo tripVo);
+
+    int insertTrip(TripVo tripVo);
+
+    int insertTripDay(TripDayVo tripDayVo);
+
+    int insertTripStamp(TripStampVo tripStampVo);
 
     TripStampDto selectByStampSeq(int tripStampSeq);
 
