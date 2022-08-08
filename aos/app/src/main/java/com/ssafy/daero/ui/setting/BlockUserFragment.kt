@@ -22,7 +22,7 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
     private val blockUserViewModel: BlockUserViewModel by viewModels()
     private lateinit var blockAdapter: UserBlockAdapter
 
-    private val userBlockClickListener: (View, Int) -> Unit = { _, articleSeq ->
+    private val userBlockClickListener: (View, Int) -> Unit = { _, userSeq ->
         findNavController().navigate(
             R.id.action_blockUserFragment_to_otherPageFragment,
             bundleOf("UserSeq" to userSeq)
@@ -74,15 +74,14 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
 
     override fun blockDelete(sequence: Int) {
         blockUserViewModel.blockDelete(sequence)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
-                    toast("차단 해제했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
                     toast("차단 해제를 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }
@@ -90,15 +89,14 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
 
     override fun blockAdd(sequence: Int) {
         blockUserViewModel.blockAdd(sequence)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
-                    toast("차단 해제했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
-                    toast("차단 해제를 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }

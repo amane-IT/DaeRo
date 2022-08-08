@@ -64,7 +64,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
     private fun setOnClickListeners(){
         binding.apply {
             buttonTripTripFollowTripStamp.setOnClickListener {
-                //TODO: 여행 중으로 이동
+                //여행 중으로 이동
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_ING)
             }
 
@@ -76,7 +76,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
     }
 
     private fun observeData() {
-        // TODO: 지금까지 여행지 상세 정보 받아오기
+        // 지금까지 여행지 상세 정보 받아오기
         tripFollowViewModel.tripFollowState.observe(viewLifecycleOwner){ state ->
             when(state){
                 SUCCESS -> {

@@ -35,26 +35,30 @@ class UserBlockAdapter(listener: BlockUserListener) : RecyclerView.Adapter<UserB
 
     override fun getItemCount() = userBlockResponseDto.size
 
-    class UserBlockViewHolder(private val binding: ItemUserBlockBinding, private val mCallback: BlockUserListener) :
+    class UserBlockViewHolder(
+        private val binding: ItemUserBlockBinding,
+        private val mCallback: BlockUserListener
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private var followYn: Boolean = true
         private var userSeq: Int? = null
+        private var followYn: Boolean? = null
 
         fun bind(data: UserBlockResponseDto) {
             binding.userBlack = data
             binding.tvUserBlock.text = data.nickname
-            editFollow()
             userSeq = data.user_seq
+            followYn = true
+            editFollow()
         }
         fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit) {
             binding.buttonFollow.setOnClickListener {
-                if(followYn){
+                if(followYn!!){
                     mCallback.blockDelete(userSeq!!)
                 }else{
                     mCallback.blockAdd(userSeq!!)
                 }
-                followYn=!followYn
+                followYn=!followYn!!
                 editFollow()
             }
             binding.imgUserBlock.setOnClickListener {
@@ -64,8 +68,9 @@ class UserBlockAdapter(listener: BlockUserListener) : RecyclerView.Adapter<UserB
                 onItemClickListener(it,userSeq!!)
             }
         }
+
         private fun editFollow(){
-            if(followYn){
+            if(followYn==true){
                 binding.buttonFollow.setBackgroundResource(R.drawable.button_unfollow)
                 binding.buttonFollow.text = "차단 해제"
                 binding.buttonFollow.setTextColor(Color.WHITE)
