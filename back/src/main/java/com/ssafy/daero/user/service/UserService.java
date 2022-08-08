@@ -238,15 +238,18 @@ public class UserService {
         Map<String, Object> badgeList = new HashMap<>();
         String[] regions = {"seoul", "incheon", "busan", "daegu", "gwangju", "jeonbuk", "daejeon", "chungbuk", "gangwon", "jeju"};
         int cnt = 0;
+        int total = 0;
         for(String region:regions) {
             if (cnt < badges.size() && Objects.equals((String) badges.get(cnt).get("region_name"), region)) {
                 badgeList.put(region, badges.get(cnt).get("count"));
+                total += (int) badges.get(cnt).get("count");
                 cnt++;
             }
             else {
                 badgeList.put(region, 0);
             }
         }
+        badgeList.put("total", total);
         return badgeList;
     }
 }
