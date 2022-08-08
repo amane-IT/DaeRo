@@ -510,4 +510,24 @@ public class SnsService {
         collection.put("results", results);
         return collection;
     }
+
+    public int blockUser(int userSeq, int blocker) {
+        try {
+            return this.snsMapper.insertBlock(userSeq, blocker);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int unblockUser(int userSeq, int blocker) {
+        try {
+            return this.snsMapper.deleteBlock(userSeq, blocker);
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public LinkedList<Map<String, Object>> blockList(int userSeq) {
+        return createBriefUserMap(this.snsMapper.selectBlockedUserByBlocker(userSeq));
+    }
 }

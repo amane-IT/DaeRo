@@ -164,8 +164,8 @@ public class SnsController {
             return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
         }
         String follow = snsService.followUser(Integer.parseInt(currentUser.get("user_seq")), user_seq);
-        if (follow == "NO_SUCH_USER") { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
-        else if (follow == "SUCCESS") { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        if (Objects.equals(follow, "NO_SUCH_USER")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (Objects.equals(follow, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
         else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
     }
 
@@ -176,8 +176,8 @@ public class SnsController {
             return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
         }
         String follow = snsService.unfollowUser(Integer.parseInt(currentUser.get("user_seq")), user_seq);
-        if (follow == "NO_SUCH_USER") { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
-        else if (follow == "SUCCESS") { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
+        if (Objects.equals(follow, "NO_SUCH_USER")) { return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED); }
+        else if (Objects.equals(follow, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.CREATED); }
         else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
     }
 
@@ -274,6 +274,31 @@ public class SnsController {
         if (resultList.size() == 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
+
+    @PostMapping("/users/{user_seq}/block")
+    public ResponseEntity<String> blockPost(@PathVariable("user_seq") int userSeq, @RequestHeader("jwt") String jwt) {
+        int blocker = this.jwtService.getUserSeq(jwt);
+        if (this.snsService.blockUser(userSeq, blocker) == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/users/{user_seq}/block")
+    public ResponseEntity<String> blockDelete(@PathVariable("user_seq") int userSeq, @RequestHeader("jwt") String jwt) {
+        int blocker = this.jwtService.getUserSeq(jwt);
+        if (this.snsService.unblockUser(userSeq, blocker) == 0) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/users/block")
+    public ResponseEntity<LinkedList<Map<String, Object>>> blockGet(@RequestHeader("jwt") String jwt) {
+        int blocker = this.jwtService.getUserSeq(jwt);
+        LinkedList<Map<String, Object>> resultList = this.snsService.blockList(blocker);
         return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 }

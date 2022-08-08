@@ -11,6 +11,7 @@ import java.util.Map;
 
 @Mapper
 public interface SnsMapper {
+    int insertBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
 
     ArticleVo selectArticleAndTripInfoByArticleSeq(int articleSeq);
 
@@ -113,4 +114,7 @@ public interface SnsMapper {
 
     ArrayList<TripPlaceDto> selectTripPlacesByArticle(int articleSeq);
 
+    ArrayList<UserDto> selectBlockedUserByBlocker(int userSeq);
+
+    int deleteBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
 }

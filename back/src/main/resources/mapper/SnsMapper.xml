@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.sns.mapper.SnsMapper">
+    <insert id="insertBlock">
+        insert into `blocks` (blocker_users_seq, blocked_users_seq) values (#{userSeq}, #{blocker})
+    </insert>
+
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
         SELECT a.trips_seq, a.title, (SELECT `like_count`
                                       FROM daero.v_users_trips_articles va
@@ -458,6 +462,31 @@
             left join `trip_places` `tp` on `ts`.`trip_places_seq` = `tp`.`trip_places_seq`
         where `a`.`articles_seq` = #{articleSeq}
     </select>
+
+    <select id="selectBlockedUserByBlocker" parameterType="_int" resultType="com.ssafy.daero.user.dto.UserDto">
+        select `b`.`blocked_users_seq`  as `userSeq`,
+               `u`.`user_email`         as `userEmail`,
+               `u`.`password`           as `password`,
+               `u`.`nickname`           as `nickname`,
+               `u`.`email_verified_yn`  as `emailVerifiedYn`,
+               `u`.`suspended_yn`       as `suspendedYn`,
+               `u`.`profile_image_link` as `profileImageLink`,
+               `u`.`reported_count`     as `reportedCount`,
+               `u`.`created_at`         as `createdAt`,
+               `u`.`del_yn`             as `delYn`,
+               `u`.`fcm_token`          as `fcmToken`,
+               `u`.`password_reset_yn`  as `passwordResetYn`
+        from `blocks` `b`
+            left join `users` `u` on `u`.`users_seq` = `b`.`blocked_users_seq`
+        where blocker_users_seq = #{userSeq}
+    </select>
+
+    <delete id="deleteBlock">
+        delete
+        from blocks
+        where blocked_users_seq = #{userSeq}
+          and blocker_users_seq = #{blocker}
+    </delete>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
         <result property="tripSeq" column="trips_seq" />
