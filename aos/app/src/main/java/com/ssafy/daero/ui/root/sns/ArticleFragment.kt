@@ -448,4 +448,12 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         blockUserViewModel
     }
 
+    override fun articleOpen(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleClose(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
+
 }

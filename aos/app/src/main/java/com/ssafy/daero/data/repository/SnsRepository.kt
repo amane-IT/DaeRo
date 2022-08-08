@@ -237,6 +237,14 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun articleClose(articleSeq: Int): Completable {
+        return snsApi.articleClose(articleSeq)
+    }
+
+    fun articleOpen(articleSeq: Int): Completable {
+        return snsApi.articleOpen(articleSeq)
+    }
+
 
     companion object {
         private var instance: SnsRepository? = null

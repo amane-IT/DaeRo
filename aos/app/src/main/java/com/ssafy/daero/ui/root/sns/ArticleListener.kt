@@ -6,4 +6,6 @@ interface ArticleListener {
     fun articleDelete(articleSeq: Int)
     fun blockAdd(userSeq: Int)
     fun setPublic()
+    fun articleOpen(articleSeq: Int)
+    fun articleClose(articleSeq: Int)
 }

@@ -149,4 +149,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
     override fun setPublic() {
         TODO("Not yet implemented")
     }
+
+    override fun articleOpen(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
+
+    override fun articleClose(articleSeq: Int) {
+        TODO("Not yet implemented")
+    }
 }

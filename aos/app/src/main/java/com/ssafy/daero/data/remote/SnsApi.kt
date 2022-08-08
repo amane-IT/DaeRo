@@ -237,4 +237,20 @@ interface SnsApi {
      */
     @GET("sns/users/block")
     fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>>
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/articles/{article_seq}/public/close")
+    fun articleClose(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/article/{article_seq}/public/open")
+    fun articleOpen(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
 }

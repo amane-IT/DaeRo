@@ -23,13 +23,24 @@ import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
 
 class ArticleMenuBottomSheetFragment(
-    private val articleSeq: Int,
-    val userSeq: Int,
-    val fragmentSeq: Int,
-    val listener: ArticleListener
+    private var articleSeq: Int,
+    var userSeq: Int,
+    var fragmentSeq: Int,
+    var listener: ArticleListener
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
+    private var expose: Char = 'y'
+
+    constructor(articleSeq: Int, userSeq: Int, fragmentSeq: Int, expose: Char, listener: ArticleListener) :
+            this(articleSeq, userSeq, fragmentSeq, listener) {
+        this.articleSeq = articleSeq
+        this.userSeq = userSeq
+        this.fragmentSeq = fragmentSeq
+        this.expose = expose
+        this.listener = listener
+    }
+
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,7 +130,11 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {
             //공개,비공개
-
+            if(expose=='y'){
+                listener.articleClose(userSeq)
+            }else{
+                listener.articleOpen(userSeq)
+            }
         }
         binding.tvArticleMenuHide.setOnClickListener {
             //숨기기
