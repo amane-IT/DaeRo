@@ -195,6 +195,12 @@
         order by `region_seq`
     </select>
 
+    <update id="updateFcmToken">
+        update daero.`users`
+        set daero.users.`fcm_token`=#{token}
+        where daero.users.`users_seq`=#{userSeq}
+    </update>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.vo.UserVo">
         <result property="userSeq" column="users_seq"/>
         <result property="userEmail" column="user_email"/>

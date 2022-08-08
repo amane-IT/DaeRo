@@ -65,4 +65,6 @@ public interface UserMapper {
     int deleteUser(int user_seq);
 
     ArrayList<Map<String, Object>> selectBadgeByUserSeq(int userSeq);
+
+    int updateFcmToken(@Param("userSeq") int userSeq, @Param("token") String token);
 }

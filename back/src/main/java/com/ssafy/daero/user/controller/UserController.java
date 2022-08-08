@@ -235,4 +235,16 @@ public class UserController {
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
+    @PutMapping("/{user_seq}/fcm-token")
+    public ResponseEntity<String> updateFcmToken(@RequestHeader("jwt") String jwt, @PathVariable("user_seq") int userSeq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Integer.parseInt(currentUser.get("user_seq")) == userSeq) {
+            boolean res = userService.updateFcmToken(userSeq, req.get("token"));
+            if (res) { return new ResponseEntity<>(HttpStatus.OK); }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
 }
