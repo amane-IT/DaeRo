@@ -555,4 +555,8 @@ public class SnsService {
             return 0;
         }
     }
+
+    public LinkedList<Map<String, Object>> popularList() {
+        return createBriefArticleMap(this.snsMapper.selectArticleByLike());
+    }
 }

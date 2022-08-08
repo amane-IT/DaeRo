@@ -320,4 +320,9 @@ public class SnsController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/article/popular")
+    public ResponseEntity<LinkedList<Map<String, Object>>> popularGet() {
+        return new ResponseEntity<>(this.snsService.popularList(), HttpStatus.OK);
+    }
 }

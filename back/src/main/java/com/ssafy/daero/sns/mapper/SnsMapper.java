@@ -121,6 +121,8 @@ public interface SnsMapper {
 
     int selectArticleCountByArticleSeqUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
+    ArrayList<ArticleListVo> selectArticleByLike();
+
     int deleteBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
 
     int updateArticleOpen(@Param("articleSeq") int articleSeq, @Param("openYn") char openYn);

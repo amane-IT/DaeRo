@@ -489,6 +489,30 @@
           and articles_seq = #{articleSeq}
     </select>
 
+    <select id="selectArticleByLike" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = v_users_trips_articles.articles_seq
+                     and `users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `likeYn`
+        from `v_users_trips_articles`
+        order by `like_count` desc
+        limit 6
+    </select>
+
     <delete id="deleteBlock">
         delete
         from blocks
