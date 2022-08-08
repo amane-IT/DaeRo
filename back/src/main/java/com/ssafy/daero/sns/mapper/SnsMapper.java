@@ -119,6 +119,10 @@ public interface SnsMapper {
 
     ArrayList<UserDto> selectBlockedUserByBlocker(int userSeq);
 
+    int selectArticleCountByArticleSeqUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    ArrayList<ArticleListVo> selectArticleByLike();
+
     int deleteBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
 
     int updateArticle(@Param("articleSeq") int articleSeq,
@@ -133,8 +137,6 @@ public interface SnsMapper {
                          @Param("dayComment") String dayComment,
                          @Param("rowNum") int rowNum);
 
-
-
-
+    int updateArticleOpen(@Param("articleSeq") int articleSeq, @Param("openYn") char openYn);
 
 }

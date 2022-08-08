@@ -482,6 +482,37 @@
         where blocker_users_seq = #{userSeq}
     </select>
 
+    <select id="selectArticleCountByArticleSeqUserSeq" resultType="_int">
+        select count(0)
+        from v_users_trips_articles
+        where users_seq = #{userSeq}
+          and articles_seq = #{articleSeq}
+    </select>
+
+    <select id="selectArticleByLike" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = v_users_trips_articles.articles_seq
+                     and `users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `likeYn`
+        from `v_users_trips_articles`
+        order by `like_count` desc
+        limit 6
+    </select>
+
     <delete id="deleteBlock">
         delete
         from blocks
@@ -517,6 +548,13 @@
                                             where trip = #{tripSeq}) as td
                                       where td.row = #{rowNum})
     ]]>
+    </update>
+
+    <update id="updateArticleOpen">
+        update articles
+        set open_yn = #{openYn}
+        where articles_seq = #{articleSeq};
+
     </update>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">

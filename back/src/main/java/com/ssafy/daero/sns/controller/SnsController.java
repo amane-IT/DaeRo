@@ -304,12 +304,38 @@ public class SnsController {
         return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 
+
     @PutMapping("/article/{article_seq}")
     public ResponseEntity<String> updateArticle(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq, @RequestBody Map<String, Object> req) {
         int currentUser = this.jwtService.getUserSeq(jwt);
         boolean updated = this.snsService.updateArticle(currentUser, articleSeq, req);
-        if (updated) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        if (updated) {
+            return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
+        }
         return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST);
+    }
 
+
+    @PutMapping("/article/{article_seq}/public/close")
+    public ResponseEntity<String> publicClosePut(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        if (this.snsService.closeArticle(articleSeq, userSeq) == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/article/{article_seq}/public/open")
+    public ResponseEntity<String> publicOpenPut(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        if (this.snsService.openArticle(articleSeq, userSeq) == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/article/popular")
+    public ResponseEntity<LinkedList<Map<String, Object>>> popularGet() {
+        return new ResponseEntity<>(this.snsService.popularList(), HttpStatus.OK);
     }
 }
