@@ -33,7 +33,7 @@
                 android:layout_width="176dp"
                 android:layout_height="176dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{article.image_url}"
+                app:smallImageUrl="@{article.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View

@@ -35,7 +35,7 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripStamp.imageUrl}"
+                app:smallImageUrl="@{tripStamp.imageUrl}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View

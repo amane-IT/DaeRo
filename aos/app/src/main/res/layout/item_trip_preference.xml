@@ -33,7 +33,7 @@
                 android:padding="6dp"
                 android:layout_gravity="center"
                 android:scaleType="centerCrop"
-                tools:src="@drawable/ic_kakao"
+                tools:src="@drawable/img_my_page_album"
                 app:roundImg="@{tripPreference.image_url}"/>
 
         </androidx.cardview.widget.CardView>
