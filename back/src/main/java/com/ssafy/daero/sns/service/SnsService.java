@@ -454,8 +454,8 @@ public class SnsService {
         for (ArticleListVo articleListVo : articleListVos) {
             Map<String, Object> map = new HashMap<>();
             map.put("article_seq", articleListVo.getArticleSeq());
-            map.put("image_url", articleListVo.getArticleSeq());
-            map.put("title", articleListVo.getArticleSeq());
+            map.put("image_url", articleListVo.getThumbnailUrl());
+            map.put("title", articleListVo.getTitle());
             list.add(map);
         }
         return list;

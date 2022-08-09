@@ -1,5 +1,8 @@
 package com.ssafy.daero.trip.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ssafy.daero.trip.dto.*;
 import com.ssafy.daero.trip.mapper.TripMapper;
 import com.ssafy.daero.trip.vo.*;
@@ -62,8 +65,7 @@ public class TripService {
         if (who == 'n') {
             jList = tripMapper.selectOtherJourneyListByUserSeq(userSeq, startDate, endDate);
         }
-        else {
-            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
+        else {            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
         }
         if (jList.size() == 0) {
             journeyVo.setResult(JourneyVo.ProfileResult.NO_CONTENT);
@@ -306,5 +308,40 @@ public class TripService {
             }
         }
         this.tripMapper.insertArticle(tripVo);
+    }
+
+    public TripVo writeJsonParser(String jsonString) {
+        JsonObject tripJson = JsonParser.parseString(jsonString).getAsJsonObject();
+        TripVo tripVo = new TripVo();
+        tripVo.setTitle(tripJson.get("title").getAsString());
+        tripVo.setTripComment(tripJson.get("tripComment").getAsString());
+        tripVo.setTripExpenses(tripJson.get("tripExpenses").getAsString());
+        tripVo.setRating(tripJson.get("rating").getAsInt());
+        tripVo.setExpose(tripJson.get("expose").getAsString());
+        tripVo.setThumbnailIndex(tripJson.get("thumbnailIndex").getAsInt());
+
+        JsonArray tripDayJsonArray = tripJson.get("records").getAsJsonArray();
+        LinkedList<TripDayVo> tripDayVos = new LinkedList<>();
+        for (int i = 0; i < tripDayJsonArray.size(); i++) {
+            JsonObject tripDay = tripDayJsonArray.get(i).getAsJsonObject();
+            TripDayVo tripDayVo = new TripDayVo();
+            tripDayVo.setDatetime(tripDay.get("datetime").getAsString());
+            tripDayVo.setDayComment(tripDay.get("dayComment").getAsString());
+
+            JsonArray tripStampJsonArray = tripDay.get("tripStamps").getAsJsonArray();
+            LinkedList<TripStampVo> tripStampVos = new LinkedList<>();
+            for (int j = 0; j < tripStampJsonArray.size(); j++) {
+                JsonObject tripStamp = tripStampJsonArray.get(i).getAsJsonObject();
+                TripStampVo tripStampVo = new TripStampVo();
+                tripStampVo.setSatisfaction(tripStamp.get("satisfaction").getAsString());
+                tripStampVo.setTripPlace(tripStamp.get("tripPlaceSeq").getAsInt());
+                tripStampVos.add(tripStampVo);
+            }
+            tripDayVo.setTripStamps(tripStampVos);
+            tripDayVos.add(tripDayVo);
+        }
+        tripVo.setRecords(tripDayVos);
+        System.out.println(tripVo.getRecords().size());
+        return tripVo;
     }
 }
