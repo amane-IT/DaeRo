@@ -116,7 +116,7 @@ public class TripService {
         for (AlbumVo aVo :
                 albumVos) {
             album.put("expose", aVo.getExpose());
-            album.put("trip_seq", aVo.getTripSeq());
+            album.put("trip_seq", aVo.getArticleSeq());
             album.put("image_url", aVo.getImageUrl());
             album.put("title", aVo.getTitle());
             if (aVo.getLikeYn() == 1) {
