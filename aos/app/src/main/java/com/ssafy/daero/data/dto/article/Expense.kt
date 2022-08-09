@@ -5,6 +5,6 @@ data class Expense(
     var expenses: String
 ) {
     override fun toString(): String {
-        return """"expense_name" : "$expenses_name", "expenses" : "${expenses}원""""
+        return """{"expenses_name" : "$expenses_name", "expenses" : "${expenses}원"}"""
     }
 }

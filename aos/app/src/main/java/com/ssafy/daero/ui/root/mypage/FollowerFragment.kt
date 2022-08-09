@@ -14,6 +14,7 @@ import com.ssafy.daero.ui.adapter.mypage.FollowAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.view.toast
 
 class FollowerFragment : BaseFragment<FragmentFollowerBinding>(R.layout.fragment_follower), FollowListener {
@@ -24,7 +25,7 @@ class FollowerFragment : BaseFragment<FragmentFollowerBinding>(R.layout.fragment
     private val followItemClickListener: (View, Int) -> Unit = { _, userSeq ->
         findNavController().navigate(
             R.id.action_followerFragment_to_otherPageFragment,
-            bundleOf("UserSeq" to userSeq)
+            bundleOf(USER_SEQ to userSeq)
         )
     }
 

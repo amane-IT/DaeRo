@@ -14,13 +14,14 @@ import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     override fun init() {
-        if(!App.prefs.isFollow){
+        if(!App.prefs.isFollowStart){
             changeFragment(curFragmentType)
         }else{
             binding.bottomnavigationRoot.selectedItemId = R.id.TripFragment
         }
         checkTripStart()
         checkTripStamp()
+        checkTripFollow()
         setOnClickListeners()
     }
 
@@ -30,6 +31,14 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
         if (App.prefs.isTripStart) {
             changeTripState(TRIP_ING)
             App.prefs.isTripStart = false
+        }
+    }
+
+    private fun checkTripFollow() {
+        if(App.prefs.isFollowStart) {
+            App.prefs.isFollow = true
+            App.prefs.isFollowStart = false
+            changeTripState(TRIP_ING)
         }
     }
 

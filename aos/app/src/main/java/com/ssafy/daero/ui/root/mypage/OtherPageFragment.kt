@@ -1,11 +1,13 @@
 package com.ssafy.daero.ui.root.mypage
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentOtherPageBinding
@@ -40,6 +42,10 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
         TabLayoutMediator(binding.tabOtherPage, binding.viewPagerOtherPage) { tab, position ->
             tab.text = tabTitleArray[position]
         }.attach()
+
+        if(userSeq == App.prefs.userSeq) {
+            binding.buttonOtherPageFollow.visibility = View.GONE
+        }
     }
 
     private fun observeData() {
@@ -97,6 +103,9 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
             } else {
                 otherPageViewModel.follow(userSeq)
             }
+        }
+        binding.imgOtherPageBack.setOnClickListener {
+            requireActivity().onBackPressed()
         }
     }
 

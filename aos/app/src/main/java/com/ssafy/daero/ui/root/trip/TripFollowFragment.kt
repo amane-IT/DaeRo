@@ -32,6 +32,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private lateinit var tripFollowList: List<TripFollow>
+    private var nextPlaceSeq = -1
 
     override fun init() {
         initData()
@@ -43,6 +44,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
     private fun initData(){
         tripFollowViewModel.getTripFollows()
         travelingViewModel.getTripStamps()
+        binding.textTripTripFollowUsername.text = "${App.prefs.nickname}님"
     }
 
     private fun initAdapter(){
@@ -65,14 +67,27 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
         binding.apply {
             buttonTripTripFollowTripStamp.setOnClickListener {
                 //여행 중으로 이동
+                App.prefs.curPlaceSeq = nextPlaceSeq
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_ING)
             }
 
             // TODO: 여행 그만두기 기능
             buttonTripTripFollowStop.setOnClickListener {
-
+                TripCompleteBottomSheetFragment(finishTrip)
+                    .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
+    }
+
+    private val finishTrip : () -> Unit = {
+        // 게시글 작성 상태로 변경
+        App.prefs.isPosting = true
+
+        // 상태 잠시 변경
+        App.isDone = true
+
+        // 게시글 추가 화면으로 이동
+        findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
     }
 
     private fun observeData() {
@@ -128,23 +143,30 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
 
     private  fun setBinding(){
         tripFollowList = tripFollowViewModel.TripFollowData
-        if(tripFollowList.size>travelingViewModel.articleTripStampData.size){
-            val iterator = tripFollowViewModel.TripFollowData.iterator()
-            while(iterator.hasNext()){
-                val nextTripSeq = iterator.next().tripPlaceSeq
-                Log.d("다음 여행지 : ", nextTripSeq.toString())
-                if(App.prefs.curPlaceSeq == nextTripSeq && iterator.hasNext()){
-                    App.prefs.curPlaceSeq = iterator.next().tripPlaceSeq
-                    Log.d("다음 여행지 curPlaceSeq : ", App.prefs.curPlaceSeq.toString())
-                    break
+
+        val curPlaceSeq = App.prefs.curPlaceSeq
+        nextPlaceSeq = -1
+        tripFollowList.forEachIndexed { index, tripFollow ->
+            if(tripFollow.tripPlaceSeq == curPlaceSeq) {
+                if(index < tripFollowList.size - 1) {
+                    nextPlaceSeq = tripFollowList[index + 1].tripPlaceSeq
+                    return@forEachIndexed
                 }
             }
-            tripInformationViewModel.getTripInformation(App.prefs.curPlaceSeq)
-        }else{
-            //TODO : 사이즈가 같으면 다음 여행지 없음 표시
-            binding.buttonTripTripFollowTripStamp.isVisible = false
-            binding.tvTripTripFollowTripName.isVisible = false
-            binding.tvTripTripFollowAddress.isVisible = false
+        }
+
+        // 다음 여행지 없는 경우
+        if(nextPlaceSeq < 0) {
+            binding.buttonTripTripFollowTripStamp.visibility = View.GONE
+            binding.tvTripTripFollowTripName.visibility = View.GONE
+            binding.tvTripTripFollowAddress.visibility = View.GONE
+            binding.textTripFollowDone.visibility = View.VISIBLE
+            binding.imageTripFollowPlane.visibility = View.GONE
+            binding.textTripTripFollowTitle.text = "따라가기를 모두 완료하였습니다!"
+        }
+        // 다음 여행지 있는 경우
+        else {
+            tripInformationViewModel.getTripInformation(nextPlaceSeq)
         }
     }
 }

@@ -107,6 +107,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun initView() {
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
+        if(App.prefs.isFollow) {
+            binding.buttonTravelingNext.visibility = View.GONE
+        }
     }
 
     private fun initAdapter() {

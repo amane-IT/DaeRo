@@ -9,13 +9,15 @@
         <variable
             name="album"
             type="com.ssafy.daero.data.dto.trip.TripAlbumItem" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingHorizontal="6dp"
-        android:paddingVertical="6dp"
-        android:layout_height="wrap_content">
+        android:paddingVertical="6dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_item_MyPageAlbum_img"
@@ -40,6 +42,15 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:background="@drawable/overlay_gradient_my_page_album" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_lock"
+                android:visibility="@{album.expose == 'y' ? View.VISIBLE : View.INVISIBLE}"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/text_item_MyPageAlbum_title"
