@@ -54,7 +54,6 @@ class SignupEmailViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     if (response.body()!!.result == 'y') {
                         responseState_verifyUserEmail.postValue(SUCCESS)
-                        userSeq = 0
                     } else {
                         responseState_verifyUserEmail.postValue(FAIL)
                     }
