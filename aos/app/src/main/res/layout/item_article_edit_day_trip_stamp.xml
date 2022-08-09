@@ -33,7 +33,7 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripStamp.image_url}"
+                app:smallImageUrl="@{tripStamp.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
         </androidx.cardview.widget.CardView>

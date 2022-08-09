@@ -111,13 +111,15 @@
                 <TextView
                     android:id="@+id/tv_trip_trip_follow_trip_name"
                     style="@style/HeadBold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="8dp"
                     android:text="강릉 안목해변"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintBottom_toTopOf="@id/tv_trip_trip_follow_address"
+                    app:layout_constraintEnd_toStartOf="@+id/card_tripFollow_image"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <TextView

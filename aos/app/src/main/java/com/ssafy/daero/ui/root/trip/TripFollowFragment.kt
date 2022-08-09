@@ -135,6 +135,7 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
         tripInformationViewModel.tripInformation.observe(viewLifecycleOwner) {
             Glide.with(binding.imgTripFollowTripStamp)
                 .load(it.image_url)
+                .override(800, 800)
                 .placeholder(R.drawable.img_my_page_album)
                 .apply(RequestOptions().centerCrop())
                 .error(R.drawable.img_my_page_album)

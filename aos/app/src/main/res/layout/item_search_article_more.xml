@@ -23,7 +23,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:imageUrl="@{articleMore.profile_url}"
+            app:circleImageUrl="@{articleMore.profile_url}"
             tools:src="@drawable/img_user" />
 
         <TextView
@@ -99,7 +99,7 @@
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
-                    app:roundImg="@{articleMore.thumbnail_url}"
+                    app:roundThumbnailImg="@{articleMore.thumbnail_url}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

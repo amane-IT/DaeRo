@@ -33,7 +33,7 @@
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripStamp.imageUrl}"
+                app:smallImageUrl="@{tripStamp.imageUrl}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View
@@ -44,7 +44,7 @@
             <TextView
                 android:id="@+id/text_item_writeDayTripStamp_title"
                 style="@style/BodyWhite"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="8dp"

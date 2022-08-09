@@ -33,7 +33,7 @@
                 android:layout_width="320dp"
                 android:layout_height="320dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripHot.image_url}"
+                app:thumbnailImageUrl="@{tripHot.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View

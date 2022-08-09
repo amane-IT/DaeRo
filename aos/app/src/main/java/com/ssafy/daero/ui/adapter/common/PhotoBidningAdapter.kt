@@ -12,6 +12,7 @@ import com.ssafy.daero.R
 fun loadImage(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
+        .override(1200, 1200)
         .placeholder(R.drawable.placeholder_trip_album)
         .apply(RequestOptions().centerCrop())
         .error(R.drawable.placeholder_trip_album)
@@ -22,8 +23,10 @@ fun loadImage(view: ImageView, url: String?) {
 fun loadPreference(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
+        .override(400,400)
         .placeholder(R.drawable.placeholder_trip_album)
         .transform(CenterCrop(), RoundedCorners(16))
+        .error(R.drawable.placeholder_trip_album)
         .into(view)
 }
 
@@ -31,6 +34,7 @@ fun loadPreference(view: ImageView, url: String?) {
 fun loadCircleImage(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
+        .override(200,200)
         .placeholder(R.drawable.placeholder_trip_album)
         .apply(RequestOptions().centerCrop().circleCrop())
         .error(R.drawable.placeholder_trip_album)
@@ -48,4 +52,37 @@ fun setLikeState(view: ImageView, likeYn: Char?) {
             view.setColorFilter(view.context.getColor(R.color.white))
         }
     }
+}
+
+@BindingAdapter("smallImageUrl")
+fun loadSmallImage(view: ImageView, url: String?) {
+    Glide.with(view)
+        .load(url)
+        .override(400,400)
+        .placeholder(R.drawable.placeholder_trip_album)
+        .apply(RequestOptions().centerCrop())
+        .error(R.drawable.placeholder_trip_album)
+        .into(view)
+}
+
+@BindingAdapter("thumbnailImageUrl")
+fun loadThumbnailImage(view: ImageView, url: String?) {
+    Glide.with(view)
+        .load(url)
+        .override(800,800)
+        .placeholder(R.drawable.placeholder_trip_album)
+        .apply(RequestOptions().centerCrop())
+        .error(R.drawable.placeholder_trip_album)
+        .into(view)
+}
+
+@BindingAdapter("roundThumbnailImg")
+fun loadRoundThumbnailImage(view: ImageView, url: String?) {
+    Glide.with(view)
+        .load(url)
+        .override(800,800)
+        .placeholder(R.drawable.placeholder_trip_album)
+        .transform(CenterCrop(), RoundedCorners(16))
+        .error(R.drawable.placeholder_trip_album)
+        .into(view)
 }
