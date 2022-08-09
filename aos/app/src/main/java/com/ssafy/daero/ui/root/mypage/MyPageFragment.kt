@@ -59,6 +59,9 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
         binding.textMyPageLabelFollowing.setOnClickListener {
             findNavController().navigate(R.id.action_rootFragment_to_followingFragment)
         }
+        binding.imageMyPageBadge.setOnClickListener {
+            findNavController().navigate(R.id.action_rootFragment_to_stampFragment)
+        }
     }
 
     private fun getUserProfile() {
