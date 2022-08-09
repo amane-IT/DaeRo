@@ -12,6 +12,8 @@ import com.ssafy.daero.databinding.FragmentLoginBinding
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.TRIP_BEFORE
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.view.setStatusBarOrigin
 import com.ssafy.daero.utils.view.setStatusBarTransparent
 
@@ -53,8 +55,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 }
                 FAIL -> {
                     // jwt 토큰, user_seq 삭제
-                    App.prefs.jwt = null
-                    App.prefs.userSeq = 0
+                    deleteAllInformation()
                     loginViewModel.responseState.value = DEFAULT
                 }
             }
@@ -80,5 +81,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     override fun onStop() {
         super.onStop()
         setStatusBarOrigin()
+    }
+
+    private fun deleteAllInformation() {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        loginViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initUser()
+        App.prefs.initTrip()
+        App.prefs.tripState = TRIP_BEFORE
     }
 }

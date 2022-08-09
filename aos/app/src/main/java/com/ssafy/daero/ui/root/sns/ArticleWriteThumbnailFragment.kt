@@ -8,10 +8,8 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentArticleWriteThumbnailBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleWriteThumbnailAdapter
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.constant.TRIP_BEFORE
+import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.view.toast
 
@@ -61,20 +59,22 @@ class ArticleWriteThumbnailFragment :
             when(it) {
                 SUCCESS -> {
                     toast("게시글을 성공적으로 업로드 하였습니다.")
-                    // todo: Room 삭제, 캐시 삭제, prefs 초기화, root로 popuptoinclusive 하기
 
-//                    // Room 삭제
-//                    articleWriteViewModel.deleteAllTripRecord()
-//
-//                    // 캐시 디렉토리 전체 삭제
-//                    deleteCache(requireContext())
-//
-//                    // Prefs 초기화
-//                    App.prefs.initTrip()
-//                    App.prefs.tripState = TRIP_BEFORE
-//
-//                    // RootFragment 로 이동
-//                    findNavController().navigate(R.id.action_articleWriteThumbnailFragment_to_rootFragment)
+                    // Room 삭제
+                    articleWriteViewModel.deleteAllTripRecord()
+
+                    // 캐시 디렉토리 전체 삭제
+                    deleteCache(requireContext())
+
+                    // Prefs 초기화
+                    App.prefs.initTrip()
+                    App.prefs.tripState = TRIP_BEFORE
+
+                    // fragment type 초기화
+                    RootFragment.curFragmentType = FragmentType.HomeFragment
+
+                    // RootFragment 로 이동
+                    findNavController().navigate(R.id.action_articleWriteThumbnailFragment_to_rootFragment)
 
                     articleWriteViewModel.postState.value = DEFAULT
                 }

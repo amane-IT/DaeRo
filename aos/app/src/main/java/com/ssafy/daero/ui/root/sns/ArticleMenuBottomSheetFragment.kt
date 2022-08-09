@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
+import com.ssafy.daero.ui.root.trip.TripFollowBottomSheetFragment
 import com.ssafy.daero.utils.constant.ARTICLE
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
@@ -85,18 +86,25 @@ class ArticleMenuBottomSheetFragment(
 
     private fun setOnClickListeners() {
         binding.tvArticleMenuTripFollow.setOnClickListener {
-            //따라가기
-            when (fragmentSeq) {
-                1 -> findNavController().navigate(
-                    R.id.action_rootFragment_to_tripFollowSelectFragment,
-                    bundleOf(ARTICLE_SEQ to articleSeq)
-                )
-                2 -> findNavController().navigate(
-                    R.id.action_articleFragment_to_tripFollowSelectFragment,
-                    bundleOf(ARTICLE_SEQ to articleSeq)
-                )
-            }
+            // 따라가기
 
+            // 기존 여행하고 있는 경우
+            if (App.prefs.curPlaceSeq > 0) {
+                TripFollowBottomSheetFragment(fragmentSeq, articleSeq).show(parentFragmentManager, "TRIP_FOLLOW_BOTTOM_SHEET")
+            }
+            // 기존 여행 없으면 바로 따라가기
+            else {
+                when (fragmentSeq) {
+                    1 -> findNavController().navigate(
+                        R.id.action_rootFragment_to_tripFollowSelectFragment,
+                        bundleOf(ARTICLE_SEQ to articleSeq)
+                    )
+                    2 -> findNavController().navigate(
+                        R.id.action_articleFragment_to_tripFollowSelectFragment,
+                        bundleOf(ARTICLE_SEQ to articleSeq)
+                    )
+                }
+            }
             dismiss()
         }
         binding.tvArticleMenuShare.setOnClickListener {

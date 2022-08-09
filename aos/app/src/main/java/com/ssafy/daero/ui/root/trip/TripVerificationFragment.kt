@@ -23,6 +23,7 @@ import com.ssafy.daero.databinding.FragmentTripVerificationBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.time.toDate
 import com.ssafy.daero.utils.view.toast
 import java.util.*
@@ -100,7 +101,6 @@ class TripVerificationFragment :
 
     private fun setOnClickListeners() {
         binding.buttonTripVerificationTripStamp.setOnClickListener {
-            //todo : trip_place_seq,place_name 매개변수로 넘겨주기
             TripStampBottomSheetFragment(selectCameraGallery).show(
                 childFragmentManager,
                 TRIP_STAMP_BOTTOM_SHEET
@@ -109,12 +109,11 @@ class TripVerificationFragment :
         binding.buttonTripVerificationStop.setOnClickListener {
             // 이전 여행기록이 없다면
             if (tripVerificationViewModel.tripStamps.value?.isEmpty() != false) {
-                // todo : 홈화면으로 이동, 캐시 디렉토리 삭제, room tripStamp 삭제, prefs 초기화
                 tripVerificationViewModel.deleteTripStamps()
+                deleteCache(requireContext())
                 App.prefs.initTrip()
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
-                // todo 게시글 추가 화면으로 이동
                 TripCompleteBottomSheetFragment(finishTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
@@ -190,7 +189,7 @@ class TripVerificationFragment :
                 setActivityTitle("")
                 setActivityMenuIconColor(requireActivity().getColor(R.color.black))
                 setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
-                setOutputCompressQuality(70)
+                setOutputCompressQuality(50)
                 setRequestedSize(0, 0)
                 setRequestedSize(0, 0, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
                 setInitialCropWindowRectangle(null)
