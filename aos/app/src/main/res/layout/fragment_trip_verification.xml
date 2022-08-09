@@ -102,13 +102,15 @@
                 <TextView
                     android:id="@+id/tv_trip_verification_trip_name"
                     style="@style/HeadBold"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:layout_marginTop="32dp"
                     android:text="강릉 안목해변"
+                    android:layout_marginEnd="16dp"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/button_trip_verification_tripStamp"
                     app:layout_constraintTop_toBottomOf="@id/card_tripVerification_img" />
 
                 <TextView

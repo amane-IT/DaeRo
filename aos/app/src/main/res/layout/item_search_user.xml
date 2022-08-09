@@ -19,7 +19,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@drawable/ic_user"
-            app:imageUrl="@{users.profile_url}"
+            app:circleImageUrl="@{users.profile_url}"
             app:civ_border_color="@color/white"
             app:civ_border_overlay="true"
             app:civ_border_width="1dp"

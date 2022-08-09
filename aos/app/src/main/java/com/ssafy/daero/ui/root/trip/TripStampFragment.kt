@@ -202,6 +202,7 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
 
                 Glide.with(requireContext())
                     .load(it.imageUrl)
+                    .override(1200, 1200)
                     .placeholder(R.drawable.placeholder_trip_album)
                     .apply(RequestOptions().centerCrop())
                     .error(R.drawable.placeholder_trip_album)

@@ -33,7 +33,7 @@
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripPlace.image_url}"
+                app:smallImageUrl="@{tripPlace.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View

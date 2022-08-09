@@ -131,7 +131,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         travelingViewModel.tripInformation.observe(viewLifecycleOwner) {
             Glide.with(requireContext())
                 .load(it.image_url)
-                .skipMemoryCache(false)
+                .override(1200, 1200)
                 .placeholder(R.drawable.placeholder_trip_album)
                 .apply(RequestOptions().centerCrop())
                 .error(R.drawable.placeholder_trip_album)

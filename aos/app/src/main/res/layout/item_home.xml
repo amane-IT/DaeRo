@@ -103,7 +103,7 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_my_page_album"
-                    app:imageUrl="@{article.thumbnail_url}"
+                    app:thumbnailImageUrl="@{article.thumbnail_url}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
