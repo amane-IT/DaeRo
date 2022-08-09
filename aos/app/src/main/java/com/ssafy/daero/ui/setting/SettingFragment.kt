@@ -14,7 +14,6 @@ import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.permission.checkPermission
-import com.ssafy.daero.utils.permission.checkPermissions
 import com.ssafy.daero.utils.view.toast
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
@@ -57,7 +56,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             findNavController().navigate(R.id.action_settingFragment_to_blockUserFragment)
         }
         binding.textSettingLabelLocation.setOnClickListener { navigateToAppSetting() }
-        binding.textSettingLabelCamera.setOnClickListener { navigateToAppSetting() }
         binding.textSettingLabelNotice.setOnClickListener {
             findNavController().navigate(R.id.action_settingFragment_to_noticeFragment)
         }
@@ -77,18 +75,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private fun otherListeners() {
         binding.switchSettingNotification.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Todo : 알림 설정
-            } else {
-                // Todo : 알림 해제
-            }
-        }
-        binding.switchSettingShake.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Todo : 흔들기 설정
-            } else {
-                // Todo : 흔들기 해제
-            }
+            App.prefs.isNotificationAllow = isChecked
         }
     }
 
@@ -99,22 +86,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private fun displayPermission() {
-        if (checkPermissions(
-                listOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
+        if (checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
             binding.textSettingLocation.text = "앱 사용중에만 허용"
         } else {
             binding.textSettingLocation.text = "권한 없음"
-        }
-
-        if (checkPermission(Manifest.permission.CAMERA)) {
-            binding.textSettingCamera.text = "앱 사용중에만 허용"
-        } else {
-            binding.textSettingCamera.text = "권한 없음"
         }
     }
 

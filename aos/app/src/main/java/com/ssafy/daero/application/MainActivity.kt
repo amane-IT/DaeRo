@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
                 curFragment.articleWriteViewModel.dayIndex -= 1
             } else {
                 curFragment.articleWriteViewModel.initArticleWriteRequest()
+                App.prefs.isPosting = false
             }
             super.onBackPressed()
         } else if (curFragment is ArticleEditDayFragment) {

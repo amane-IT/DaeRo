@@ -271,7 +271,7 @@ class TripStampFragment : BaseFragment<FragmentTripStampBinding>(R.layout.fragme
                 setActivityTitle("")
                 setActivityMenuIconColor(requireActivity().getColor(R.color.black))
                 setOutputCompressFormat(Bitmap.CompressFormat.JPEG)
-                setOutputCompressQuality(70)
+                setOutputCompressQuality(50)
                 setRequestedSize(0, 0)
                 setRequestedSize(0, 0, CropImageView.RequestSizeOptions.RESIZE_INSIDE)
                 setInitialCropWindowRectangle(null)

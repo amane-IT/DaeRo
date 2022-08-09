@@ -12,7 +12,6 @@ import com.ssafy.daero.R
 fun loadImage(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
-        .skipMemoryCache(false)
         .placeholder(R.drawable.placeholder_trip_album)
         .apply(RequestOptions().centerCrop())
         .error(R.drawable.placeholder_trip_album)

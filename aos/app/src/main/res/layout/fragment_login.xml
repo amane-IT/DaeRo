@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraint_login_container"
@@ -67,18 +68,22 @@
                 android:layout_marginStart="64dp"
                 android:layout_marginBottom="32dp"
                 android:src="@drawable/ic_kakao"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/button_login_emailLogin"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/image_login_naver"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:src="@drawable/ic_naver"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/image_login_kakao"
                 app:layout_constraintEnd_toStartOf="@id/image_login_google"
                 app:layout_constraintStart_toEndOf="@id/image_login_kakao"
-                app:layout_constraintTop_toTopOf="@id/image_login_kakao" />
+                app:layout_constraintTop_toTopOf="@id/image_login_kakao"
+                tools:visibility="visible" />
 
             <ImageView
                 android:id="@+id/image_login_google"
@@ -86,9 +91,11 @@
                 android:layout_height="56dp"
                 android:layout_marginEnd="64dp"
                 android:src="@drawable/ic_google"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@id/image_login_kakao"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/image_login_kakao" />
+                app:layout_constraintTop_toTopOf="@id/image_login_kakao"
+                tools:visibility="visible" />
 
             <Button
                 android:id="@+id/button_login_emailLogin"

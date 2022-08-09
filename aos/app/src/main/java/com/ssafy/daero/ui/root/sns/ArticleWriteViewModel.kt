@@ -14,9 +14,12 @@ import com.ssafy.daero.utils.time.toServerDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.Json.Default.encodeToString
+import okhttp3.MediaType.Companion.parse
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
 
 class ArticleWriteViewModel : BaseViewModel() {
@@ -46,19 +49,19 @@ class ArticleWriteViewModel : BaseViewModel() {
             )
         }
 
-       val json = Json.encodeToString(articleWriteRequest!!)
+        val json = Json.encodeToString(articleWriteRequest!!)
+        val requestBody = json.toRequestBody("text/plain".toMediaTypeOrNull())
 
-        Log.d("ArticleWriteVM_싸피", files.toString())
-        Log.d("ArticleWriteVM_싸피", json)
         addDisposable(
             tripRepository.postArticle(
                 files = files,
-                json = json
+                //json = json
+                json = requestBody
             ).subscribe({
                 postState.postValue(SUCCESS)
                 showProgress.postValue(false)
             }, { throwable ->
-                Log.d("ArticleWriteVM_싸피", throwable.toString())
+                Log.d("ArticleWriteVM_DaeRo", throwable.toString())
                 postState.postValue(FAIL)
                 showProgress.postValue(false)
             })
@@ -118,7 +121,7 @@ class ArticleWriteViewModel : BaseViewModel() {
     fun getThumbnailIndex(): Int {
         var index = -1
         linearTripStamps.forEachIndexed { _index, tripStampDto ->
-            if(tripStampDto.isThumbnail) {
+            if (tripStampDto.isThumbnail) {
                 index = _index
                 return@forEachIndexed
             }
@@ -126,11 +129,14 @@ class ArticleWriteViewModel : BaseViewModel() {
         return index
     }
 
-    private fun makeExpenseString() : String {
+    private fun makeExpenseString(): String {
+        if (expenses.isEmpty()) return ""
+
         var res = "["
         expenses.forEach {
             res += "$it,"
         }
+        res = res.substring(0, res.length - 1)
         res += "]"
         return res
     }

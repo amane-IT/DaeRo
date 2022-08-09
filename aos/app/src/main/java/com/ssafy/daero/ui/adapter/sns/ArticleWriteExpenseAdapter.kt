@@ -60,7 +60,7 @@ class ArticleWriteExpenseAdapter(
                 timer2.cancel()
 
                 timer2 = Timer()
-                timer2.schedule(1000L) {
+                timer2.schedule(500L) {
                     expenseChangeListener(bindingAdapterPosition, it.toString())
                 }
             }
@@ -68,7 +68,7 @@ class ArticleWriteExpenseAdapter(
                 timer1.cancel()
 
                 timer1 = Timer()
-                timer1.schedule(1000L) {
+                timer1.schedule(500L) {
                     nameChangeListener(bindingAdapterPosition, it.toString())
                 }
             }
