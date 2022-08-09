@@ -1,6 +1,5 @@
 package com.ssafy.daero.trip.controller;
 
-
 import com.ssafy.daero.image.service.ImageService;
 import com.ssafy.daero.image.vo.ImageVo;
 import com.ssafy.daero.trip.service.TripService;
@@ -149,16 +148,29 @@ public class TripController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> finishTrip(@RequestHeader("jwt") String jwt,
-                                                          @RequestParam("json") TripVo tripVo,
-                                                          @RequestParam("files") ArrayList<MultipartFile> files) {
+                                                          @RequestParam("json") String jsonString,
+                                                          @RequestParam ArrayList<MultipartFile> files) {
+        System.out.println(jsonString);
+
         int fileNum = files.size();
+        String[] urls = new String[fileNum];
+
+        TripVo tripVo;
+        try {
+            tripVo = this.tripService.writeJsonParser(jsonString);
+        } catch (Exception e) {
+            System.out.println("ERROR : Parsing error");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         System.out.println("files 크기" + files.size());
         System.out.println("제목 : " + tripVo.getTitle());
-        String[] urls = new String[fileNum];
+
         for (int i = 0; i < fileNum; i++) {
             ImageVo imageVo = this.imageService.uploadFile(files.get(i));
             if (imageVo.getResult() != ImageVo.ImageResult.SUCCESS) {
+
                 System.out.println("ERROR : " + i + "번째 사진 업로드 실패");
+                System.out.println("ERROR TYPE : " + imageVo.getResult());
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
             urls[i] = imageVo.getDownloadUrl();

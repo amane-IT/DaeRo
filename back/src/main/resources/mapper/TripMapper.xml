@@ -10,8 +10,8 @@
 
     <insert id="insertTrip" parameterType="com.ssafy.daero.trip.vo.TripVo">
         insert into `trips` (users_seq, trip_comment, trip_expenses, trip_rating)
-        VALUES (#{userSeq}, #{tripComment}, #{tripExpneses}, #{rating})
-        <selectKey keyProperty="trips_seq" resultType="_int">
+        VALUES (#{userSeq}, #{tripComment}, #{tripExpenses}, #{rating})
+        <selectKey keyProperty="tripSeq" resultType="_int">
             select last_insert_id()
         </selectKey>
     </insert>
@@ -19,7 +19,7 @@
     <insert id="insertTripDay" parameterType="com.ssafy.daero.trip.vo.TripDayVo">
         insert into `trip_days` (trip, date, day_comment)
         VALUES (#{tripSeq}, #{datetime}, #{dayComment})
-        <selectKey keyProperty="trip_days_seq" resultType="_int">
+        <selectKey keyProperty="tripDaySeq" resultType="_int">
             select last_insert_id()
         </selectKey>
     </insert>
