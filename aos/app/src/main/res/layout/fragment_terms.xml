@@ -13,7 +13,7 @@
             android:layout_height="48dp"
             app:contentInsetStart="0dp"
             android:layout_marginBottom="32dp"
-            app:layout_constraintBottom_toTopOf="@id/text_term_title1"
+            app:layout_constraintBottom_toTopOf="@id/scrollView_term"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -42,56 +42,465 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <TextView
-            style="@style/SubHeadBold"
-            android:id="@+id/text_term_title1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="제 1조 (목적)"
-            android:layout_marginLeft="32dp"
-            android:layout_marginTop="16dp"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView_term"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/text_term_detail1"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_Term" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_Term"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-        <TextView
-            style="@style/Term"
-            android:id="@+id/text_term_detail1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:layout_constraintTop_toBottomOf="@id/text_term_title1"
-            app:layout_constraintBottom_toTopOf="@id/text_term_title2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="어쩌구 저쩌구 블라블라"
-            />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            style="@style/SubHeadBold"
-            android:id="@+id/text_term_title2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="제 2조 (정의)"
-            android:layout_margin="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_term_detail1"
-            />
+                <TextView
+                    style="@style/HeadBold"
+                    android:id="@+id/text_term_first"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 1 장 환영합니다!"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title1"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            style="@style/Term"
-            android:id="@+id/text_term_detail2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:layout_constraintTop_toBottomOf="@id/text_term_title2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="어쩌구 저쩌구 블라블라"
-            />
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 1조 (목적 및 정의)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail1"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_first" />
 
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title1"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라" />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 2조 (약관의 효력 및 변경)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail1"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail2"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title2"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 3조 (약관 외 준칙)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail3"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail2" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title3"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_second"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라" />
+
+                <TextView
+                    style="@style/HeadBold"
+                    android:id="@+id/text_term_second"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 2 장 서비스 이용계약"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title4"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail3" />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 4조 (계약의 성립)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_second"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail4" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title4"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 5조 (서비스 가입의 제한)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail5"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail4" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title5"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_third"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/HeadBold"
+                    android:id="@+id/text_term_third"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 3 장 서비스 이용"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title6"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail5" />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 6조 (다양한 서비스의 제공)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_third"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail6"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title6"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title7"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 7조 (서비스의 변경 및 종료)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail6"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail7" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title7"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title8"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 8조 (게시물의 관리)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail7"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail8"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title8"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title9"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 9조 (권리의 귀속 및 저작물의 이용)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail8"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail9" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title9"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title10"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 10조 (서비스 이용 방법 및 주의점)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail9"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail10"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title10"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title11"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 11조 (이용계약 해지)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail10"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail11"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail11"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title11"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title12"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 12조 (개인정보의 보호)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail12"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail11" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title12"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_forth"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라" />
+
+                <TextView
+                    style="@style/HeadBold"
+                    android:id="@+id/text_term_forth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 4 장 기타"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title13"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail12" />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 13조 (손해배상 등)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="32dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_forth"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail13" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail13"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_forth"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title14"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 14조 (통지 및 공지)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail14"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail13" />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail14"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title14"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_title15"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+                <TextView
+                    style="@style/SubHeadBold"
+                    android:id="@+id/text_term_title15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="제 15조 (분쟁의 해결)"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_detail14"
+                    app:layout_constraintBottom_toTopOf="@id/text_term_detail15"
+                    />
+
+                <TextView
+                    style="@style/Term"
+                    android:id="@+id/text_term_detail15"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_term_title15"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="어쩌구 저쩌구 블라블라"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
