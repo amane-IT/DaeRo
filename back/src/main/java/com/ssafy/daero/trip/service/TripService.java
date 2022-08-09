@@ -331,7 +331,7 @@ public class TripService {
             JsonArray tripStampJsonArray = tripDay.get("tripStamps").getAsJsonArray();
             LinkedList<TripStampVo> tripStampVos = new LinkedList<>();
             for (int j = 0; j < tripStampJsonArray.size(); j++) {
-                JsonObject tripStamp = tripStampJsonArray.get(i).getAsJsonObject();
+                JsonObject tripStamp = tripStampJsonArray.get(j).getAsJsonObject();
                 TripStampVo tripStampVo = new TripStampVo();
                 tripStampVo.setSatisfaction(tripStamp.get("satisfaction").getAsString());
                 tripStampVo.setTripPlace(tripStamp.get("tripPlaceSeq").getAsInt());
