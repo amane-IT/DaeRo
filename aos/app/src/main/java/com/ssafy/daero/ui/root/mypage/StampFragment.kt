@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.os.Build.VERSION_CODES.O
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
@@ -17,8 +16,6 @@ class StampFragment : BaseFragment<FragmentStampBinding>(R.layout.fragment_stamp
     private val O = "ONE"
     private val F = "FIVE"
     private val T = "TEN"
-
-    private val LEVEL = "LEVEL"
 
     private lateinit var stampAdapter: StampAdapter
     private lateinit var stampLevelAdapter: StampDetailAdapter
@@ -62,8 +59,7 @@ class StampFragment : BaseFragment<FragmentStampBinding>(R.layout.fragment_stamp
             getRegions("제주도", it.jeju)
 
             getLevel(
-                //it.total
-            50
+                it.total
             )
             shuffle(stampList)
 
