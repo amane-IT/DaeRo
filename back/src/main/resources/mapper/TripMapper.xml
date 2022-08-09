@@ -128,10 +128,10 @@
     </select>
 
     <select id="selectOtherAlbumListByUserSeq" resultMap="mappingAlbumVo">
-        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        SELECT album.title, album.articles_seq, album.thumbnail_url, album.open_yn, album.like_yn
         FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row,
                      a.title,
-                     a.trips_seq,
+                     a.articles_seq,
                      a.thumbnail_url,
                      a.open_yn,
                      exists(select *
@@ -148,10 +148,10 @@
     </select>
 
     <select id="selectMyAlbumListByUserSeq" resultMap="mappingAlbumVo">
-        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        SELECT album.title, album.articles_seq, album.thumbnail_url, album.open_yn, album.like_yn
         FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row,
                      a.title,
-                     a.trips_seq,
+                     a.articles_seq,
                      a.thumbnail_url,
                      a.open_yn,
                      exists(select *
@@ -230,7 +230,7 @@
     </resultMap>
 
     <resultMap id="mappingAlbumVo" type="com.ssafy.daero.trip.vo.AlbumVo">
-        <result property="tripSeq" column="trips_seq"/>
+        <result property="articleSeq" column="articles_seq"/>
         <result property="imageUrl" column="thumbnail_url"/>
         <result property="title" column="title"/>
         <result property="expose" column="open_yn"/>
