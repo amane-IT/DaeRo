@@ -10,6 +10,7 @@ import com.ssafy.daero.data.dto.badge.BadgeItem
 import com.ssafy.daero.databinding.FragmentStampBinding
 import com.ssafy.daero.databinding.FragmentStampRegionDetailBinding
 import com.ssafy.daero.ui.adapter.mypage.StampDetailAdapter
+import com.ssafy.daero.utils.constant.USER_SEQ
 import java.util.*
 
 class StampRegionDetailFragment : BaseFragment<FragmentStampRegionDetailBinding>(R.layout.fragment_stamp_region_detail) {
@@ -22,20 +23,33 @@ class StampRegionDetailFragment : BaseFragment<FragmentStampRegionDetailBinding>
     private val T = "TEN"
 
     private var stampList = mutableListOf<BadgeItem>()
+    private var userSeq = 0
 
     override fun init() {
         initData()
         initAdapter()
+        setOnClickListeners()
         observeData()
+        getBadges()
     }
 
-    private fun initData(){
-        stampViewModel.getBadges()
+    private fun initData() {
+        userSeq = arguments?.getInt(USER_SEQ, 0) ?: 0
+    }
+
+    private fun getBadges() {
+        stampViewModel.getBadges(userSeq)
     }
 
     private fun initAdapter(){
         stampDetailAdapter = StampDetailAdapter()
         binding.recyclerStampReion.adapter = stampDetailAdapter
+    }
+
+    private fun setOnClickListeners() {
+        binding.imgStampRegionBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
     }
 
     private fun observeData(){

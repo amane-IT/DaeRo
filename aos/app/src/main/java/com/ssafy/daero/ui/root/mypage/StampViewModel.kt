@@ -17,13 +17,13 @@ class StampViewModel: BaseViewModel() {
 
     var stampState = MutableLiveData<Int>()
 
-    fun getBadges(){
+    fun getBadges(userSeq: Int){
         addDisposable(
-            stampRepository.getBadges()
+            stampRepository.getBadges(userSeq)
                 .subscribe({ response ->
                     _stampCount.postValue(response.body())
                 }, { throwable ->
-                    Log.d(TAG, "getBadges: ${throwable.toString()}")
+                    Log.d(TAG, "getBadges: $throwable")
                 })
         )
     }

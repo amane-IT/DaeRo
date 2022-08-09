@@ -1,21 +1,24 @@
 package com.ssafy.daero.ui.root.mypage
 
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentMyPageBinding
 import com.ssafy.daero.ui.adapter.mypage.MyPageViewPagerAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.view.toast
 
 class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val myPageViewModel : MyPageViewModel by viewModels()
+    private val myPageViewModel: MyPageViewModel by viewModels()
     private val tabTitleArray = arrayOf("기록", "여정")
 
     override fun init() {
@@ -60,7 +63,10 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             findNavController().navigate(R.id.action_rootFragment_to_followingFragment)
         }
         binding.imageMyPageBadge.setOnClickListener {
-            findNavController().navigate(R.id.action_rootFragment_to_stampFragment)
+            findNavController().navigate(
+                R.id.action_rootFragment_to_stampFragment,
+                bundleOf(USER_SEQ to App.prefs.userSeq)
+            )
         }
     }
 

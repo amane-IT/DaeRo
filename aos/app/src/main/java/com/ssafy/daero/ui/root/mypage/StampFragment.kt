@@ -1,13 +1,17 @@
 package com.ssafy.daero.ui.root.mypage
 
+import android.graphics.Paint
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.badge.BadgeItem
 import com.ssafy.daero.databinding.FragmentStampBinding
 import com.ssafy.daero.ui.adapter.mypage.StampAdapter
 import com.ssafy.daero.ui.adapter.mypage.StampDetailAdapter
+import com.ssafy.daero.utils.constant.USER_SEQ
 import java.util.Collections.shuffle
 
 class StampFragment : BaseFragment<FragmentStampBinding>(R.layout.fragment_stamp) {
@@ -22,16 +26,23 @@ class StampFragment : BaseFragment<FragmentStampBinding>(R.layout.fragment_stamp
 
     private var stampList = mutableListOf<BadgeItem>()
     private var stampLevel = mutableListOf<BadgeItem>()
+    private var userSeq = 0
 
     override fun init() {
         initData()
+        initView()
         initAdapter()
         observeData()
         setOnClickListeners()
+        getBadges()
     }
 
-    private fun initData(){
-        stampViewModel.getBadges()
+    private fun initData() {
+        userSeq = arguments?.getInt(USER_SEQ, 0) ?: 0
+    }
+
+    private fun initView() {
+        binding.textStampRegionMore.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun initAdapter(){
@@ -78,9 +89,15 @@ class StampFragment : BaseFragment<FragmentStampBinding>(R.layout.fragment_stamp
     private fun setOnClickListeners(){
         binding.apply {
             textStampRegionMore.setOnClickListener {
-                findNavController().navigate(R.id.action_stampFragment_to_stampRegionDetailFragment)
+                findNavController().navigate(R.id.action_stampFragment_to_stampRegionDetailFragment, bundleOf(
+                    USER_SEQ to userSeq))
             }
+            imgStampBack.setOnClickListener { requireActivity().onBackPressed() }
         }
+    }
+
+    private fun getBadges() {
+        stampViewModel.getBadges(userSeq)
     }
 
     private fun getRegions(placeName: String, count: Int) {

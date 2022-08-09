@@ -76,6 +76,9 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
                 TripCompleteBottomSheetFragment(finishTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
+            imageTripFollowNotification.setOnClickListener {
+                findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
+            }
         }
     }
 

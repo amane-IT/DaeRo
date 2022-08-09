@@ -7,7 +7,10 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
-import com.ssafy.daero.data.dto.user.*
+import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
+import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
+import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.data.remote.UserApi
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -163,8 +166,8 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getBadges(): Single<Response<StampResponseDto>> {
-        return userApi.getBadges(App.prefs.userSeq)
+    fun getBadges(userSeq: Int): Single<Response<StampResponseDto>> {
+        return userApi.getBadges(userSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())

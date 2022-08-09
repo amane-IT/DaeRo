@@ -179,10 +179,14 @@
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_rootFragment_to_stampFragment"
-            app:destination="@id/stampFragment" />
+            app:destination="@id/stampFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/settingFragment"
@@ -472,16 +476,16 @@
         android:id="@+id/articleWriteThumbnailFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleWriteThumbnailFragment"
         android:label="ArticleWriteThumbnailFragment"
-        tools:layout="@layout/fragment_article_write_thumbnail" >
+        tools:layout="@layout/fragment_article_write_thumbnail">
         <action
             android:id="@+id/action_articleWriteThumbnailFragment_to_rootFragment"
             app:destination="@id/rootFragment"
-            app:popUpTo="@id/articleWriteThumbnailFragment"
-            app:popUpToInclusive="true"
             app:enterAnim="@animator/nav_default_enter_anim"
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+            app:popExitAnim="@animator/nav_default_pop_exit_anim"
+            app:popUpTo="@id/articleWriteThumbnailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/tripInformationFragment"
@@ -514,6 +518,13 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_otherPageFragment_to_stampFragment"
+            app:destination="@id/stampFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/searchContentMoreFragment"
@@ -574,13 +585,12 @@
         android:name="com.ssafy.daero.ui.setting.InquiryRegisterFragment"
         android:label="InquiryRegisterFragment"
         tools:layout="@layout/fragment_inquiry_register" />
-        />
+    />
     <fragment
         android:id="@+id/tripFollowSelectFragment"
         android:name="com.ssafy.daero.ui.root.trip.TripFollowSelectFragment"
         android:label="TripFollowSelectFragment"
-        tools:layout="@layout/fragment_trip_follow_select"
-        >
+        tools:layout="@layout/fragment_trip_follow_select">
         <action
             android:id="@+id/action_tripFollowSelectFragment_to_rootFragment"
             app:destination="@id/rootFragment"
@@ -589,33 +599,33 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim"
             app:popUpTo="@id/tripFollowSelectFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/articleEditDayFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleEditDayFragment"
-        tools:layout="@layout/fragment_article_edit_day"
-        android:label="ArticleEditDayFragment" >
+        android:label="ArticleEditDayFragment"
+        tools:layout="@layout/fragment_article_edit_day">
         <action
             android:id="@+id/action_articleEditDayFragment_to_articleEditExpenseFragment"
             app:destination="@id/articleEditExpenseFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_articleEditDayFragment_self"
             app:destination="@id/articleEditDayFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/articleEditThumbnailFragment"
-        tools:layout="@layout/fragment_article_edit_thumbnail"
         android:name="com.ssafy.daero.ui.root.sns.ArticleEditThumbnailFragment"
-        android:label="ArticleEditThumbnailFragment" >
+        android:label="ArticleEditThumbnailFragment"
+        tools:layout="@layout/fragment_article_edit_thumbnail">
         <action
             android:id="@+id/action_articleEditThumbnailFragment_to_rootFragment"
             app:destination="@id/rootFragment"
@@ -624,20 +634,20 @@
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim"
             app:popUpTo="@id/articleEditThumbnailFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/articleEditExpenseFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleEditExpenseFragment"
-        tools:layout="@layout/fragment_article_edit_expense"
-        android:label="ArticleEditExpenseFragment" >
+        android:label="ArticleEditExpenseFragment"
+        tools:layout="@layout/fragment_article_edit_expense">
         <action
             android:id="@+id/action_articleEditExpenseFragment_to_articleEditThumbnailFragment"
             app:destination="@id/articleEditThumbnailFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right"/>
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/stampFragment"
@@ -647,15 +657,15 @@
         <action
             android:id="@+id/action_stampFragment_to_stampRegionDetailFragment"
             app:destination="@id/stampRegionDetailFragment"
-            app:enterAnim="@animator/nav_default_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/stampRegionDetailFragment"
         android:name="com.ssafy.daero.ui.root.mypage.StampRegionDetailFragment"
         android:label="StampRegionDetailFragment"
-        tools:layout="@layout/fragment_stamp_region_detail"/>
+        tools:layout="@layout/fragment_stamp_region_detail" />
 
 </navigation>

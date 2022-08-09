@@ -14,7 +14,20 @@
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/text_stamp_title">
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_stamp_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black" />
+
 
             <TextView
                 style="@style/HeadBold"
@@ -22,32 +35,30 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:text="DaeRo" />
+                android:text="배지 목록" />
+
 
         </com.google.android.material.appbar.MaterialToolbar>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_stamp" />
+
+
         <TextView
-            android:id="@+id/text_stamp_title"
+            android:id="@+id/text_stamp_region"
             style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="배지 목록"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_stamp"/>
-
-        <TextView
-            android:id="@+id/text_stamp_region"
-            style="@style/SubHeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="32dp"
             android:text="지역별"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_stamp_title" />
+            app:layout_constraintTop_toBottomOf="@id/toolbar_stamp" />
 
         <TextView
             android:id="@+id/text_stamp_regionMore"
@@ -55,56 +66,55 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
-            android:layout_marginTop="20dp"
             android:text="더보기"
+            app:layout_constraintBottom_toBottomOf="@id/text_stamp_region"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_stamp_title" />
+            app:layout_constraintTop_toTopOf="@id/text_stamp_region" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_stamp_region"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:clipToPadding="false"
+            android:orientation="vertical"
             android:paddingHorizontal="8dp"
             android:paddingStart="12dp"
-            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_stamp_region"
-            app:layout_constraintBottom_toTopOf="@id/text_stamp_count"
+            app:spanCount="3"
+            tools:itemCount="3"
             tools:listitem="@layout/item_stamp" />
 
         <TextView
             android:id="@+id/text_stamp_count"
-            style="@style/SubHeadBold"
+            style="@style/HeadBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="48dp"
             android:text="개수 별"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recycler_stamp_region"
-            app:layout_constraintBottom_toTopOf="@id/recycler_stamp_count"/>
+            app:layout_constraintTop_toBottomOf="@id/recycler_stamp_region" />
 
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_stamp_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="240dp"
+            android:layout_marginTop="16dp"
             android:clipToPadding="false"
+            android:orientation="vertical"
             android:paddingHorizontal="8dp"
             android:paddingStart="12dp"
-            android:orientation="vertical"
-            app:spanCount="3"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_stamp_count"
+            app:spanCount="3"
+            tools:itemCount="3"
             tools:listitem="@layout/item_stamp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

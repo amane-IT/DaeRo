@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.root.mypage
 
 import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -106,6 +107,10 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
         }
         binding.imgOtherPageBack.setOnClickListener {
             requireActivity().onBackPressed()
+        }
+        binding.imageOtherPageBadge.setOnClickListener {
+            findNavController().navigate(R.id.action_otherPageFragment_to_stampFragment,
+            bundleOf(USER_SEQ to userSeq))
         }
     }
 

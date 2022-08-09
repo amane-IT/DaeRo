@@ -25,7 +25,7 @@
                 android:text="DaeRo" />
 
             <ImageView
-                android:id="@+id/image_trip_trip_follow_notification"
+                android:id="@+id/image_tripFollow_notification"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_vertical|end"

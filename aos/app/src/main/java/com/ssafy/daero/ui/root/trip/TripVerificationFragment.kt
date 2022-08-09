@@ -118,6 +118,9 @@ class TripVerificationFragment :
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
+        binding.imageTripVerificationNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
+        }
     }
 
     private val finishTrip : () -> Unit = {

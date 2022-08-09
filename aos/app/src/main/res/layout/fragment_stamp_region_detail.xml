@@ -15,7 +15,19 @@
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/text_stampRegion_title">
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_stampRegion_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black" />
 
             <TextView
                 style="@style/HeadBold"
@@ -23,33 +35,31 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:text="DaeRo" />
+                android:text="지역 배지 목록" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <TextView
-            android:id="@+id/text_stampRegion_title"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="배지 목록"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_stampRegion"/>
+            app:layout_constraintTop_toBottomOf="@id/toolbar_stampRegion" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_stampReion"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            app:layout_constraintTop_toBottomOf="@id/text_stampRegion_title"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:listitem="@layout/item_stamp"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_stampRegion"
+            app:spanCount="3"
+            tools:listitem="@layout/item_stamp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
