@@ -252,4 +252,9 @@ public class UserService {
         badgeList.put("total", total);
         return badgeList;
     }
+
+    public boolean updateFcmToken(int userSeq, String token) {
+        int updated = this.userMapper.updateFcmToken(userSeq, token);
+        return updated == 1;
+    }
 }
