@@ -56,7 +56,7 @@ class ArticleWriteViewModel : BaseViewModel() {
             tripRepository.postArticle(
                 files = files,
                 //json = json
-            json = requestBody
+                json = requestBody
             ).subscribe({
                 postState.postValue(SUCCESS)
                 showProgress.postValue(false)
@@ -121,7 +121,7 @@ class ArticleWriteViewModel : BaseViewModel() {
     fun getThumbnailIndex(): Int {
         var index = -1
         linearTripStamps.forEachIndexed { _index, tripStampDto ->
-            if(tripStampDto.isThumbnail) {
+            if (tripStampDto.isThumbnail) {
                 index = _index
                 return@forEachIndexed
             }
@@ -129,11 +129,14 @@ class ArticleWriteViewModel : BaseViewModel() {
         return index
     }
 
-    private fun makeExpenseString() : String {
+    private fun makeExpenseString(): String {
+        if (expenses.isEmpty()) return ""
+
         var res = "["
         expenses.forEach {
             res += "$it,"
         }
+        res = res.substring(0, res.length - 1)
         res += "]"
         return res
     }

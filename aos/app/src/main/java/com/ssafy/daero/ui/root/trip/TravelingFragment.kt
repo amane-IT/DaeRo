@@ -92,8 +92,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun checkLocationPermission() {
-        if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, {
+        if (!checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, {
                 toast("권한 허용이 확인되었습니다.")
             }, {
                 toast("권한을 허용하지 않으면 인증할 수 없습니다.")

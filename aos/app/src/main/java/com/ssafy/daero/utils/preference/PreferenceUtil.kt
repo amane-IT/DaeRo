@@ -108,6 +108,13 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putInt(TRIP_TIME, value).apply()
         }
 
+    // 알림 설정 여부
+    var isNotificationAllow: Boolean
+        get() = prefs.getBoolean(IS_NOTIFICATION_ALLOW, true)
+        set(value) {
+            prefs.edit().putBoolean(IS_NOTIFICATION_ALLOW, value).apply()
+        }
+
     fun initUser() {
         jwt = null
         userSeq = 0

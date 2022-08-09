@@ -88,10 +88,13 @@ class ArticleEditViewModel : BaseViewModel() {
     }
 
     private fun makeExpenseString(): String {
+        if (expenses.isEmpty()) return ""
+
         var res = "["
         expenses.forEach {
             res += "$it,"
         }
+        res = res.substring(0, res.length - 1)
         res += "]"
         return res
     }

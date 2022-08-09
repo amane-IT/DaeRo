@@ -92,9 +92,9 @@ class TripInformationFragment :
         }
         binding.buttonTripInformationStartTrip.setOnClickListener {
             // 권한 체크
-            if (!checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            if (!checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 // 권한 요청
-                requestPermission(Manifest.permission.ACCESS_FINE_LOCATION, {
+                requestPermission(Manifest.permission.ACCESS_COARSE_LOCATION, {
                     startTrip()
                 }, {
                     toast("권한이 없으면 여행을 할 수 없습니다.")
