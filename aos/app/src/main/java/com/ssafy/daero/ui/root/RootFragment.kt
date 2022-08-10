@@ -17,7 +17,6 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
         initFragment()
         checkTripStart()
         checkTripStamp()
-        checkTripFollow()
         setOnClickListeners()
     }
 
@@ -33,14 +32,6 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
         if (App.prefs.isTripStart) {
             changeTripState(TRIP_ING)
             App.prefs.isTripStart = false
-        }
-    }
-
-    private fun checkTripFollow() {
-        if (App.prefs.isFollowStart) {
-            App.prefs.isFollow = true
-            App.prefs.isFollowStart = false
-            changeTripState(TRIP_ING)
         }
     }
 

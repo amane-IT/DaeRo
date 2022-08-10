@@ -11,7 +11,6 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentLoginBinding
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.constant.TRIP_BEFORE
 import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.view.setStatusBarOrigin
@@ -27,8 +26,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         jwtLogin()
     }
 
+    private fun showPermissionGuide() {
+        PermissionDialogFragment().show(childFragmentManager, "dlg_permission")
+    }
+
     private fun initViews() {
         binding.textLoginSignup.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
+
+        if (!App.prefs.isPermissionGuideCheck) {
+            showPermissionGuide()
+        }
     }
 
     private fun setOnClickListeners() {
@@ -48,7 +55,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
 
     private fun observeData() {
         loginViewModel.responseState.observe(viewLifecycleOwner) { response ->
-            when(response) {
+            when (response) {
                 200 -> {
                     findNavController().navigate(R.id.action_loginFragment_to_rootFragment)
                     loginViewModel.responseState.value = DEFAULT
