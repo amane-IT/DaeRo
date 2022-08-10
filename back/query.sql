@@ -290,6 +290,16 @@ create table `preference_places`
         on delete cascade on update cascade
 );
 
+create table hide
+  (
+      hide_seq    int auto_increment,
+      article_seq int,
+      user_seq    int,
+      constraint primary key (`hide_seq`),
+      constraint foreign key (`article_seq`) references `articles` (`articles_seq`),
+      constraint foreign key (`user_seq`) references `users` (`users_seq`)
+  );
+
 create view `tag_region_place` as
 select `p`.`trip_places_seq`, `p`.`place_name`, `t`.`place_tag_seq`, `p`.`region_seq`
 from `tag_trip_places` as `t`

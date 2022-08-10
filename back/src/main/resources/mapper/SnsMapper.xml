@@ -12,6 +12,15 @@
                          where `blocked_users_seq` = #{userSeq} and `blocker_users_seq` = #{blocker})
     </insert>
 
+    <insert id="insertHide">
+        insert into `hide` (article_seq, user_seq)
+        select #{articleSeq}, #{userSeq}
+        from dual
+        where not exists(select *
+                         from `hide`
+                         where `article_seq` = #{articleSeq} and `user_seq` = #{userSeq})
+    </insert>
+
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
         SELECT a.trips_seq, a.title, a.created_at, (SELECT `like_count`
                                       FROM daero.v_users_trips_articles va
@@ -145,6 +154,7 @@
               FROM daero.replies r
               WHERE rereply_parent = #{replySeq}) AS reply
         WHERE (#{page} - 1) * 10 &lt; reply.row
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
           AND reply.row &lt; (#{page} * 10) + 1;
 ## TODO: need block
     </select>
@@ -313,6 +323,7 @@
         where `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleCountByFollowCreatedAt" resultType="_int">
@@ -324,6 +335,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByFollowCreatedAt" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -352,6 +364,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>
@@ -383,6 +396,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
         order by `created_at` desc
         ]]>
     </select>
@@ -451,6 +465,7 @@
             or binary (`t`.`trip_comment`) like concat('%', #{content}, '%')
             or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -478,6 +493,7 @@
             or binary (`a`.`trip_comment`) like concat('%', #{content}, '%')
             or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>
@@ -489,6 +505,7 @@
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
         where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByPlace" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -515,6 +532,7 @@
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
         where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>

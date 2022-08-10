@@ -76,8 +76,8 @@ public class TripController {
     }
 
     @PostMapping("/recommend")
-    public ResponseEntity<Map<String, Integer>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody(required=false) Map<String, ArrayList<Integer>> req) {
-        Map<String, Integer> resultMap = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody(required=false) Map<String, ArrayList<Integer>> req) {
+        Map<String, Object> resultMap = new HashMap<>();
         int tripPlaceSeq;
         // 태그로 검색한 경우
         if (req != null && (req.get("regions") != null && req.get("tags") != null) &&
@@ -92,6 +92,7 @@ public class TripController {
             // 검색된 결과가 없으면 404 Not Found
             if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             resultMap.put("place_seq", tripPlaceSeq);
+            resultMap.put("image_url", this.tripService.placeImage(tripPlaceSeq));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }
         int userSeq = Integer.parseInt(jwtService.decodeJwt(jwt).get("user_seq"));
@@ -99,20 +100,22 @@ public class TripController {
         // 검색된 결과가 없으면 404 Not Found
         if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         resultMap.put("place_seq", tripPlaceSeq);
+        resultMap.put("image_url", this.tripService.placeImage(tripPlaceSeq));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/recommend")
-    public ResponseEntity<Map<String, Integer>> recommendGet(
+    public ResponseEntity<Map<String, Object>> recommendGet(
             @RequestParam("place-seq") int tripPlaceSeq,
             @RequestParam("time") int time,
             @RequestParam("transportation") String transportation) {
         int placeSeq = this.tripService.recommendNextPlace(tripPlaceSeq, time, transportation);
-        Map<String, Integer> resultMap = new HashMap<>();
+        Map<String, Object> resultMap = new HashMap<>();
         if (placeSeq == 0) {
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }
         resultMap.put("place_seq", placeSeq);
+        resultMap.put("image_url", this.tripService.placeImage(placeSeq));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 

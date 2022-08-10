@@ -246,6 +246,10 @@ public class TripService {
         return recommendPool.get(selected).getTripPlaceSeq();
     }
 
+    public String placeImage(int placeSeq) {
+        return this.tripMapper.selectPlaceByPlaceSeq(placeSeq).getImageUrl();
+    }
+
     public LinkedList<Map<String, Object>> nearbyPlace(int placeSeq) {
         final int NEARBY_DISTANCE = 10;
         // 현재 위치 가져오기

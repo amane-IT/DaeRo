@@ -350,4 +350,10 @@ public class SnsController {
     public ResponseEntity<LinkedList<Map<String, Object>>> popularGet() {
         return new ResponseEntity<>(this.snsService.popularList(), HttpStatus.OK);
     }
+
+    @GetMapping("/article/{article_seq}/hide")
+    public ResponseEntity<String> hideArticle(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        return new ResponseEntity<>(this.snsService.hide(userSeq, articleSeq) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
 }

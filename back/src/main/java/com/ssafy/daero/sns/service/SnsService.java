@@ -595,4 +595,9 @@ public class SnsService {
     public LinkedList<Map<String, Object>> popularList() {
         return createBriefArticleMap(this.snsMapper.selectArticleByLike());
     }
+
+    public boolean hide(int userSeq, int articleSeq) {
+        this.snsMapper.deleteLike(articleSeq, userSeq);
+        return this.snsMapper.insertHide(articleSeq, userSeq) != 0;
+    }
 }

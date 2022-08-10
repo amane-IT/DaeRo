@@ -14,6 +14,8 @@ import java.util.Map;
 public interface SnsMapper {
     int insertBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
 
+    int insertHide(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
     ArticleVo selectArticleAndTripInfoByArticleSeq(int articleSeq);
 
     ArrayList<StampVo> selectStampAndDayInfoByTripSeq(int tripSeq);
