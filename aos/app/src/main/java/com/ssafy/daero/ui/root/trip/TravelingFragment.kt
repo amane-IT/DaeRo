@@ -254,7 +254,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 App.prefs.initTrip()
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
-                TripCompleteBottomSheetFragment(finishTrip)
+                TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
@@ -272,6 +272,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
         // 게시글 추가 화면으로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
+    }
+
+    private val doneTrip: () -> Unit = {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        travelingViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initTrip()
+        (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
     }
 
     private fun findDirectionByNaverMap() {

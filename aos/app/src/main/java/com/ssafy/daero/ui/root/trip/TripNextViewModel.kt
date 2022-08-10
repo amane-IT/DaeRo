@@ -92,6 +92,25 @@ class TripNextViewModel : BaseViewModel() {
         )
     }
 
+    fun deleteAllTripRecord() {
+        addDisposable(
+            tripRepository.deleteAllTripStamps()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
+        )
+        addDisposable(
+            tripRepository.deleteAllTripFollow()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
     fun initNextTripRecommend() {
         _nextTripRecommendResponseDto.value = 0
     }

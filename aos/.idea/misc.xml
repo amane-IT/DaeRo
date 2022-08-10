@@ -24,6 +24,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/menu_selector_color_icon.xml" value="0.298" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/menu_selector_color_text.xml" value="0.298" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/overlay_gradient_login.xml" value="0.181" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/overlay_gradient_trip_recommend.xml" value="0.276" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/drawable/splash_icon.xml" value="0.1885" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_comment.xml" value="0.2671875" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_like.xml" value="0.2484375" />
@@ -31,7 +32,7 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_profile_remove.xml" value="0.26458333333333334" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_report.xml" value="0.25364583333333335" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_tag.xml" value="0.2526041666666667" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_trip_complete.xml" value="0.264" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_trip_complete.xml" value="0.33" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/bottomsheet_trip_follow.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/dlg_logout.xml" value="0.18469431380932022" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_Terms.xml" value="0.36614583333333334" />
@@ -81,8 +82,8 @@
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_stamp.xml" value="0.22" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_stamp_region_detail.xml" value="0.22" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_terms.xml" value="0.24375" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.25" />
-        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip.xml" value="0.38572513287775245" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_traveling.xml" value="0.33" />
+        <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_follow.xml" value="0.25" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_follow_select.xml" value="0.2304403591278324" />
         <entry key="..\:/DaeRo/aos/app/src/main/res/layout/fragment_trip_information.xml" value="0.25" />
