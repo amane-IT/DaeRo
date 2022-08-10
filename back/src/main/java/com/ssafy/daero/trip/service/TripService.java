@@ -300,15 +300,16 @@ public class TripService {
         int tripSeq = tripVo.getTripSeq();
         tripVo.setThumbnailUrl(urls[tripVo.getThumbnailIndex()]);
         tripVo.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        int imageIndex = 0;
         for (TripDayVo tripDayVo : tripVo.getRecords()) {
             tripDayVo.setTripSeq(tripSeq);
             this.tripMapper.insertTripDay(tripDayVo);
             int tripDaySeq = tripDayVo.getTripDaySeq();
-            for (int i = 0; i < tripDayVo.getTripStamps().size(); i++) {
-                TripStampVo tripStampVo = tripDayVo.getTripStamps().get(i);
+            for (TripStampVo tripStampVo : tripDayVo.getTripStamps()) {
                 tripStampVo.setTripSeq(tripSeq);
                 tripStampVo.setTripDaySeq(tripDaySeq);
-                tripStampVo.setUrl(urls[i]);
+                tripStampVo.setUrl(urls[imageIndex]);
+                imageIndex++;
                 this.tripMapper.insertTripStamp(tripStampVo);
             }
         }

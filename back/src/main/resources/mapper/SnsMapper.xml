@@ -86,12 +86,24 @@
         WHERE articles_seq = #{articleSeq}
     </delete>
 
-    <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
-        SELECT *
-        from replies
-        where articles_seq = #{articleSeq}
-          and rereply_parent is null
-          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+    <select id="selectReplyListByArticleSeq" resultType="com.ssafy.daero.sns.vo.ReplyVo">
+        SELECT `r`.`replies_seq`    as `replySeq`,
+               `r`.`articles_seq`   as `articleSeq`,
+               `r`.`users_seq`      as `userSeq`,
+               `r`.`content`        as `content`,
+               `r`.`created_at`     as `createdAt`,
+               `r`.`updated_at`     as `updatedAt`,
+               (select count(0)
+                from `replies`
+                where `rereply_parent` = `r`.replies_seq)  as `rereplyCount`,
+               `r`.`rereply_parent` as `rereplyParent`,
+               `u`.`nickname` as `nickname`,
+               `u`.`profile_image_link` as `profileUrl`
+        from `replies` `r`
+            left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
+        where `articles_seq` = #{articleSeq}
+          and `rereply_parent` is null
+          and `r`.`users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
         limit #{limit} offset #{offset}
     </select>
 
@@ -102,7 +114,7 @@
     </select>
 
     <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.articles
         WHERE articles_seq = #{articleSeq}
     </select>
@@ -128,15 +140,24 @@
     </delete>
 
     <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
-        select *
-        from replies
-        where rereply_parent = #{replySeq}
-          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        select `r`.`replies_seq`    as `replySeq`,
+               `r`.`articles_seq`   as `articleSeq`,
+               `r`.`users_seq`      as `userSeq`,
+               `r`.`content`        as `content`,
+               `r`.`created_at`     as `createdAt`,
+               `r`.`updated_at`     as `updatedAt`,
+               `r`.`rereply_parent` as `rereplyParent`,
+               `u`.`nickname` as `nickname`,
+               `u`.`profile_image_link` as `profileUrl`
+        from `replies` `r`
+                 left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
+        where `rereply_parent` = #{replySeq}
+          and `r`.`users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
         limit #{limit} offset #{offset}
     </select>
 
     <select id="selectReplyByReplySeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
         WHERE replies_seq = #{replySeq}
     </select>
@@ -148,7 +169,7 @@
     </insert>
 
     <select id="selectArticleLikeByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.likes
         WHERE users_seq = #{userSeq}
           AND articles_seq = #{articleSeq}
@@ -185,8 +206,7 @@
               WHERE u.users_seq IN (SELECT l.users_seq
                                     FROM daero.likes l
                                     WHERE articles_seq = #{articleSeq})) AS user
-        limit #{limit} offset #{offset};
-# TODO: 페이징
+        limit #{limit} offset #{offset}
     </select>
 
     <insert id="insertReport">
@@ -284,13 +304,13 @@
     </select>
 
     <select id="selectLikeCountByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.likes
         WHERE articles_seq = #{articleSeq}
     </select>
 
     <select id="selectReplyByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
         WHERE articles_seq = #{articleSeq}
           AND rereply_parent IS NULL
@@ -389,7 +409,7 @@
     </select>
 
     <select id="selectCollectionCountByUserSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.likes
         WHERE `users_seq` = #{userSeq}
     </select>

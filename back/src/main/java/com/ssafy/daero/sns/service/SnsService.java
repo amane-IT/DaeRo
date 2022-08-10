@@ -117,20 +117,16 @@ public class SnsService {
 
     private LinkedList<Map<String, Object>> createReplyMapList(List<ReplyVo> replyVos) {
         LinkedList<Map<String, Object>> replyList = new LinkedList<>();
-        for (ReplyVo rVo : replyVos) {
+        for (ReplyVo replyVo : replyVos) {
             Map<String, Object> reply = new HashMap<>();
-            reply.put("reply_seq", rVo.getReplySeq());
-            reply.put("nickname", rVo.getNickname());
-            reply.put("user_seq", rVo.getUserSeq());
-            reply.put("profile_url", rVo.getProfileUrl());
-            reply.put("created_at", rVo.getCreatedAt());
-            reply.put("content", rVo.getContent());
-            reply.put("rereply_count", rVo.getRereplyCount());
-            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) {
-                reply.put("modified", 'n');
-            } else {
-                reply.put("modified", 'y');
-            }
+            reply.put("reply_seq", replyVo.getReplySeq());
+            reply.put("nickname", replyVo.getNickname());
+            reply.put("user_seq", replyVo.getUserSeq());
+            reply.put("profile_url", replyVo.getProfileUrl());
+            reply.put("created_at", replyVo.getCreatedAt());
+            reply.put("content", replyVo.getContent());
+            reply.put("rereply_count", replyVo.getRereplyCount());
+            reply.put("modified", replyVo.getCreatedAt().equals(replyVo.getUpdatedAt()) ? 'y' : 'n');
             replyList.add(reply);
         }
         return replyList;
