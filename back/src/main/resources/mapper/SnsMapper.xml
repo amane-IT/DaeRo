@@ -11,7 +11,7 @@
     </insert>
 
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT a.trips_seq, a.title, (SELECT `like_count`
+        SELECT a.trips_seq, a.title, a.created_at, (SELECT `like_count`
                                       FROM daero.v_users_trips_articles va
                                       WHERE va.articles_seq=a.articles_seq) AS like_count, (SELECT `open_yn`
                                                                                             FROM daero.v_users_trips_articles va
@@ -569,6 +569,7 @@
         <result property="likes" column="like_count" />
         <result property="comments" column="reply_count" />
         <result property="openYn" column="open_yn" />
+        <result property="createdAt" column="created_at" />
     </resultMap>
 
     <resultMap id="mappingStampVo" type="com.ssafy.daero.sns.vo.StampVo">
