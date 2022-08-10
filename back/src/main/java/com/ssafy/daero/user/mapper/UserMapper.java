@@ -52,6 +52,8 @@ public interface UserMapper {
 
     ArrayList<TripPlaceDto> selectPreferencePlace();
 
+    int selectPreferenceCountByUserSeq(int userSeq);
+
     int updateUser(SignupVo signupVo);
 
     int updateUserPassword(ChangePasswordVo changePasswordVo);

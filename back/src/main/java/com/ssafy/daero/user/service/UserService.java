@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -35,6 +36,10 @@ public class UserService {
     }
 
     public SignupVo signup(SignupVo signupVo) {
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        System.out.println(today);
+        signupVo.setCreatedAt(today);
+        System.out.println(signupVo.getCreatedAt());
         if (userMapper.updateUser(signupVo) != 1) {
             signupVo.setResult(SignupVo.SignupResult.NO_SUCH_USER);
             return signupVo;
@@ -204,7 +209,10 @@ public class UserService {
         return true;
     }
 
-    public void setPreference(int userSeq, ArrayList<Integer> placeArray) {
+    public boolean setPreference(int userSeq, ArrayList<Integer> placeArray) {
+        if (this.userMapper.selectPreferenceCountByUserSeq(userSeq) != 0) {
+            return false;
+        }
         ArrayList<Integer> tagArray = userMapper.selectPlaceTagAll();
         for (int tagSeq : tagArray) {
             userMapper.insertUserFavor(userSeq, tagSeq);
@@ -216,6 +224,7 @@ public class UserService {
                 userMapper.updateUserFavor(userSeq, tag);
             }
         }
+        return true;
     }
 
     public LinkedList<Map<String, Object>> sendPreference() {

@@ -225,7 +225,9 @@ public class UserController {
 
     @PostMapping("/{user_seq}/preference")
     public ResponseEntity<String> preferencePost(@PathVariable("user_seq") int userSeq, @RequestBody ArrayList<Integer> placeArray) {
-        userService.setPreference(userSeq, placeArray);
+        if (userService.setPreference(userSeq, placeArray)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

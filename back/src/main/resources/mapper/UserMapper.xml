@@ -142,6 +142,12 @@
         where `trip_places_seq` in (select `place_seq` from `preference_places`)
     </select>
 
+    <select id="selectPreferenceCountByUserSeq" parameterType="_int" resultType="_int">
+        select count(0)
+        from `user_favor`
+        where `users_seq` = #{userSeq}
+    </select>
+
     <update id="updateProfile">
         UPDATE users
         SET `nickname`=#{nickname},
