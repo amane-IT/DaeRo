@@ -5,13 +5,16 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripNextBinding
 import com.ssafy.daero.ui.adapter.TripNearByAdapter
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
+import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.view.toast
 
 class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment_trip_next) {
@@ -83,7 +86,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
             // TODO: 여행 그만두기 기능 = 게시글 작성
             buttonTripNextStop.setOnClickListener {
-                TripCompleteBottomSheetFragment(finishTrip)
+                TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
 
@@ -102,6 +105,18 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
 
         // 게시글 추가 화면으로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
+    }
+
+    private val doneTrip: () -> Unit = {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        tripNextViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initTrip()
+        (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
     }
 
     private fun getTripStamps() {
@@ -153,6 +168,12 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
                     toast("해당 조건에 맞는 여행지가 없습니다.")
                     tripNextViewModel.nextTripRecommendState.value = DEFAULT
                 }
+            }
+        }
+        tripNextViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if(it.isNotBlank()) {
+                Glide.with(requireContext()).load(it)
+                tripNextViewModel.imageUrl.value = ""
             }
         }
     }

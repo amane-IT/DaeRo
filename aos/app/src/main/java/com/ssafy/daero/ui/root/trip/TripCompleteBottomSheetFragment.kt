@@ -9,7 +9,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.databinding.BottomsheetTripCompleteBinding
 
 class TripCompleteBottomSheetFragment(
-    private val confirm: () -> Unit
+    private val confirm: () -> Unit,
+    private val done: () -> Unit,
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomsheetTripCompleteBinding? = null
     private val binding get() = _binding!!
@@ -39,6 +40,7 @@ class TripCompleteBottomSheetFragment(
 
     private fun setOnClickListeners() {
         binding.buttonTripCompleteWrite.setOnClickListener { confirm(); dismiss() }
+        binding.buttonTripCompleteDone.setOnClickListener { done(); dismiss() }
         binding.buttonTripCompleteBack.setOnClickListener { dismiss() }
     }
 

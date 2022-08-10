@@ -30,15 +30,15 @@
 
             <ImageView
                 android:id="@+id/image_item_MyPageAlbum_img"
-                android:layout_width="320dp"
-                android:layout_height="320dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 app:thumbnailImageUrl="@{tripHot.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View
-                android:layout_width="320dp"
-                android:layout_height="320dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:background="@drawable/overlay_gradient_my_page_album" />
 
             <TextView

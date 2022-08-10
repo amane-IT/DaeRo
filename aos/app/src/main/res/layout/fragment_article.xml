@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:textSize="28dp"
                     tools:text="강릉 ~ 속초 여행"
                     app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     tools:text="2022.07.16~2022.07.17"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_title" />
@@ -116,7 +116,7 @@
                     android:id="@+id/fragment_article_map"
                     android:layout_width="360dp"
                     android:layout_height="240dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:name="com.naver.maps.map.MapFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -226,7 +226,7 @@
 
                 <TextView
                     android:id="@+id/tv_article_content"
-                    style="@style/Body"
+                    style="@style/Term"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"

@@ -21,6 +21,8 @@ class TripNextViewModel : BaseViewModel() {
     val nextTripRecommendResponseDto: LiveData<Int>
         get() = _nextTripRecommendResponseDto
 
+    val imageUrl = MutableLiveData<String>()
+
     private val _tripList = MutableLiveData<List<TripStamp>>()
     val tripList: LiveData<List<TripStamp>>
         get() = _tripList
@@ -75,9 +77,9 @@ class TripNextViewModel : BaseViewModel() {
                 transportation
             ).subscribe({ response ->
                 // place_seq 저장
-                Log.d("TripNextVM_DaeRo", response.body().toString())
                 if(response.body()!!.place_seq == 0) {
                     nextTripRecommendState.postValue(EMPTY)
+                    imageUrl.postValue(response.body()!!.image_url)
                 } else {
                     _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
                 }
@@ -87,6 +89,25 @@ class TripNextViewModel : BaseViewModel() {
                 showProgress.postValue(false)
                 nextTripRecommendState.postValue(FAIL)
             })
+        )
+    }
+
+    fun deleteAllTripRecord() {
+        addDisposable(
+            tripRepository.deleteAllTripStamps()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
+        )
+        addDisposable(
+            tripRepository.deleteAllTripFollow()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
         )
     }
 

@@ -28,6 +28,7 @@ class TravelingViewModel : BaseViewModel() {
     var tripInformationState = MutableLiveData<Int>()
 
     var placeSeq = MutableLiveData<Int>()
+    var imageUrl = MutableLiveData<String>()
     var tripRecommendState = MutableLiveData<Int>()
 
     fun getTripStamps() {
@@ -87,6 +88,7 @@ class TravelingViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     if (response.body()!!.place_seq != 0) {
                         placeSeq.postValue(response.body()!!.place_seq)
+                        imageUrl.postValue(response.body()!!.image_url)
                     } else {
                         tripRecommendState.postValue(FAIL)
                     }
@@ -105,6 +107,7 @@ class TravelingViewModel : BaseViewModel() {
             ).subscribe({ response ->
                 if (response.body()!!.place_seq != 0) {
                     placeSeq.postValue(response.body()!!.place_seq)
+                    imageUrl.postValue(response.body()!!.image_url)
                 } else {
                     tripRecommendState.postValue(FAIL)
                 }
