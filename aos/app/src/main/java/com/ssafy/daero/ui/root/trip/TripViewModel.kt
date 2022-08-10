@@ -41,12 +41,12 @@ class TripViewModel : BaseViewModel() {
     fun getFirstTripRecommend(firstTripRecommendRequestDto: FirstTripRecommendRequestDto) {
         showProgress.postValue(SUCCESS)
 
-        // 1.5초 딜레이
+        // 1초 딜레이
         val delay =
-            Single.just(1).delay(1500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
+            Single.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
+        // 서버 결과, 1초 경과 모두 끝나야 응답 받기
         addDisposable(
             Single.zip(
                 delay,

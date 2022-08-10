@@ -8,8 +8,11 @@
         android:layout_height="match_parent">
 
         <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:id="@+id/scroll_searchArticle"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -20,91 +23,97 @@
 
                 <TextView
                     android:id="@+id/text_searchArticle_content"
+                    style="@style/HeadBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
                     android:layout_marginBottom="20dp"
                     android:text="내용"
-                    style="@style/SubHeadBold"
+                    app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_content"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_content"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    style="@style/Body"
                     android:id="@+id/text_searchArticle_contentMoreData"
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="24dp"
                     android:text="더보기"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_searchArticle_content"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_content"/>
+                    app:layout_constraintTop_toTopOf="@+id/text_searchArticle_content" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_searchArticle_content"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginBottom="32dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginHorizontal="4dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_content"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:spanCount="2"
                     tools:itemCount="4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/text_searchArticle_place"/>
+                    tools:listitem="@layout/item_search_article" />
 
                 <TextView
                     android:id="@+id/text_searchArticle_place"
+                    style="@style/HeadBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="32dp"
                     android:layout_marginBottom="16dp"
                     android:text="여행지"
-                    style="@style/SubHeadBold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_place"/>
+                    app:layout_constraintTop_toBottomOf="@id/recycler_searchArticle_content" />
 
                 <TextView
-                    style="@style/Body"
                     android:id="@+id/text_searchArticle_placeMoreData"
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
                     android:text="더보기"
+                    app:layout_constraintBottom_toBottomOf="@+id/text_searchArticle_place"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/recycler_searchArticle_content"
-                    app:layout_constraintBottom_toTopOf="@id/recycler_searchArticle_place"/>
+                    app:layout_constraintTop_toTopOf="@+id/text_searchArticle_place"
+                    app:layout_goneMarginEnd="24dp" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_searchArticle_place"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="12dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginHorizontal="4dp"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_searchArticle_place"
                     app:spanCount="2"
                     tools:itemCount="4"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/text_searchUser_noData"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="NO DATA"
-                    style="@style/BigTitle"
-                    android:visibility="gone"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    />
+                    tools:listitem="@layout/item_search_article" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:id="@+id/text_searchArticle_noContent"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="검색 결과가 없습니다."
+            android:textColor="@color/gray"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

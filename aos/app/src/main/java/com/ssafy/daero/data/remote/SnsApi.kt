@@ -198,7 +198,7 @@ interface SnsApi {
      * */
     @GET("sns/search")
     fun searchPlaceMore(
-        @Query("place-name") place_name: String,
+        @Query("place") place: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<ArticleMoreItem>>
 
