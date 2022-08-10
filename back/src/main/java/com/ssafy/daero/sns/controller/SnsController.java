@@ -158,6 +158,18 @@ public class SnsController {
         else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
     }
 
+    @PostMapping("/user/{user_seq}/report")
+    public ResponseEntity<String> reportUser(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestBody Map<String, Integer> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Objects.equals(currentUser.get("user_seq"), "null")) {
+            return new ResponseEntity<>(FAILURE, HttpStatus.UNAUTHORIZED);
+        }
+        String reported = snsService.reportUser(user_seq, Integer.parseInt(currentUser.get("user_seq")), req.get("report_seq"));
+        if (Objects.equals(reported, "ALREADY_REPORTED")) { return new ResponseEntity<>(FAILURE, HttpStatus.ALREADY_REPORTED); }
+        else if (Objects.equals(reported, "SUCCESS")) { return new ResponseEntity<>(SUCCESS, HttpStatus.OK); }
+        else { return new ResponseEntity<>(FAILURE, HttpStatus.BAD_REQUEST); }
+    }
+
     @PostMapping("/follow")
     public ResponseEntity<String> followUser(@RequestHeader("jwt") String jwt, @RequestParam("follow-user") int user_seq) {
         Map<String, String> currentUser = jwtService.decodeJwt(jwt);
