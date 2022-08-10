@@ -12,9 +12,12 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -55,11 +58,11 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var mShakeCount = 1
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     lateinit var mLastLocation: Location
-    private var mLocationRequest: LocationRequest = LocationRequest.create()
+    lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
     private var categoryTags = listOf<Int>()
     private var regionTags = listOf<Int>()
-
+    private lateinit var vibrator: Vibrator
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
         findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
         bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
@@ -69,6 +72,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         super.onCreate(savedInstanceState)
         mSensorManager = requireActivity().getSystemService(Context.SENSOR_SERVICE) as SensorManager
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
     }
 
     override fun onResume() {
@@ -301,6 +306,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 shakeCount -= mShakeCount
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
                 if (shakeCount < 1) {
+                    shakeCount = 5
+                    binding.tvTravelingVerificationCount.text = shakeCount.toString()
                     startLocationUpdates()
                 }
             }
@@ -312,6 +319,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun startLocationUpdates() {
+        Log.d("확인","1")
         mFusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         if (ActivityCompat.checkSelfPermission(
@@ -321,6 +329,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         ) {
             return
         }
+        mLocationRequest = LocationRequest.create()
         mFusedLocationProviderClient!!.requestLocationUpdates(
             mLocationRequest,
             mLocationCallback,
@@ -328,8 +337,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         )
     }
 
-    private val mLocationCallback = object : LocationCallback() {
+    private var mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
+            Log.d("확인","2")
             locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
         }
@@ -337,6 +347,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     fun onLocationChanged(location: Location) {
+        Log.d("확인","3")
         //todo : 반경 10km 안이면 인증 완료 화면 전환, 아니면 다시 인증해주세요 다이얼로그 -> 현재위치 전송해줘야함
         mLastLocation = location
         mLastLocation.latitude // 갱신 된 위도
@@ -347,9 +358,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             App.prefs.verificationTime = System.currentTimeMillis()
             (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
         }else{
-            shakeCount = 5
-            binding.tvTravelingVerificationCount.text = shakeCount.toString()
             toast("거리가 부족합니다.\n여행지에 도착 후 다시 인증해주세요.")
+            vibrator.vibrate(VibrationEffect.createOneShot(150, 100))
+            mFusedLocationProviderClient!!.removeLocationUpdates(mLocationCallback)
         }
     }
 
