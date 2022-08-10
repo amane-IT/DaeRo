@@ -132,12 +132,18 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         if (userVo == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
 
-        if (userVo.getResult() == UserVo.UserVoResult.SUCCESS) {
+        if (userVo.getResult() == UserVo.UserVoResult.SUCCESS || userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
             response.put("user_seq", userVo.getUserSeq());
             response.put("user_nickname", userVo.getNickname());
             String jwt = jwtService.create(userVo.getUserSeq(), loginVO.getId());
             response.put("jwt", jwt);
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            if (userVo.getResult() == UserVo.UserVoResult.SUCCESS) {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            }
+
         } else if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
@@ -158,12 +164,18 @@ public class UserController {
         if (userSeq <= 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        UserDto userDto = userService.loginJwt(userSeq);
-        if (userDto == null) {
+        UserVo userVo = userService.loginJwt(userSeq);
+        if (userVo == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        if (userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
+            return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        }
         resultMap.put("user_seq", userSeq);
-        resultMap.put("user_nickname", userDto.getNickname());
+        resultMap.put("user_nickname", userVo.getNickname());
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 

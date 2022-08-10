@@ -61,6 +61,9 @@ public class UserService {
             if (userVo.getSuspendedYn() == 'y' && userVo.getSuspendedExpiry().after(now)) {
                 userVo.setResult(UserVo.UserVoResult.SUSPENDED_USER);
             }
+            else if (userMapper.selectUserFavor(userVo.getUserSeq()) == 0) {
+                userVo.setResult(UserVo.UserVoResult.NO_FAVOR);
+            }
             else {
                 // 정지 만료 기간이 지났거나 정지당하지 않은 유저
                 userVo.setResult(UserVo.UserVoResult.SUCCESS);
@@ -72,8 +75,21 @@ public class UserService {
         return userVo;
     }
 
-    public UserDto loginJwt(int userSeq) {
-        return userMapper.selectByUserSeq(userSeq);
+    public UserVo loginJwt(int userSeq) {
+        UserVo userVo = userMapper.selectByUserSeq(userSeq);
+        Date now = new Date();
+        // 정지당한 유저
+        if (userVo.getSuspendedYn() == 'y' && userVo.getSuspendedExpiry().after(now)) {
+            userVo.setResult(UserVo.UserVoResult.SUSPENDED_USER);
+        }
+        else if (userMapper.selectUserFavor(userVo.getUserSeq()) == 0) {
+            userVo.setResult(UserVo.UserVoResult.NO_FAVOR);
+        }
+        else {
+            // 정지 만료 기간이 지났거나 정지당하지 않은 유저
+            userVo.setResult(UserVo.UserVoResult.SUCCESS);
+        }
+        return userVo;
     }
 
     public boolean findId(String email) {
