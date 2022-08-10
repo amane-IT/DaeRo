@@ -60,8 +60,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var regionTags = listOf<Int>()
 
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
-        bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
+        findNavController().navigate(
+            R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,7 +109,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun initView() {
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
-        if(App.prefs.isFollow) {
+        if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
         }
     }
@@ -164,7 +166,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 val bundle = Bundle().apply {
                     putInt(PLACE_SEQ, it)
                     putBoolean(IS_RE_RECOMMEND, true)
-                    if(App.prefs.isFirstTrip) {
+                    if (App.prefs.isFirstTrip) {
                         putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
                     }
                 }
@@ -173,6 +175,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                     bundle
                 )
                 travelingViewModel.placeSeq.value = 0
+            }
+        }
+        travelingViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if (it.isNotBlank()) {
+                Glide.with(requireContext()).load(it)
+                travelingViewModel.imageUrl.value = ""
             }
         }
     }
@@ -255,7 +263,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
     }
 
-    private val finishTrip : () -> Unit = {
+    private val finishTrip: () -> Unit = {
         // 게시글 작성 상태로 변경
         App.prefs.isPosting = true
 

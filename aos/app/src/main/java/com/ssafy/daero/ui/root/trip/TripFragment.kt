@@ -7,11 +7,13 @@ import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
 import com.ssafy.daero.databinding.FragmentTripBinding
 import com.ssafy.daero.ui.adapter.trip.TripHotAdapter
 import com.ssafy.daero.ui.adapter.trip.TripPopularAdapter
@@ -86,7 +88,6 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     }
 
     private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        // todo: 상세 게시글로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleFragment, bundleOf(
             ARTICLE_SEQ to articleSeq))
     }
@@ -172,10 +173,12 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         tripViewModel.firstTripRecommendResponseDto.observe(viewLifecycleOwner, tripInformationObserver)
     }
 
-    private val tripInformationObserver = { place_seq : Int ->
-        if(place_seq > 0) {
+    private val tripInformationObserver = { recommend : FirstTripRecommendResponseDto ->
+        if(recommend.place_seq > 0) {
+            Glide.with(requireContext()).load(recommend.image_url)
+
             val bundle = Bundle().apply {
-                putInt(PLACE_SEQ, place_seq)
+                putInt(PLACE_SEQ, recommend.place_seq)
                 putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
             }
 

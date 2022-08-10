@@ -24,6 +24,7 @@ class TripInformationViewModel : BaseViewModel() {
         get() = _showProgress
 
     val placeSeq = MutableLiveData<Int>()
+    val imageUrl = MutableLiveData<String>()
 
     /**
      * 여행지 정보
@@ -55,6 +56,7 @@ class TripInformationViewModel : BaseViewModel() {
                 .subscribe(
                     { response ->
                         placeSeq.postValue(response.body()!!.place_seq)
+                        imageUrl.postValue(response.body()!!.image_url)
                         // 추천받은 placeSeq 로 여행지 정보 요청
                         getTripInformation(response.body()!!.place_seq)
                     },
@@ -74,6 +76,7 @@ class TripInformationViewModel : BaseViewModel() {
                 App.prefs.tripTransportation
             ).subscribe({ response ->
                 placeSeq.postValue(response.body()!!.place_seq)
+                imageUrl.postValue(response.body()!!.image_url)
 
                 // 추천받은 placeSeq 로 여행지 정보 요청
                 getTripInformation(response.body()!!.place_seq)

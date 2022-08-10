@@ -5,6 +5,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -153,6 +154,12 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
                     toast("해당 조건에 맞는 여행지가 없습니다.")
                     tripNextViewModel.nextTripRecommendState.value = DEFAULT
                 }
+            }
+        }
+        tripNextViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if(it.isNotBlank()) {
+                Glide.with(requireContext()).load(it)
+                tripNextViewModel.imageUrl.value = ""
             }
         }
     }

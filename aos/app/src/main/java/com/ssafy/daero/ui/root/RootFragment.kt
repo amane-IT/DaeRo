@@ -16,6 +16,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     override fun init() {
         if(!App.prefs.isFollowStart){
             changeFragment(curFragmentType)
+            binding.bottomnavigationRoot.selectedItemId = selectPosition
         }else{
             binding.bottomnavigationRoot.selectedItemId = R.id.TripFragment
         }
@@ -203,9 +204,11 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
                 }
             }
         }
+        selectPosition = binding.bottomnavigationRoot.selectedItemId
     }
 
     companion object {
-        var curFragmentType = FragmentType.HomeFragment
+        var curFragmentType = FragmentType.TripFragment
+        var selectPosition = R.id.TripFragment
     }
 }
