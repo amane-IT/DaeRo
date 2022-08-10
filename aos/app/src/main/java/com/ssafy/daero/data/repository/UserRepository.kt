@@ -7,10 +7,7 @@ import com.ssafy.daero.data.dto.login.*
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
-import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
-import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
-import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
-import com.ssafy.daero.data.dto.user.UserProfileResponseDto
+import com.ssafy.daero.data.dto.user.*
 import com.ssafy.daero.data.remote.UserApi
 import com.ssafy.daero.utils.retrofit.RetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -126,8 +123,10 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun postPreference(userSeq: Int, result: List<Int>): Single<Void> {
+    fun postPreference(userSeq: Int, result: List<Int>): Completable {
         return userApi.postPreference(userSeq, result)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun confirmPassword(
@@ -150,10 +149,9 @@ class UserRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun withdrawal(userSeq: Int): Single<Response<Boolean>> {
+    fun withdrawal(userSeq: Int): Completable {
         return userApi.withdrawal(userSeq)
             .subscribeOn(Schedulers.io())
-            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

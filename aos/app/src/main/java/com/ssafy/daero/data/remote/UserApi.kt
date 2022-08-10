@@ -111,7 +111,7 @@ interface UserApi {
     fun postPreference(
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
-    ): Single<Void>
+    ): Completable
 
     /**
      * 비밀번호 확인 요청
@@ -135,7 +135,8 @@ interface UserApi {
      * 회원 탈퇴
      */
     @PUT("users/{user_seq}/quit")
-    fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
+    fun withdrawal(@Path("user_seq") userSeq: Int): Completable
+//            Single<Response<Boolean>>
 
     /**
      * FCM Token 전송
