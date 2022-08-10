@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.*;
 
 @RestController
@@ -351,7 +350,7 @@ public class SnsController {
         return new ResponseEntity<>(this.snsService.popularList(), HttpStatus.OK);
     }
 
-    @GetMapping("/article/{article_seq}/hide")
+    @PostMapping("/article/{article_seq}/hide")
     public ResponseEntity<String> hideArticle(@RequestHeader("jwt") String jwt, @PathVariable("article_seq") int articleSeq) {
         int userSeq = this.jwtService.getUserSeq(jwt);
         return new ResponseEntity<>(this.snsService.hide(userSeq, articleSeq) ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
