@@ -296,6 +296,18 @@ public class SnsService {
         return "BAD_REQUEST";
     }
 
+    public String reportUser(int userSeq, int currentUserSeq, int reportSeq) {
+        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
+        if (user == null) { return "BAD_REQUEST"; }
+        // 신고한 적 있는지 확인
+        int reported = snsMapper.selectReportUserByUserSeq(userSeq, currentUserSeq);
+        if (reported == 1) { return "ALREDY_REPORTED"; }
+        // 신고하기
+        int inserted = snsMapper.insertReport(userSeq, currentUserSeq, userSeq, reportSeq, "user");
+        if (inserted == 1) { return "SUCCESS"; }
+        return "BAC_REQUEST";
+    }
+
     public String followUser(int followerUserSeq, int followedUserSeq) {
         // follow할 유저가 있는지 확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);

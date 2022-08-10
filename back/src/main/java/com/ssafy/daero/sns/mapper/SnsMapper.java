@@ -60,6 +60,8 @@ public interface SnsMapper {
 
     int selectReportReplyByUserSeq(@Param("replySeq") int replySeq, @Param("userSeq") int userSeq);
 
+    int selectReportUserByUserSeq(@Param("userSeq") int userSeq, @Param("currentUserSeq") int currentUserSeq);
+
     int selectFollowByUserSeq(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
     int insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
 

@@ -13,14 +13,11 @@
     </insert>
 
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT a.trips_seq,
-               a.title,
-               (SELECT `like_count`
-                FROM daero.v_users_trips_articles va
-                WHERE va.articles_seq = a.articles_seq) AS like_count,
-               (SELECT `open_yn`
-                FROM daero.v_users_trips_articles va
-                WHERE va.articles_seq = a.articles_seq) AS open_yn,
+        SELECT a.trips_seq, a.title, a.created_at, (SELECT `like_count`
+                                      FROM daero.v_users_trips_articles va
+                                      WHERE va.articles_seq=a.articles_seq) AS like_count, (SELECT `open_yn`
+                                                                                            FROM daero.v_users_trips_articles va
+                                                                                            WHERE va.articles_seq=a.articles_seq) AS open_yn,
                (SELECT `reply_count`
                 FROM daero.v_users_trips_articles va
                 WHERE va.articles_seq = a.articles_seq) AS reply_count,
@@ -214,21 +211,28 @@
     </insert>
 
     <select id="selectReportArticleByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
         WHERE reporter_users_seq = #{userSeq}
           AND content_seq = #{articleSeq}
     </select>
 
     <select id="selectReportReplyByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
         WHERE reporter_users_seq = #{userSeq}
           AND content_seq = #{replySeq}
     </select>
 
+    <select id="selectReportUserByUserSeq" resultType="_int">
+        SELECT COUNT(0)
+        FROM daero.reports
+        WHERE reporter_users_seq=#{currentUserSeq}
+          AND reported_users_seq=#{userSeq} AND article_type='user'
+    </select>
+
     <select id="selectFollowByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
         WHERE following_users_seq = #{followedUserSeq}
           AND follower_users_seq = #{followerUserSeq}
@@ -634,6 +638,7 @@
         <result property="likes" column="like_count"/>
         <result property="comments" column="reply_count"/>
         <result property="openYn" column="open_yn"/>
+        <result property="createdAt" column="created_at"/>
     </resultMap>
 
     <resultMap id="mappingStampVo" type="com.ssafy.daero.sns.vo.StampVo">
