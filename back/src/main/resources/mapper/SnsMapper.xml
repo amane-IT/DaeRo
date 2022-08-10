@@ -323,7 +323,7 @@
         where `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleCountByFollowCreatedAt" resultType="_int">
@@ -335,7 +335,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByFollowCreatedAt" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -364,7 +364,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>
@@ -396,7 +396,7 @@
           and `open_yn` = 'y'
           and `users_seq` != #{userSeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
         order by `created_at` desc
         ]]>
     </select>
@@ -465,7 +465,7 @@
             or binary (`t`.`trip_comment`) like concat('%', #{content}, '%')
             or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -493,7 +493,7 @@
             or binary (`a`.`trip_comment`) like concat('%', #{content}, '%')
             or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>
@@ -505,7 +505,7 @@
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
         where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleByPlace" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
@@ -532,7 +532,7 @@
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
         where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          and `articles_seq` not in (select `article_seq` from `hide` where `users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
         order by `created_at` desc
         limit #{limit} offset #{offset}
     </select>
