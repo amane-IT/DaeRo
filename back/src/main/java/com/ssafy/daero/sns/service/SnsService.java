@@ -71,9 +71,11 @@ public class SnsService {
         days.put("day_comment", dayComment);
         days.put("trip_stamps", stamps);
         records.add(days);
-
+        ArrayList<Map<String, Object>> expenses = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Map<String, Object>> expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
+        if (!articleVo.getTripExpenses().isEmpty()) {
+            expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
+        }
 
         articleDetail.put("user_seq", articleVo.getUserSeq());
         articleDetail.put("nickname", userInfo.get("nickname"));
