@@ -292,18 +292,19 @@ public class TripService {
     }
 
     public void writeArticle(TripVo tripVo, String[] urls) {
-        int index = 0;
-        int tripSeq = this.tripMapper.insertTrip(tripVo);
-        tripVo.setTripSeq(tripSeq);
+        this.tripMapper.insertTrip(tripVo);
+        int tripSeq = tripVo.getTripSeq();
         tripVo.setThumbnailUrl(urls[tripVo.getThumbnailIndex()]);
         tripVo.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
         for (TripDayVo tripDayVo : tripVo.getRecords()) {
             tripDayVo.setTripSeq(tripSeq);
-            int tripDaySeq = this.tripMapper.insertTripDay(tripDayVo);
-            for (TripStampVo tripStampVo : tripDayVo.getTripStamps()) {
+            this.tripMapper.insertTripDay(tripDayVo);
+            int tripDaySeq = tripDayVo.getTripDaySeq();
+            for (int i = 0; i < tripDayVo.getTripStamps().size(); i++) {
+                TripStampVo tripStampVo = tripDayVo.getTripStamps().get(i);
                 tripStampVo.setTripSeq(tripSeq);
                 tripStampVo.setTripDaySeq(tripDaySeq);
-                tripStampVo.setUrl(urls[index]);
+                tripStampVo.setUrl(urls[i]);
                 this.tripMapper.insertTripStamp(tripStampVo);
             }
         }
