@@ -251,7 +251,7 @@
         WHERE follower_users_seq = #{userSeq}
     </select>
 
-    <select id="selectFollowerListByFollowedUserSeq" resultMap="com.ssafy.daero.sns.vo.UserVo">
+    <select id="selectFollowerListByFollowedUserSeq" resultType="com.ssafy.daero.sns.vo.UserVo">
         select `users_seq`          as `userSeq`,
                `nickname`           as `nickname`,
                `profile_image_link` as `profileImageLink`,
@@ -267,7 +267,7 @@
         limit #{limit} offset #{offset}
     </select>
 
-    <select id="selectFollowingListByFollowerUserSeq" resultMap="mappingUserVo">
+    <select id="selectFollowingListByFollowerUserSeq" resultType="com.ssafy.daero.sns.vo.UserVo">
         select `users_seq`          as `userSeq`,
                `nickname`           as `nickname`,
                `profile_image_link` as `profileImageLink`,
