@@ -78,6 +78,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     override fun onPause() {
         super.onPause()
+        mSensorManager.unregisterListener(this)
     }
 
     override fun init() {
@@ -301,7 +302,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
                 if (shakeCount < 1) {
                     startLocationUpdates()
-                    mSensorManager.unregisterListener(this)
                 }
             }
         }
