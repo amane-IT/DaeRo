@@ -63,8 +63,6 @@ class ArticleMenuBottomSheetFragment(
         if (userSeq == App.prefs.userSeq) {
             binding.tvArticleMenuTripFollow.visibility = View.GONE
             binding.viewArticleMenuTripFollow.visibility = View.GONE
-            binding.tvArticleMenuHide.visibility = View.GONE
-            binding.viewArticleMenuHide.visibility = View.GONE
             binding.tvArticleMenuReport.visibility = View.GONE
             binding.viewArticleMenuReport.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
@@ -147,10 +145,6 @@ class ArticleMenuBottomSheetFragment(
                 listener.articleOpen(articleSeq)
             }
             dismiss()
-        }
-        binding.tvArticleMenuHide.setOnClickListener {
-            //숨기기
-
         }
         binding.tvArticleMenuCancel.setOnClickListener {
             dismiss()
