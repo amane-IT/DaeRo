@@ -33,6 +33,15 @@
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loginFragment_to_tripPreferenceFragment"
+            app:destination="@id/tripPreferenceFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/emailLoginFragment"
@@ -62,6 +71,15 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
+        <action
+            android:id="@+id/action_emailLoginFragment_to_tripPreferenceFragment"
+            app:destination="@id/tripPreferenceFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/emailLoginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signupEmailFragment"
@@ -362,7 +380,7 @@
             app:exitAnim="@anim/to_left"
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right"
-            app:popUpTo="@id/signupUsernameFragment"
+            app:popUpTo="@id/tripPreferenceFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -407,7 +425,18 @@
         android:id="@+id/resetPasswordFragment"
         android:name="com.ssafy.daero.ui.setting.ResetPasswordFragment"
         android:label="ResetPasswordFragment"
-        tools:layout="@layout/fragment_reset_password" />
+        tools:layout="@layout/fragment_reset_password">
+
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
+            app:popUpTo="@id/settingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/articleFragment"
         android:name="com.ssafy.daero.ui.root.sns.ArticleFragment"

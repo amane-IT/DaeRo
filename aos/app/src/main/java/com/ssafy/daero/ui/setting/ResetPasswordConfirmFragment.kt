@@ -5,25 +5,28 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.databinding.FragmentResetPasswordConfirmBinding
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
-class ResetPasswordConfirmFragment : BaseFragment<FragmentResetPasswordConfirmBinding>(R.layout.fragment_reset_password) {
+class ResetPasswordConfirmFragment :
+    BaseFragment<FragmentResetPasswordConfirmBinding>(R.layout.fragment_reset_password_confirm)
+{
     private val resetPasswordConfirmViewModel : ResetPasswordConfirmViewModel by viewModels()
 
     override fun init() {
-        setOnClickListener()
         observeData()
+        setOnClickListener()
     }
 
     private fun setOnClickListener() {
         binding.apply {
             buttonResetPasswordConfirmNextStep.setOnClickListener {
                 val dto =
-                    ResetPasswordRequestDto(editTextResetPasswordConfirmPasswordVerification.text.toString())
+                    ResetPasswordConfirmRequestDto(editTextResetPasswordConfirmPasswordVerification.text.toString())
                 resetPasswordConfirmViewModel.confirmPassword(dto)
             }
 

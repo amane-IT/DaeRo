@@ -7,14 +7,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentCollectionBinding
 import com.ssafy.daero.ui.adapter.sns.CollectionAdapter
 import com.ssafy.daero.ui.root.sns.ArticleViewModel
-import com.ssafy.daero.utils.collections
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
-import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.constant.USER_SEQ
 
 class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.fragment_collection){

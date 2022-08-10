@@ -2,6 +2,7 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
@@ -111,7 +112,7 @@ interface UserApi {
     fun postPreference(
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
-    ): Single<Void>
+    ): Completable
 
     /**
      * 비밀번호 확인 요청
@@ -119,7 +120,7 @@ interface UserApi {
     @POST("users/{user_seq}/password")
     fun confirmPassword(
         @Path("user_seq") userSeq: Int,
-        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+        @Body resetPasswordConfirmRequestDto: ResetPasswordConfirmRequestDto
     ): Single<Response<ResetPasswordResponseDto>>
 
     /**
@@ -135,7 +136,8 @@ interface UserApi {
      * 회원 탈퇴
      */
     @PUT("users/{user_seq}/quit")
-    fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
+    fun withdrawal(@Path("user_seq") userSeq: Int): Completable
+//            Single<Response<Boolean>>
 
     /**
      * FCM Token 전송

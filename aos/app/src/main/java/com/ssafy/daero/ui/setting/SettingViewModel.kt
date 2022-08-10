@@ -17,13 +17,15 @@ class SettingViewModel : BaseViewModel() {
 
     fun withdrawal() {
         addDisposable(
-            userRepository.withdrawal(App.userSeq)
-                .subscribe({ response ->
-                    if (response.body()!!) {
+            userRepository.withdrawal(App.prefs.userSeq)
+                .subscribe({
+//                        response ->
+//                    Log.d("탈퇴여부 체크", "withdrawal: ${response.body()}")
+//                    if (response.body()!!) {
                         withdrawalState.postValue(SUCCESS)
-                    } else {
-                        withdrawalState.postValue(FAIL)
-                    }
+//                    } else {
+//                        withdrawalState.postValue(FAIL)
+//                    }
                 }, { throwable ->
                     Log.d("SettingVM_DaeRo", throwable.toString())
                     withdrawalState.postValue(FAIL)

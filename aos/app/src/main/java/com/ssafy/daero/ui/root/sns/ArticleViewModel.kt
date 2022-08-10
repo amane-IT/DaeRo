@@ -1,20 +1,12 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.rxjava3.cachedIn
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.*
-import com.ssafy.daero.data.dto.trip.TripAlbumItem
 import com.ssafy.daero.data.repository.SnsRepository
-import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import io.reactivex.rxjava3.core.Completable
 
 class ArticleViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
