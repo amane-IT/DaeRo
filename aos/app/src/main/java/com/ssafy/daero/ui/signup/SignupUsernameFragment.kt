@@ -30,8 +30,13 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
         binding.apply {
             buttonSignupUsernameConfirm.setOnClickListener {
-                val dto = SignupNicknameRequestDto(editTextSignupUsernameUserName.text.toString())
-                signupUsernameViewModel.verifyNickname(dto)
+                if(editTextSignupUsernameUserName.text.isNotEmpty()) {
+                    val dto =
+                        SignupNicknameRequestDto(editTextSignupUsernameUserName.text.toString())
+                    signupUsernameViewModel.verifyNickname(dto)
+                } else {
+                    toast("닉네임을 입력해주세요.")
+                }
             }
 
             buttonSignupUsernameNextStep.setOnClickListener {
@@ -59,7 +64,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
     private fun addTextChangedListeners(){
         binding.apply {
-            // 비밀번호 확인
+            // 닉네임 확인
             editTextSignupUsernameUserName.addTextChangedListener(object : TextWatcher {
                 //입력이 끝났을 때
                 override fun afterTextChanged(p0: Editable?) { }
@@ -69,7 +74,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
 
                 //텍스트 변화가 있을 시
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if (App.userName != editTextSignupUsernameUserName.text.toString()) {
+                    if (App.prefs.nickname != editTextSignupUsernameUserName.text.toString()) {
                         buttonSignupUsernameConfirm.visibility = View.VISIBLE
                         buttonSignupUsernameNextStep.visibility = View.GONE
                     }
@@ -89,6 +94,7 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                     binding.textSignupUsernameCheckMessage.text = "사용가능한 닉네임입니다."
                     binding.buttonSignupUsernameConfirm.visibility = View.GONE
                     binding.buttonSignupUsernameNextStep.visibility = View.VISIBLE
+                    App.prefs.nickname = binding.editTextSignupUsernameUserName.text.toString()
                 }
                 FAIL -> {
                     binding.textSignupUsernameCheckMessage.text = "중복된 닉네임입니다."
@@ -112,8 +118,6 @@ class SignupUsernameFragment : BaseFragment<FragmentSignupUsernameBinding>(R.lay
                 SUCCESS -> {
                     App.userId = ""
                     App.password = ""
-                    App.userName = ""
-
                     findNavController().navigate(R.id.action_signupUsernameFragment_to_tripPreferenceFragment)
                 }
                 FAIL ->{
