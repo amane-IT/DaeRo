@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 *.properties
 *.war
-!**/src/main/**/ssl
+*.p12
 
 ### STS ###
 .apt_generated
