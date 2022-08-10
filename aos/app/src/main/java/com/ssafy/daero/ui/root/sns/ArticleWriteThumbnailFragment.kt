@@ -71,7 +71,7 @@ class ArticleWriteThumbnailFragment :
                     App.prefs.tripState = TRIP_BEFORE
 
                     // fragment type 초기화
-                    RootFragment.curFragmentType = FragmentType.HomeFragment
+                    RootFragment.selectPosition = R.id.TripFragment
 
                     // RootFragment 로 이동
                     findNavController().navigate(R.id.action_articleWriteThumbnailFragment_to_rootFragment)
