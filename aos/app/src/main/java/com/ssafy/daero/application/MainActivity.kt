@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        RootFragment.curFragmentType = FragmentType.HomeFragment
+        RootFragment.selectPosition = R.id.TripFragment
     }
 
     override fun onBackPressed() {

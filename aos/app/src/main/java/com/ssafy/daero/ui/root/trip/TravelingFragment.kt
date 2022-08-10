@@ -64,8 +64,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private var regionTags = listOf<Int>()
     private lateinit var vibrator: Vibrator
     private val tripUntilNowClickListener: (View, Int) -> Unit = { _, tripStampId ->
-        findNavController().navigate(R.id.action_rootFragment_to_tripStampFragment,
-        bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true))
+        findNavController().navigate(
+            R.id.action_rootFragment_to_tripStampFragment,
+            bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true)
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -113,7 +115,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun initView() {
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
-        if(App.prefs.isFollow) {
+        if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
         }
     }
@@ -170,7 +172,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 val bundle = Bundle().apply {
                     putInt(PLACE_SEQ, it)
                     putBoolean(IS_RE_RECOMMEND, true)
-                    if(App.prefs.isFirstTrip) {
+                    if (App.prefs.isFirstTrip) {
                         putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
                     }
                 }
@@ -179,6 +181,12 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                     bundle
                 )
                 travelingViewModel.placeSeq.value = 0
+            }
+        }
+        travelingViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if (it.isNotBlank()) {
+                Glide.with(requireContext()).load(it)
+                travelingViewModel.imageUrl.value = ""
             }
         }
     }
@@ -252,7 +260,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 App.prefs.initTrip()
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
-                TripCompleteBottomSheetFragment(finishTrip)
+                TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
@@ -261,7 +269,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
     }
 
-    private val finishTrip : () -> Unit = {
+    private val finishTrip: () -> Unit = {
         // 게시글 작성 상태로 변경
         App.prefs.isPosting = true
 
@@ -270,6 +278,18 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
         // 게시글 추가 화면으로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
+    }
+
+    private val doneTrip: () -> Unit = {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        travelingViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initTrip()
+        (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
     }
 
     private fun findDirectionByNaverMap() {

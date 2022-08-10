@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -82,6 +83,12 @@ class TripInformationFragment :
             if (it > 0) {
                 placeSeq = it
                 tripInformationViewModel.placeSeq.value = 0
+            }
+        }
+        tripInformationViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if(it.isNotBlank()) {
+                Glide.with(requireContext()).load(it)
+                tripInformationViewModel.imageUrl.value = ""
             }
         }
     }

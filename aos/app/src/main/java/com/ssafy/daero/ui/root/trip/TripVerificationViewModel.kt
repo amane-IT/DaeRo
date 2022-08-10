@@ -70,14 +70,21 @@ class TripVerificationViewModel : BaseViewModel() {
         )
     }
 
-    fun insertTripStamp(tripStamp: TripStamp) {
+    fun deleteAllTripRecord() {
         addDisposable(
-            tripRepository.insertTripStamp(tripStamp)
+            tripRepository.deleteAllTripStamps()
                 .subscribe({
-                    responseState.postValue(SUCCESS)
+
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
-                    responseState.postValue(FAIL)
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                })
+        )
+        addDisposable(
+            tripRepository.deleteAllTripFollow()
+                .subscribe({
+
+                }, { throwable ->
+                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }

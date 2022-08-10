@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="20dp"
                     android:text="강원 강릉시 창해로14번길 20-1"
                     app:layout_constraintEnd_toStartOf="@id/button_traveling_directions"
@@ -159,20 +159,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="52dp"
                     android:text="트립스탬프 인증"
                     android:textColor="@color/primaryTextColor"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_traveling_address" />
 
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_shake"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_traveling_trip_stamp_verification"
+                    app:layout_constraintStart_toEndOf="@id/tv_traveling_trip_stamp_verification"
+                    app:layout_constraintTop_toTopOf="@id/tv_traveling_trip_stamp_verification" />
+
                 <Button
                     android:id="@+id/button_traveling_temporary"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
                     android:text="임시 인증"
                     app:layout_constraintBottom_toBottomOf="@id/tv_traveling_trip_stamp_verification"
-                    app:layout_constraintStart_toEndOf="@id/tv_traveling_trip_stamp_verification"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_traveling_trip_stamp_verification" />
 
                 <TextView
@@ -182,7 +191,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="16dp"
                     android:text="목적지 주변에 도착하면 5번 흔들어주세요!"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_traveling_trip_stamp_verification" />

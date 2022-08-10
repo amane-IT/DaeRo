@@ -14,15 +14,17 @@ import com.ssafy.daero.utils.constant.*
 
 class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     override fun init() {
-        if(!App.prefs.isFollowStart){
-            changeFragment(curFragmentType)
-        }else{
-            binding.bottomnavigationRoot.selectedItemId = R.id.TripFragment
-        }
+        initFragment()
         checkTripStart()
         checkTripStamp()
         checkTripFollow()
         setOnClickListeners()
+    }
+
+    private fun initFragment() {
+        binding.bottomnavigationRoot.selectedItemId = selectPosition
+        val fragmentType = getFragmentType(binding.bottomnavigationRoot.selectedItemId)
+        changeFragment(fragmentType)
     }
 
     // 여행 상세 페이지에서 여행 시작 버튼 눌렀는지 여부
@@ -35,7 +37,7 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     }
 
     private fun checkTripFollow() {
-        if(App.prefs.isFollowStart) {
+        if (App.prefs.isFollowStart) {
             App.prefs.isFollow = true
             App.prefs.isFollowStart = false
             changeTripState(TRIP_ING)
@@ -194,18 +196,10 @@ class RootFragment : BaseFragment<FragmentRootBinding>(R.layout.fragment_root) {
     }
 
     private fun saveCurrentFragment() {
-        childFragmentManager.fragments.forEach { fragment ->
-            if (fragment.isVisible) {
-                FragmentType.values().forEach { fragmentType ->
-                    if (fragmentType.tag == fragment.tag!!) {
-                        curFragmentType = fragmentType
-                    }
-                }
-            }
-        }
+        selectPosition = binding.bottomnavigationRoot.selectedItemId
     }
 
     companion object {
-        var curFragmentType = FragmentType.HomeFragment
+        var selectPosition = R.id.TripFragment
     }
 }
