@@ -65,9 +65,9 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @GetMapping("/article/{article_seq}/reply/{reply_seq}")
-    public ResponseEntity<Map<String, Object>> replyDetail(@PathVariable int article_seq, @PathVariable int reply_seq) {
-        Map<String, Object> res = adminService.replyDetail(article_seq, reply_seq);
+    @GetMapping("/reply/{reply_seq}")
+    public ResponseEntity<Map<String, Object>> replyDetail(@PathVariable int reply_seq) {
+        Map<String, Object> res = adminService.replyDetail(reply_seq);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         return new ResponseEntity<>(res, HttpStatus.OK);
     }

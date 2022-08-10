@@ -17,7 +17,7 @@
 
     <select id="selectUserList" parameterType="_int" resultMap="mappingUserDto">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
+        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, user_email, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
         FROM reports r
         WHERE r.reported_users_seq=u.users_seq) AS report_count
         FROM daero.users u) AS user
@@ -98,12 +98,17 @@
 
     <select id="selectArticleList" parameterType="_int" resultMap="mappingArticleVo">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY a.articles_seq ASC) AS row, a.articles_seq, a.title, a.created_at, a.open_yn, (SELECT t.users_seq
-                                                                        FROM trips t
-                                                                        WHERE t.trips_seq=a.trips_seq) AS users_seq
+        FROM (SELECT row_number() over (ORDER BY a.articles_seq ASC) AS row,
+                     a.articles_seq,
+                     a.title,
+                     a.created_at,
+                     a.open_yn,
+                     (SELECT t.users_seq
+                      FROM trips t
+                      WHERE t.trips_seq = a.trips_seq)               AS users_seq
               FROM daero.articles a) AS article
-        WHERE (#{page} -1)*10 &lt; article.row
-          AND article.row &lt; 1+(#{page}*10)
+        WHERE (#{page} - 1) * 10 &lt; article.row
+          AND article.row &lt; 1 + (#{page} * 10);
     </select>
 
     <select id="selectUserListBySearch" resultMap="mappingUserDto">
@@ -294,10 +299,11 @@
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url" />
         <result property="nickname" column="nickname" />
-        <result property="userSeq" column="user_seq" />
+        <result property="userSeq" column="users_seq" />
         <result property="reportedCount" column="report_count" />
         <result property="createdAt" column="created_at" />
         <result property="suspendedYn" column="suspended_yn" />
+        <result property="userEmail" column="user_email" />
     </resultMap>
 
     <resultMap id="mappingReportDto" type="com.ssafy.daero.admin.dto.ReportDto">
@@ -320,7 +326,7 @@
     </resultMap>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
-        <result property="articleSeq" column="article_seq" />
+        <result property="articleSeq" column="articles_seq" />
         <result property="nickname" column="nickname" />
         <result property="userSeq" column="users_seq" />
         <result property="createdAt" column="created_at" />
