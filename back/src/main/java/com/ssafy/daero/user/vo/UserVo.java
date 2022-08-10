@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 public class UserVo extends UserDto {
     public enum UserVoResult {
-        SUCCESS, FAILURE, SUSPENDED_USER
+        SUCCESS, FAILURE, SUSPENDED_USER, NO_FAVOR
     }
     private UserVoResult result;
 }
