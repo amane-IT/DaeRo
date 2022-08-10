@@ -57,6 +57,7 @@ public class AdminService {
             user.put("report_count", uVo.getReportedCount());
             user.put("reg_date", uVo.getCreatedAt());
             user.put("suspended_yn", uVo.getSuspendedYn());
+            user.put("id", uVo.getUserEmail());
             userList.add(user);
             user = new HashMap<>();
         }
@@ -161,6 +162,7 @@ public class AdminService {
         articleDetail.put("tags", tags);
         articleDetail.put("trip_expenses", expenses);
         articleDetail.put("records", records);
+        articleDetail.put("created_at", articleVo.getCreatedAt());
         return articleDetail;
     }
 
@@ -203,9 +205,7 @@ public class AdminService {
         return replyList;
     }
 
-    public Map<String, Object> replyDetail(int articleSeq, int replySeq) {
-        int article = adminMapper.selectArticleByArticleSeq(articleSeq);
-        if (article == 0) { return null; }
+    public Map<String, Object> replyDetail(int replySeq) {
         ReplyVo replyVo = adminMapper.selectReplyByReplySeq(replySeq);
         if (replyVo == null) { return null; }
         Map<String, Object> replyDetail = new HashMap<>();
