@@ -48,8 +48,11 @@ public class SnsController {
     }
 
     @GetMapping("/article/{article_seq}/reply")
-    public ResponseEntity<Map<String, Object>> replyList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, Object> res = snsService.replyList(article_seq, page);
+    public ResponseEntity<Map<String, Object>> replyList(@RequestHeader("jwt") String jwt,
+                                                         @PathVariable int article_seq,
+                                                         @RequestParam(defaultValue = "1") int page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        Map<String, Object> res = snsService.replyList(article_seq, page, userSeq);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
         else { return new ResponseEntity<>(res, HttpStatus.OK); }
@@ -92,8 +95,11 @@ public class SnsController {
     }
 
     @GetMapping("/article/{article_seq}/reply/{reply_seq}")
-    public ResponseEntity<Map<String, Object>> rereplyList(@PathVariable int article_seq, @PathVariable int reply_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, Object> res = snsService.rereplyList(reply_seq, page);
+    public ResponseEntity<Map<String, Object>> rereplyList(@RequestHeader("jwt") String jwt,
+                                                           @PathVariable int article_seq,
+                                                           @PathVariable int reply_seq, @RequestParam(defaultValue = "1") int page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        Map<String, Object> res = snsService.rereplyList(reply_seq, page, userSeq);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else if (res.size() == 0) { return new ResponseEntity<>(HttpStatus.NO_CONTENT); }
         else { return new ResponseEntity<>(res, HttpStatus.CREATED); }
@@ -194,23 +200,17 @@ public class SnsController {
     }
 
     @GetMapping("/user/{user_seq}/follower")
-    public ResponseEntity<Map<String, Object>> followerList(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
-        if (Objects.equals(currentUser.get("user_seq"), "null")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        Map<String, Object> followerList = snsService.followerList(Integer.parseInt(currentUser.get("user_seq")), user_seq, page);
+    public ResponseEntity<Map<String, Object>> followerList(@RequestHeader("jwt") String jwt, @PathVariable("user_seq") int followed, @RequestParam(defaultValue = "1") int page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        Map<String, Object> followerList = snsService.followerList(userSeq, followed, page);
         if (followerList == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else { return new ResponseEntity<>(followerList, HttpStatus.OK); }
     }
 
     @GetMapping("/user/{user_seq}/following")
-    public ResponseEntity<Map<String, Object>> followingList(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestParam(defaultValue = "1") String page) {
-        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
-        if (Objects.equals(currentUser.get("user_seq"), "null")) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-        Map<String, Object> followingList = snsService.followingList(Integer.parseInt(currentUser.get("user_seq")), user_seq, page);
+    public ResponseEntity<Map<String, Object>> followingList(@RequestHeader("jwt") String jwt, @PathVariable int user_seq, @RequestParam(defaultValue = "1") int page) {
+        int userSeq = this.jwtService.getUserSeq(jwt);
+        Map<String, Object> followingList = snsService.followingList(userSeq, user_seq, page);
         if (followingList == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {

@@ -9,7 +9,8 @@
         from dual
         where not exists(select *
                          from `blocks`
-                         where `blocked_users_seq` = #{userSeq} and `blocker_users_seq` = #{blocker})
+                         where `blocked_users_seq` = #{userSeq}
+                           and `blocker_users_seq` = #{blocker})
     </insert>
 
     <insert id="insertHide">
@@ -18,15 +19,20 @@
         from dual
         where not exists(select *
                          from `hide`
-                         where `article_seq` = #{articleSeq} and `user_seq` = #{userSeq})
+                         where `article_seq` = #{articleSeq}
+                           and `user_seq` = #{userSeq})
     </insert>
 
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT a.trips_seq, a.title, a.created_at, (SELECT `like_count`
-                                      FROM daero.v_users_trips_articles va
-                                      WHERE va.articles_seq=a.articles_seq) AS like_count, (SELECT `open_yn`
-                                                                                            FROM daero.v_users_trips_articles va
-                                                                                            WHERE va.articles_seq=a.articles_seq) AS open_yn,
+        SELECT a.trips_seq,
+               a.title,
+               a.created_at,
+               (SELECT `like_count`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq = a.articles_seq) AS like_count,
+               (SELECT `open_yn`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq = a.articles_seq) AS open_yn,
                (SELECT `reply_count`
                 FROM daero.v_users_trips_articles va
                 WHERE va.articles_seq = a.articles_seq) AS reply_count,
@@ -82,27 +88,11 @@
 
     <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY r.created_at) AS row,
-                     replies_seq,
-                     users_seq,
-                     content,
-                     created_at,
-                     updated_at,
-                     (SELECT COUNT(*)
-                      FROM daero.replies
-                      WHERE rereply_parent = r.replies_seq)    AS rereply_count,
-                     (SELECT u.nickname
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq)           AS nickname,
-                     (SELECT u.profile_image_link
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq)           AS profile_url
-              FROM daero.replies r
-              WHERE articles_seq = #{articleSeq}
-                AND rereply_parent IS NULL) AS reply
-        WHERE (#{page} - 1) * 10 &lt; reply.row
+        from replies
+        where articles_seq = #{articleSeq}
+          and rereply_parent is null
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          AND reply.row &lt; (#{page} * 10) + 1
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectUserSeqByReplySeq" parameterType="_int" resultType="java.lang.Integer">
@@ -138,25 +128,11 @@
     </delete>
 
     <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY r.created_at) AS row,
-                     replies_seq,
-                     users_seq,
-                     content,
-                     created_at,
-                     updated_at,
-                     (SELECT u.nickname
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq)               AS nickname,
-                     (SELECT u.profile_image_link
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq)               AS profile_url
-              FROM daero.replies r
-              WHERE rereply_parent = #{replySeq}) AS reply
-        WHERE (#{page} - 1) * 10 &lt; reply.row
+        select *
+        from replies
+        where rereply_parent = #{replySeq}
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
-          AND reply.row &lt; (#{page} * 10) + 1;
-## TODO: need block
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectReplyByReplySeq" parameterType="_int" resultType="_int">
@@ -192,8 +168,8 @@
 
     <delete id="deleteLikeByAuthor">
         delete
-        from `likes` `l`
-        where `l`.`users_seq` = #{userSeq}
+        from `likes`
+        where `users_seq` = #{userSeq}
           and `articles_seq` in (select `articles_seq`
                                  from `v_users_trips_articles` `v`
                                  where `v`.`users_seq` = #{author})
@@ -209,8 +185,8 @@
               WHERE u.users_seq IN (SELECT l.users_seq
                                     FROM daero.likes l
                                     WHERE articles_seq = #{articleSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-          AND user.row &lt; (#{page} * 10) + 1
+        limit #{limit} offset #{offset};
+# TODO: 페이징
     </select>
 
     <insert id="insertReport">
@@ -237,8 +213,9 @@
     <select id="selectReportUserByUserSeq" resultType="_int">
         SELECT COUNT(0)
         FROM daero.reports
-        WHERE reporter_users_seq=#{currentUserSeq}
-          AND reported_users_seq=#{userSeq} AND article_type='user'
+        WHERE reporter_users_seq = #{currentUserSeq}
+          AND reported_users_seq = #{userSeq}
+          AND article_type = 'user'
     </select>
 
     <select id="selectFollowByUserSeq" resultType="_int">
@@ -261,39 +238,49 @@
     </delete>
 
     <select id="selectFollowerByUserSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
         WHERE following_users_seq = #{userSeq}
-        ## TODO: need block
+          and `following_users_seq` not in
+              (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
     </select>
 
     <select id="selectFollowingByUserSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
         WHERE follower_users_seq = #{userSeq}
     </select>
 
-    <select id="selectFollowerListByUserSeq" resultMap="mappingUserVo">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY nickname) AS row, users_seq, nickname, profile_image_link
-              FROM daero.users
-              WHERE users_seq IN (SELECT follower_users_seq
-                                  FROM daero.follows
-                                  WHERE following_users_seq = #{userSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-          AND user.row &lt; (#{page} * 10) + 1
-        ## TODO: need block
+    <select id="selectFollowerListByFollowedUserSeq" resultMap="com.ssafy.daero.sns.vo.UserVo">
+        select `users_seq`          as `userSeq`,
+               `nickname`           as `nickname`,
+               `profile_image_link` as `profileImageLink`,
+               if((select count(0)
+                   from `follows`
+                   where `following_users_seq` = `users_seq`
+                     and `follower_users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `followYn`
+        from `users` `u`
+                 left join `follows` `f` on `u`.`users_seq` = `f`.`follower_users_seq`
+        where `f`.`following_users_seq` = #{followed}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
-    <select id="selectFollowingListByUserSeq" resultMap="mappingUserVo">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY nickname) AS row, users_seq, nickname, profile_image_link
-              FROM daero.users
-              WHERE users_seq IN (SELECT following_users_seq
-                                  FROM daero.follows
-                                  WHERE follower_users_seq = #{userSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-          AND user.row &lt; (#{page} * 10) + 1
+    <select id="selectFollowingListByFollowerUserSeq" resultMap="mappingUserVo">
+        select `users_seq`          as `userSeq`,
+               `nickname`           as `nickname`,
+               `profile_image_link` as `profileImageLink`,
+               if((select count(0)
+                   from `follows`
+                   where `following_users_seq` = `users_seq`
+                     and `follower_users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `followYn`
+        from `users` `u`
+                 left join `follows` `f` on `u`.`users_seq` = `f`.`following_users_seq`
+        where `f`.`follower_users_seq` = #{follower}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectLikeCountByArticleSeq" parameterType="_int" resultType="_int">
@@ -311,10 +298,10 @@
     </select>
 
     <select id="selectRereplyByReplySeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
         WHERE rereply_parent = #{replySeq}
-## TODO: need block
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
     </select>
 
     <select id="selectArticleCount" parameterType="_int" resultType="_int">
@@ -642,8 +629,7 @@
     <update id="updateArticleOpen">
         update articles
         set open_yn = #{openYn}
-        where articles_seq = #{articleSeq};
-
+        where articles_seq = #{articleSeq}
     </update>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">

@@ -28,7 +28,10 @@ public interface SnsMapper {
 
     int deleteArticleByArticleSeq(int articleSeq);
 
-    ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
+    ArrayList<ReplyVo> selectReplyListByArticleSeq(@Param("articleSeq") int articleSeq,
+                                                   @Param("limit") int limit,
+                                                   @Param("offset") int offset,
+                                                   @Param("userSeq") int userSeq);
 
     Integer selectUserSeqByReplySeq(int replySeq);
 
@@ -40,11 +43,17 @@ public interface SnsMapper {
 
     int deleteReplyByReplySeq(int replySeq);
 
-    ArrayList<ReplyVo> selectRereplyListByReplySeq(@Param("replySeq") int replySeq, @Param("page") int page);
+    ArrayList<ReplyVo> selectRereplyListByReplySeq(@Param("replySeq") int replySeq,
+                                                   @Param("limit") int limit,
+                                                   @Param("offset") int offset,
+                                                   @Param("userSeq") int userSeq);
 
     int selectReplyByReplySeq(int replySeq);
 
-    int insertRereply(@Param("articleSeq") int articleSeq, @Param("replySeq") int replySeq, @Param("userSeq") int userSeq, @Param("content") String content);
+    int insertRereply(@Param("articleSeq") int articleSeq,
+                      @Param("replySeq") int replySeq,
+                      @Param("userSeq") int userSeq,
+                      @Param("content") String content);
 
     int selectArticleLikeByUserSeq(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
@@ -54,7 +63,8 @@ public interface SnsMapper {
 
     int deleteLikeByAuthor(@Param("author") int author, @Param("userSeq") int userSeq);
 
-    ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
+    ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq,
+                                                     @Param("page") int page);
 
     int insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
 
@@ -65,6 +75,7 @@ public interface SnsMapper {
     int selectReportUserByUserSeq(@Param("userSeq") int userSeq, @Param("currentUserSeq") int currentUserSeq);
 
     int selectFollowByUserSeq(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
+
     int insertFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
 
     int deleteFollow(@Param("followerUserSeq") int followerUserSeq, @Param("followedUserSeq") int followedUserSeq);
@@ -73,9 +84,15 @@ public interface SnsMapper {
 
     int selectFollowingByUserSeq(int userSeq);
 
-    ArrayList<UserVo> selectFollowerListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+    ArrayList<UserVo> selectFollowerListByFollowedUserSeq(@Param("followed") int followed,
+                                                          @Param("limit") int limit,
+                                                          @Param("offset") int offset,
+                                                          @Param("userSeq") int userSeq);
 
-    ArrayList<UserVo> selectFollowingListByUserSeq(@Param("userSeq") int userSeq, @Param("page") int page);
+    ArrayList<UserVo> selectFollowingListByFollowerUserSeq(@Param("follower") int follower,
+                                                           @Param("limit") int limit,
+                                                           @Param("offset") int offset,
+                                                           @Param("userSeq") int userSeq);
 
     int selectLikeCountByArticleSeq(int articleSeq);
 
@@ -99,6 +116,7 @@ public interface SnsMapper {
                                                       @Param("recent") String recent);
 
     int selectCollectionCountByUserSeq(int userSeq);
+
     ArrayList<Map<String, Object>> selectCollectionByUserSeq(@Param("userSeq") int userSeq, @Param("limit") int limit, @Param("offset") int offset);
 
     int selectUserCountByNickname(String nickname);
@@ -140,10 +158,10 @@ public interface SnsMapper {
                       @Param("expose") String expose);
 
     int selectTripSeqByArticleSeq(int articleSeq);
+
     int updateDayComment(@Param("tripSeq") int tripSeq,
                          @Param("dayComment") String dayComment,
                          @Param("rowNum") int rowNum);
 
     int updateArticleOpen(@Param("articleSeq") int articleSeq, @Param("openYn") char openYn);
-
 }

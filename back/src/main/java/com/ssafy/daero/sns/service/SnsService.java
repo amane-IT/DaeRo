@@ -15,10 +15,12 @@ import java.util.*;
 @Service
 public class SnsService {
     private final SnsMapper snsMapper;
-    private final int PAGE_SIZE = 10;
+    private final int ARTICLE_PAGE_SIZE = 10;
+    private final int REPLY_PAGE_SIZE = 10;
     private final int RECENT_DAY = -3;
     private final int SEARCH_USER_PAGE_SIZE = 10;
     private final int SEARCH_ARTICLE_PAGE_SIZE = 4;
+    private final int USER_PAGE_SIZE = 10;
 
     public SnsService(SnsMapper snsMapper) {
         this.snsMapper = snsMapper;
@@ -27,11 +29,16 @@ public class SnsService {
     public Map<String, Object> articleDetail(int articleSeq, int userSeq) throws JsonProcessingException {
         ArticleVo articleVo = snsMapper.selectArticleAndTripInfoByArticleSeq(articleSeq);
         Map<String, Object> articleDetail = new HashMap<>();
-        if(articleVo == null) { return articleDetail; }
+        if (articleVo == null) {
+            return articleDetail;
+        }
         int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
         char like;
-        if (liked == 0) { like = 'n'; }
-        else { like = 'y'; }
+        if (liked == 0) {
+            like = 'n';
+        } else {
+            like = 'y';
+        }
         ArrayList<StampVo> stampVo = snsMapper.selectStampAndDayInfoByTripSeq(articleVo.getTripSeq());
         Map<String, String> userInfo = snsMapper.selectUserByUserSeq(articleVo.getUserSeq());
         ArrayList<Integer> tags = snsMapper.selectPlaceTagsByArticleSeq(articleSeq);
@@ -46,7 +53,7 @@ public class SnsService {
         String datetime = stampVo.get(0).getDatetime();
         String dayComment = stampVo.get(0).getDayComment();
         for (StampVo sVo :
-             stampVo) {
+                stampVo) {
             if (sVo.getTripDaySeq() != currentDaySeq) {
                 days.put("datetime", datetime);
                 days.put("day_comment", dayComment);
@@ -96,7 +103,9 @@ public class SnsService {
     public int deleteArticle(int articleSeq, int userSeq) {
         // 본인 게시글인지 확인
         Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
-        if (articleUser == null) { return 0; }
+        if (articleUser == null) {
+            return 0;
+        }
         if (articleUser == userSeq) {
             int deletedArticle = snsMapper.deleteArticleByArticleSeq(articleSeq);
             if (deletedArticle == 0) {
@@ -106,18 +115,10 @@ public class SnsService {
         return 2;
     }
 
-    public Map<String, Object> replyList(int articleSeq, String page) {
-        Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
-        if (articleUser == null) { return null; }
-        int totalPage = (int) Math.ceil((snsMapper.selectReplyByArticleSeq(articleSeq))/10.0);
-        if (totalPage  == 0) { totalPage = 1; }
-        if (Integer.parseInt(page) > totalPage) { return null; }
-        ArrayList<Map<String, Object>> replyList = new ArrayList<>();
-        Map<String, Object> reply = new HashMap<>();
-        ArrayList<ReplyVo> replyVos = snsMapper.selectReplyListByArticleSeq(articleSeq, Integer.parseInt(page));
-        Map<String, Object> results = new HashMap<>();
-        for (ReplyVo rVo :
-                replyVos) {
+    private LinkedList<Map<String, Object>> createReplyMapList(List<ReplyVo> replyVos) {
+        LinkedList<Map<String, Object>> replyList = new LinkedList<>();
+        for (ReplyVo rVo : replyVos) {
+            Map<String, Object> reply = new HashMap<>();
             reply.put("reply_seq", rVo.getReplySeq());
             reply.put("nickname", rVo.getNickname());
             reply.put("user_seq", rVo.getUserSeq());
@@ -125,13 +126,33 @@ public class SnsService {
             reply.put("created_at", rVo.getCreatedAt());
             reply.put("content", rVo.getContent());
             reply.put("rereply_count", rVo.getRereplyCount());
-            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) { reply.put("modified", 'n'); }
-            else { reply.put("modified", 'y'); }
+            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) {
+                reply.put("modified", 'n');
+            } else {
+                reply.put("modified", 'y');
+            }
             replyList.add(reply);
-            reply = new HashMap<>();
         }
+        return replyList;
+    }
+
+    public Map<String, Object> replyList(int articleSeq, int page, int userSeq) {
+        Integer articleUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
+        if (articleUser == null) {
+            return null;
+        }
+        int totalCount = snsMapper.selectReplyByArticleSeq(articleSeq);
+        int totalPage = (totalCount - 1) / REPLY_PAGE_SIZE + 1;
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (page > totalPage) {
+            return null;
+        }
+        LinkedList<Map<String, Object>> replyList = createReplyMapList(snsMapper.selectReplyListByArticleSeq(articleSeq, REPLY_PAGE_SIZE, REPLY_PAGE_SIZE * (page - 1), userSeq));
+        Map<String, Object> results = new HashMap<>();
         results.put("total_page", totalPage);
-        results.put("page", Integer.parseInt(page));
+        results.put("page", page);
         results.put("results", replyList);
         return results;
     }
@@ -140,11 +161,16 @@ public class SnsService {
         ReplyVo replyVo = new ReplyVo();
         // article이 존재하는지 확인
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
-        if (article == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_ARTICLE); return replyVo; }
-        else {
+        if (article == 0) {
+            replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_ARTICLE);
+            return replyVo;
+        } else {
             int inserted = snsMapper.insertReply(articleSeq, userSeq, content);
-            if (inserted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
-            else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
+            if (inserted == 1) {
+                replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            } else {
+                replyVo.setResult(ReplyVo.ReplyResult.FAILURE);
+            }
             return replyVo;
         }
     }
@@ -153,13 +179,22 @@ public class SnsService {
         Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
         ReplyVo replyVo = new ReplyVo();
         // reply가 없는 경우
-        if (replyUser == null) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo;}
+        if (replyUser == null) {
+            replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY);
+            return replyVo;
+        }
         // replyUser와 userSeq가 다른 경우(본인이 아닌 경우) (UNAUTH)
-        if (replyUser != userSeq) { replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED); return replyVo;}
+        if (replyUser != userSeq) {
+            replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED);
+            return replyVo;
+        }
         // 본인이 맞는 경우 -> 수정
         int updated = snsMapper.updateReplyByReplySeq(replySeq, content);
-        if (updated == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
-        else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
+        if (updated == 1) {
+            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+        } else {
+            replyVo.setResult(ReplyVo.ReplyResult.FAILURE);
+        }
         return replyVo;
     }
 
@@ -167,89 +202,108 @@ public class SnsService {
         Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
         ReplyVo replyVo = new ReplyVo();
         // reply가 없는 경우
-        if (replyUser == null) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo;}
+        if (replyUser == null) {
+            replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY);
+            return replyVo;
+        }
         // replyUser와 userSeq가 다른 경우(본인이 아닌 경우) (UNAUTH)
-        if (replyUser != userSeq) { replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED); return replyVo;}
+        if (replyUser != userSeq) {
+            replyVo.setResult(ReplyVo.ReplyResult.UNAUTHORIZED);
+            return replyVo;
+        }
         int deleted = snsMapper.deleteReplyByReplySeq(replySeq);
-        if (deleted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
-        else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
+        if (deleted == 1) {
+            replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+        } else {
+            replyVo.setResult(ReplyVo.ReplyResult.FAILURE);
+        }
         return replyVo;
     }
 
-    public Map<String, Object> rereplyList(int replySeq, String page) {
+    public Map<String, Object> rereplyList(int replySeq, int page, int userSeq) {
         Integer replyUser = snsMapper.selectUserSeqByReplySeq(replySeq);
-        if (replyUser == null) { return null; }
-        int totalPage = (int) Math.ceil((snsMapper.selectRereplyByReplySeq(replySeq))/10.0);
-        if (totalPage == 0) { totalPage = 1; }
-        if (Integer.parseInt(page) > totalPage) { return null; }
-        Map<String, Object> results = new HashMap<>();
-        ArrayList<ReplyVo> rereplyVos = snsMapper.selectRereplyListByReplySeq(replySeq, Integer.parseInt(page));
-        ArrayList<Map<String, Object>> rereplyList = new ArrayList<>();
-        Map<String, Object> reply = new HashMap<>();
-        for (ReplyVo rVo :
-                rereplyVos) {
-            reply.put("reply_seq", rVo.getReplySeq());
-            reply.put("nickname", rVo.getNickname());
-            reply.put("user_seq", rVo.getUserSeq());
-            reply.put("profile_url", rVo.getProfileUrl());
-            reply.put("created_at", rVo.getCreatedAt());
-            reply.put("content", rVo.getContent());
-            if (Objects.equals(rVo.getCreatedAt(), rVo.getUpdatedAt())) { reply.put("modified", 'n'); }
-            else { reply.put("modified", 'y'); }
-            rereplyList.add(reply);
-            reply = new HashMap<>();
+        if (replyUser == null) {
+            return null;
         }
+        int totalCount = snsMapper.selectRereplyByReplySeq(replySeq);
+        int totalPage = (totalCount - 1) / REPLY_PAGE_SIZE + 1;
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (page > totalPage) {
+            return null;
+        }
+        LinkedList<Map<String, Object>> rereplyList = createReplyMapList(snsMapper.selectRereplyListByReplySeq(replySeq, REPLY_PAGE_SIZE, REPLY_PAGE_SIZE * (page - 1), userSeq));
+        Map<String, Object> results = new HashMap<>();
         results.put("total_page", totalPage);
-        results.put("page", Integer.parseInt(page));
+        results.put("page", page);
         results.put("results", rereplyList);
         return results;
     }
 
-    public ReplyVo createRereply(int articleSeq,int replySeq, int userSeq, String content) {
+    public ReplyVo createRereply(int articleSeq, int replySeq, int userSeq, String content) {
         ReplyVo replyVo = new ReplyVo();
         // reply가 존재하는지 확인
         int reply = snsMapper.selectReplyByReplySeq(replySeq);
-        if (reply == 0) { replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY); return replyVo; }
-        else {
+        if (reply == 0) {
+            replyVo.setResult(ReplyVo.ReplyResult.NO_SUCH_REPLY);
+        } else {
             int inserted = snsMapper.insertRereply(articleSeq, replySeq, userSeq, content);
-            if (inserted == 1) { replyVo.setResult(ReplyVo.ReplyResult.SUCCESS); }
-            else { replyVo.setResult(ReplyVo.ReplyResult.FAILURE); }
-            return replyVo;
+            if (inserted == 1) {
+                replyVo.setResult(ReplyVo.ReplyResult.SUCCESS);
+            } else {
+                replyVo.setResult(ReplyVo.ReplyResult.FAILURE);
+            }
         }
+        return replyVo;
     }
 
     public String likeArticle(int userSeq, int articleSeq, char like) {
         // user 있는지 확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
-        if (user == null) { return "NO_SUCH_USER"; }
+        if (user == null) {
+            return "NO_SUCH_USER";
+        }
         // article 있는지 확인
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
-        if (article == 0) { return "NO_SUCH_ARTICLE"; }
+        if (article == 0) {
+            return "NO_SUCH_ARTICLE";
+        }
         // 좋아요 누른 적 있는지 확인
         int liked = snsMapper.selectArticleLikeByUserSeq(articleSeq, userSeq);
         if (like == 'l') {
             if (liked == 0) {
                 int inserted = snsMapper.insertLike(articleSeq, userSeq);
-                if (inserted == 1) { return "SUCCESS"; }
+                if (inserted == 1) {
+                    return "SUCCESS";
+                }
             }
-        }
-        else if (like == 'u') {
+        } else if (like == 'u') {
             if (liked == 1) {
                 int deleted = snsMapper.deleteLike(articleSeq, userSeq);
-                if (deleted == 1) { return "SUCCESS"; }
+                if (deleted == 1) {
+                    return "SUCCESS";
+                }
             }
+        } else {
+            return "BAD_REQUEST";
         }
-        else { return "BAD_REQUEST"; }
         return "BAD_REQUEST";
     }
 
     public Map<String, Object> likeUserList(int articleSeq, String page) {
         // article 있는지 확인
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
-        if (article == 0) { return null; }
-        int totalPage = (int) Math.ceil((snsMapper.selectLikeCountByArticleSeq(articleSeq))/10.0);
-        if (totalPage == 0) { totalPage = 1; }
-        if (Integer.parseInt(page) > totalPage) { return null; }
+        if (article == 0) {
+            return null;
+        }
+        int totalPage = (int) Math.ceil((snsMapper.selectLikeCountByArticleSeq(articleSeq)) / 10.0);
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (Integer.parseInt(page) > totalPage) {
+            return null;
+        }
         ArrayList<UserVo> userList = snsMapper.selectLikeUserListByArticleSeq(articleSeq, Integer.parseInt(page));
         Map<String, Object> results = new HashMap<>();
         ArrayList<Map<String, Object>> likeUserList = new ArrayList<>();
@@ -271,131 +325,161 @@ public class SnsService {
     public String reportArticle(int articleSeq, int userSeq, int reportSeq) {
         // article 있는지 확인
         int article = snsMapper.selectArticleByArticleSeq(articleSeq);
-        if (article == 0) { return "BAD_REQUEST"; }
+        if (article == 0) {
+            return "BAD_REQUEST";
+        }
         Integer reportedUser = snsMapper.selectUserSeqByArticleSeq(articleSeq);
         // 신고한 적 있는지 확인
         int reported = snsMapper.selectReportArticleByUserSeq(articleSeq, userSeq);
-        if (reported == 1) { return "ALREADY_REPORTED"; }
+        if (reported == 1) {
+            return "ALREADY_REPORTED";
+        }
         // 신고하기
         int inserted = snsMapper.insertReport(articleSeq, userSeq, reportedUser, reportSeq, "article");
-        if (inserted == 1) { return "SUCCESS"; }
+        if (inserted == 1) {
+            return "SUCCESS";
+        }
         return "BAD_REQUEST";
     }
 
     public String reportReply(int replySeq, int userSeq, int reportSeq) {
         // reply 있는지 확인
         int reply = snsMapper.selectReplyByReplySeq(replySeq);
-        if (reply == 0) { return "BAD_REQUEST"; }
+        if (reply == 0) {
+            return "BAD_REQUEST";
+        }
         Integer reportedUser = snsMapper.selectUserSeqByReplySeq(replySeq);
         // 신고한 적 있는지 확인
         int reported = snsMapper.selectReportReplyByUserSeq(replySeq, userSeq);
-        if(reported == 1) { return "ALREADY_REPORTED"; }
+        if (reported == 1) {
+            return "ALREADY_REPORTED";
+        }
         // 신고하기
         int inserted = snsMapper.insertReport(replySeq, userSeq, reportedUser, reportSeq, "reply");
-        if (inserted == 1) { return "SUCCESS"; }
+        if (inserted == 1) {
+            return "SUCCESS";
+        }
         return "BAD_REQUEST";
     }
 
     public String reportUser(int userSeq, int currentUserSeq, int reportSeq) {
         Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
-        if (user == null) { return "BAD_REQUEST"; }
+        if (user == null) {
+            return "BAD_REQUEST";
+        }
         // 신고한 적 있는지 확인
         int reported = snsMapper.selectReportUserByUserSeq(userSeq, currentUserSeq);
-        if (reported == 1) { return "ALREDY_REPORTED"; }
+        if (reported == 1) {
+            return "ALREDY_REPORTED";
+        }
         // 신고하기
         int inserted = snsMapper.insertReport(userSeq, currentUserSeq, userSeq, reportSeq, "user");
-        if (inserted == 1) { return "SUCCESS"; }
+        if (inserted == 1) {
+            return "SUCCESS";
+        }
         return "BAC_REQUEST";
     }
 
     public String followUser(int followerUserSeq, int followedUserSeq) {
         // follow할 유저가 있는지 확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
-        if (user == null) { return "NO_SUCH_USER"; }
+        if (user == null) {
+            return "NO_SUCH_USER";
+        }
         // follow한 적 있는지 확인
         int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
-        if (followed != 0) { return "BAD_REQUEST"; }
+        if (followed != 0) {
+            return "BAD_REQUEST";
+        }
         // follow
         int follow = snsMapper.insertFollow(followerUserSeq, followedUserSeq);
-        if (follow == 1) { return "SUCCESS"; }
+        if (follow == 1) {
+            return "SUCCESS";
+        }
         return "BAD_REQUEST";
     }
 
     public String unfollowUser(int followerUserSeq, int followedUserSeq) {
         // unfollow할 유저가 있는지 확인
         Map<String, String> user = snsMapper.selectUserByUserSeq(followedUserSeq);
-        if (user == null) { return "NO_SUCH_USER"; }
+        if (user == null) {
+            return "NO_SUCH_USER";
+        }
         // follow한 적 있는지 확인
         int followed = snsMapper.selectFollowByUserSeq(followerUserSeq, followedUserSeq);
-        if (followed != 1) { return "BAD_REQUEST"; }
+        if (followed != 1) {
+            return "BAD_REQUEST";
+        }
         // unfollow
         int deleted = snsMapper.deleteFollow(followerUserSeq, followedUserSeq);
-        if (deleted == 1) { return "SUCCESS"; }
+        if (deleted == 1) {
+            return "SUCCESS";
+        }
         return "BAD_REQUEST";
     }
 
-    public Map<String, Object> followerList(int currentUserSeq, int userSeq, String page) {
-        // user확인
-        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
-        if (user == null) { return null; }
-        // follow 목록 불러오기
-        int totalPage = (int) Math.ceil((snsMapper.selectFollowerByUserSeq(userSeq))/10.0);
-        if (totalPage == 0) { totalPage = 1; }
-        if (Integer.parseInt(page) > totalPage) { return null; }
-        ArrayList<UserVo> users = snsMapper.selectFollowerListByUserSeq(userSeq, Integer.parseInt(page));
-        Map<String, Object> results = new HashMap<>();
-        ArrayList<Map<String, Object>> followerList = new ArrayList<>();
-        Map<String, Object> follower = new HashMap<>();
-        for (UserVo uVo :
-                users) {
-            follower.put("user_seq", uVo.getUserSeq());
-            follower.put("nickname", uVo.getNickname());
-            follower.put("profile_url", uVo.getProfileImageLink());
-            int followed = snsMapper.selectFollowByUserSeq(currentUserSeq, uVo.getUserSeq());
-            if (followed == 1) { follower.put("follow_yn", 'y'); }
-            else { follower.put("follow_yn", 'n'); }
-            followerList.add(follower);
-            follower = new HashMap<>();
+    private LinkedList<Map<String, Object>> createUserMapList(ArrayList<UserVo> userVos) {
+        LinkedList<Map<String, Object>> userList = new LinkedList<>();
+        for (UserVo userVo : userVos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("user_seq", userVo.getUserSeq());
+            map.put("nickname", userVo.getNickname());
+            map.put("profile_url", userVo.getProfileImageLink());
+            map.put("follow_yn", userVo.getFollowYn());
+            userList.add(map);
         }
-        results.put("page", Integer.parseInt(page));
-        results.put("total_page", totalPage);
-        results.put("results", followerList);
+        return userList;
+    }
 
+    public Map<String, Object> followerList(int userSeq, int followed, int page) {
+        // user확인
+        Map<String, String> user = snsMapper.selectUserByUserSeq(followed);
+        if (user == null) {
+            return null;
+        }
+        // follow 목록 불러오기
+        int totalCount = snsMapper.selectFollowerByUserSeq(followed);
+        int totalPage = (totalCount - 1) / USER_PAGE_SIZE + 1;
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (page > totalPage) {
+            return null;
+        }
+        LinkedList<Map<String, Object>> followerList = createUserMapList(snsMapper.selectFollowerListByFollowedUserSeq(followed, USER_PAGE_SIZE, USER_PAGE_SIZE * (page - 1), userSeq));
+        Map<String, Object> results = new HashMap<>();
+        results.put("total_page", totalPage);
+        results.put("page", page);
+        results.put("results", followerList);
         return results;
     }
 
-    public Map<String, Object> followingList(int currentUserSeq, int userSeq, String page) {
+    public Map<String, Object> followingList(int userSeq, int follower, int page) {
         // user확인
-        Map<String, String> user = snsMapper.selectUserByUserSeq(userSeq);
-        if (user == null) { return null; }
-        // follow 목록 불러오기
-        int totalPage = (int) Math.ceil((snsMapper.selectFollowingByUserSeq(userSeq))/10.0);
-        if (totalPage == 0) { totalPage = 1; }
-        if (Integer.parseInt(page) > totalPage) { return null; }
-        ArrayList<UserVo> users = snsMapper.selectFollowingListByUserSeq(userSeq, Integer.parseInt(page));
-        ArrayList<Map<String, Object>> followingList = new ArrayList<>();
-        Map<String, Object> results = new HashMap<>();
-        Map<String, Object> following = new HashMap<>();
-        for (UserVo uVo :
-                users) {
-            following.put("user_seq", uVo.getUserSeq());
-            following.put("nickname", uVo.getNickname());
-            following.put("profile_url", uVo.getProfileImageLink());
-            int followed = snsMapper.selectFollowByUserSeq(currentUserSeq, uVo.getUserSeq());
-            if (followed == 1) { following.put("follow_yn", 'y'); }
-            else { following.put("follow_yn", 'n'); }
-            followingList.add(following);
-            following = new HashMap<>();
+        Map<String, String> user = snsMapper.selectUserByUserSeq(follower);
+        if (user == null) {
+            return null;
         }
+        // follow 목록 불러오기
+        int totalCount = snsMapper.selectFollowingByUserSeq(follower);
+        int totalPage = (totalCount - 1) / USER_PAGE_SIZE + 1;
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (page > totalPage) {
+            return null;
+        }
+        LinkedList<Map<String, Object>> followingList = createUserMapList(snsMapper.selectFollowingListByFollowerUserSeq(follower, USER_PAGE_SIZE, USER_PAGE_SIZE * (page - 1), userSeq));
+        Map<String, Object> results = new HashMap<>();
         results.put("total_page", totalPage);
-        results.put("page", Integer.parseInt(page));
+        results.put("page", page);
         results.put("results", followingList);
         return results;
     }
 
     public int getTotalArticlePage(int userSeq) {
         int totalCount = this.snsMapper.selectArticleCount(userSeq);
-        return (totalCount - 1) / PAGE_SIZE + 1;
+        return (totalCount - 1) / ARTICLE_PAGE_SIZE + 1;
     }
 
     private LinkedList<Map<String, Object>> createArticleMap(ArrayList<ArticleListVo> articleListVos) {
@@ -425,18 +509,18 @@ public class SnsService {
         recent.add(Calendar.DATE, RECENT_DAY);
         String recentString = new SimpleDateFormat("yyyy-MM-dd").format(recent.getTime());
         int followCount = this.snsMapper.selectArticleCountByFollowCreatedAt(userSeq, recentString);
-        int followPage = (followCount - 1) / PAGE_SIZE + 1;
+        int followPage = (followCount - 1) / ARTICLE_PAGE_SIZE + 1;
         ArrayList<ArticleListVo> articleList;
         if (page < followPage) {
-            articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, PAGE_SIZE, PAGE_SIZE * (page - 1), recentString);
+            articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, ARTICLE_PAGE_SIZE, ARTICLE_PAGE_SIZE * (page - 1), recentString);
         } else {
-            int followRemain = followCount % PAGE_SIZE;
-            int other = PAGE_SIZE - followRemain;
+            int followRemain = followCount % ARTICLE_PAGE_SIZE;
+            int other = ARTICLE_PAGE_SIZE - followRemain;
             if (page == followPage) {
-                articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, followRemain, PAGE_SIZE * (page - 1), recentString);
+                articleList = this.snsMapper.selectArticleByFollowCreatedAt(userSeq, followRemain, ARTICLE_PAGE_SIZE * (page - 1), recentString);
                 articleList.addAll(this.snsMapper.selectArticleByNotFollow(userSeq, other, 0, recentString));
             } else {
-                articleList = this.snsMapper.selectArticleByNotFollow(userSeq, PAGE_SIZE, PAGE_SIZE * (page - followPage - 1) + other, recentString);
+                articleList = this.snsMapper.selectArticleByNotFollow(userSeq, ARTICLE_PAGE_SIZE, ARTICLE_PAGE_SIZE * (page - followPage - 1) + other, recentString);
             }
         }
         return createArticleMap(articleList);
@@ -486,21 +570,21 @@ public class SnsService {
 
     public int getSearchContentTotalPage(String content) {
         int totalCount = this.snsMapper.selectArticleCountByContent(content);
-        return (totalCount - 1) / PAGE_SIZE + 1;
+        return (totalCount - 1) / ARTICLE_PAGE_SIZE + 1;
     }
 
     public LinkedList<Map<String, Object>> searchContent(String content, int page, int userSeq) {
-        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByContent(content, PAGE_SIZE, PAGE_SIZE * (page - 1), userSeq);
+        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByContent(content, ARTICLE_PAGE_SIZE, ARTICLE_PAGE_SIZE * (page - 1), userSeq);
         return createArticleMap(searchResult);
     }
 
     public int getSearchPlaceTotalPage(String place) {
         int totalCount = this.snsMapper.selectArticleCountByPlace(place);
-        return (totalCount - 1) / PAGE_SIZE + 1;
+        return (totalCount - 1) / ARTICLE_PAGE_SIZE + 1;
     }
 
     public LinkedList<Map<String, Object>> searchPlace(String place, int page, int userSeq) {
-        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByPlace(place, PAGE_SIZE, PAGE_SIZE * (page - 1), userSeq);
+        ArrayList<ArticleListVo> searchResult = this.snsMapper.selectArticleByPlace(place, ARTICLE_PAGE_SIZE, ARTICLE_PAGE_SIZE * (page - 1), userSeq);
         return createArticleMap(searchResult);
     }
 
@@ -518,10 +602,14 @@ public class SnsService {
     }
 
     public Map<String, Object> collection(int userSeq, int page) {
-        int totalPage = (int) Math.ceil((snsMapper.selectCollectionCountByUserSeq(userSeq))/10.0);
-        if (totalPage == 0) { totalPage = 1; }
-        if (page > totalPage) { return null; }
-        ArrayList<Map<String, Object>> results = snsMapper.selectCollectionByUserSeq(userSeq, PAGE_SIZE, (page-1)*PAGE_SIZE);
+        int totalPage = (int) Math.ceil((snsMapper.selectCollectionCountByUserSeq(userSeq)) / 10.0);
+        if (totalPage == 0) {
+            totalPage = 1;
+        }
+        if (page > totalPage) {
+            return null;
+        }
+        ArrayList<Map<String, Object>> results = snsMapper.selectCollectionByUserSeq(userSeq, ARTICLE_PAGE_SIZE, (page - 1) * ARTICLE_PAGE_SIZE);
         Map<String, Object> collection = new HashMap<>();
         collection.put("total_page", totalPage);
         collection.put("page", page);
