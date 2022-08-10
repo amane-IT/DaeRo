@@ -100,7 +100,7 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
                 }
                 //텍스트 변화가 있을 시
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9!@#$%^&*]).{8,20}$".toRegex())){
+                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,20}\$".toRegex())){
                         textSignupPasswordMessage.text = "사용가능한 비밀번호입니다."
                         textSignupPasswordMessage.setTextColor(R.color.primaryTextColor)
                         buttonSignupPasswordNextStep.isEnabled=false

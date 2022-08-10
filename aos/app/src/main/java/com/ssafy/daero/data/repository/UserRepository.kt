@@ -4,6 +4,7 @@ import android.content.Context
 import com.ssafy.daero.application.App
 import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
@@ -131,7 +132,7 @@ class UserRepository private constructor(context: Context) {
 
     fun confirmPassword(
         userSeq: Int,
-        passwordRequestDto: ResetPasswordRequestDto
+        passwordRequestDto: ResetPasswordConfirmRequestDto
     ): Single<Response<ResetPasswordResponseDto>> {
         return userApi.confirmPassword(userSeq, passwordRequestDto)
             .subscribeOn(Schedulers.io())

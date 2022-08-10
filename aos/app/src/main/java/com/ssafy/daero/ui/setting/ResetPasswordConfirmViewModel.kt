@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
@@ -20,13 +21,13 @@ class ResetPasswordConfirmViewModel : BaseViewModel() {
 
     val responseState = MutableLiveData<Int>()
 
-    fun confirmPassword(passwordRequestDto: ResetPasswordRequestDto){
+    fun confirmPassword(passwordRequestDto: ResetPasswordConfirmRequestDto){
         _showProgress.postValue(true)
 
         addDisposable(
             userRepository.confirmPassword(App.prefs.userSeq, passwordRequestDto)
                 .subscribe({ response ->
-                    if(response.body()!!.result == 'Y'){
+                    if(response.body()!!.result == 'y'){
                         responseState.postValue(SUCCESS)
                     } else{
                         responseState.postValue(FAIL)

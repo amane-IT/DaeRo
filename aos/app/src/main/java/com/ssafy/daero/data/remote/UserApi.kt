@@ -2,6 +2,7 @@ package com.ssafy.daero.data.remote
 
 import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
@@ -119,7 +120,7 @@ interface UserApi {
     @POST("users/{user_seq}/password")
     fun confirmPassword(
         @Path("user_seq") userSeq: Int,
-        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+        @Body resetPasswordConfirmRequestDto: ResetPasswordConfirmRequestDto
     ): Single<Response<ResetPasswordResponseDto>>
 
     /**

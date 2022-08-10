@@ -27,7 +27,7 @@ class FindPasswordViewModel : BaseViewModel() {
         addDisposable(
             findIDRepository.findPasswordModify(findPasswordModifyRequestDto, reset_seq)
                 .subscribe({ response ->
-                    if (response.body()!!.result == 'Y') {
+                    if (response.body()!!.result == 'y') {
                         responseState.postValue(SUCCESS)
                     } else {
                         responseState.postValue(FAIL)
