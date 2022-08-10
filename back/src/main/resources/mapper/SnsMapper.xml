@@ -172,20 +172,26 @@
     </insert>
 
     <select id="selectReportArticleByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
         WHERE reporter_users_seq = #{userSeq}
           AND content_seq = #{articleSeq}
     </select>
 
     <select id="selectReportReplyByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
         WHERE reporter_users_seq=#{userSeq} AND content_seq=#{replySeq}
     </select>
 
+    <select id="selectReportUserByUserSeq" resultType="_int">
+        SELECT COUNT(0)
+        FROM daero.reports
+        WHERE reporter_users_seq=#{currentUserSeq} AND reported_users_seq=#{userSeq} AND article_type='user'
+    </select>
+
     <select id="selectFollowByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
         WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
     </select>
