@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.ArrayList;
 import java.util.Map;
 
+@SuppressWarnings("UnusedReturnValue")
 @Mapper
 public interface SnsMapper {
     int insertBlock(@Param("userSeq") int userSeq, @Param("blocker") int blocker);
@@ -48,6 +49,8 @@ public interface SnsMapper {
     int insertLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
 
     int deleteLike(@Param("articleSeq") int articleSeq, @Param("userSeq") int userSeq);
+
+    int deleteLikeByAuthor(@Param("author") int author, @Param("userSeq") int userSeq);
 
     ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq, @Param("page") int page);
 

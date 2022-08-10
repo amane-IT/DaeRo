@@ -519,6 +519,8 @@ public class SnsService {
 
     public int blockUser(int userSeq, int blocker) {
         try {
+            this.snsMapper.deleteFollow(blocker, userSeq);
+            this.snsMapper.deleteLikeByAuthor(userSeq, blocker);
             return this.snsMapper.insertBlock(userSeq, blocker);
         } catch (Exception e) {
             return 0;
@@ -544,13 +546,13 @@ public class SnsService {
             return false;
         }
         // article + trip update
-        int updatedarticle = this.snsMapper.updateArticle(articleSeq, (String) req.get("title"), (String) req.get("tripComment"), (String) req.get("tripExpenses"), (int) req.get("rating"), (String) req.get("expose"));
+        this.snsMapper.updateArticle(articleSeq, (String) req.get("title"), (String) req.get("tripComment"), (String) req.get("tripExpenses"), (int) req.get("rating"), (String) req.get("expose"));
         int tripSeq = this.snsMapper.selectTripSeqByArticleSeq(articleSeq);
         ArrayList<String> days = (ArrayList<String>) req.get("records");
         // days update
         int rowNum = 1;
         for (String dayComment : days) {
-            int updatedDay = this.snsMapper.updateDayComment(tripSeq, dayComment, rowNum);
+            this.snsMapper.updateDayComment(tripSeq, dayComment, rowNum);
             rowNum++;
         }
         return true;
