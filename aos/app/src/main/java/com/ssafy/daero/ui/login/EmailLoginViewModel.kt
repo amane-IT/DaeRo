@@ -37,21 +37,32 @@ class EmailLoginViewModel : BaseViewModel() {
                     App.prefs.nickname = response.body()?.user_nickname ?: ""
 
                     _showProgress.postValue(false)
-                    responseState.postValue(SUCCESS)
+                    responseState.postValue(response.code())
                 }, { throwable ->
                     Log.d("EmailLoginVM_DaeRo", throwable.toString())
-                    if(throwable is HttpException) {
-                        // http error code
-                        Log.d("EmailLoginVM_DaeRo", throwable.code().toString())
-                    }
 
                     // jwt 토큰, user_seq 삭제
                     App.prefs.jwt = null
                     App.prefs.userSeq = 0
                     App.prefs.nickname = null
 
-                    _showProgress.postValue(false)
-                    responseState.postValue(FAIL)
+                    if(throwable is HttpException){
+                        Log.d("LoginVM_DaeRo", "jwtLogin_fail1: ${throwable.code()}")
+                        Log.d("LoginVM_DaeRo", "jwtLogin_fail2: ${throwable}")
+                        if(throwable.code() == 403){
+                            // 정지된 유저
+                            _showProgress.postValue(false)
+                            responseState.postValue(throwable.code())
+                        } else {
+                            _showProgress.postValue(false)
+                            responseState.postValue(FAIL)
+                        }
+                    }
+                    else {
+                        Log.d("LoginVM_DaeRo", "jwtLogin_fail3: $throwable")
+                        _showProgress.postValue(false)
+                        responseState.postValue(FAIL)
+                    }
                 })
         )
     }

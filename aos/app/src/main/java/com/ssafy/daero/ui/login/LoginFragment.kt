@@ -47,13 +47,23 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     }
 
     private fun observeData() {
-        loginViewModel.responseState.observe(viewLifecycleOwner) {
-            when(it) {
-                SUCCESS -> {
+        loginViewModel.responseState.observe(viewLifecycleOwner) { response ->
+            when(response) {
+                200 -> {
                     findNavController().navigate(R.id.action_loginFragment_to_rootFragment)
                     loginViewModel.responseState.value = DEFAULT
                 }
+                202 -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_tripPreferenceFragment)
+                    loginViewModel.responseState.value = DEFAULT
+                }
+                403 -> {
+                    // todo: 정지된 유저 다이얼로그 띄우기
+                    loginViewModel.responseState.value = DEFAULT
+                }
+
                 FAIL -> {
+                    Log.d("code", "observeData: XXX")
                     // jwt 토큰, user_seq 삭제
                     deleteAllInformation()
                     loginViewModel.responseState.value = DEFAULT
