@@ -171,11 +171,11 @@ public class UserController {
         if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        if (userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
-            return new ResponseEntity<>(HttpStatus.ACCEPTED);
-        }
         resultMap.put("user_seq", userSeq);
         resultMap.put("user_nickname", userVo.getNickname());
+        if (userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
