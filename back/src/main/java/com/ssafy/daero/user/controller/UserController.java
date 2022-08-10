@@ -220,12 +220,12 @@ public class UserController {
     }
 
     @PutMapping("/{user_seq}/quit")
-    public ResponseEntity<String> leaveUser(@PathVariable int user_seq) {
+    public ResponseEntity<Boolean> leaveUser(@PathVariable int user_seq) {
         boolean res = userService.leaveUser(user_seq);
         if (res) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
     }
 
