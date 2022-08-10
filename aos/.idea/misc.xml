@@ -177,6 +177,11 @@
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/edittext_regular.xml" value="0.2465" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/drawable/ic_back.xml.xml" value="0.2465" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/activity_main.xml" value="0.25364583333333335" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_find_password.xml" value="0.264" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_loading.xml" value="0.10989583333333333" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_logout.xml" value="0.10989583333333333" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_ver.xml" value="0.10885416666666667" />
+        <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/dlg_verification.xml" value="0.2" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article.xml" value="0.12335359675785208" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_day.xml" value="0.22871376811594202" />
         <entry key="..\:/SSAFY/work_android/S07P12D110/aos/app/src/main/res/layout/fragment_article_write_expense.xml" value="0.22871376811594202" />

@@ -12,6 +12,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
@@ -33,7 +34,7 @@ import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
-import kotlin.math.sqrt
+import kotlin.math.*
 
 class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling),
     SensorEventListener {
@@ -51,10 +52,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private val SHAKE_SKIP_TIME = 500
     private var mShakeTime: Long = 0
     private var shakeCount = 5
-    private var mShakeCount = 0
+    private var mShakeCount = 1
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     lateinit var mLastLocation: Location
-    internal lateinit var mLocationRequest: LocationRequest
+    private var mLocationRequest: LocationRequest = LocationRequest.create()
     private val REQUEST_PERMISSION_LOCATION = 10
     private var categoryTags = listOf<Int>()
     private var regionTags = listOf<Int>()
@@ -77,7 +78,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     override fun onPause() {
         super.onPause()
-        mSensorManager.unregisterListener(this)
     }
 
     override fun init() {
@@ -297,11 +297,11 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                     return
                 }
                 mShakeTime = currentTime
-                mShakeCount++
                 shakeCount -= mShakeCount
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
                 if (shakeCount < 1) {
                     startLocationUpdates()
+                    mSensorManager.unregisterListener(this)
                 }
             }
         }
@@ -315,10 +315,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         mFusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
@@ -345,5 +341,34 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         mLastLocation = location
         mLastLocation.latitude // 갱신 된 위도
         mLastLocation.longitude // 갱신 된 경도
+        var distance = distanceInKilometerByHaversine(mLastLocation.latitude,mLastLocation.longitude,latitude,longitude)
+        Log.d("거리",distance.toString())
+        if(distance <= 10.0){
+            App.prefs.verificationTime = System.currentTimeMillis()
+            (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
+        }else{
+            shakeCount = 5
+            binding.tvTravelingVerificationCount.text = shakeCount.toString()
+            toast("거리가 부족합니다.\n여행지에 도착 후 다시 인증해주세요.")
+        }
+    }
+
+    private fun distanceInKilometerByHaversine(x1: Double, y1: Double, x2: Double, y2: Double): Double {
+        var distance: Double
+        var radius = 6371.0 // 지구 반지름(km)
+        var toRadian: Double = Math.PI / 180;
+
+        var deltaLatitude: Double = abs(x1 - x2) * toRadian;
+        var deltaLongitude: Double = abs(y1 - y2) * toRadian;
+
+        var sinDeltaLat: Double = sin(deltaLatitude / 2);
+        var sinDeltaLng: Double = sin(deltaLongitude / 2);
+        var squareRoot: Double = sqrt(
+                sinDeltaLat * sinDeltaLat +
+                        cos(x1 * toRadian) * cos(x2 * toRadian) * sinDeltaLng * sinDeltaLng);
+
+        distance = 2 * radius * asin(squareRoot);
+
+        return distance;
     }
 }
