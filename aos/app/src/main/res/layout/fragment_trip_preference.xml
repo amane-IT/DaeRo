@@ -63,15 +63,16 @@
 
         <Button
             android:id="@+id/button_tripPreference_start"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="48dp"
-            android:layout_marginVertical="8dp"
             android:layout_marginHorizontal="16dp"
-            style="@style/BodyWhite"
+            android:layout_marginBottom="16dp"
             android:text="시작하기"
-            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/button_regular"
+            style="@style/BodyWhite"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ProgressBar
             android:id="@+id/progressBar_tripPreference_loading"

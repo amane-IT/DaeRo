@@ -7,9 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.signup.TripPreferenceResponseDto
 import com.ssafy.daero.databinding.FragmentTripPreferenceBinding
 import com.ssafy.daero.ui.adapter.signup.TripPreferenceAdapter
 import com.ssafy.daero.ui.login.LoginViewModel
@@ -51,9 +49,7 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
                     var requestList = result.toList()
                     requestList = requestList.sorted()
                     Log.d("Trip", "setOnClickListener: ${requestList.toString()}")
-                    tripPreferenceViewModel.postPreference(App.userSeq, requestList)
-                    jwtLogin()
-                    findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
+                    tripPreferenceViewModel.postPreference(requestList)
                 }
             }
         }
@@ -74,6 +70,19 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
                     toast("이미지 로딩에 실패했습니다.")
                 }
             }
+        }
+
+        tripPreferenceViewModel.responseState_postPreference.observe(viewLifecycleOwner) { state ->
+            when(state) {
+                SUCCESS -> {
+                    jwtLogin()
+                    findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
+                }
+                FAIL -> {
+                    toast("선호도 조사 전송에 실패했습니다. 다시 시도해 주세요.")
+                }
+            }
+
         }
 
         tripPreferenceViewModel.count.observe(viewLifecycleOwner){

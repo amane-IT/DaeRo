@@ -69,8 +69,6 @@ class App : Application() {
     companion object {
         lateinit var userId: String
         lateinit var password: String
-        var userName: String = ""
-        var userSeq: Int = 0
         var isDone = false
         var isEdit = false
         var keyword: String? = null

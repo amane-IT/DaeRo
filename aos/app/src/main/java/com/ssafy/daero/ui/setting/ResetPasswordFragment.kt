@@ -14,7 +14,7 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
-class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layout.fragment_reset_password_confirm) {
+class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layout.fragment_reset_password) {
 
     private val resetPasswordViewModel : ResetPasswordViewModel by viewModels()
 
@@ -83,7 +83,7 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layou
             editTextResetPasswordPassword.addTextChangedListener(object : TextWatcher {
                 //입력이 끝났을 때 비밀번호 유효성 검사
                 override fun afterTextChanged(p0: Editable?) {
-                    if(editTextResetPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9!@#$%^&*]).{8,20}$".toRegex())){
+                    if(editTextResetPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,20}\$".toRegex())){
                         textResetPasswordMessage.text = "사용가능한 비밀번호입니다."
                         textResetPasswordMessage.setTextColor(R.color.primaryTextColor)
 
@@ -105,7 +105,7 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layou
                 }
                 //텍스트 변화가 있을 시
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(editTextResetPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9!@#$%^&*]).{8,20}$".toRegex())){
+                    if(editTextResetPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,20}\$".toRegex())){
                         textResetPasswordMessage.text = "사용가능한 비밀번호입니다."
                         textResetPasswordMessage.setTextColor(R.color.primaryTextColor)
                         // 가입하기 버튼 활성화
@@ -133,6 +133,7 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(R.layou
             when(state){
                 SUCCESS -> {
                     toast("비밀번호 변경이 완료되었습니다.")
+                    findNavController().navigate(R.id.action_resetPasswordFragment_to_settingFragment)
                 }
                 FAIL -> {
                     toast("비밀번호 변경에 실패했습니다. 다시 시도해 주세요.")

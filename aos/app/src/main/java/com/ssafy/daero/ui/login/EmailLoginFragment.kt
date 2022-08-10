@@ -74,8 +74,16 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
         }
         emailLoginViewModel.responseState.observe(viewLifecycleOwner) { state ->
             when(state) {
-                SUCCESS -> {
+                200 -> {
                     findNavController().navigate(R.id.action_emailLoginFragment_to_rootFragment)
+                    emailLoginViewModel.responseState.value = DEFAULT
+                }
+                202 -> {
+                    findNavController().navigate(R.id.action_emailLoginFragment_to_tripPreferenceFragment)
+                    emailLoginViewModel.responseState.value = DEFAULT
+                }
+                403 -> {
+                    // todo: 정지된 유저 다이얼로그 띄우기
                     emailLoginViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {
