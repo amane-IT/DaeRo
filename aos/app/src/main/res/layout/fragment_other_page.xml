@@ -37,6 +37,18 @@
                 android:layout_marginStart="16dp"
                 tools:text="김싸피님" />
 
+            <ImageView
+                android:id="@+id/img_otherPage_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_menu"
+                app:tint="@color/black" />
+
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View

@@ -42,4 +42,19 @@ class ReportViewModel : BaseViewModel() {
                 )
         )
     }
+
+    fun reportUser(userSeq: Int, report_seq: Int) {
+        addDisposable(
+            snsRepository.reportUser(userSeq, ReportRequestDto(report_seq))
+                .subscribe(
+                    {
+                        reportState.postValue(SUCCESS)
+                    },
+                    { throwable ->
+                        Log.d("ReportVM", throwable.toString())
+                        reportState.postValue(FAIL)
+                    }
+                )
+        )
+    }
 }

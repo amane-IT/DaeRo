@@ -130,12 +130,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         }
     }
 
-    override fun blockAdd(userSeq: Int) {
-        blockUserViewModel.blockAdd(userSeq)
+    override fun blockArticle(articleSeq: Int) {
+        blockUserViewModel.blockAdd(articleSeq)
         blockUserViewModel.responseState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
                     toast("해당 유저를 차단했습니다.")
+                    homeAdapter.refresh()
                     blockUserViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {

@@ -209,6 +209,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             when (it) {
                 SUCCESS -> {
                     toast("해당 유저를 차단했습니다.")
+                    commentAdapter.refresh()
                     blockUserViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {

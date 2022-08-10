@@ -125,6 +125,15 @@ interface SnsApi {
     ): Completable
 
     /**
+     * 유저 신고하기
+     */
+    @POST("sns/reply/{user_seq}/report")
+    fun reportUser(
+        @Path("user_seq") userSeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
+
+    /**
      * 댓글 신고하기
      */
     @POST("sns/reply/{reply_seq}/report")
@@ -217,6 +226,14 @@ interface SnsApi {
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>
+
+    /**
+     * 게시물 숨기기
+     */
+    @POST("sns/users/{article_seq}/hide")
+    fun blockArticle(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
 
     /**
      * 차단하기

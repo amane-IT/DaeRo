@@ -13,14 +13,14 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentOtherPageBinding
 import com.ssafy.daero.ui.adapter.mypage.OtherPageViewPagerAdapter
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.constant.USER_SEQ
+import com.ssafy.daero.ui.root.sns.ArticleMenuBottomSheetFragment
+import com.ssafy.daero.ui.setting.BlockUserViewModel
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragment_other_page) {
+class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragment_other_page), OtherPageListener {
     private val otherPageViewModel: OtherPageViewModel by viewModels()
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val tabTitleArray = arrayOf("기록", "여정")
     var userSeq = 0
     private var followState = false
@@ -112,6 +112,16 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
             findNavController().navigate(R.id.action_otherPageFragment_to_stampFragment,
             bundleOf(USER_SEQ to userSeq))
         }
+        binding.imgOtherPageMenu.setOnClickListener {
+            // todo: articleSeq 넘기기
+            OtherPageMenuBottomSheetFragment(
+                userSeq,
+                this@OtherPageFragment
+            ).show(
+                childFragmentManager,
+                ARTICLE_MENU_BOTTOM_SHEET
+            )
+        }
     }
 
     private fun getUserProfile() {
@@ -161,5 +171,22 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
 
     fun enableSlide() {
         binding.viewPagerOtherPage.isUserInputEnabled = true
+    }
+
+    override fun blockAdd(userSeq: Int) {
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    requireActivity().onBackPressed()
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
     }
 }

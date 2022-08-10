@@ -50,6 +50,9 @@ class ReportBottomSheetFragment(type: Int, seq: Int) : BottomSheetDialogFragment
             COMMENT -> {
                 reportViewModel.reportComment(seq, reportSeq)
             }
+            USER -> {
+                reportViewModel.reportUser(seq, reportSeq)
+            }
         }
     }
 

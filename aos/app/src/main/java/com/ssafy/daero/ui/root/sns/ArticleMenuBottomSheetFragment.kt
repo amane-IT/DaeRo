@@ -134,7 +134,7 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기
-            listener.blockAdd(userSeq)
+            listener.blockArticle(userSeq)
             dismiss()
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {
