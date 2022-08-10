@@ -27,7 +27,7 @@ public interface UserMapper {
 
     UserVo selectById(String id);
 
-    UserDto selectByUserSeq(int user_seq);
+    UserVo selectByUserSeq(int user_seq);
 
     int selectFollowerByUserSeq(@Param("profile_user_seq") int profile_user_seq, @Param("current_user_seq") int current_user_seq);
 
@@ -67,4 +67,6 @@ public interface UserMapper {
     ArrayList<Map<String, Object>> selectBadgeByUserSeq(int userSeq);
 
     int updateFcmToken(@Param("userSeq") int userSeq, @Param("token") String token);
+
+    int selectUserFavor(int userSeq);
 }
