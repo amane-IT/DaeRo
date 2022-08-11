@@ -1,3 +1,3 @@
 package com.ssafy.daero.utils.constant
 
-const val BASE_URL = "http://i7D110.p.ssafy.io/"
+const val BASE_URL = "https://i7D110.p.ssafy.io/api/"

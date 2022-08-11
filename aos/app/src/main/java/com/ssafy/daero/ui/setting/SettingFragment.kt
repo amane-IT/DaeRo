@@ -31,7 +31,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 SUCCESS -> {
                     settingViewModel.withdrawalState.value = DEFAULT
                     deleteAllInformation()
-                    RootFragment.curFragmentType = FragmentType.HomeFragment
+                    //RootFragment.curFragmentType = FragmentType.HomeFragment
                     findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
                 }
                 FAIL -> {
@@ -109,7 +109,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private val logoutListener: () -> Unit = {
         deleteAllInformation()
-        RootFragment.curFragmentType = FragmentType.HomeFragment
+        RootFragment.selectPosition = R.id.TripFragment
         findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
     }
 

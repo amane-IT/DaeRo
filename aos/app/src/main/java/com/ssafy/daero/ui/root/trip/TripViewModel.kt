@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
 import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
@@ -23,8 +24,8 @@ class TripViewModel : BaseViewModel() {
 
     val showProgress = MutableLiveData<Int>()
 
-    private val _firstTripRecommendResponseDto = MutableLiveData<Int>()
-    val firstTripRecommendResponseDto: LiveData<Int>
+    private val _firstTripRecommendResponseDto = MutableLiveData<FirstTripRecommendResponseDto>()
+    val firstTripRecommendResponseDto: LiveData<FirstTripRecommendResponseDto>
         get() = _firstTripRecommendResponseDto
 
     private val _popularTrip = MutableLiveData<List<TripPopularResponseDto>>()
@@ -41,12 +42,12 @@ class TripViewModel : BaseViewModel() {
     fun getFirstTripRecommend(firstTripRecommendRequestDto: FirstTripRecommendRequestDto) {
         showProgress.postValue(SUCCESS)
 
-        // 1.5초 딜레이
+        // 1초 딜레이
         val delay =
-            Single.just(1).delay(1500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
+            Single.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
+        // 서버 결과, 1초 경과 모두 끝나야 응답 받기
         addDisposable(
             Single.zip(
                 delay,
@@ -56,7 +57,7 @@ class TripViewModel : BaseViewModel() {
                 }).subscribe(
                 { response ->
                     // userSeq 저장
-                    _firstTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                    _firstTripRecommendResponseDto.postValue(response.body())
                     showProgress.postValue(FAIL)
                 },
                 { throwable ->
@@ -109,6 +110,6 @@ class TripViewModel : BaseViewModel() {
     }
 
     fun initTripInformation() {
-        _firstTripRecommendResponseDto.value = 0
+        _firstTripRecommendResponseDto.value = FirstTripRecommendResponseDto(0, "")
     }
 }

@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.signup.SignupEmailRequestDto
 import com.ssafy.daero.data.dto.signup.SignupEmailResponseDto
@@ -33,7 +32,8 @@ class SignupEmailViewModel : BaseViewModel() {
                         Log.d("SignupEmailVM_DaeRo", response.toString())
                         Log.d("SignupEmailVM_DaeRo", response.body()!!.toString())
                         responseState_verifyEmail.postValue(SUCCESS)
-                        userSeq = response.body()!!.user_seq
+                        App.prefs.userSeq = response.body()!!.user_seq
+                        Log.d("SignupEmailVM_DaeRo", "verifyEmail: ${App.prefs.userSeq}")
 
                     } else {
                         responseState_verifyEmail.postValue(FAIL)
@@ -50,7 +50,7 @@ class SignupEmailViewModel : BaseViewModel() {
     fun verifyUserEmail() {
         _showProgress.postValue(true)
         addDisposable(
-            userRepository.verifyUserEmail(SignupEmailResponseDto(userSeq))
+            userRepository.verifyUserEmail(SignupEmailResponseDto(App.prefs.userSeq))
                 .subscribe({ response ->
                     if (response.body()!!.result == 'y') {
                         responseState_verifyUserEmail.postValue(SUCCESS)

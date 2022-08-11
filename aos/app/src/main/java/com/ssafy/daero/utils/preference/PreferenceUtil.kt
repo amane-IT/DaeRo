@@ -45,13 +45,6 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putBoolean(IS_TRIP_START, value).apply()
         }
 
-    // 여행 상세페이지에서 여행 시작 버튼 클릭 여부
-    var isFollowStart: Boolean
-        get() = prefs.getBoolean(IS_FOLLOW_START, false)
-        set(value) {
-            prefs.edit().putBoolean(IS_FOLLOW_START, value).apply()
-        }
-
     // 여행 상태
     var tripState: Int
         get() = prefs.getInt(TRIP_STATE, TRIP_BEFORE)
@@ -115,6 +108,13 @@ class PreferenceUtil(context: Context) {
             prefs.edit().putBoolean(IS_NOTIFICATION_ALLOW, value).apply()
         }
 
+    // 권한 안내 확인 여부
+    var isPermissionGuideCheck: Boolean
+        get() = prefs.getBoolean(IS_PERMISSION_GUIDE_CHECK, false)
+        set(value) {
+            prefs.edit().putBoolean(IS_PERMISSION_GUIDE_CHECK, value).apply()
+        }
+
     fun initUser() {
         jwt = null
         userSeq = 0
@@ -131,7 +131,6 @@ class PreferenceUtil(context: Context) {
         isFirstTrip = true
         tripTransportation = "walk"
         tripTime = 30
-        isFollowStart = false
         tripState = TRIP_BEFORE
     }
 }

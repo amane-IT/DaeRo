@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/image_home_item_user"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             app:circleImageUrl="@{article.profile_url}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,12 +29,12 @@
 
         <TextView
             android:id="@+id/text_home_item_nickname"
-            style="@style/Body"
+            style="@style/SubHeadSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="@{article.nickname}"
-            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/text_home_item_createdAt"
             app:layout_constraintStart_toEndOf="@id/image_home_item_user"
             app:layout_constraintTop_toTopOf="@id/image_home_item_user"
             tools:text="김싸피" />
@@ -50,6 +50,7 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@id/image_home_item_user"
             app:layout_constraintStart_toEndOf="@id/image_home_item_user"
+            app:layout_constraintTop_toBottomOf="@id/text_home_item_nickname"
             tools:text="1분전" />
 
         <ImageView
@@ -72,9 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="12dp"
-            android:ellipsize="end"
             android:gravity="start"
-            android:maxLines="2"
             android:text="@{article.description}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -103,11 +102,11 @@
                     android:adjustViewBounds="true"
                     android:scaleType="centerCrop"
                     android:src="@drawable/img_my_page_album"
-                    app:thumbnailImageUrl="@{article.thumbnail_url}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:thumbnailImageUrl="@{article.thumbnail_url}" />
 
                 <View
                     android:layout_width="match_parent"
@@ -115,8 +114,10 @@
                     android:background="@drawable/overlay_gradient_my_page_album"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/text_home_item_date"

@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="articleMore"
             type="com.ssafy.daero.data.dto.search.ArticleMoreItem" />
@@ -13,70 +14,71 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp">
+        android:paddingHorizontal="12dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="24dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/image_articleMore_userImg"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:circleImageUrl="@{articleMore.profile_url}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:circleImageUrl="@{articleMore.profile_url}"
             tools:src="@drawable/img_user" />
 
         <TextView
             android:id="@+id/text_articleMore_userName"
+            style="@style/SubHeadSemiBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/SubHeadBold"
-            android:text="@{articleMore.nickname}"
-            tools:text="SSAFY_KIM"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:text="@{articleMore.nickname}"
+            app:layout_constraintBottom_toTopOf="@id/text_articleMore_time"
             app:layout_constraintStart_toEndOf="@id/image_articleMore_userImg"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/image_articleMore_userImg"/>
+            app:layout_constraintTop_toTopOf="@id/image_articleMore_userImg"
+            tools:text="SSAFY_KIM" />
 
         <TextView
             android:id="@+id/text_articleMore_time"
+            style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/SubHead"
-            android:textColor="@color/dark_gray"
-            android:text="@{articleMore.created_at}"
-            tools:text="1분 전"
-            android:layout_marginTop="4dp"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
+            android:text="@{articleMore.created_at}"
+            android:textColor="@color/dark_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/image_articleMore_userImg"
             app:layout_constraintStart_toEndOf="@id/image_articleMore_userImg"
             app:layout_constraintTop_toBottomOf="@id/text_articleMore_userName"
-            app:layout_constraintBottom_toTopOf="@id/text_articleMore_content"/>
+            tools:text="1분 전" />
 
         <ImageView
             android:id="@+id/imageView_articleMore_menu"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="3dp"
             android:src="@drawable/ic_menu"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="16dp"
-            app:tint="@color/gray"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/image_articleMore_userImg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/image_articleMore_userImg"
+            app:tint="@color/black" />
 
         <TextView
-            style="@style/Body"
             android:id="@+id/text_articleMore_content"
+            style="@style/Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="12dp"
             android:text="@{articleMore.description}"
-            app:layout_constraintTop_toBottomOf="@id/text_articleMore_time"
-            app:layout_constraintBottom_toTopOf="@id/card_articleMore_thumbnail"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/image_articleMore_userImg"
+            tools:text="이번 여행은 어쩌구 저쩌구 이번 여행은 어쩌구 저쩌구 이번 여행은 어쩌구 저쩌구 이번 여행은 어쩌구 저쩌구 이번 여행은 어쩌구 저쩌구" />
+
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_articleMore_thumbnail"
@@ -97,13 +99,13 @@
                     android:id="@+id/imageView_articleMore_tripStamp"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:scaleType="centerCrop"
                     android:adjustViewBounds="true"
-                    app:roundThumbnailImg="@{articleMore.thumbnail_url}"
+                    android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
+                    app:roundThumbnailImg="@{articleMore.thumbnail_url}"
                     tools:src="@drawable/img_my_page_album" />
 
                 <View
@@ -114,6 +116,31 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/text_articleMore_item_date"
+                    style="@style/BodyWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text='@{articleMore.start_date + " ~ " + articleMore.end_date}'
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="2022.07.16 ~ 2022.07.17" />
+
+                <TextView
+                    android:id="@+id/text_articleMore_item_title"
+                    style="@style/HeadSemiBoldWhite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="@{articleMore.title}"
+                    app:layout_constraintBottom_toTopOf="@id/text_articleMore_item_date"
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:text="강릉 ~ 속초 여행" />
+
 
                 <TextView
                     android:id="@+id/text_articleMore_comment"
@@ -132,9 +159,9 @@
                     android:id="@+id/imageView_articleMore_comment"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/ic_comment"
                     android:layout_marginEnd="2dp"
                     android:layout_marginBottom="16dp"
+                    android:src="@drawable/ic_comment"
                     app:layout_constraintBottom_toBottomOf="@id/imageView_articleMore_tripStamp"
                     app:layout_constraintEnd_toStartOf="@id/text_articleMore_comment"
                     app:tint="@color/white" />
@@ -160,9 +187,9 @@
                     android:layout_marginBottom="16dp"
                     app:layout_constraintBottom_toBottomOf="@id/imageView_articleMore_tripStamp"
                     app:layout_constraintEnd_toStartOf="@id/text_articleMore_like"
-                    app:tint="@color/white"
                     app:likeState="@{articleMore.like_yn}"
-                    tools:src="@drawable/ic_like"/>
+                    app:tint="@color/white"
+                    tools:src="@drawable/ic_like" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
