@@ -14,10 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.article.CommentAddRequestDto
 import com.ssafy.daero.databinding.BottomsheetCommentBinding
 import com.ssafy.daero.ui.adapter.sns.CommentAdapter
 import com.ssafy.daero.ui.adapter.sns.ReCommentAdapter
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
@@ -26,7 +28,7 @@ import com.ssafy.daero.utils.view.setFullHeight
 import com.ssafy.daero.utils.view.toast
 
 class CommentBottomSheetFragment(private val articleSeq: Int, private val comments: Int, private val userProfileClickListener: (Int) -> Unit) :
-    BottomSheetDialogFragment(), CommentListener {
+    BottomSheetDialogFragment(), CommentListener, ReportListener {
 
     private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val commentViewModel: CommentViewModel by viewModels()
@@ -44,6 +46,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
                         id,
                         content,
                         userSeq,
+                        this@CommentBottomSheetFragment,
                         this@CommentBottomSheetFragment
                     )
                     commentMenuBottomSheetFragment.show(
@@ -126,13 +129,13 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             }, 0)
             binding.editTextCommentAddComment.setText("")
             toast("댓글이 수정되었습니다.")
-            getComment()
+            commentAdapter.refresh()
         }
     }
 
     override fun commentDelete(sequence: Int) {
         commentViewModel.commentDelete(sequence)
-        getComment()
+        commentAdapter.refresh()
     }
 
     override fun reCommentAdd(sequence: Int) {
@@ -151,10 +154,6 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
                 sequence,
                 CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
             )
-            commentViewModel.commentUpdate(
-                sequence,
-                CommentAddRequestDto(binding.editTextCommentAddComment.text.toString())
-            )
             binding.editTextCommentAddComment.postDelayed({
                 val inputMethodManager =
                     requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -165,7 +164,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             }, 0)
             binding.editTextCommentAddComment.setText("")
             toast("답글이 추가되었습니다.")
-            getComment()
+            commentAdapter.refresh()
         }
     }
 
@@ -186,7 +185,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
                 )
             }, 0)
             toast("댓글이 추가되었습니다.")
-            getComment()
+            commentAdapter.refresh()
         }
     }
 
@@ -209,6 +208,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
             when (it) {
                 SUCCESS -> {
                     toast("해당 유저를 차단했습니다.")
+                    commentAdapter.refresh()
                     blockUserViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {
@@ -222,6 +222,21 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun block(seq: Int) {
+        blockUserViewModel.blockAdd(seq)
+        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    commentAdapter.refresh()
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    blockUserViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
     }
 }
 

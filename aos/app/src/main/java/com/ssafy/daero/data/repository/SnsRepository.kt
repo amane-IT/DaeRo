@@ -5,6 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
@@ -119,6 +120,12 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun reportUser(userSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportUser(userSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun reportComment(replySeq: Int, reportRequest: ReportRequestDto): Completable {
         return snsApi.reportComment(replySeq, reportRequest)
             .subscribeOn(Schedulers.io())
@@ -216,6 +223,12 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.getTripFollow(articleSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun blockArticle(articleSeq: Int): Completable {
+        return snsApi.blockArticle(articleSeq)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

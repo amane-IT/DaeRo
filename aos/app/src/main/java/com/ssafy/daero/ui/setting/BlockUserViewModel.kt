@@ -2,6 +2,7 @@ package com.ssafy.daero.ui.setting
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
@@ -44,6 +45,18 @@ class BlockUserViewModel : BaseViewModel() {
     fun blockDelete(userSeq: Int) {
         addDisposable(
             snsRepository.blockDelete(userSeq)
+                .subscribe({
+                    blockState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
+                    blockState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun blockArticle(articleSeq: Int) {
+        addDisposable(
+            snsRepository.blockArticle(articleSeq)
                 .subscribe({
                     blockState.postValue(SUCCESS)
                 }, { throwable ->

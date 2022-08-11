@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -24,11 +25,13 @@ import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.overlay.PathOverlay
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
+import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.article.TripStamp
 import com.ssafy.daero.databinding.FragmentArticleBinding
 import com.ssafy.daero.ui.adapter.sns.ArticleAdapter
 import com.ssafy.daero.ui.adapter.sns.ExpenseAdapter
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.tag.categoryTags
@@ -38,6 +41,7 @@ import com.ssafy.daero.utils.view.toast
 
 class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_article),
     ArticleListener,
+    ReportListener,
     OnMapReadyCallback {
 
     private val blockUserViewModel: BlockUserViewModel by viewModels()
@@ -181,6 +185,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 articleSeq,
                 articleViewModel.articleData.user_seq,
                 2,
+                this@ArticleFragment,
                 this@ArticleFragment,
                 articleViewModel.articleData.expose
             ).show(
@@ -429,17 +434,18 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    override fun blockAdd(userSeq: Int) {
-        blockUserViewModel.blockAdd(userSeq)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+    override fun blockArticle(articleSeq: Int) {
+        blockUserViewModel.blockArticle(articleSeq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
-                    toast("해당 유저를 차단했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("해당 여행기록을 차단했습니다.")
+                    requireActivity().onBackPressed()
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
-                    toast("유저 차단을 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }
@@ -478,6 +484,22 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
                 FAIL -> {
                     toast("게시글 공개 처리를 실패했습니다.")
                     articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun block(seq: Int) {
+        blockUserViewModel.blockArticle(seq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    requireActivity().onBackPressed()
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }

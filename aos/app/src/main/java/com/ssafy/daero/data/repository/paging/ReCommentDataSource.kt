@@ -22,7 +22,7 @@ class ReCommentDataSource(private val snsApi: SnsApi, private val articleSeq: In
                 LoadResult.Page(
                     data = it.results,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (page == it.total_page) null else page + 1
+                    nextKey = if (page >= it.total_page) null else page + 1
                 ) as LoadResult<Int, ReCommentItem>
             }
             .onErrorReturn {

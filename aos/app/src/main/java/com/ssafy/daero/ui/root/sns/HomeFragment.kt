@@ -8,11 +8,12 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentHomeBinding
 import com.ssafy.daero.ui.adapter.sns.HomeAdapter
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), ArticleListener {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), ArticleListener, ReportListener {
     private val homeViewModel: HomeViewModel by viewModels()
     private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
@@ -90,7 +91,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     // 더보기 버튼 클릭
     private val onMoreClickListener: (Int, Int) -> Unit = { articleSeq, userSeq->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,this@HomeFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,this@HomeFragment, this@HomeFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
@@ -130,17 +131,18 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         }
     }
 
-    override fun blockAdd(userSeq: Int) {
-        blockUserViewModel.blockAdd(userSeq)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+    override fun blockArticle(articleSeq: Int) {
+        blockUserViewModel.blockArticle(articleSeq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
-                    toast("해당 유저를 차단했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("해당 여행기록을 차단했습니다.")
+                    homeAdapter.refresh()
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
-                    toast("유저 차단을 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }
@@ -156,5 +158,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     override fun articleClose(articleSeq: Int) {
         TODO("Not yet implemented")
+    }
+
+    override fun block(seq: Int) {
+        blockUserViewModel.blockArticle(seq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    homeAdapter.refresh()
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+            }
+        }
     }
 }
