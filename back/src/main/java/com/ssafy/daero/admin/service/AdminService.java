@@ -148,9 +148,11 @@ public class AdminService {
         days.put("trip_stamps", stamps);
         records.add(days);
 
+        ArrayList<Map<String, Object>> expenses = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Map<String, Object>> expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
-
+        if (!articleVo.getTripExpenses().isEmpty()) {
+            expenses = mapper.readValue(articleVo.getTripExpenses(), ArrayList.class);
+        }
         articleDetail.put("user_seq", articleVo.getUserSeq());
         articleDetail.put("nickname", userInfo.get("nickname"));
         articleDetail.put("profile_url", userInfo.get("profile_image_link"));
