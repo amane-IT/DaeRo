@@ -23,7 +23,7 @@ class SearchPlaceMoreDataSource(private val snsApi: SnsApi, private val searchKe
                 PagingSource.LoadResult.Page(
                     data = it.results,
                     prevKey = if(page == 1) null else page - 1,
-                    nextKey = if (page == it.total_page) null else page + 1
+                    nextKey = if (page >= it.total_page) null else page + 1
                 ) as PagingSource.LoadResult<Int, ArticleMoreItem>
             }
             .onErrorReturn {

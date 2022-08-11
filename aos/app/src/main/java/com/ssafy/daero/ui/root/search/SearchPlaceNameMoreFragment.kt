@@ -11,13 +11,14 @@ import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.*
 import com.ssafy.daero.ui.adapter.search.SearchArticleMoreAdapter
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.root.sns.*
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
 class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBinding>(R.layout.fragment_search_place_name_more),
-    ArticleListener {
+    ArticleListener, ReportListener {
     private val searchPlaceMoreViewModel : SearchPlaceNameMoreViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
     private val blockUserViewModel: BlockUserViewModel by viewModels()
@@ -103,7 +104,8 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,this@SearchPlaceNameMoreFragment).show(
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,
+            this@SearchPlaceNameMoreFragment, this@SearchPlaceNameMoreFragment).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
@@ -126,20 +128,19 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         }
     }
 
-    override fun blockArticle(articleSeq: Int){
+    override fun blockArticle(articleSeq: Int) {
         blockUserViewModel.blockArticle(articleSeq)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner){
-            when(it){
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
                 SUCCESS -> {
-                    toast("해당 유저를 차단했습니다.")
+                    toast("해당 여행기록을 차단했습니다.")
                     searchArticleMoreAdapter.refresh()
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
-                    toast("유저 차단을 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
-
             }
         }
     }
@@ -163,6 +164,22 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
                 FAIL -> {
                     toast("게시글 공개 처리를 실패했습니다.")
                     articleViewModel.exposeState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun block(seq: Int) {
+        blockUserViewModel.blockArticle(seq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    searchArticleMoreAdapter.refresh()
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("여행기록 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }

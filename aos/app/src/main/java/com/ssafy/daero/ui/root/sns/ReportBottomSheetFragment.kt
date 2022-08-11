@@ -9,10 +9,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.databinding.BottomsheetReportBinding
 import com.ssafy.daero.ui.adapter.sns.ReportAdapter
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class ReportBottomSheetFragment(type: Int, seq: Int) : BottomSheetDialogFragment() {
+class ReportBottomSheetFragment(type: Int, val seq: Int, val reportListener: ReportListener) : BottomSheetDialogFragment() {
     private var _binding: BottomsheetReportBinding? = null
     private val binding get() = _binding!!
 
@@ -61,6 +62,7 @@ class ReportBottomSheetFragment(type: Int, seq: Int) : BottomSheetDialogFragment
             when (it) {
                 SUCCESS -> {
                     toast("신고가 완료되었습니다.")
+                    reportListener.block(seq)
                     reportViewModel.reportState.value = DEFAULT
                     dismiss()
                 }

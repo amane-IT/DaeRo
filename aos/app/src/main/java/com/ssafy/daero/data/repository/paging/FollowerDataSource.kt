@@ -22,7 +22,7 @@ class FollowerDataSource(private val snsApi: SnsApi, private val userSeq: Int) :
                 LoadResult.Page(
                     data = it.results,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (page == it.total_page) null else page + 1
+                    nextKey = if (page >= it.total_page) null else page + 1
                 ) as LoadResult<Int, FollowResponseDto>
             }
             .onErrorReturn {

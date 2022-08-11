@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.root.trip.TripFollowBottomSheetFragment
 import com.ssafy.daero.utils.constant.ARTICLE
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
@@ -23,7 +24,8 @@ class ArticleMenuBottomSheetFragment(
     var userSeq: Int,
     var fragmentSeq: Int,
     var listener: ArticleListener,
-    var expose: Char = 'y',
+    var reportListener: ReportListener,
+    var expose: Char = 'y'
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
@@ -125,14 +127,14 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기, album_seq
             dismiss()
-            ReportBottomSheetFragment(ARTICLE, articleSeq).show(
+            ReportBottomSheetFragment(ARTICLE, articleSeq, reportListener).show(
                 parentFragmentManager,
                 REPORT_BOTTOM_SHEET
             )
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기
-            listener.blockArticle(userSeq)
+            listener.blockArticle(articleSeq)
             dismiss()
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {

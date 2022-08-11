@@ -127,7 +127,7 @@ interface SnsApi {
     /**
      * 유저 신고하기
      */
-    @POST("sns/reply/{user_seq}/report")
+    @POST("sns/user/{user_seq}/report")
     fun reportUser(
         @Path("user_seq") userSeq: Int,
         @Body reportRequest: ReportRequestDto
@@ -230,7 +230,7 @@ interface SnsApi {
     /**
      * 게시물 숨기기
      */
-    @POST("sns/users/{article_seq}/hide")
+    @POST("sns/article/{article_seq}/hide")
     fun blockArticle(
         @Path("article_seq") articleSeq: Int
     ): Completable
