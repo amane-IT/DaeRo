@@ -37,7 +37,7 @@
                 app:roundImg="@{tripPreference.image_url}"/>
 
             <View
-                android:layout_width="164dp"
+                android:layout_width="176dp"
                 android:layout_height="176dp"
                 android:layout_gravity="center"
                 android:background="@drawable/overlay_gradient_my_page_album" />
