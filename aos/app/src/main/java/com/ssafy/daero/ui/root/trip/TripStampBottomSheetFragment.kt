@@ -1,5 +1,7 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +9,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.databinding.FragmentTripStampBottomSheetBinding
+import com.ssafy.daero.utils.permission.checkPermission
 
 
 class TripStampBottomSheetFragment(private val onItemClickListener: (Boolean, Boolean) -> Unit) :

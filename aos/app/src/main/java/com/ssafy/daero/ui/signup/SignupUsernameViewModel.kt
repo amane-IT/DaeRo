@@ -57,7 +57,6 @@ class SignupUsernameViewModel : BaseViewModel() {
                         _showProgress.postValue(false)
                         responseState_signup.postValue(SUCCESS)
                         App.prefs.jwt = response.body()!!.jwt
-                        App.prefs.userSeq = response.body()!!.userSeq
                     }
                 }, { throwable ->
                     Log.d("SignupUsernameVM_DaeRo", throwable.toString())

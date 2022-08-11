@@ -26,7 +26,7 @@
     <style name="BigTitle" parent="android:TextAppearance">
         <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:fontFamily">@font/scdream_regular</item>
+        <item name="android:fontFamily">@font/scdream_bold</item>
         <item name="android:textStyle">bold</item>
         <item name="android:includeFontPadding">false</item>
     </style>
@@ -143,6 +143,13 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:fontFamily">@font/scdream_medium</item>
         <item name="android:gravity">right</item>
+    </style>
+
+    <style name="notFontPaddingBody" parent="android:TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:fontFamily">@font/notosanskr_regular</item>
     </style>
 
     <style name="RippleEffect">

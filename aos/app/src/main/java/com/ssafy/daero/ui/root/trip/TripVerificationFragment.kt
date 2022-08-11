@@ -17,7 +17,6 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripVerificationBinding
 import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
@@ -26,7 +25,6 @@ import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.time.toDate
 import com.ssafy.daero.utils.view.toast
-import java.util.*
 
 class TripVerificationFragment :
     BaseFragment<FragmentTripVerificationBinding>(R.layout.fragment_trip_verification) {
@@ -114,7 +112,7 @@ class TripVerificationFragment :
                 App.prefs.initTrip()
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
             } else {
-                TripCompleteBottomSheetFragment(finishTrip)
+                TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)
             }
         }
@@ -132,6 +130,18 @@ class TripVerificationFragment :
 
         // 게시글 추가 화면으로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleWriteDayFragment)
+    }
+
+    private val doneTrip: () -> Unit = {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        tripVerificationViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initTrip()
+        (requireParentFragment() as RootFragment).changeTripState(TRIP_BEFORE)
     }
 
     private fun getTripStamps() {

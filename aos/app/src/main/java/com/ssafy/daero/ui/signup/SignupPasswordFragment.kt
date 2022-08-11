@@ -1,19 +1,14 @@
 package com.ssafy.daero.ui.signup
 
 import android.graphics.Color
-import android.graphics.Paint
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
-import androidx.databinding.adapters.TextViewBindingAdapter.setText
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSignupPasswordBinding
 import com.ssafy.daero.utils.view.toast
-import java.util.regex.Pattern
 
 class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.layout.fragment_signup_password){
     override fun init() {
@@ -25,12 +20,12 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
         binding.apply {
             buttonSignupPasswordNextStep.setOnClickListener {
                 val pwd = editTextSignupPasswordPassword.text.toString()
-                val pwd_verification = editTextSignupEmailPasswordVerification.text.toString()
+                val pwdVerification = editTextSignupEmailPasswordVerification.text.toString()
 
-                if(pwd != "" && pwd_verification != "" && pwd == pwd_verification) {
+                if(pwd != "" && pwdVerification != "" && pwd == pwdVerification) {
                     App.password = binding.editTextSignupPasswordPassword.text.toString()
                     findNavController().navigate(R.id.action_signupPasswordFragment_to_signupUsernameFragment)
-                } else if(pwd == "" || pwd_verification == "")
+                } else if(pwd == "" || pwdVerification == "")
                     toast("비밀번호를 입력해 주세요.")
                 else
                     toast("비밀번호가 일치하지 않습니다.")
@@ -50,13 +45,10 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
             editTextSignupEmailPasswordVerification.addTextChangedListener(object :TextWatcher{
                 //입력이 끝났을 때 비밀번호 일치하는지 확인
                 override fun afterTextChanged(p0: Editable?) {
-                    if(editTextSignupPasswordPassword.text.toString().equals(editTextSignupEmailPasswordVerification.text.toString())){
+                    if(editTextSignupPasswordPassword.text.toString() == editTextSignupEmailPasswordVerification.text.toString()){
                         textSignupPasswordMessage.text = "비밀번호가 일치합니다."
                         textSignupPasswordMessage.setTextColor(R.color.primaryTextColor)
-
-                        // 가입하기 버튼 활성화
-                        if(flag)
-                            buttonSignupPasswordNextStep.isEnabled=true
+                        buttonSignupPasswordNextStep.isEnabled=true
                     }
                     else{
                         textSignupPasswordMessage.text = "비밀번호가 일치하지 않습니다."
@@ -89,12 +81,9 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
             editTextSignupPasswordPassword.addTextChangedListener(object :TextWatcher{
                 //입력이 끝났을 때 비밀번호 유효성 검사
                 override fun afterTextChanged(p0: Editable?) {
-                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9!@#$%^&*]).{8,20}$".toRegex())){
+                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,20}\$".toRegex())){
                         textSignupPasswordMessage.text = "사용가능한 비밀번호입니다."
                         textSignupPasswordMessage.setTextColor(R.color.primaryTextColor)
-
-                        // 가입하기 버튼 활성화
-                        flag = true
                     }
                     else{
                         textSignupPasswordMessage.text = "비밀번호 형식을 지켜주세요. \n" +
@@ -111,11 +100,10 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
                 }
                 //텍스트 변화가 있을 시
                 override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9!@#$%^&*]).{8,20}$".toRegex())){
+                    if(editTextSignupPasswordPassword.text.matches("^(?=.*[a-zA-Z0-9])(?=.*[a-zA-Z!@#\$%^&*])(?=.*[0-9!@#\$%^&*]).{8,20}\$".toRegex())){
                         textSignupPasswordMessage.text = "사용가능한 비밀번호입니다."
                         textSignupPasswordMessage.setTextColor(R.color.primaryTextColor)
-                        // 가입하기 버튼 활성화
-                        flag = true
+                        buttonSignupPasswordNextStep.isEnabled=false
                     }
                     else{
                         textSignupPasswordMessage.text = "비밀번호 형식을 지켜주세요. \n" +
@@ -125,10 +113,13 @@ class SignupPasswordFragment : BaseFragment<FragmentSignupPasswordBinding>(R.lay
                         // 가입하기 버튼 비활성화
                         buttonSignupPasswordNextStep.isEnabled=false
                     }
+
+                    if(editTextSignupPasswordPassword.text == editTextSignupEmailPasswordVerification.text){
+                        textSignupPasswordMessage.text = "비밀번호가 일치합니다."
+                        buttonSignupPasswordNextStep.isEnabled = true
+                    }
                 }
             })
         }
     }
-
-
 }

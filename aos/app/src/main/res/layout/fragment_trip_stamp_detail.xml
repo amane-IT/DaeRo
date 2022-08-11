@@ -65,7 +65,7 @@
                 android:layout_width="360dp"
                 android:layout_height="360dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/bg_login" />
+                tools:src="@drawable/bg_login" />
 
             <View
                 android:layout_width="360dp"

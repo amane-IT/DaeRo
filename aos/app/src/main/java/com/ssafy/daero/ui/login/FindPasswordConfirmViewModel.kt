@@ -48,7 +48,7 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
         addDisposable(
             findIDRepository.findPassword(findPasswordRequestDto)
                 .subscribe({ response ->
-                    if (response.body()!!.result == 'Y') {
+                    if (response.body()!!.result == 'y') {
                         confirmResponseState.postValue(SUCCESS)
                     } else {
                         confirmResponseState.postValue(FAIL)

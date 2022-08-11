@@ -2,21 +2,24 @@ package com.ssafy.daero.ui.root.trip
 
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.cardview.widget.CardView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.chip.Chip
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
 import com.ssafy.daero.databinding.FragmentTripBinding
 import com.ssafy.daero.ui.adapter.trip.TripHotAdapter
 import com.ssafy.daero.ui.adapter.trip.TripPopularAdapter
 import com.ssafy.daero.utils.constant.*
-import com.ssafy.daero.utils.hotArticles
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
 
@@ -28,7 +31,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     lateinit var loadingDialog: LoadingDialogFragment
     private lateinit var bottomSheet: BottomSheetBehavior<CardView>
     private var cornerRadius: Float = 0f
-    private var peekHeight: Int = 0
+    private var originPeekHeight: Int = 0
 
     private var categoryTags = listOf<Int>()
     private var regionTags = listOf<Int>()
@@ -53,7 +56,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         loadingDialog = LoadingDialogFragment.newInstance()
         bottomSheet = BottomSheetBehavior.from(binding.cardTripRecommend)
         bottomSheet.saveFlags = BottomSheetBehavior.SAVE_PEEK_HEIGHT
-        peekHeight = bottomSheet.peekHeight
+        originPeekHeight = bottomSheet.peekHeight
         cornerRadius = binding.cardTripRecommend.radius
         binding.textTripKeyword.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         binding.textTripUsername.text = "${App.prefs.nickname}님"
@@ -86,7 +89,6 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     }
 
     private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        // todo: 상세 게시글로 이동
         findNavController().navigate(R.id.action_rootFragment_to_articleFragment, bundleOf(
             ARTICLE_SEQ to articleSeq))
     }
@@ -106,6 +108,38 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private val applyFilter: (List<Int>, List<Int>) -> Unit = { categoryTags, regionTags ->
         this.categoryTags = categoryTags
         this.regionTags = regionTags
+
+        binding.chipGroupTripTags.removeAllViews()
+
+        // 태그가 비어있다면
+        if(categoryTags.isEmpty() && regionTags.isEmpty()) {
+            bottomSheet.peekHeight = originPeekHeight
+            binding.chipGroupTripTags.visibility = View.GONE
+        } else {
+            binding.chipGroupTripTags.visibility = View.VISIBLE
+            categoryTags.forEach {
+                binding.chipGroupTripTags.addView(
+                    Chip(requireContext()).apply {
+                        setTextAppearanceResource(R.style.ChipText)
+                        setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
+                        setChipBackgroundColorResource(R.color.selector_chip_color)
+                        text = com.ssafy.daero.utils.tag.categoryTags[it-1].tag
+                    }
+                )
+            }
+            regionTags.forEach {
+                binding.chipGroupTripTags.addView(
+                    Chip(requireContext()).apply {
+                        setTextAppearanceResource(R.style.ChipText)
+                        setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
+                        setChipBackgroundColorResource(R.color.selector_chip_color)
+                        text = com.ssafy.daero.utils.tag.regionTags[it-1].tag
+                    }
+                )
+            }
+            val tagHeight = ((((categoryTags.size + regionTags.size) / 4.5) + 1) * 150).toInt()
+            bottomSheet.peekHeight = originPeekHeight + tagHeight
+        }
     }
 
     private fun otherListeners() {
@@ -172,10 +206,12 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         tripViewModel.firstTripRecommendResponseDto.observe(viewLifecycleOwner, tripInformationObserver)
     }
 
-    private val tripInformationObserver = { place_seq : Int ->
-        if(place_seq > 0) {
+    private val tripInformationObserver = { recommend : FirstTripRecommendResponseDto ->
+        if(recommend.place_seq > 0) {
+            Glide.with(requireContext()).load(recommend.image_url)
+
             val bundle = Bundle().apply {
-                putInt(PLACE_SEQ, place_seq)
+                putInt(PLACE_SEQ, recommend.place_seq)
                 putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
             }
 

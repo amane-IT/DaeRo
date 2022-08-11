@@ -10,10 +10,8 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.entity.TripFollow
 import com.ssafy.daero.databinding.FragmentTripFollowSelectBinding
 import com.ssafy.daero.ui.adapter.trip.TripFollowSelectAdapter
-import com.ssafy.daero.utils.constant.ARTICLE_SEQ
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.ui.root.RootFragment
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
 class TripFollowSelectFragment :
@@ -67,7 +65,9 @@ class TripFollowSelectFragment :
 
             App.prefs.curPlaceSeq = result[0]
 
-            App.prefs.isFollowStart = true
+            App.prefs.isFollow = true
+            App.prefs.tripState = TRIP_ING
+            RootFragment.selectPosition = R.id.TripFragment
             findNavController().navigate(
                 R.id.action_tripFollowSelectFragment_to_rootFragment
             )

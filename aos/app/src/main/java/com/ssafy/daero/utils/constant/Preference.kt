@@ -19,6 +19,7 @@ const val IS_FIRST_TRIP = "is_first_trip"
 const val TRIP_TRANSPORTATION = "trip_transportation"
 const val TRIP_TIME = "trip_time"
 const val IS_NOTIFICATION_ALLOW = "is_notification_allow"
+const val IS_PERMISSION_GUIDE_CHECK = "is_permission_guide_check"
 
 /**
  * 현재 여행중인 여행지 seq
