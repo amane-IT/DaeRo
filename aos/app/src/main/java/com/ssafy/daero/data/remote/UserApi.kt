@@ -78,19 +78,19 @@ interface UserApi {
     /**
      * 이메일 인증 요청
      */
-    @POST("/users/email")
+    @POST("users/email")
     fun verifyEmail(@Body signupEmailRequestDto: SignupEmailRequestDto): Single<Response<SignupEmailResponseDto>>
 
     /**
      * 이메일 인증 여부
      */
-    @GET("/users/{user_seq}/verified")
+    @GET("users/{user_seq}/verified")
     fun verifyUserEmail(@Path("user_seq") user_seq: Int): Single<Response<VerifyUserEmailResponseDto>>
 
     /**
      * 닉네임 중복 검사
      */
-    @POST("/users/nickname")
+    @POST("users/nickname")
     fun verifyNickname(@Body signupNicknameRequestDto: SignupNicknameRequestDto): Single<Response<SignupNicknameResponseDto>>
 
     /**
