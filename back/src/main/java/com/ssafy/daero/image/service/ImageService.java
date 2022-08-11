@@ -49,6 +49,7 @@ public class ImageService {
             imageVo.setResult(ImageVo.ImageResult.SERVER_ERROR);
             return imageVo;
         }
+        System.out.println("씨발 개새끼");
         imageVo.setDownloadUrl(IMAGE_URL_PREFIX + newFile.getName());
         imageVo.setResult(ImageVo.ImageResult.SUCCESS);
         return imageVo;
