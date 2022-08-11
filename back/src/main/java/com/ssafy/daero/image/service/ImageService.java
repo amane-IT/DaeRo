@@ -16,7 +16,7 @@ import java.util.Arrays;
 @Service
 public class ImageService {
     private final String IMAGE_PATH = "/var/lib/tomcat9/webapps/upload/";
-    private final String IMAGE_URL_PREFIX = "http://i7d110.p.ssafy.io/image/download/";
+    private final String IMAGE_URL_PREFIX = "https://i7d110.p.ssafy.io/api/image/download/";
     private final String[] ALLOWED_IMAGE_MIMES = new String[]{"image/jpeg", "image/png"};
 
     public ImageVo uploadFile(MultipartFile multipartFile) {
