@@ -2,7 +2,6 @@ package com.ssafy.daero.ui.setting
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import com.ssafy.daero.data.repository.SnsRepository

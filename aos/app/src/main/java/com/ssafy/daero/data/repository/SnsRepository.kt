@@ -5,7 +5,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.application.App.Companion.userSeq
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
