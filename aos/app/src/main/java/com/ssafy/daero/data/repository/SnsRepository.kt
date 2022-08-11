@@ -30,9 +30,8 @@ class SnsRepository private constructor(context: Context) {
 
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
-    private var articleDataSource = ArticleDataSource(snsApi)
     private var invalidatingPagingSourceFactory =
-        InvalidatingPagingSourceFactory { articleDataSource }
+        InvalidatingPagingSourceFactory { ArticleDataSource(snsApi) }
 
     fun getArticles(): Flowable<PagingData<ArticleHomeItem>> {
         return Pager(
@@ -46,8 +45,7 @@ class SnsRepository private constructor(context: Context) {
     }
 
     fun invalidatePageSource() {
-        articleDataSource.invalidate()
-        invalidatingPagingSourceFactory = InvalidatingPagingSourceFactory { articleDataSource }
+        invalidatingPagingSourceFactory.invalidate()
     }
 
     fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {
