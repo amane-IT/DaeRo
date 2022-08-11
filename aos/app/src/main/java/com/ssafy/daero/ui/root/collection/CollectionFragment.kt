@@ -1,7 +1,6 @@
 package com.ssafy.daero.ui.root.collection
 
 import android.util.Log
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -25,6 +24,7 @@ class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.frag
         initData()
         initAdapter()
         observeData()
+        setOnClickListeners()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -51,9 +51,16 @@ class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.frag
     private fun observeData(){
         collectionViewModel.collections.observe(viewLifecycleOwner){
             Log.d(TAG, "observeData: $it")
-            // TODO: 컬렉션 API 완성하면 살리기
             collectionAdapter.submitData(lifecycle, it)
-//            collectionAdapter.submitData(lifecycle, collections)
+        }
+    }
+
+
+    private fun setOnClickListeners(){
+        binding.apply {
+            imageCollectionNotification.setOnClickListener {
+                findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
+            }
         }
     }
 
