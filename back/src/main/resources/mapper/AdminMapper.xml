@@ -209,8 +209,8 @@
                (SELECT admin_name
                 FROM daero.admin a
                 WHERE a.admin_seq = i.admin_seq) AS author
-        FROM daero.inquires i;
-
+        FROM daero.inquires i
+        WHERE i.inquires_seq=#{inquirySeq}
     </select>
 
     <update id="updateInquiryByInquirySeq">
