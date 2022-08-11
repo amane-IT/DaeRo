@@ -9,6 +9,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentLoginBinding
+import com.ssafy.daero.ui.setting.ForbiddenDialogFragment
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.TRIP_BEFORE
@@ -66,6 +67,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
                 }
                 403 -> {
                     // todo: 정지된 유저 다이얼로그 띄우기
+                    showForbiddenDialog()
                     loginViewModel.responseState.value = DEFAULT
                 }
 
@@ -111,5 +113,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         App.prefs.initUser()
         App.prefs.initTrip()
         App.prefs.tripState = TRIP_BEFORE
+    }
+
+    private fun showForbiddenDialog() {
+        ForbiddenDialogFragment().show(childFragmentManager, "WITHDRAWAL_DIALOG")
     }
 }
