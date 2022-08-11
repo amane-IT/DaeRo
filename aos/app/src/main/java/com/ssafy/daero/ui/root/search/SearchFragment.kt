@@ -3,6 +3,7 @@ package com.ssafy.daero.ui.root.search
 import android.view.inputmethod.EditorInfo
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
@@ -41,6 +42,9 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
             searchViewModel.searchUserName(keyword)
             searchViewModel.searchArticle(keyword)
             App.keyword = keyword
+        }
+        binding.imageSearchNotification.setOnClickListener {
+            findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
         }
     }
 
