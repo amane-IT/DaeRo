@@ -16,6 +16,8 @@ import com.ssafy.daero.application.MainActivity
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.login.LoginRequestDto
 import com.ssafy.daero.databinding.FragmentEmailLoginBinding
+import com.ssafy.daero.ui.setting.ForbiddenDialogFragment
+import com.ssafy.daero.ui.setting.WithdrawalDialogFragment
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -84,6 +86,7 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
                 }
                 403 -> {
                     // todo: 정지된 유저 다이얼로그 띄우기
+                    showForbiddenDialog()
                     emailLoginViewModel.responseState.value = DEFAULT
                 }
                 FAIL -> {
@@ -92,5 +95,9 @@ class EmailLoginFragment : BaseFragment<FragmentEmailLoginBinding>(R.layout.frag
                 }
             }
         }
+    }
+
+    private fun showForbiddenDialog() {
+        ForbiddenDialogFragment().show(childFragmentManager, "WITHDRAWAL_DIALOG")
     }
 }
