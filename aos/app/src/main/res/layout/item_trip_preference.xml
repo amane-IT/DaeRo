@@ -36,6 +36,23 @@
                 tools:src="@drawable/img_my_page_album"
                 app:roundImg="@{tripPreference.image_url}"/>
 
+            <View
+                android:layout_width="164dp"
+                android:layout_height="176dp"
+                android:layout_gravity="center"
+                android:background="@drawable/overlay_gradient_my_page_album" />
+
+            <TextView
+                android:id="@+id/text_itemTripPreference_title"
+                style="@style/BodyWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{tripPreference.place_name}"
+                tools:text="강릉 여행" />
+
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
