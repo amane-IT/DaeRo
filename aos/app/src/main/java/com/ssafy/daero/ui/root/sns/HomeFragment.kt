@@ -1,8 +1,12 @@
 package com.ssafy.daero.ui.root.sns
 
+import android.util.Log
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -12,6 +16,8 @@ import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), ArticleListener, ReportListener {
     private val homeViewModel: HomeViewModel by viewModels()
@@ -24,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         setOnClickListeners()
         observeData()
         getArticles()
+        initSwipeToRefresh()
     }
 
     private fun setOnClickListeners() {
@@ -62,6 +69,22 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     private fun getArticles() {
         homeViewModel.getArticles()
+    }
+
+    private fun initSwipeToRefresh() {
+        binding.swipeRefresh.setOnRefreshListener {
+            homeViewModel.getArticles()
+            binding.recyclerHome.apply {
+                layoutManager = null
+                adapter = null
+                layoutManager = LinearLayoutManager(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL,
+                    false
+                )
+                adapter = homeAdapter
+            }
+        }
     }
 
     // 좋아요 버튼 클릭
@@ -120,7 +143,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
             when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
+                    homeViewModel.invalidatePageSource()
+                    var idx = homeAdapter.itemCount
                     homeAdapter.refresh()
+                    binding.recyclerHome.scrollToPosition(idx)
                     articleViewModel.deleteState.value = DEFAULT
                 }
                 FAIL -> {
@@ -137,7 +163,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
             when (it) {
                 SUCCESS -> {
                     toast("해당 여행기록을 차단했습니다.")
+                    homeViewModel.invalidatePageSource()
+                    var idx = homeAdapter.itemCount
                     homeAdapter.refresh()
+                    binding.recyclerHome.scrollToPosition(idx)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
@@ -162,10 +191,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
 
     override fun block(seq: Int) {
         blockUserViewModel.blockArticle(seq)
-        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
-            when (it) {
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) { response ->
+            when (response) {
                 SUCCESS -> {
+                    var idx = homeAdapter.itemCount
                     homeAdapter.refresh()
+                    binding.recyclerHome.scrollToPosition(idx)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {

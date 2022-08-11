@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.FAIL

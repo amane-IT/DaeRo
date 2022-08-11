@@ -13,12 +13,18 @@ import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class ReportBottomSheetFragment(type: Int, val seq: Int, val reportListener: ReportListener) : BottomSheetDialogFragment() {
+class ReportBottomSheetFragment(val type: Int, val seq: Int, val reportListener: ReportListener) : BottomSheetDialogFragment() {
     private var _binding: BottomsheetReportBinding? = null
     private val binding get() = _binding!!
 
     private val reportViewModel: ReportViewModel by viewModels()
     private lateinit var reportAdapter: ReportAdapter
+    private var commentSeq: Int = 0
+
+
+    constructor(type: Int, seq: Int, reportListener: ReportListener, commentSeq:Int) : this(type, seq, reportListener) {
+        this.commentSeq = commentSeq
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,7 +55,7 @@ class ReportBottomSheetFragment(type: Int, val seq: Int, val reportListener: Rep
                 reportViewModel.reportArticle(seq, reportSeq)
             }
             COMMENT -> {
-                reportViewModel.reportComment(seq, reportSeq)
+                reportViewModel.reportComment(commentSeq, reportSeq)
             }
             USER -> {
                 reportViewModel.reportUser(seq, reportSeq)

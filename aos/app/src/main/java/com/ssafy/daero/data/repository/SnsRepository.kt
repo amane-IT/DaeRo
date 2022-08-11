@@ -1,6 +1,7 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import androidx.paging.InvalidatingPagingSourceFactory
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -29,16 +30,24 @@ class SnsRepository private constructor(context: Context) {
 
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
+    private var articleDataSource = ArticleDataSource(snsApi)
+    private var invalidatingPagingSourceFactory =
+        InvalidatingPagingSourceFactory { articleDataSource }
 
     fun getArticles(): Flowable<PagingData<ArticleHomeItem>> {
         return Pager(
-            config = PagingConfig(
+            PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { ArticleDataSource(snsApi) }
+            pagingSourceFactory = invalidatingPagingSourceFactory
         ).flowable
+    }
+
+    fun invalidatePageSource() {
+        articleDataSource.invalidate()
+        invalidatingPagingSourceFactory = InvalidatingPagingSourceFactory { articleDataSource }
     }
 
     fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {

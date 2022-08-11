@@ -8,11 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
-import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
-import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 
 class SearchContentMoreViewModel : BaseViewModel() {
     private val TAG = "SearchContentMoreVM_DaeRo"

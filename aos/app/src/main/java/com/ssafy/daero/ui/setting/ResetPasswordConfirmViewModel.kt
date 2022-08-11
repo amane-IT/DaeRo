@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
-import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS

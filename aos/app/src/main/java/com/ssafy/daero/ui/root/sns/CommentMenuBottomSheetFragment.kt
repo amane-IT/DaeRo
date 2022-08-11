@@ -78,7 +78,7 @@ class CommentMenuBottomSheetFragment(
         }
         binding.tvCommentMenuReport.setOnClickListener {
             dismiss()
-            ReportBottomSheetFragment(COMMENT, replySeq, reportListener).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
+            ReportBottomSheetFragment(COMMENT, userSeq, reportListener, replySeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvCommentMenuBlock.setOnClickListener {
             //todo: 차단하기

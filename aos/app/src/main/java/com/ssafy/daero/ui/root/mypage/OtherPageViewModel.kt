@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
-import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripAlbumItem

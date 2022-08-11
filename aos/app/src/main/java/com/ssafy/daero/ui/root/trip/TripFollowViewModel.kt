@@ -1,14 +1,10 @@
 package com.ssafy.daero.ui.root.trip
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PagingData
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.entity.TripFollow
-import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL

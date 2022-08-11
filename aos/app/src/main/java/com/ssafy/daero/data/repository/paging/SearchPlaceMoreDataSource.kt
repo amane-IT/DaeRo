@@ -11,6 +11,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class SearchPlaceMoreDataSource(private val snsApi: SnsApi, private val searchKeyword: String) : RxPagingSource<Int, ArticleMoreItem>() {
     override fun getRefreshKey(state: PagingState<Int, ArticleMoreItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
             state.closestItemToPosition(anchorPosition)?.article_seq
         }
     }
@@ -22,7 +24,7 @@ class SearchPlaceMoreDataSource(private val snsApi: SnsApi, private val searchKe
             .map{
                 PagingSource.LoadResult.Page(
                     data = it.results,
-                    prevKey = if(page == 1) null else page - 1,
+                    prevKey = null,
                     nextKey = if (page >= it.total_page) null else page + 1
                 ) as PagingSource.LoadResult<Int, ArticleMoreItem>
             }
