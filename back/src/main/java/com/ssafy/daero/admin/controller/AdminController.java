@@ -2,11 +2,9 @@ package com.ssafy.daero.admin.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ssafy.daero.admin.service.AdminService;
-import com.ssafy.daero.admin.vo.AnswerVo;
-import com.ssafy.daero.admin.vo.FaqVo;
-import com.ssafy.daero.admin.vo.NoticeVo;
-import com.ssafy.daero.admin.vo.TripPlaceVo;
-import com.ssafy.daero.sns.service.SnsService;
+import com.ssafy.daero.admin.vo.*;
+import com.ssafy.daero.user.service.JwtService;
+import com.ssafy.daero.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +19,14 @@ public class AdminController {
     private final String FAILURE = "FAILURE";
 
     private final AdminService adminService;
-    public AdminController(AdminService adminService) { this.adminService = adminService; }
+    private final JwtService jwtService;
+    private final UserService userService;
+
+    public AdminController(AdminService adminService, JwtService jwtService, UserService userService) {
+        this.adminService = adminService;
+        this.jwtService = jwtService;
+        this.userService = userService;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<Integer> login(@RequestBody Map<String, String> req) {
@@ -217,5 +222,15 @@ public class AdminController {
         boolean res = adminService.suspendUser(user_seq, req.get("day"));
         if (res) { return new ResponseEntity<>(SUCCESS,HttpStatus.OK); }
         return new ResponseEntity<>(FAILURE,HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/users/{user_seq}")
+    public ResponseEntity<Map<String, Object>> userProfile(@RequestHeader("jwt") String jwt, @PathVariable int user_seq) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        Map<String, Object> res = userService.userProfile(user_seq, Integer.parseInt(currentUser.get("user_seq")));
+        if (res == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }
