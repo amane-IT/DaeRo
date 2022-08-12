@@ -35,9 +35,9 @@ fun loadCircleImage(view: ImageView, url: String?) {
     Glide.with(view)
         .load(url)
         .override(200,200)
-        .placeholder(R.drawable.placeholder_trip_album)
+        .placeholder(R.drawable.img_user)
         .apply(RequestOptions().centerCrop().circleCrop())
-        .error(R.drawable.placeholder_trip_album)
+        .error(R.drawable.img_user)
         .into(view)
 }
 

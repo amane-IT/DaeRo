@@ -79,9 +79,9 @@ class TripNextViewModel : BaseViewModel() {
                 // place_seq 저장
                 if(response.body()!!.place_seq == 0) {
                     nextTripRecommendState.postValue(EMPTY)
-                    imageUrl.postValue(response.body()!!.image_url)
                 } else {
                     _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                    imageUrl.postValue(response.body()!!.image_url)
                 }
                 showProgress.postValue(false)
             }, { throwable ->

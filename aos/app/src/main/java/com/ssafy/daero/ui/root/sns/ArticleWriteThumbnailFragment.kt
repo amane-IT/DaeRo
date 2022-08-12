@@ -63,6 +63,9 @@ class ArticleWriteThumbnailFragment :
                     // Room 삭제
                     articleWriteViewModel.deleteAllTripRecord()
 
+                    // ArticleWriteViewModel 상태 초기화
+                    articleWriteViewModel.finishWriteArticle()
+
                     // 캐시 디렉토리 전체 삭제
                     deleteCache(requireContext())
 
