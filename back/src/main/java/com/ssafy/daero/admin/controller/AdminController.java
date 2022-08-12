@@ -78,9 +78,15 @@ public class AdminController {
     }
 
     @GetMapping("/article")
-    public ResponseEntity<Map<String, Object>> articleList(@RequestParam(required = false, defaultValue = "1") String page) {
-        Map<String, Object> res = adminService.articleList(Integer.parseInt(page));
-        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+    public ResponseEntity<Map<String, Object>> articleList(SearchVo searchVo) {
+        Map<String, Object> res;
+        if (searchVo.getSearch() == null) {
+            res = adminService.articleList(searchVo.getPage());
+            if (res == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        }
+        res = this.adminService.articleSearch(searchVo.getSearch(), searchVo.getPage());
+        if (res == null) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 

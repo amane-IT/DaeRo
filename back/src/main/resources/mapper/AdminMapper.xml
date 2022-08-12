@@ -115,23 +115,60 @@
     </select>
 
     <select id="selectArticleCount" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.articles
     </select>
 
-    <select id="selectArticleList" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY a.articles_seq ASC) AS row,
-                     a.articles_seq,
-                     a.title,
-                     a.created_at,
-                     a.open_yn,
-                     (SELECT t.users_seq
-                      FROM trips t
-                      WHERE t.trips_seq = a.trips_seq)               AS users_seq
-              FROM daero.articles a) AS article
-        WHERE (#{page} - 1) * 10 &lt; article.row
-          AND article.row &lt; 1 + (#{page} * 10);
+    <select id="selectArticleList" parameterType="_int" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `v`.`articles_seq`       as `articleSeq`,
+               `v`.`nickname`           as `nickname`,
+               `v`.`users_seq`          as `userSeq`,
+               `v`.`trips_seq`          as `tripSeq`,
+               `v`.`profile_image_link` as `profileUrl`,
+               `v`.`created_at`         as `createdAt`,
+               `v`.`thumbnail_url`      as `thumbnailUrl`,
+               `v`.`trip_comment`       as `description`,
+               `v`.`title`              as `title`,
+               `v`.`start_date`         as `startDate`,
+               `v`.`end_date`           as `endDate`,
+               `v`.`like_count`         as `likeCount`,
+               `v`.`reply_count`        as `replyCount`
+        FROM `v_users_trips_articles` `v`
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleCountByContent" parameterType="String" resultType="_int">
+        select distinct count(0)
+        from `articles` as `a`
+                 left join `trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`
+                 left join `trip_days` `d` on `d`.trip = `t`.`trips_seq`
+        where (binary (`a`.`title`) like concat('%', #{content}, '%')
+            or binary (`t`.`trip_comment`) like concat('%', #{content}, '%')
+            or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
+    </select>
+
+    <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select distinct `v`.`articles_seq`       as `articleSeq`,
+                        `v`.`nickname`           as `nickname`,
+                        `v`.`users_seq`          as `userSeq`,
+                        `v`.`trips_seq`          as `tripSeq`,
+                        `v`.`profile_image_link` as `profileUrl`,
+                        `v`.`created_at`         as `createdAt`,
+                        `v`.`thumbnail_url`      as `thumbnailUrl`,
+                        `v`.`trip_comment`       as `description`,
+                        `v`.`title`              as `title`,
+                        `v`.`start_date`         as `startDate`,
+                        `v`.`end_date`           as `endDate`,
+                        `v`.`like_count`         as `likeCount`,
+                        `v`.`reply_count`        as `replyCount`
+        from `v_users_trips_articles` `v`
+                 left join `trip_days` `d` on `d`.`trip` = `v`.`trips_seq`
+        where (binary (`v`.`title`) like concat('%', #{content}, '%')
+            or binary (`v`.`trip_comment`) like concat('%', #{content}, '%')
+            or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectUserListBySearch" resultMap="mappingUserDto">
@@ -379,17 +416,6 @@
         <result property="userSeq" column="users_seq"/>
         <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
-    </resultMap>
-
-    <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
-        <result property="articleSeq" column="articles_seq" />
-        <result property="nickname" column="nickname" />
-        <result property="userSeq" column="users_seq" />
-        <result property="createdAt" column="created_at" />
-        <result property="title" column="title" />
-        <result property="startDate" column="start_date" />
-        <result property="endDate" column="end_date" />
-        <result property="openYn" column="open_yn" />
     </resultMap>
 
     <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.admin.vo.*;
 import com.ssafy.daero.sns.mapper.SnsMapper;
+import com.ssafy.daero.sns.vo.ArticleListVo;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.sns.vo.StampVo;
@@ -176,7 +177,7 @@ public class AdminService {
         ArrayList<Map<String, Object>> results = new ArrayList<>();
         ArrayList<Map<String, Object>> rereplies = new ArrayList<>();
         Map<String, Object> reply = new HashMap<>();
-        ArrayList<ReplyVo> rereply = new ArrayList<>();
+        ArrayList<ReplyVo> rereply;
 
         for (ReplyVo rVo:replyVos) {
             rereply = adminMapper.selectRereplyListByByReplySeq(rVo.getReplySeq());
@@ -215,34 +216,47 @@ public class AdminService {
         replyDetail.put("content", replyVo.getContent());
         replyDetail.put("created_at", replyVo.getCreatedAt());
         return replyDetail;
+    }
 
+    private LinkedList<Map<String, Object>> createArticleMapList(ArrayList<ArticleListVo> articleListVos) {
+        LinkedList<Map<String, Object>> results = new LinkedList<>();
+        for (ArticleListVo articleListVo : articleListVos) {
+            Map<String, Object> article = new HashMap<>();
+            article.put("article_seq", articleListVo.getArticleSeq());
+            article.put("nickname", articleListVo.getNickname());
+            article.put("user_seq", articleListVo.getUserSeq());
+            article.put("created_at", articleListVo.getCreatedAt());
+            article.put("title", articleListVo.getTitle());
+            article.put("open_yn", articleListVo.getOpenYn());
+            results.add(article);
+        }
+        return results;
     }
 
     public Map<String, Object> articleList(int page) {
-        int totalPage = (int) Math.ceil(adminMapper.selectArticleCount()/10.0);
+        int totalPage = (adminMapper.selectArticleCount() - 1) / ARTICLE_PAGE_SIZE;
         if (totalPage == 0) { totalPage = 1; }
         if (page > totalPage) { return null; }
+        LinkedList<Map<String, Object>> results = createArticleMapList(adminMapper.selectArticleList(REPORT_PAGE_SIZE, (page - 1) * REPORT_PAGE_SIZE));
         Map<String, Object> articleList = new HashMap<>();
-        ArrayList<Map<String, Object>> results = new ArrayList<>();
-        Map<String, Object> article = new HashMap<>();
-        ArrayList<ArticleVo> articleVos = adminMapper.selectArticleList(page);
-        for (ArticleVo aVo :
-                articleVos) {
-            Map<String, String> userInfo = snsMapper.selectUserByUserSeq(aVo.getUserSeq());
-            article.put("article_seq", aVo.getArticleSeq());
-            article.put("nickname", userInfo.get("nickname"));
-            article.put("user_seq", aVo.getUserSeq());
-            article.put("created_at", aVo.getCreatedAt());
-            article.put("title", aVo.getTitle());
-            article.put("open_yn", aVo.getOpenYn());
-            results.add(article);
-            article = new HashMap<>();
-        }
         articleList.put("total_page", totalPage);
         articleList.put("page", page);
         articleList.put("results", results);
         return articleList;
     }
+
+    public Map<String, Object> articleSearch(String content, int page) {
+        int totalCount = this.adminMapper.selectArticleCountByContent(content);
+        int totalPage = (totalCount - 1) / ARTICLE_PAGE_SIZE + 1;
+        if (page > totalPage) return null;
+        LinkedList<Map<String, Object>> results = createArticleMapList(this.adminMapper.selectArticleByContent(content, ARTICLE_PAGE_SIZE, (page - 1) * ARTICLE_PAGE_SIZE));
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("total_page", totalPage);
+        resultMap.put("page", page);
+        resultMap.put("results", results);
+        return resultMap;
+    }
+
     public Map<String, Object> searchUser(String search, int page) {
         int totalPage = (int) Math.ceil(adminMapper.selectUserCount()/10.0);
         if (totalPage == 0) { totalPage = 1; }

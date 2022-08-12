@@ -31,13 +31,17 @@ public interface AdminMapper {
 
     ArrayList<ReplyVo> selectRereplyListByByReplySeq(@Param("replySeq") int replySeq);
 
-    int selectArticleByArticleSeq(int articleSeq);
-
     ReplyVo selectReplyByReplySeq(int replySeq);
 
     int selectArticleCount();
 
-    ArrayList<ArticleVo> selectArticleList(int page);
+    ArrayList<ArticleListVo> selectArticleList(@Param("limit") int limit, @Param("offset") int offset);
+
+    int selectArticleCountByContent(String content);
+
+    ArrayList<ArticleListVo> selectArticleByContent(@Param("content") String content,
+                                                    @Param("limit") int limit,
+                                                    @Param("offset") int offset);
 
     ArrayList<UserDto> selectUserListBySearch(@Param("search") String search, @Param("page") int page);
 
