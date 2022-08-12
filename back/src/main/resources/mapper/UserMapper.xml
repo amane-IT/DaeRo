@@ -195,22 +195,23 @@
     <select id="selectBadgeByUserSeq" parameterType="_int" resultType="java.util.Map">
         select (select region_name
                 from region_tags t
-                where t.`region_seq`= a.`region_seq`) as region_name, `count`
+                where t.`region_seq` = a.`region_seq`) as region_name,
+               `count`
         from user_achievements a
-        where `users_seq`=#{userSeq}
+        where `users_seq` = #{userSeq}
         order by `region_seq`
     </select>
 
     <update id="updateFcmToken">
         update daero.`users`
-        set daero.users.`fcm_token`=#{token}
-        where daero.users.`users_seq`=#{userSeq}
+        set daero.users.`fcm_token` = #{token}
+        where daero.users.`users_seq` = #{userSeq}
     </update>
 
     <select id="selectUserFavor" parameterType="_int" resultType="_int">
         select COUNT(0)
         from daero.user_favor
-        where users_seq=#{userSeq}
+        where users_seq = #{userSeq}
     </select>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.vo.UserVo">
@@ -226,6 +227,6 @@
         <result property="delYn" column="del_yn"/>
         <result property="fcmToken" column="fcm_token"/>
         <result property="passwordFindYn" column="password_find_yn"/>
-        <result property="suspendedExpiry" column="suspended_expiry" />
+        <result property="suspendedExpiry" column="suspended_expiry"/>
     </resultMap>
 </mapper>

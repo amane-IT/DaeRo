@@ -7,7 +7,7 @@
     <select id="selectAdminByCode" parameterType="String" resultType="java.lang.Integer">
         SELECT `admin_seq`
         FROM daero.admin
-        WHERE `code`=#{code}
+        WHERE `code` = #{code}
     </select>
 
     <select id="selectUserCount" resultType="_int">
@@ -17,12 +17,19 @@
 
     <select id="selectUserList" parameterType="_int" resultMap="mappingUserDto">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, user_email, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
-        FROM reports r
-        WHERE r.reported_users_seq=u.users_seq) AS report_count
-        FROM daero.users u) AS user
-        WHERE (#{page} -1)*10 &lt; user.row
-                         AND user.row &lt; 1+(#{page}*10)
+        FROM (SELECT row_number() over (ORDER BY u.users_seq)   AS row,
+                     user_email,
+                     profile_image_link,
+                     nickname,
+                     users_seq,
+                     created_at,
+                     suspended_yn,
+                     (select COUNT(*)
+                      FROM reports r
+                      WHERE r.reported_users_seq = u.users_seq) AS report_count
+              FROM daero.users u) AS user
+        WHERE (#{page} - 1) * 10 &lt; user.row
+          AND user.row &lt; 1 + (#{page} * 10)
     </select>
 
     <select id="selectReportCount" parameterType="_int" resultType="_int">
@@ -48,47 +55,61 @@
     <update id="updateReportHandled" parameterType="_int">
         UPDATE daero.reports
         SET `handled_yn` = 'y'
-        WHERE reports_seq=#{reportSeq}
+        WHERE reports_seq = #{reportSeq}
     </update>
 
     <select id="selectReplyCount" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
         FROM daero.replies
-        WHERE `articles_seq`=#{articleSeq} AND `rereply_parent` IS NULL
+        WHERE `articles_seq` = #{articleSeq}
+          AND `rereply_parent` IS NULL
     </select>
 
     <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY r.replies_seq ASC) AS row, replies_seq,
-        users_seq, content, created_at, (SELECT nickname
-        FROM daero.users u
-        WHERE u.users_seq=r.users_seq) AS nickname
-        FROM daero.replies r
-        WHERE r.articles_seq=#{articleSeq} AND r.rereply_parent IS NULL) AS reply
-        WHERE (#{page} -1)*10 &lt; reply.row
-                          AND reply.row &lt; 1+(#{page}*10)
+        FROM (SELECT row_number() over (ORDER BY r.replies_seq) AS row,
+                     replies_seq,
+                     users_seq,
+                     content,
+                     created_at,
+                     (SELECT nickname
+                      FROM daero.users u
+                      WHERE u.users_seq = r.users_seq)          AS nickname
+              FROM daero.replies r
+              WHERE r.articles_seq = #{articleSeq}
+                AND r.rereply_parent IS NULL) AS reply
+        WHERE (#{page} - 1) * 10 &lt; reply.row
+          AND reply.row &lt; 1 + (#{page} * 10)
     </select>
 
     <select id="selectRereplyListByByReplySeq" resultMap="mappingReplyVo">
-        SELECT replies_seq, users_seq, content, created_at, (SELECT nickname
-                                                            FROM daero.users u
-                                                            WHERE u.users_seq=r.users_seq) AS nickname
+        SELECT replies_seq,
+               users_seq,
+               content,
+               created_at,
+               (SELECT nickname
+                FROM daero.users u
+                WHERE u.users_seq = r.users_seq) AS nickname
         FROM daero.replies r
-        WHERE r.rereply_parent=#{replySeq}
+        WHERE r.rereply_parent = #{replySeq}
     </select>
 
     <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
         SELECT COUNT(*)
         FROM daero.articles
-        WHERE `articles_seq`=#{articleSeq}
+        WHERE `articles_seq` = #{articleSeq}
     </select>
 
     <select id="selectReplyByReplySeq" parameterType="_int" resultMap="mappingReplyVo">
-        SELECT `replies_seq`, `users_seq`, `content`, `created_at`, (SELECT nickname
-                                                                     FROM daero.users u
-                                                                     WHERE u.users_seq=r.users_seq) AS nickname
+        SELECT `replies_seq`,
+               `users_seq`,
+               `content`,
+               `created_at`,
+               (SELECT nickname
+                FROM daero.users u
+                WHERE u.users_seq = r.users_seq) AS nickname
         FROM daero.replies r
-        WHERE `replies_seq`=#{replySeq}
+        WHERE `replies_seq` = #{replySeq}
     </select>
 
     <select id="selectArticleCount" resultType="_int">
@@ -113,21 +134,27 @@
 
     <select id="selectUserListBySearch" resultMap="mappingUserDto">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY u.users_seq ASC) AS row, profile_image_link, nickname, users_seq, created_at, suspended_yn, (select COUNT(*)
-                                                                                                                                              FROM reports r
-                                                                                                                                              WHERE r.reported_users_seq=u.users_seq) AS report_count
+        FROM (SELECT row_number() over (ORDER BY u.users_seq)   AS row,
+                     profile_image_link,
+                     nickname,
+                     users_seq,
+                     created_at,
+                     suspended_yn,
+                     (select COUNT(*)
+                      FROM reports r
+                      WHERE r.reported_users_seq = u.users_seq) AS report_count
               FROM daero.users u
-              WHERE u.nickname LIKE CONCAT('%',#{search},'%')) AS user
-        WHERE (#{page} -1)*10 &lt; user.row
-          AND user.row &lt; 1+(#{page}*10)
+              WHERE u.nickname LIKE CONCAT('%', #{search}, '%')) AS user
+        WHERE (#{page} - 1) * 10 &lt; user.row
+          AND user.row &lt; 1 + (#{page} * 10)
     </select>
 
     <select id="selectPlaceList" parameterType="_int" resultMap="mappingTripPlaceDto">
         SELECT *
-        FROM (SELECT row_number() over (ORDER BY tp.trip_places_seq ASC) AS row, trip_places_seq, place_name, address
+        FROM (SELECT row_number() over (ORDER BY tp.trip_places_seq) AS row, trip_places_seq, place_name, address
               FROM daero.trip_places tp) AS place
-        WHERE (#{page} -1)*10 &lt; place.row
-          AND place.row &lt; 1+(#{page}*10)
+        WHERE (#{page} - 1) * 10 &lt; place.row
+          AND place.row &lt; 1 + (#{page} * 10)
     </select>
 
     <select id="selectPlaceCount" resultType="_int">
@@ -138,18 +165,19 @@
     <select id="selectTagsByPlaceSeq" parameterType="_int" resultType="Integer">
         SELECT place_tag_seq
         FROM daero.tag_trip_places
-        WHERE trip_places_seq=#{placeSeq}
+        WHERE trip_places_seq = #{placeSeq}
     </select>
 
     <insert id="insertPlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
-        INSERT INTO daero.trip_places (`place_name`, `address`, `latitude`, `longitude`, `description`, `region_seq`, `image_url`)
+        INSERT INTO daero.trip_places
+        (`place_name`, `address`, `latitude`, `longitude`, `description`, `region_seq`, `image_url`)
         VALUES (#{placeName}, #{address}, #{latitude}, #{longitude}, #{description}, #{regionSeq}, #{imageUrl})
     </insert>
 
     <select id="selectPlaceSeqByPlaceAddress" parameterType="String" resultType="java.lang.Integer">
         SELECT `trip_places_seq`
         FROM trip_places
-        WHERE address=#{address}
+        WHERE address = #{address}
     </select>
 
     <insert id="insertPlaceTag">
@@ -159,16 +187,26 @@
 
     <update id="updatePlace" parameterType="com.ssafy.daero.admin.vo.TripPlaceVo">
         UPDATE daero.trip_places
-        SET `place_name`=#{placeName}, `address`=#{address}, `latitude`=#{latitude}, `longitude`=#{longitude}, `image_url`=#{imageUrl}, `description`=#{description}, `region_seq`=#{regionSeq}
-        WHERE trip_places_seq=#{tripPlaceSeq}
+        SET `place_name`=#{placeName},
+            `address`=#{address},
+            `latitude`=#{latitude},
+            `longitude`=#{longitude},
+            `image_url`=#{imageUrl},
+            `description`=#{description},
+            `region_seq`=#{regionSeq}
+        WHERE trip_places_seq = #{tripPlaceSeq}
     </update>
 
     <delete id="deletePlaceTag" parameterType="_int">
-        DELETE FROM daero.tag_trip_places WHERE `trip_places_seq`=#{placeSeq}
+        DELETE
+        FROM daero.tag_trip_places
+        WHERE `trip_places_seq` = #{placeSeq}
     </delete>
 
     <delete id="deletePlace" parameterType="_int">
-        DELETE FROM daero.trip_places WHERE `trip_places_seq`=#{placeSeq}
+        DELETE
+        FROM daero.trip_places
+        WHERE `trip_places_seq` = #{placeSeq}
     </delete>
 
     <select id="selectInquiryCount" resultType="_int">
@@ -183,17 +221,18 @@
                inquiry.created_at,
                inquiry.answer_at,
                inquiry.answer_yn
-        FROM (SELECT row_number()                         over (ORDER BY i.inquires_seq ASC) AS row, `inquires_seq`,
+        FROM (SELECT row_number() over (ORDER BY i.inquires_seq) AS row,
+                     `inquires_seq`,
                      `title`,
                      `created_at`,
                      `answer_yn`,
                      `answer_at`,
                      (SELECT u.nickname
                       FROM daero.users u
-                      WHERE u.users_seq = i.users_seq) AS user_name
-        FROM daero.inquires i) AS inquiry
-        WHERE (#{page}-1)*10 &lt; inquiry.row
-                          AND inquiry.row &lt; 1+(#{page}*10)
+                      WHERE u.users_seq = i.users_seq)           AS user_name
+              FROM daero.inquires i) AS inquiry
+        WHERE (#{page} - 1) * 10 &lt; inquiry.row
+          AND inquiry.row &lt; 1 + (#{page} * 10)
     </select>
 
     <select id="selectInquiryDetail" parameterType="_int" resultType="java.util.Map">
@@ -210,7 +249,7 @@
                 FROM daero.admin a
                 WHERE a.admin_seq = i.admin_seq) AS author
         FROM daero.inquires i
-        WHERE i.inquires_seq=#{inquirySeq}
+        WHERE i.inquires_seq = #{inquirySeq}
     </select>
 
     <update id="updateInquiryByInquirySeq">
@@ -230,16 +269,17 @@
 
     <select id="selectFaqList" parameterType="_int" resultType="java.util.Map">
         SELECT faqs.`faq_seq`, faqs.`title`, faqs.`content`, faqs.`created_at`, faqs.`admin_name`
-        FROM (SELECT row_number()                         over (ORDER BY f.faq_seq ASC) AS row, `faq_seq`,
+        FROM (SELECT row_number() over (ORDER BY f.faq_seq) AS row,
+                     `faq_seq`,
                      `title`,
                      `content`,
                      `created_at`,
                      (SELECT admin_name
                       FROM daero.admin a
-                      WHERE a.admin_seq = f.admin_seq) AS admin_name
+                      WHERE a.admin_seq = f.admin_seq)      AS admin_name
               FROM daero.faq f) AS faqs
-        WHERE (#{page}-1)*10 &lt; faqs.row
-          AND faqs.row &lt; 1+(#{page}*10)
+        WHERE (#{page} - 1) * 10 &lt; faqs.row
+          AND faqs.row &lt; 1 + (#{page} * 10)
     </select>
 
     <insert id="insertFaq" parameterType="com.ssafy.daero.admin.vo.FaqVo">
@@ -257,7 +297,9 @@
     </update>
 
     <delete id="deleteFaq" parameterType="_int">
-        DELETE FROM daero.faq WHERE `faq_seq`=#{faqSeq}
+        DELETE
+        FROM daero.faq
+        WHERE `faq_seq` = #{faqSeq}
     </delete>
 
     <select id="selectNoticeCount" resultType="_int">
@@ -267,12 +309,16 @@
 
     <select id="selectNoticeList" parameterType="_int" resultType="java.util.Map">
         SELECT noti.`notice_seq`, noti.`title`, noti.`content`, noti.`created_at`, noti.`admin_seq`
-        FROM (SELECT row_number()                         over (ORDER BY n.notice_seq ASC) AS row,
-        n.`notice_seq`, n.`title`, n.`content`, n.`created_at`, n.`admin_seq`
+        FROM (SELECT row_number() over (ORDER BY n.notice_seq) AS row,
+                     n.`notice_seq`,
+                     n.`title`,
+                     n.`content`,
+                     n.`created_at`,
+                     n.`admin_seq`
 
-        FROM daero.notice n) AS noti
-        WHERE (#{page}-1)*10 &lt; noti.row
-                         AND noti.row &lt; 1+(#{page}*10)
+              FROM daero.notice n) AS noti
+        WHERE (#{page} - 1) * 10 &lt; noti.row
+          AND noti.row &lt; 1 + (#{page} * 10)
     </select>
 
     <insert id="insertNotice" parameterType="com.ssafy.daero.admin.vo.NoticeVo">
@@ -282,28 +328,34 @@
 
     <update id="updateNotice">
         UPDATE daero.notice
-        SET `title`=#{title}, `content`=#{content}, `admin_seq`=#{adminSeq}, `updated_at` = DATE_FORMAT(now(), '%Y-%m-%d %T')
-        WHERE `notice_seq`=#{noticeSeq}
+        SET `title`=#{title},
+            `content`=#{content},
+            `admin_seq`=#{adminSeq},
+            `updated_at` = DATE_FORMAT(now(), '%Y-%m-%d %T')
+        WHERE `notice_seq` = #{noticeSeq}
     </update>
 
     <delete id="deleteNotice" parameterType="_int">
-        DELETE FROM daero.notice WHERE `notice_seq`=#{noticeSeq}
+        DELETE
+        FROM daero.notice
+        WHERE `notice_seq` = #{noticeSeq}
     </delete>
 
     <update id="updateUserSuspension">
         UPDATE daero.users
-        SET `suspended_yn`='y', `suspended_expiry`=#{date}
-        WHERE `users_seq`=#{userSeq}
+        SET `suspended_yn`='y',
+            `suspended_expiry`=#{date}
+        WHERE `users_seq` = #{userSeq}
     </update>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
-        <result property="profileImageLink" column="profile_image_url" />
-        <result property="nickname" column="nickname" />
-        <result property="userSeq" column="users_seq" />
-        <result property="reportedCount" column="report_count" />
-        <result property="createdAt" column="created_at" />
-        <result property="suspendedYn" column="suspended_yn" />
-        <result property="userEmail" column="user_email" />
+        <result property="profileImageLink" column="profile_image_url"/>
+        <result property="nickname" column="nickname"/>
+        <result property="userSeq" column="users_seq"/>
+        <result property="reportedCount" column="report_count"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="suspendedYn" column="suspended_yn"/>
+        <result property="userEmail" column="user_email"/>
     </resultMap>
 
     <resultMap id="mappingReportDto" type="com.ssafy.daero.admin.dto.ReportDto">
@@ -318,11 +370,11 @@
     </resultMap>
 
     <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
-        <result property="replySeq" column="replies_seq" />
-        <result property="nickname" column="nickname" />
-        <result property="userSeq" column="users_seq" />
-        <result property="content" column="content" />
-        <result property="createdAt" column="created_at" />
+        <result property="replySeq" column="replies_seq"/>
+        <result property="nickname" column="nickname"/>
+        <result property="userSeq" column="users_seq"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
     </resultMap>
 
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
@@ -337,8 +389,8 @@
     </resultMap>
 
     <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
-        <result property="tripPlaceSeq" column="trip_places_seq" />
-        <result property="placeName" column="place_name" />
-        <result property="address" column="address" />
+        <result property="tripPlaceSeq" column="trip_places_seq"/>
+        <result property="placeName" column="place_name"/>
+        <result property="address" column="address"/>
     </resultMap>
 </mapper>
