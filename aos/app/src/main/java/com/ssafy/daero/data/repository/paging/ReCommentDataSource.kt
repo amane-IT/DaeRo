@@ -10,7 +10,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 class ReCommentDataSource(private val snsApi: SnsApi, private val articleSeq: Int, private val replySeq: Int) : RxPagingSource<Int, ReCommentItem>() {
     override fun getRefreshKey(state: PagingState<Int, ReCommentItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestItemToPosition(anchorPosition)?.reply_seq
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
@@ -21,8 +22,8 @@ class ReCommentDataSource(private val snsApi: SnsApi, private val articleSeq: In
             .map {
                 LoadResult.Page(
                     data = it.results,
-                    prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (page == it.total_page) null else page + 1
+                    prevKey = null,
+                    nextKey = if (page >= it.total_page) null else page + 1
                 ) as LoadResult<Int, ReCommentItem>
             }
             .onErrorReturn {

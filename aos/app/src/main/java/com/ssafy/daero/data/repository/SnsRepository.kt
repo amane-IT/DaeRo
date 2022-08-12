@@ -1,6 +1,7 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import androidx.paging.InvalidatingPagingSourceFactory
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -29,16 +30,22 @@ class SnsRepository private constructor(context: Context) {
 
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
+    private var invalidatingPagingSourceFactory =
+        InvalidatingPagingSourceFactory { ArticleDataSource(snsApi) }
 
     fun getArticles(): Flowable<PagingData<ArticleHomeItem>> {
         return Pager(
-            config = PagingConfig(
+            PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { ArticleDataSource(snsApi) }
+            pagingSourceFactory = invalidatingPagingSourceFactory
         ).flowable
+    }
+
+    fun invalidatePageSource() {
+        invalidatingPagingSourceFactory.invalidate()
     }
 
     fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {
@@ -115,6 +122,12 @@ class SnsRepository private constructor(context: Context) {
 
     fun reportArticle(articleSeq: Int, reportRequest: ReportRequestDto): Completable {
         return snsApi.reportArticle(articleSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun reportUser(userSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportUser(userSeq, reportRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -216,6 +229,12 @@ class SnsRepository private constructor(context: Context) {
         return snsApi.getTripFollow(articleSeq)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun blockArticle(articleSeq: Int): Completable {
+        return snsApi.blockArticle(articleSeq)
+            .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
 

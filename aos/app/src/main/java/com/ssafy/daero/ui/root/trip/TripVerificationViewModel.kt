@@ -8,7 +8,6 @@ import com.ssafy.daero.data.dto.trip.TripInformationResponseDto
 import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 
 class TripVerificationViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()

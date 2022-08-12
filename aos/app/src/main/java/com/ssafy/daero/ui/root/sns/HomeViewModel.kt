@@ -32,4 +32,8 @@ class HomeViewModel : BaseViewModel() {
                 )
         )
     }
+
+    fun invalidatePageSource(){
+        snsRepository.invalidatePageSource()
+    }
 }

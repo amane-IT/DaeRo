@@ -1,10 +1,8 @@
 package com.ssafy.daero.ui.setting
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.service.FAQResponseDto
 import com.ssafy.daero.data.dto.service.InquiryRequestDto
 import com.ssafy.daero.data.dto.service.InquiryResponseDto
 import com.ssafy.daero.data.repository.ServiceRepository
