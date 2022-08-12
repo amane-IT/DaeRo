@@ -31,15 +31,15 @@ export default ({
         .catch(err => console.log(err.response.data))
     },
     // 신고 여부 전환
-    // handledReport(reportSeq) {
-    //     axios({
-    //         url: adminApi.admin.handledReport(reportSeq),
-    //         method: 'put'
-    //     })
-    //     .then(res => {
-    //         console.log(res)
-    //     })
-    // },
+    handledReport(reportSeq) {
+        axios({
+            url: adminApi.admin.handledReport(reportSeq),
+            method: 'put'
+        })
+        .then(res => {
+            console.log(res)
+        })
+    },
     getInquiryList({ commit }, page) {
         axios({
             url: adminApi.admin.inquiryList() + '?page=' + page,
