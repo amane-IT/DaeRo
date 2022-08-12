@@ -147,6 +147,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
                 SUCCESS -> {
                     toast("해당 여행기록을 차단했습니다.")
                     searchArticleMoreAdapter.refresh()
+                    binding.recyclerSearchContentMore.scrollToPosition(position)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {

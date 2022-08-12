@@ -12,7 +12,6 @@ class SearchUserNameDataSource(private val snsApi: SnsApi, private val searchKey
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
-            state.closestItemToPosition(anchorPosition)?.user_seq
         }
     }
 

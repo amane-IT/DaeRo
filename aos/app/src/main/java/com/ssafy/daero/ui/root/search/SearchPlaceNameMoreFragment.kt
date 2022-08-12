@@ -134,6 +134,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
                 SUCCESS -> {
                     toast("해당 여행기록을 차단했습니다.")
                     searchArticleMoreAdapter.refresh()
+                    binding.recyclerSearchPlaceMore.scrollToPosition(position)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
