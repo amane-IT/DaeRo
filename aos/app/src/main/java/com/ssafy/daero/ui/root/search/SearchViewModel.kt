@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,6 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 
 class SearchViewModel : BaseViewModel() {
-    private val TAG = "SearchVM_DaeRo"
     private val snsRepository = SnsRepository.get()
 
     val responseState_userName = MutableLiveData<Int>()
@@ -37,12 +35,10 @@ class SearchViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.searchUserName(searchKeyWord).cachedIn(viewModelScope)
                 .subscribe({
-                    Log.d(TAG, "searchUserName: $it")
                     _resultUserSearch.postValue(it)
                     responseState_userName.postValue(SUCCESS)
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d(TAG, "searchUserName: $throwable")
                     responseState_userName.postValue(FAIL)
                     _showProgress.postValue(false)
                 })
@@ -57,7 +53,7 @@ class SearchViewModel : BaseViewModel() {
                     _showProgress.postValue(false)
 
                     // 검색 결과 없는 경우
-                    if(response.body()!!.content.isEmpty() && response.body()!!.place.isEmpty()) {
+                    if (response.body()!!.content.isEmpty() && response.body()!!.place.isEmpty()) {
                         responseState_articles.postValue(FAIL)
                         return@subscribe
                     }
@@ -65,7 +61,6 @@ class SearchViewModel : BaseViewModel() {
                     responseState_articles.postValue(SUCCESS)
                     _resultArticleSearch.postValue(response.body())
                 }, { throwable ->
-                    Log.d(TAG, "searchArticle: $throwable")
                     responseState_articles.postValue(FAIL)
                     _showProgress.postValue(false)
                 })

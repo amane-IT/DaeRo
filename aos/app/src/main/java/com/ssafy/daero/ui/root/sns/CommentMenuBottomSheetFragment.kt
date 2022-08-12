@@ -67,7 +67,6 @@ class CommentMenuBottomSheetFragment(
 
     private fun setOnClickListeners() {
         binding.tvCommentMenuModify.setOnClickListener {
-            //todo: 수정하기
             mCallback.commentUpdate(content, replySeq)
             dismiss()
         }
@@ -81,7 +80,6 @@ class CommentMenuBottomSheetFragment(
             ReportBottomSheetFragment(COMMENT, userSeq, reportListener, replySeq, 0).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvCommentMenuBlock.setOnClickListener {
-            //todo: 차단하기
             mCallback.blockAdd(userSeq)
             dismiss()
         }

@@ -180,6 +180,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="24dp"
                     android:text="임시 인증"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/tv_traveling_trip_stamp_verification"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@id/tv_traveling_trip_stamp_verification" />

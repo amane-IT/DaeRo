@@ -14,10 +14,8 @@ import android.os.Bundle
 import android.os.Looper
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -117,6 +115,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
         if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
+        }
+        // 관리자 계정만 임시 인증 버튼 활성화
+        if (App.prefs.userSeq == 1) {
+            binding.buttonTravelingTemporary.visibility = View.VISIBLE
         }
     }
 
@@ -241,7 +243,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             }
         }
         binding.buttonTravelingTemporary.setOnClickListener {
-            // todo: 임시 인증 버튼, 추후에 삭제
+            // todo: 임시 인증 버튼, 관리자 계정에만 보임
 
             // 인증 완료한 시각 기록
             App.prefs.verificationTime = System.currentTimeMillis()
@@ -339,7 +341,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun startLocationUpdates() {
-        Log.d("확인","1")
         mFusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(requireContext())
         if (ActivityCompat.checkSelfPermission(
@@ -359,7 +360,6 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private var mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
-            Log.d("확인","2")
             locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
         }
@@ -367,24 +367,32 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     fun onLocationChanged(location: Location) {
-        Log.d("확인","3")
         //todo : 반경 10km 안이면 인증 완료 화면 전환, 아니면 다시 인증해주세요 다이얼로그 -> 현재위치 전송해줘야함
         mLastLocation = location
         mLastLocation.latitude // 갱신 된 위도
         mLastLocation.longitude // 갱신 된 경도
-        var distance = distanceInKilometerByHaversine(mLastLocation.latitude,mLastLocation.longitude,latitude,longitude)
-        Log.d("거리",distance.toString())
-        if(distance <= 10.0){
+        var distance = distanceInKilometerByHaversine(
+            mLastLocation.latitude,
+            mLastLocation.longitude,
+            latitude,
+            longitude
+        )
+        if (distance <= 10.0) {
             App.prefs.verificationTime = System.currentTimeMillis()
             (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
-        }else{
+        } else {
             toast("거리가 부족합니다.\n여행지에 도착 후 다시 인증해주세요.")
             vibrator.vibrate(VibrationEffect.createOneShot(150, 100))
             mFusedLocationProviderClient!!.removeLocationUpdates(mLocationCallback)
         }
     }
 
-    private fun distanceInKilometerByHaversine(x1: Double, y1: Double, x2: Double, y2: Double): Double {
+    private fun distanceInKilometerByHaversine(
+        x1: Double,
+        y1: Double,
+        x2: Double,
+        y2: Double
+    ): Double {
         var distance: Double
         var radius = 6371.0 // 지구 반지름(km)
         var toRadian: Double = Math.PI / 180;
@@ -395,8 +403,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         var sinDeltaLat: Double = sin(deltaLatitude / 2);
         var sinDeltaLng: Double = sin(deltaLongitude / 2);
         var squareRoot: Double = sqrt(
-                sinDeltaLat * sinDeltaLat +
-                        cos(x1 * toRadian) * cos(x2 * toRadian) * sinDeltaLng * sinDeltaLng);
+            sinDeltaLat * sinDeltaLat +
+                    cos(x1 * toRadian) * cos(x2 * toRadian) * sinDeltaLng * sinDeltaLng
+        );
 
         distance = 2 * radius * asin(squareRoot);
 

@@ -60,9 +60,10 @@ class CommentAdapter(
             binding.recyclerCommentReComment.visibility=View.GONE
             Glide.with(binding.imgCommentItemUser)
                 .load(data.profile_url)
-                .placeholder(R.drawable.ic_back)
+                .override(200,200)
+                .placeholder(R.drawable.img_user)
                 .apply(RequestOptions().centerCrop())
-                .error(R.drawable.ic_back)
+                .error(R.drawable.img_user)
                 .into(binding.imgCommentItemUser)
 
              binding.tvCommentUser.text = data.nickname

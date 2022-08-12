@@ -53,7 +53,6 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
 
     private fun observeData(){
         searchPlaceMoreViewModel.resultPlaceNameSearch.observe(viewLifecycleOwner){
-            Log.d("TAG", "observeData: 여기")
             searchArticleMoreAdapter.submitData(lifecycle, it)
         }
 
@@ -146,11 +145,11 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
     }
 
     override fun setPublic() {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun articleOpen(articleSeq: Int) {
-        TODO("Not yet implemented")
+        // TODO("Not yet implemented")
     }
 
     override fun articleClose(articleSeq: Int) {

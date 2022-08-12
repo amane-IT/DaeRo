@@ -59,7 +59,6 @@ class ArticleWriteViewModel : BaseViewModel() {
                 postState.postValue(SUCCESS)
                 showProgress.postValue(false)
             }, { throwable ->
-                Log.d("ArticleWriteVM_DaeRo", throwable.toString())
                 postState.postValue(FAIL)
                 showProgress.postValue(false)
             })
@@ -81,7 +80,6 @@ class ArticleWriteViewModel : BaseViewModel() {
                     linearTripStamps = it.flatten()
                     tripStampState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     tripStampState.postValue(FAIL)
                 })
         )

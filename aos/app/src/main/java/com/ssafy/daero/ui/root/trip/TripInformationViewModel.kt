@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -85,7 +84,6 @@ class TripInformationViewModel : BaseViewModel() {
     }
 
     private val throwableBlock: (Throwable) -> Unit = { throwable ->
-        Log.d("TripInfoVM_DaeRo", throwable.toString())
         _showProgress.postValue(false)
         tripInformationState.postValue(FAIL)
     }

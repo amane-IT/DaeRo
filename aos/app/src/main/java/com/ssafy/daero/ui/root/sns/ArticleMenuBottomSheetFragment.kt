@@ -31,8 +31,6 @@ class ArticleMenuBottomSheetFragment(
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
 
-
-
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NORMAL, R.style.ArticleMenuBottomSheetFragment)
@@ -92,7 +90,10 @@ class ArticleMenuBottomSheetFragment(
 
             // 기존 여행하고 있는 경우
             if (App.prefs.curPlaceSeq > 0) {
-                TripFollowBottomSheetFragment(fragmentSeq, articleSeq).show(parentFragmentManager, "TRIP_FOLLOW_BOTTOM_SHEET")
+                TripFollowBottomSheetFragment(fragmentSeq, articleSeq).show(
+                    parentFragmentManager,
+                    "TRIP_FOLLOW_BOTTOM_SHEET"
+                )
             }
             // 기존 여행 없으면 바로 따라가기
             else {
@@ -127,12 +128,11 @@ class ArticleMenuBottomSheetFragment(
             dismiss()
         }
         binding.tvArticleMenuReport.setOnClickListener {
-            //todo: 신고하기, album_seq
-            dismiss()
             ReportBottomSheetFragment(ARTICLE, articleSeq, reportListener, position).show(
                 parentFragmentManager,
                 REPORT_BOTTOM_SHEET
             )
+            dismiss()
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기

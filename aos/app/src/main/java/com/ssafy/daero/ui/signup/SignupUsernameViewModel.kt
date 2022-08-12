@@ -40,7 +40,6 @@ class SignupUsernameViewModel : BaseViewModel() {
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("SignupUserNameVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState_nickname.postValue(FAIL)
                 })
@@ -59,7 +58,6 @@ class SignupUsernameViewModel : BaseViewModel() {
                         App.prefs.jwt = response.body()!!.jwt
                     }
                 }, { throwable ->
-                    Log.d("SignupUsernameVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState_signup.postValue(FAIL)
                 })

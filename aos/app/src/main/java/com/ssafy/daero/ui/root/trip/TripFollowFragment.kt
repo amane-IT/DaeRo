@@ -23,7 +23,6 @@ import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.file.deleteCache
-import com.ssafy.daero.utils.popularTripPlaces
 import com.ssafy.daero.utils.view.toast
 
 class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.fragment_trip_follow) {
@@ -72,7 +71,6 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_ING)
             }
 
-            // TODO: 여행 그만두기 기능
             buttonTripTripFollowStop.setOnClickListener {
                 TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)

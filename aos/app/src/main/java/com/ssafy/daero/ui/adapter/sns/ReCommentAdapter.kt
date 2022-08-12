@@ -46,9 +46,10 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, Int, String) -> Un
         fun bind(data: ReCommentItem) {
             Glide.with(binding.imgReCommentUser)
                 .load(data.profile_url)
-                .placeholder(R.drawable.ic_back)
+                .override(200,200)
+                .placeholder(R.drawable.img_user)
                 .apply(RequestOptions().centerCrop())
-                .error(R.drawable.ic_back)
+                .error(R.drawable.img_user)
                 .into(binding.imgReCommentUser)
 
             binding.tvCommentUser.text = data.nickname

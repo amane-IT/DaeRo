@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.signup
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -29,18 +28,14 @@ class SignupEmailViewModel : BaseViewModel() {
             userRepository.verifyEmail(signupEmailRequestDto)
                 .subscribe({ response ->
                     if (response.body()!!.user_seq > 0) {
-                        Log.d("SignupEmailVM_DaeRo", response.toString())
-                        Log.d("SignupEmailVM_DaeRo", response.body()!!.toString())
                         responseState_verifyEmail.postValue(SUCCESS)
                         App.prefs.userSeq = response.body()!!.user_seq
-                        Log.d("SignupEmailVM_DaeRo", "verifyEmail: ${App.prefs.userSeq}")
 
                     } else {
                         responseState_verifyEmail.postValue(FAIL)
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("SignupEmailVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState_verifyEmail.postValue(FAIL)
                 })

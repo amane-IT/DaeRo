@@ -31,7 +31,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
                 SUCCESS -> {
                     settingViewModel.withdrawalState.value = DEFAULT
                     deleteAllInformation()
-                    //RootFragment.curFragmentType = FragmentType.HomeFragment
                     findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
                 }
                 FAIL -> {

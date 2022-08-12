@@ -84,7 +84,6 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
                 )
             }
 
-            // TODO: 여행 그만두기 기능 = 게시글 작성
             buttonTripNextStop.setOnClickListener {
                 TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)

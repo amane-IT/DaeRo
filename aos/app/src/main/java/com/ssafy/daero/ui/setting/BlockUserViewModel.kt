@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
@@ -23,7 +22,6 @@ class BlockUserViewModel : BaseViewModel() {
                     userBlockData = it.body()!!
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -35,7 +33,6 @@ class BlockUserViewModel : BaseViewModel() {
                 .subscribe({
                     blockState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     blockState.postValue(FAIL)
                 })
         )
@@ -47,7 +44,6 @@ class BlockUserViewModel : BaseViewModel() {
                 .subscribe({
                     blockState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     blockState.postValue(FAIL)
                 })
         )
@@ -59,7 +55,6 @@ class BlockUserViewModel : BaseViewModel() {
                 .subscribe({
                     blockState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     blockState.postValue(FAIL)
                 })
         )

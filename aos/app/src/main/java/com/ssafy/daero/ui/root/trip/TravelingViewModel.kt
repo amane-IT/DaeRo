@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -37,7 +36,6 @@ class TravelingViewModel : BaseViewModel() {
                 .subscribe({
                     _tripStamps.postValue(it)
                 }, { throwable ->
-                    Log.d("TravelingVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -56,7 +54,6 @@ class TravelingViewModel : BaseViewModel() {
                         )
                     },
                     { throwable ->
-                        Log.d("TripInfoVM_DaeRo", throwable.toString())
                         tripInformationState.postValue(FAIL)
                     }
                 )
@@ -69,7 +66,6 @@ class TravelingViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
         addDisposable(
@@ -77,7 +73,6 @@ class TravelingViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -93,7 +88,6 @@ class TravelingViewModel : BaseViewModel() {
                         tripRecommendState.postValue(FAIL)
                     }
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                     tripRecommendState.postValue(FAIL)
                 })
         )
@@ -112,7 +106,6 @@ class TravelingViewModel : BaseViewModel() {
                     tripRecommendState.postValue(FAIL)
                 }
             }, { throwable ->
-                Log.d("TripInfoVM_DaeRo", throwable.toString())
                 tripRecommendState.postValue(FAIL)
             })
         )

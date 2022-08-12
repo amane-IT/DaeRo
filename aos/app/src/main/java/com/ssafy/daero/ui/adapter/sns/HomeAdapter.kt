@@ -61,7 +61,6 @@ class HomeAdapter(
         fun bind(article: ArticleHomeItem) {
             binding.article = article
             likes = article.likes
-            Log.d("좋아요 상태",article.toString())
         }
 
         fun bindLikeClickListener(onLikeClickListener: (Int, Boolean) -> Unit) {

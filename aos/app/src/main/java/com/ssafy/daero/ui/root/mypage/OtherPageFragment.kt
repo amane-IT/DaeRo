@@ -46,6 +46,7 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
 
         if(userSeq == App.prefs.userSeq) {
             binding.buttonOtherPageFollow.visibility = View.GONE
+            binding.imgOtherPageMenu.visibility = View.GONE
         }
     }
 
@@ -138,22 +139,10 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
                 followState = true
                 buttonOtherPageFollow.text = "언팔로우"
                 buttonOtherPageFollow.setBackgroundResource(R.drawable.button_unfollow)
-//                buttonOtherPageFollow.setBackgroundColor(
-//                    requireContext().resources.getColor(
-//                        R.color.gray,
-//                        requireActivity().theme
-//                    )
-//                )
             } else {
                 followState = false
                 buttonOtherPageFollow.text = "팔로우"
                 buttonOtherPageFollow.setBackgroundResource(R.drawable.button_follow)
-//                buttonOtherPageFollow.setBackgroundColor(
-//                    requireContext().resources.getColor(
-//                        R.color.primaryColor,
-//                        requireActivity().theme
-//                    )
-//                )
             }
         }
 

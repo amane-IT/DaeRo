@@ -34,7 +34,6 @@ class BlockUserFragment : BaseFragment<FragmentBlockUserBinding>(R.layout.fragme
     }
 
     private fun initData(){
-        //todo : bundle로 넘겨받은 유저시퀀스 처리
         blockUserViewModel.getBlockUser()
     }
 

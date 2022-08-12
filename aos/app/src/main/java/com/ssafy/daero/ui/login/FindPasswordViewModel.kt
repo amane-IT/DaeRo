@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -34,7 +33,6 @@ class FindPasswordViewModel : BaseViewModel() {
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("FindPasswordVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState.postValue(FAIL)
                 })
