@@ -152,7 +152,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
                 BottomSheetBehavior.STATE_EXPANDED -> {
                     tripViewModel.getFirstTripRecommend(
                         FirstTripRecommendRequestDto(
-                            categoryTags, regionTags
+                            regionTags, categoryTags
                         )
                     )
                 }
