@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.adapter.sns
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import com.ssafy.daero.databinding.ItemArticleDayBinding
 class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() {
 
     var articleData: List<Record> = emptyList()
-    lateinit var onItemClickListener : (View, Int) -> Unit
+    lateinit var onItemClickListener: (View, Int) -> Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
         return ArticleViewHolder(
@@ -20,13 +19,12 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            ),onItemClickListener
+            ), onItemClickListener
         )
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
         holder.bind(articleData[position]!!)
-        Log.d("데이터",position.toString())
     }
 
     override fun getItemCount() = articleData.size
@@ -40,13 +38,14 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ArticleViewHolder>() 
         init {
             binding.recyclerArticleTripStamp.apply {
                 adapter = TripStampAdapter(onItemClickListener)
-                layoutManager = LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
+                layoutManager =
+                    LinearLayoutManager(binding.root.context, RecyclerView.HORIZONTAL, false)
             }
         }
 
         fun bind(data: Record) {
             binding.record = data
-            binding.textArticleDay.text = "Day"+(bindingAdapterPosition+1).toString()
+            binding.textArticleDay.text = "Day" + (bindingAdapterPosition + 1).toString()
             (binding.recyclerArticleTripStamp.adapter as TripStampAdapter).apply {
                 addTripStamp(data.trip_stamps)
             }

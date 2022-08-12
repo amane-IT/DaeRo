@@ -1,10 +1,3 @@
-/*
- * Created by Im-Tae
- *
- * Copyright (c) 2022. Im-Tae.
- * Last modified 22. 3. 16. 오후 5:11
- */
-
 package com.ssafy.daero.base
 
 import android.os.Bundle
@@ -15,8 +8,6 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
-import com.ssafy.daero.databinding.ActivityMainBinding.inflate
 
 abstract class BaseFragment<B : ViewDataBinding>(
     @LayoutRes val layoutId: Int

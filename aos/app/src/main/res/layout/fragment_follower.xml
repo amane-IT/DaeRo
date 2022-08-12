@@ -9,7 +9,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_follower"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +29,7 @@
 
             <TextView
                 android:id="@+id/tv_follower_user"
-                style="@style/SubHeadBold"
+                style="@style/HeadBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -38,41 +38,23 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_follower"
+        <View
+            android:id="@+id/view_follower"
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_follower" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_follower"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_follower"
-            app:layout_constraintVertical_bias="1.0">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/view_follower"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/lightGray"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_follower"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/view_follower" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
+            app:layout_constraintTop_toBottomOf="@id/view_follower" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

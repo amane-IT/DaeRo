@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ReportRequestDto
@@ -21,7 +20,6 @@ class ReportViewModel : BaseViewModel() {
                         reportState.postValue(SUCCESS)
                     },
                     { throwable ->
-                        Log.d("ReportVM", throwable.toString())
                         reportState.postValue(FAIL)
                     }
                 )
@@ -36,7 +34,20 @@ class ReportViewModel : BaseViewModel() {
                         reportState.postValue(SUCCESS)
                     },
                     { throwable ->
-                        Log.d("ReportVM", throwable.toString())
+                        reportState.postValue(FAIL)
+                    }
+                )
+        )
+    }
+
+    fun reportUser(userSeq: Int, report_seq: Int) {
+        addDisposable(
+            snsRepository.reportUser(userSeq, ReportRequestDto(report_seq))
+                .subscribe(
+                    {
+                        reportState.postValue(SUCCESS)
+                    },
+                    { throwable ->
                         reportState.postValue(FAIL)
                     }
                 )

@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
 import androidx.room.Room
+import com.ssafy.daero.data.dto.article.ArticleWriteRequestDto
 import com.ssafy.daero.data.dto.trip.*
 import com.ssafy.daero.data.entity.Notification
 import com.ssafy.daero.data.entity.TripFollow
@@ -21,6 +22,8 @@ import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -102,6 +105,20 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun getAroundTrips(placeSeq: Int): Single<Response<List<TripPopularResponseDto>>> {
+        return tripApi.getAroundTrips(placeSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun postArticle(files: List<MultipartBody.Part>, json: RequestBody): Single<Response<Unit>> {
+        return tripApi.postArticle(files, json)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     // 알림 저장
     fun insertNotification(notification: Notification): Completable {
         return database.notificationDao().insertNotification(notification)
@@ -109,7 +126,7 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    // 알림 받아오기기
+    // 알림 받아오기
     fun getNotifications(): Single<List<Notification>> {
         return database.notificationDao().getNotifications()
             .subscribeOn(Schedulers.io())
@@ -130,10 +147,44 @@ class TripRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    // TripStamp 전체 삭제
+    fun deleteAllTripStamps(): Completable {
+        return database.tripStampDao().deleteAllStamps()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripStamp 수정
+    fun updateTripStamp(id: Int, imageUrl: String, satisfaction: Char): Completable {
+        return database.tripStampDao().updateTripStamp(id, imageUrl, satisfaction)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripStamp 한개 가져오기
+    fun getTripStamp(id: Int): Single<TripStamp> {
+        return database.tripStampDao().getTripStamp(id)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+
     // TripStamp 모두 가져오기
     fun getTripStamps(): Single<List<TripStamp>> {
         return database.tripStampDao().getTripStamps()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // 다음 여행지 추천받기
+    fun recommendNextPlace(
+        placeSeq: Int,
+        time: Int,
+        transportation: String
+    ): Single<Response<NextPlaceRecommendResponseDto>> {
+        return tripApi.recommendNextPlace(placeSeq, time, transportation)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 
@@ -148,6 +199,20 @@ class TripRepository private constructor(context: Context) {
     fun getTripFollows(): Single<List<TripFollow>> {
         return database.tripFollowDao().getTripFollows()
             .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    // TripFollow 모두 삭제
+    fun deleteAllTripFollow(): Completable {
+        return database.tripFollowDao().deleteAllTripFollow()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getTripStampDetail(tripStampSeq: Int): Single<Response<TripStampDetailResponseDto>> {
+        return tripApi.getTripStampDetail(tripStampSeq)
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
     }
 

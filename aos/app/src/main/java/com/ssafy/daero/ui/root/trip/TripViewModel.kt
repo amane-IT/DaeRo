@@ -1,11 +1,13 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.FirstTripRecommendRequestDto
+import com.ssafy.daero.data.dto.trip.FirstTripRecommendResponseDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
+import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -17,28 +19,34 @@ import java.util.concurrent.TimeUnit
 
 class TripViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
+    private val snsRepository = SnsRepository.get()
 
     val showProgress = MutableLiveData<Int>()
 
-    private val _firstTripRecommendResponseDto = MutableLiveData<Int>()
-    val firstTripRecommendResponseDto: LiveData<Int>
+    private val _firstTripRecommendResponseDto = MutableLiveData<FirstTripRecommendResponseDto>()
+    val firstTripRecommendResponseDto: LiveData<FirstTripRecommendResponseDto>
         get() = _firstTripRecommendResponseDto
 
     private val _popularTrip = MutableLiveData<List<TripPopularResponseDto>>()
     val popularTrip: LiveData<List<TripPopularResponseDto>>
         get() = _popularTrip
 
+
+    private val _hotArticles = MutableLiveData<List<TripHotResponseDto>>()
+    val hotArticle: LiveData<List<TripHotResponseDto>>
+        get() = _hotArticles
+
     var firstTripRecommendState = MutableLiveData<Int>()
 
     fun getFirstTripRecommend(firstTripRecommendRequestDto: FirstTripRecommendRequestDto) {
         showProgress.postValue(SUCCESS)
 
-        // 2.5초 딜레이
+        // 1초 딜레이
         val delay =
-            Single.just(1).delay(2500, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
+            Single.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
 
-        // 서버 결과, 2.5초 경과 모두 끝나야 응답 받기
+        // 서버 결과, 1초 경과 모두 끝나야 응답 받기
         addDisposable(
             Single.zip(
                 delay,
@@ -48,34 +56,14 @@ class TripViewModel : BaseViewModel() {
                 }).subscribe(
                 { response ->
                     // userSeq 저장
-                    _firstTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+                    _firstTripRecommendResponseDto.postValue(response.body())
                     showProgress.postValue(FAIL)
                 },
                 { throwable ->
-                    Log.d("TripVM_DaeRo", throwable.toString())
                     showProgress.postValue(FAIL)
                     firstTripRecommendState.postValue(FAIL)
                 })
         )
-
-        /*
-        // 임시 코드, 2.5초 후에 placeSeq = 1 발행
-        delay.subscribe(
-            { response ->
-                // userSeq 저장
-                //_firstTripRecommendResponseDto.postValue(response.body())
-                _firstTripRecommendResponseDto.postValue(
-                    1
-                )
-                showProgress.postValue(FAIL)
-            },
-            { throwable ->
-                Log.d("TripVM_DaeRo", throwable.toString())
-                showProgress.postValue(FAIL)
-                firstTripRecommendState.postValue(FAIL)
-            })
-
-         */
     }
 
     fun getPopularTrips() {
@@ -84,12 +72,21 @@ class TripViewModel : BaseViewModel() {
                 .subscribe({
                     _popularTrip.postValue(it.body())
                 }, { throwable ->
-                    Log.d("TripVM_DaeRo", throwable.toString())
+                })
+        )
+    }
+
+    fun getHotArticle() {
+        addDisposable(
+            snsRepository.getHotArticles()
+                .subscribe({
+                    _hotArticles.postValue(it.body())
+                }, { throwable ->
                 })
         )
     }
 
     fun initTripInformation() {
-        _firstTripRecommendResponseDto.value = 0
+        _firstTripRecommendResponseDto.value = FirstTripRecommendResponseDto(0, "")
     }
 }

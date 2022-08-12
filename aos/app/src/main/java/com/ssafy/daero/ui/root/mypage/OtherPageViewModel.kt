@@ -1,12 +1,10 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
-import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripAlbumItem
@@ -47,9 +45,7 @@ class OtherPageViewModel : BaseViewModel() {
                 { response ->
                     _userProfile.postValue(response.body())
                 }, { throwable ->
-                    Log.d("OtherPageVM_DaeRo", throwable.toString())
                     if (throwable is HttpException) {
-                        Log.d("OtherPageVM_DaeRo", throwable.code().toString())
                     }
                     getProfileState.postValue(FAIL)
                 })
@@ -62,7 +58,6 @@ class OtherPageViewModel : BaseViewModel() {
                 .subscribe({
                     followState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("OtherPageVM_DaeRo", throwable.toString())
                     followState.postValue(FAIL)
                 })
         )
@@ -74,7 +69,6 @@ class OtherPageViewModel : BaseViewModel() {
                 .subscribe({
                     unFollowState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("OtherPageVM_DaeRo", throwable.toString())
                     unFollowState.postValue(FAIL)
                 })
         )
@@ -95,9 +89,7 @@ class OtherPageViewModel : BaseViewModel() {
                     }
                 },
                 { throwable ->
-                    Log.d("OtherPageVM_DaeRo", throwable.toString())
                     if (throwable is HttpException) {
-                        Log.d("OtherPageVM_DaeRo", throwable.code().toString())
                     }
                     getJourneyState.postValue(FAIL)
                 }
@@ -113,7 +105,6 @@ class OtherPageViewModel : BaseViewModel() {
                     {
                         _album.postValue(it)
                     }, { throwable ->
-                        Log.d("OtherPageVM_DaeRo", throwable.toString())
                     }
                 )
         )

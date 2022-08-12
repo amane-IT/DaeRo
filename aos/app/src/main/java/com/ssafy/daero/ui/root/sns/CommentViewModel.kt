@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,12 +16,12 @@ import com.ssafy.daero.utils.constant.SUCCESS
 class CommentViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
 
-    private val _comment = MutableLiveData< PagingData<CommentItem>>()
-    val comment : LiveData<PagingData<CommentItem>>
+    private val _comment = MutableLiveData<PagingData<CommentItem>>()
+    val comment: LiveData<PagingData<CommentItem>>
         get() = _comment
 
-    private val _reComment = MutableLiveData< PagingData<ReCommentItem>>()
-    val reComment : LiveData<PagingData<ReCommentItem>>
+    private val _reComment = MutableLiveData<PagingData<ReCommentItem>>()
+    val reComment: LiveData<PagingData<ReCommentItem>>
         get() = _reComment
 
     val responseState = MutableLiveData<Int>()
@@ -34,7 +33,6 @@ class CommentViewModel : BaseViewModel() {
                 .subscribe({
                     _comment.postValue(it)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -48,7 +46,6 @@ class CommentViewModel : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -64,7 +61,6 @@ class CommentViewModel : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -77,7 +73,6 @@ class CommentViewModel : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -86,11 +81,10 @@ class CommentViewModel : BaseViewModel() {
     fun reCommentAdd(articleSeq: Int, replySeq: Int, commentAddRequestDto: CommentAddRequestDto) {
 
         addDisposable(
-            snsRepository.reCommentAdd(articleSeq,replySeq, commentAddRequestDto)
+            snsRepository.reCommentAdd(articleSeq, replySeq, commentAddRequestDto)
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -104,7 +98,6 @@ class CommentViewModel : BaseViewModel() {
                 .subscribe({
                     _reComment.postValue(it)
                 }, { throwable ->
-                    Log.d("reCommentSelectVM_DaeRo", throwable.toString())
                 })
         )
     }

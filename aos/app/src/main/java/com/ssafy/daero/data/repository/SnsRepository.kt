@@ -1,17 +1,18 @@
 package com.ssafy.daero.data.repository
 
 import android.content.Context
+import androidx.paging.InvalidatingPagingSourceFactory
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.flowable
-import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.article.*
 import com.ssafy.daero.data.dto.collection.CollectionItem
 import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
-import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
+import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import com.ssafy.daero.data.remote.SnsApi
@@ -29,16 +30,22 @@ class SnsRepository private constructor(context: Context) {
 
     // Sns API
     private val snsApi = RetrofitBuilder.retrofit.create(SnsApi::class.java)
+    private var invalidatingPagingSourceFactory =
+        InvalidatingPagingSourceFactory { ArticleDataSource(snsApi) }
 
     fun getArticles(): Flowable<PagingData<ArticleHomeItem>> {
         return Pager(
-            config = PagingConfig(
+            PagingConfig(
                 pageSize = 10,
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = { ArticleDataSource(snsApi)}
+            pagingSourceFactory = invalidatingPagingSourceFactory
         ).flowable
+    }
+
+    fun invalidatePageSource() {
+        invalidatingPagingSourceFactory.invalidate()
     }
 
     fun article(articleSeq: Int): Single<Response<ArticleResponseDto>> {
@@ -46,6 +53,10 @@ class SnsRepository private constructor(context: Context) {
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun articleDelete(articleSeq: Int): Completable {
+        return snsApi.articleDelete(articleSeq)
     }
 
     fun commentSelect(articleSeq: Int): Flowable<PagingData<CommentItem>> {
@@ -86,6 +97,7 @@ class SnsRepository private constructor(context: Context) {
     fun likeDelete(userSeq: Int, articleSeq: Int): Completable {
         return snsApi.likeDelete(userSeq, articleSeq)
     }
+
     fun reCommentSelect(articleSeq: Int, replySeq: Int): Flowable<PagingData<ReCommentItem>> {
         return Pager(
             config = PagingConfig(
@@ -110,6 +122,12 @@ class SnsRepository private constructor(context: Context) {
 
     fun reportArticle(articleSeq: Int, reportRequest: ReportRequestDto): Completable {
         return snsApi.reportArticle(articleSeq, reportRequest)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun reportUser(userSeq: Int, reportRequest: ReportRequestDto): Completable {
+        return snsApi.reportUser(userSeq, reportRequest)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }
@@ -161,7 +179,7 @@ class SnsRepository private constructor(context: Context) {
                 enablePlaceholders = false,
                 prefetchDistance = 1
             ),
-            pagingSourceFactory = {SearchUserNameDataSource(snsApi, searchKeyword) }
+            pagingSourceFactory = { SearchUserNameDataSource(snsApi, searchKeyword) }
         ).flowable
     }
 
@@ -214,6 +232,12 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
+    fun blockArticle(articleSeq: Int): Completable {
+        return snsApi.blockArticle(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
     fun blockAdd(userSeq: Int): Completable {
         return snsApi.blockAdd(userSeq)
             .subscribeOn(Schedulers.io())
@@ -226,10 +250,34 @@ class SnsRepository private constructor(context: Context) {
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun getBlockUser(
-        userSeq: Int
-    ): Single<Response<List<UserBlockResponseDto>>> {
-        return snsApi.getBlockUser(userSeq)
+    fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>> {
+        return snsApi.getBlockUser()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun articleClose(articleSeq: Int): Completable {
+        return snsApi.articleClose(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun articleOpen(articleSeq: Int): Completable {
+        return snsApi.articleOpen(articleSeq)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun getHotArticles(): Single<Response<List<TripHotResponseDto>>> {
+        return snsApi.getHotArticles()
+            .subscribeOn(Schedulers.io())
+            .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
+            .observeOn(AndroidSchedulers.mainThread())
+    }
+
+    fun editArticle(articleSeq: Int, articleEditRequestDto: ArticleEditRequestDto): Single<Response<Unit>> {
+        return snsApi.editArticle(articleSeq, articleEditRequestDto)
             .subscribeOn(Schedulers.io())
             .map { t -> if (t.isSuccessful) t else throw HttpException(t) }
             .observeOn(AndroidSchedulers.mainThread())

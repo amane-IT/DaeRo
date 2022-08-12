@@ -11,12 +11,9 @@ import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSettingBinding
 import com.ssafy.daero.ui.root.RootFragment
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.FragmentType
-import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.*
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.permission.checkPermission
-import com.ssafy.daero.utils.permission.checkPermissions
 import com.ssafy.daero.utils.view.toast
 
 class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_setting) {
@@ -33,8 +30,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             when (it) {
                 SUCCESS -> {
                     settingViewModel.withdrawalState.value = DEFAULT
-                    App.prefs.initAll()
-                    RootFragment.curFragmentType = FragmentType.HomeFragment
+                    deleteAllInformation()
                     findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
                 }
                 FAIL -> {
@@ -59,7 +55,6 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
             findNavController().navigate(R.id.action_settingFragment_to_blockUserFragment)
         }
         binding.textSettingLabelLocation.setOnClickListener { navigateToAppSetting() }
-        binding.textSettingLabelCamera.setOnClickListener { navigateToAppSetting() }
         binding.textSettingLabelNotice.setOnClickListener {
             findNavController().navigate(R.id.action_settingFragment_to_noticeFragment)
         }
@@ -79,18 +74,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private fun otherListeners() {
         binding.switchSettingNotification.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Todo : 알림 설정
-            } else {
-                // Todo : 알림 해제
-            }
-        }
-        binding.switchSettingShake.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // Todo : 흔들기 설정
-            } else {
-                // Todo : 흔들기 해제
-            }
+            App.prefs.isNotificationAllow = isChecked
         }
     }
 
@@ -101,22 +85,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private fun displayPermission() {
-        if (checkPermissions(
-                listOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                )
-            )
+        if (checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         ) {
             binding.textSettingLocation.text = "앱 사용중에만 허용"
         } else {
             binding.textSettingLocation.text = "권한 없음"
-        }
-
-        if (checkPermission(Manifest.permission.CAMERA)) {
-            binding.textSettingCamera.text = "앱 사용중에만 허용"
-        } else {
-            binding.textSettingCamera.text = "권한 없음"
         }
     }
 
@@ -134,8 +107,8 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
     }
 
     private val logoutListener: () -> Unit = {
-        App.prefs.initAll()
-        RootFragment.curFragmentType = FragmentType.HomeFragment
+        deleteAllInformation()
+        RootFragment.selectPosition = R.id.TripFragment
         findNavController().navigate(R.id.action_settingFragment_to_loginFragment)
     }
 
@@ -145,5 +118,18 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(R.layout.fragment_s
 
     private val withdrawalListener: () -> Unit = {
         settingViewModel.withdrawal()
+    }
+
+    private fun deleteAllInformation() {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        settingViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initUser()
+        App.prefs.initTrip()
+        App.prefs.tripState = TRIP_BEFORE
     }
 }

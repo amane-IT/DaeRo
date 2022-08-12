@@ -1,113 +1,146 @@
 package com.ssafy.daero.ui.signup
 
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.data.dto.signup.TripPreferenceResponseDto
 import com.ssafy.daero.databinding.FragmentTripPreferenceBinding
 import com.ssafy.daero.ui.adapter.signup.TripPreferenceAdapter
+import com.ssafy.daero.ui.login.LoginViewModel
+import com.ssafy.daero.utils.constant.DEFAULT
+import com.ssafy.daero.utils.constant.FAIL
+import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.view.toast
 
-class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.layout.fragment_trip_preference){
+class TripPreferenceFragment :
+    BaseFragment<FragmentTripPreferenceBinding>(R.layout.fragment_trip_preference) {
 
     private lateinit var tripPreferenceAdapter: TripPreferenceAdapter
     private val tripPreferenceViewModel: TripPreferenceViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
+
     private val result = mutableListOf<Int>()
 
     override fun init() {
         initView()
+        initAdatper()
         setOnClickListener()
         observeData()
+        getPreferences()
     }
 
-    private fun initView(){
-        binding.buttonTripPreferenceStart.isEnabled = false
+    private fun getPreferences() {
+        tripPreferenceViewModel.getPreferences()
+    }
 
+    private fun initView() {
+        binding.buttonTripPreferenceStart.isEnabled = false
+    }
+
+    private fun initAdatper() {
         tripPreferenceAdapter = TripPreferenceAdapter().apply {
             onItemClickListener = tripPreferenceItemClickListener
         }
-
         binding.recyclerTripPreferenceImageList.adapter = tripPreferenceAdapter
     }
 
-    private fun setOnClickListener(){
+    private fun setOnClickListener() {
         binding.apply {
             buttonTripPreferenceStart.setOnClickListener {
-                if(result.size == 5){
+                if (result.size == 5) {
                     var requestList = result.toList()
                     requestList = requestList.sorted()
-                    Log.d("Trip", "setOnClickListener: ${requestList.toString()}")
-                    tripPreferenceViewModel.postPreference(App.prefs.userSeq, requestList)
-                    // TODO: 프래그먼트 이동
+                    tripPreferenceViewModel.postPreference(requestList)
                 }
             }
         }
     }
 
-    private fun observeData(){
-        tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner){
+    private fun observeData() {
+        tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner) {
             binding.progressBarTripPreferenceLoading.isVisible = it
         }
 
-//        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner){ state ->
-//            when(state){
-//                SUCCESS -> {
-//                    tripPreferenceAdapter.dataList = tripPreferenceViewModel.preferenceList
-//                }
-//
-//                FAIL -> {
-//                    toast("이미지 로딩에 실패했습니다.")
-//                }
-//            }
-//        }
+        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                FAIL -> {
+                    toast("이미지 로딩에 실패했습니다.")
+                    tripPreferenceViewModel.responseState_getPreference.value = DEFAULT
+                }
+            }
+        }
 
-        tripPreferenceViewModel.count.observe(viewLifecycleOwner){
+        tripPreferenceViewModel.preferences.observe(viewLifecycleOwner) {
+            tripPreferenceAdapter.dataList = it
+            tripPreferenceAdapter.notifyDataSetChanged()
+        }
+
+        tripPreferenceViewModel.responseState_postPreference.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                SUCCESS -> {
+                    jwtLogin()
+                    findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
+                }
+                FAIL -> {
+                    toast("선호도 조사 전송에 실패했습니다. 다시 시도해 주세요.")
+                }
+            }
+
+        }
+
+        tripPreferenceViewModel.count.observe(viewLifecycleOwner) {
             binding.textTripPreferenceCount.text = "$it / 5"
         }
 
-        tripPreferenceAdapter.dataList = listOf(
-            TripPreferenceResponseDto(1, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(2, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(3, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(4, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(5, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(6, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(7, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(8, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(9, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-            TripPreferenceResponseDto(10, "dummy", "https://unsplash.com/photos/jVT8vo04UT0/download?ixid=MnwxMjA3fDB8MXxzZWFyY2h8MjN8fHRyaXB8ZW58MHx8fHwxNjU4ODkyNzgy&force=true&w=1920"),
-        )
-
         tripPreferenceAdapter.notifyDataSetChanged()
+
+        loginViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
+                    loginViewModel.responseState.value = DEFAULT
+                }
+                FAIL -> {
+                    // jwt 토큰, user_seq 삭제
+                    App.prefs.jwt = null
+                    loginViewModel.responseState.value = DEFAULT
+                }
+            }
+        }
     }
 
-    private val tripPreferenceItemClickListener : (View, Int) -> Unit = { _, place_seq ->
+    private fun jwtLogin() {
+        App.prefs.jwt?.let {
+            loginViewModel.jwtLogin()
+        }
+    }
 
-        if(tripPreferenceViewModel.count.value!! < 5){
-            if(tripPreferenceAdapter.dataList[place_seq - 1].isSelected){
-                tripPreferenceAdapter.dataList[place_seq - 1].isSelected = false
+    private val tripPreferenceItemClickListener: (View, Int) -> Unit = { _, idx ->
+
+        if (tripPreferenceViewModel.count.value!! < 5) {
+            if (tripPreferenceAdapter.dataList[idx].isSelected) {
+                tripPreferenceAdapter.dataList[idx].isSelected = false
                 tripPreferenceViewModel.minusCount()
-                result.remove(place_seq)
+                result.remove(tripPreferenceAdapter.dataList[idx].place_seq)
             } else {
-                tripPreferenceAdapter.dataList[place_seq - 1].isSelected = true
+                tripPreferenceAdapter.dataList[idx].isSelected = true
                 tripPreferenceViewModel.plusCount()
-                result.add(place_seq)
-                if(tripPreferenceViewModel.count.value!! == 5)
+                result.add(tripPreferenceAdapter.dataList[idx].place_seq)
+                if (tripPreferenceViewModel.count.value!! == 5)
                     binding.buttonTripPreferenceStart.isEnabled = true
             }
         } else {
-            if(tripPreferenceAdapter.dataList[place_seq - 1].isSelected) {
-                tripPreferenceAdapter.dataList[place_seq - 1].isSelected = false
+            if (tripPreferenceAdapter.dataList[idx].isSelected) {
+                tripPreferenceAdapter.dataList[idx].isSelected = false
                 tripPreferenceViewModel.minusCount()
-                result.remove(place_seq)
+                result.remove(tripPreferenceAdapter.dataList[idx].place_seq)
                 binding.buttonTripPreferenceStart.isEnabled = false
             }
         }
 
-        tripPreferenceAdapter.notifyItemChanged(place_seq - 1)
+        tripPreferenceAdapter.notifyItemChanged(idx)
     }
-
 }

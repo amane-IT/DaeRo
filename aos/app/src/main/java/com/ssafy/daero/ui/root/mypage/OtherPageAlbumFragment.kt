@@ -29,7 +29,6 @@ class OtherPageAlbumFragment :
     }
 
     private val albumItemClickListener: (View, Int) -> Unit = { _, tripSeq ->
-        // todo: tripSeq 이용해서 앨범 상세 페이지로 이동
         findNavController().navigate(R.id.action_otherPageFragment_to_articleFragment, bundleOf(
             ARTICLE_SEQ to tripSeq))
     }

@@ -1,19 +1,19 @@
 package com.ssafy.daero.ui.root.trip
 
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampBottomSheetBinding
+import com.ssafy.daero.utils.permission.checkPermission
 
 
-class TripStampBottomSheetFragment(val tripPlaceSeq: Int, val placeName: String, val dateTime: Long) : BottomSheetDialogFragment() {
+class TripStampBottomSheetFragment(private val onItemClickListener: (Boolean, Boolean) -> Unit) :
+    BottomSheetDialogFragment() {
     private var _binding: FragmentTripStampBottomSheetBinding? = null
     private val binding get() = _binding!!
 
@@ -30,6 +30,7 @@ class TripStampBottomSheetFragment(val tripPlaceSeq: Int, val placeName: String,
         super.onViewCreated(view, savedInstanceState)
 
         expandFullHeight()
+        setOnClickListeners()
     }
 
     private fun expandFullHeight() {
@@ -42,12 +43,19 @@ class TripStampBottomSheetFragment(val tripPlaceSeq: Int, val placeName: String,
     private fun setOnClickListeners() {
         binding.apply {
             imageTripStampCamera.setOnClickListener {
-                // TODO: 카메라 촬영 기능
+                onItemClickListener(false, true)
+                dismiss()
             }
 
             imageTripStampGallery.setOnClickListener {
-                // TODO: 갤러리 사진 선택 기능
+                onItemClickListener(true, false)
+                dismiss()
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

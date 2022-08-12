@@ -69,7 +69,7 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginBottom="16dp"
                         android:text="김싸피님,"
-                        android:textSize="24dp"
+                        android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -82,7 +82,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="16dp"
                         android:text="여행을 시작해볼까요?"
-                        android:textSize="24dp"
+                        android:textSize="24sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/text_trip_username" />
 
@@ -137,7 +137,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="240dp"
+                        android:layout_marginBottom="200dp"
                         android:clipToPadding="false"
                         android:orientation="horizontal"
                         android:paddingHorizontal="8dp"
@@ -161,7 +161,7 @@
             android:layout_height="match_parent"
             android:focusableInTouchMode="true"
             app:behavior_hideable="false"
-            app:behavior_peekHeight="160dp"
+            app:behavior_peekHeight="138dp"
             app:cardCornerRadius="24dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
@@ -192,17 +192,29 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/image_trip_up" />
 
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chipGroup_trip_tags"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="16dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_trip_swipeDescription" />
+
                 <TextView
                     android:id="@+id/text_trip_keyword"
                     style="@style/BodyWhite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:padding="12dp"
+                    android:layout_marginTop="4dp"
                     android:text="키워드 선택하기"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/text_trip_swipeDescription" />
+                    app:layout_constraintTop_toBottomOf="@id/chipGroup_trip_tags" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

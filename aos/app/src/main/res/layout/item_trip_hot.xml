@@ -30,25 +30,26 @@
 
             <ImageView
                 android:id="@+id/image_item_MyPageAlbum_img"
-                android:layout_width="320dp"
-                android:layout_height="320dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{tripHot.thumbnail_url}"
+                app:thumbnailImageUrl="@{tripHot.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View
-                android:layout_width="320dp"
-                android:layout_height="320dp"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
                 android:background="@drawable/overlay_gradient_my_page_album" />
 
             <TextView
                 android:id="@+id/text_item_MyPageAlbum_title"
-                style="@style/BodyWhite"
-                android:layout_width="wrap_content"
+                style="@style/SubHeadSemiBoldWhite"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
                 android:text="@{tripHot.title}"
                 tools:text="강릉 여행" />
 

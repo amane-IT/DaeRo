@@ -1,66 +1,52 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentTripStampDetailBinding
-import com.ssafy.daero.ui.root.trip.TripStampBottomSheetFragment
+import com.ssafy.daero.utils.constant.SUCCESS
 
 class TripStampDetailFragment : BaseFragment<FragmentTripStampDetailBinding>(R.layout.fragment_trip_stamp_detail) {
 
-    private var isGood = true
+    private val tripStampDetailViewModel: TripStampDetailViewModel by viewModels()
+
     override fun init() {
-        initView()
+        initData()
+        observeData()
         setOnClickListeners()
     }
 
-    private fun initView(){
-        binding.apply {
-            // TODO: 이미지뷰에 사진 & 장소명 & 날짜 뿌리기
+    private fun initData(){
+        val tripStampSeq = arguments?.getInt("tripStampSeq", 0) ?: 0
+        tripStampDetailViewModel.getTripStampDetail(tripStampSeq)
+    }
+
+    private fun observeData(){
+        tripStampDetailViewModel.tripStampDetail.observe(viewLifecycleOwner) {
+            binding.textItemTripStampDetailTitle.text = it.place
+            binding.textItemTripStampDetailDate.text = it.datetime
+
+            Glide.with(requireContext())
+                .load(it.image_url)
+                .placeholder(R.drawable.placeholder_trip_album)
+                .apply(RequestOptions().centerCrop())
+                .error(R.drawable.placeholder_trip_album)
+                .into(binding.imageTripStampDetailStamp)
         }
+
     }
 
     private fun setOnClickListeners(){
         binding.apply {
-            imageTripStampDetailThumbup.setOnClickListener {
-                isGood = true
-                imageTripStampDetailThumbup.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.primaryColor))
-                imageTripStampDetailThumbDown.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.lightGray))
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ${imageTripStampDetailThumbup.imageTintList.toString()}")
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ${imageTripStampDetailThumbDown.imageTintList.toString()}")
-
+            buttonTripStampDetailShare.setOnClickListener {
+                // TODO: 트립스탬프 카카오톡으로 공유 기능 구현
             }
 
-            imageTripStampDetailThumbDown.setOnClickListener {
-                isGood = false
-                imageTripStampDetailThumbDown.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.primaryColor))
-                imageTripStampDetailThumbup.setColorFilter(ContextCompat.getColor(requireActivity().applicationContext, R.color.lightGray))
-                Log.d("TripStampDetailVM_DaeRo", "setOnClickListeners: ThumbDown")
-            }
-
-            buttonTripStampSave.setOnClickListener {
-                // TODO: 트립스탬프 저장 기능 구현
-            }
-
-
-//          buttonTripStampRetry.setOnClickListener {
-                // TODO: 트립스탬프 재생성
-//                TripStampBottomSheetFragment().show(
-//                    childFragmentManager,
-//                    "TripStampBottomSheetFragment"
-//                )
-//          }
-
-            buttonTripStampShare.setOnClickListener {
-                // TODO: 트립스탬프 카카오톡 공유하기
-                // 참고: https://youngest-programming.tistory.com/530
-            }
-
-            imgSignupEmailBack.setOnClickListener {
+            imgTripStampDetailBack.setOnClickListener {
                 requireActivity().onBackPressed()
             }
-
         }
     }
 }

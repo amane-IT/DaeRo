@@ -1,18 +1,16 @@
 package com.ssafy.daero.ui.root.sns
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
-import com.ssafy.daero.data.dto.article.CommentAddRequestDto
+import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentCommentMenuBottomSheetBinding
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.utils.constant.COMMENT
 import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 
@@ -20,6 +18,8 @@ import com.ssafy.daero.utils.constant.REPORT_BOTTOM_SHEET
 class CommentMenuBottomSheetFragment(
     val replySeq: Int,
     val content: String,
+    val userSeq: Int,
+    private val reportListener: ReportListener,
     listener: CommentListener
 ) : BottomSheetDialogFragment() {
 
@@ -47,12 +47,26 @@ class CommentMenuBottomSheetFragment(
     }
 
     fun init() {
+        initView()
         setOnClickListeners()
+    }
+
+    private fun initView() {
+        if (userSeq == App.prefs.userSeq) {
+            binding.tvCommentMenuReport.visibility = View.GONE
+            binding.viewReport.visibility = View.GONE
+            binding.tvCommentMenuBlock.visibility = View.GONE
+            binding.viewDelete.visibility = View.GONE
+        } else {
+            binding.tvCommentMenuModify.visibility = View.GONE
+            binding.viewModify.visibility = View.GONE
+            binding.tvCommentMenuDelete.visibility = View.GONE
+            binding.viewDelete.visibility = View.GONE
+        }
     }
 
     private fun setOnClickListeners() {
         binding.tvCommentMenuModify.setOnClickListener {
-            //todo: 수정하기
             mCallback.commentUpdate(content, replySeq)
             dismiss()
         }
@@ -63,10 +77,11 @@ class CommentMenuBottomSheetFragment(
         }
         binding.tvCommentMenuReport.setOnClickListener {
             dismiss()
-            ReportBottomSheetFragment(COMMENT, replySeq).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
+            ReportBottomSheetFragment(COMMENT, userSeq, reportListener, replySeq, 0).show(parentFragmentManager, REPORT_BOTTOM_SHEET)
         }
         binding.tvCommentMenuBlock.setOnClickListener {
-            //todo: 차단하기
+            mCallback.blockAdd(userSeq)
+            dismiss()
         }
         binding.tvCommentMenuCancel.setOnClickListener {
             dismiss()

@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -30,7 +29,7 @@ class MyPageViewModel : BaseViewModel() {
         get() = _myJourney
 
     private val _myAlbum = MutableLiveData<PagingData<TripAlbumItem>>()
-    val myAlbum : LiveData<PagingData<TripAlbumItem>>
+    val myAlbum: LiveData<PagingData<TripAlbumItem>>
         get() = _myAlbum
 
 
@@ -46,9 +45,7 @@ class MyPageViewModel : BaseViewModel() {
                     }
                     _userProfile.postValue(response.body())
                 }, { throwable ->
-                    Log.d("ProfileSettingVM_DaeRo", throwable.toString())
                     if (throwable is HttpException) {
-                        Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
                     }
                     getProfileState.postValue(FAIL)
                 })
@@ -70,9 +67,7 @@ class MyPageViewModel : BaseViewModel() {
                     }
                 },
                 { throwable ->
-                    Log.d("ProfileSettingVM_DaeRo", throwable.toString())
                     if (throwable is HttpException) {
-                        Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
                     }
                     getJourneyState.postValue(FAIL)
                 }
@@ -88,7 +83,6 @@ class MyPageViewModel : BaseViewModel() {
                     {
                         _myAlbum.postValue(it)
                     }, { throwable ->
-                        Log.d("ProfileSettingVM_DaeRo", throwable.toString())
                     }
                 )
         )

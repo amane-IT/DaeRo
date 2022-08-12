@@ -9,13 +9,15 @@
         <variable
             name="album"
             type="com.ssafy.daero.data.dto.trip.TripAlbumItem" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:paddingHorizontal="6dp"
-        android:paddingVertical="6dp"
-        android:layout_height="wrap_content">
+        android:paddingVertical="6dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_item_MyPageAlbum_img"
@@ -33,7 +35,7 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:scaleType="centerCrop"
-                app:imageUrl="@{album.image_url}"
+                app:thumbnailImageUrl="@{album.image_url}"
                 tools:src="@drawable/img_my_page_album" />
 
             <View
@@ -41,13 +43,23 @@
                 android:layout_height="200dp"
                 android:background="@drawable/overlay_gradient_my_page_album" />
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="8dp"
+                android:src="@drawable/ic_lock"
+                android:visibility="@{album.expose == 'y' ? View.INVISIBLE : View.VISIBLE}"
+                app:tint="@color/white" />
+
             <TextView
                 android:id="@+id/text_item_MyPageAlbum_title"
-                style="@style/BodyWhite"
-                android:layout_width="wrap_content"
+                style="@style/BodySemiBoldWhite"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="36dp"
                 android:layout_marginBottom="8dp"
                 android:text="@{album.title}"
                 tools:text="강릉 여행" />

@@ -1,23 +1,18 @@
 package com.ssafy.daero.ui.root.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.article.ArticleResponseDto
-import com.ssafy.daero.data.dto.search.ArticleItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import retrofit2.Response
 
 class SearchViewModel : BaseViewModel() {
-    private val TAG = "SearchVM_DaeRo"
     private val snsRepository = SnsRepository.get()
 
     val responseState_userName = MutableLiveData<Int>()
@@ -31,28 +26,43 @@ class SearchViewModel : BaseViewModel() {
     val resultArticleSearch: LiveData<SearchArticleResponseDto>
         get() = _resultArticleSearch
 
-    fun searchUserName(searchKeyWord: String){
+    private val _showProgress = MutableLiveData<Boolean>()
+    val showProgress: LiveData<Boolean>
+        get() = _showProgress
+
+    fun searchUserName(searchKeyWord: String) {
+        _showProgress.postValue(true)
         addDisposable(
             snsRepository.searchUserName(searchKeyWord).cachedIn(viewModelScope)
                 .subscribe({
-                    Log.d(TAG, "searchUserName: $it")
                     _resultUserSearch.postValue(it)
+                    responseState_userName.postValue(SUCCESS)
+                    _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d(TAG, "searchUserName: ${throwable.toString()}")
                     responseState_userName.postValue(FAIL)
+                    _showProgress.postValue(false)
                 })
         )
     }
 
-    fun searchArticle(searchKeyWord: String){
+    fun searchArticle(searchKeyWord: String) {
+        _showProgress.postValue(true)
         addDisposable(
             snsRepository.searchArticle(searchKeyWord)
-                .subscribe({response ->
-                    _resultArticleSearch.postValue(response.body())
+                .subscribe({ response ->
+                    _showProgress.postValue(false)
+
+                    // 검색 결과 없는 경우
+                    if (response.body()!!.content.isEmpty() && response.body()!!.place.isEmpty()) {
+                        responseState_articles.postValue(FAIL)
+                        return@subscribe
+                    }
+
                     responseState_articles.postValue(SUCCESS)
-                }, {throwable ->
-                    Log.d(TAG, "searchArticle: ${throwable.toString()}")
+                    _resultArticleSearch.postValue(response.body())
+                }, { throwable ->
                     responseState_articles.postValue(FAIL)
+                    _showProgress.postValue(false)
                 })
         )
     }

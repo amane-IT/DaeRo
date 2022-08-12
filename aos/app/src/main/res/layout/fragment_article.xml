@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -33,7 +34,7 @@
                 android:layout_height="32dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/ic_user"
+                android:src="@drawable/img_user"
                 app:civ_border_color="@color/white"
                 app:civ_border_overlay="true"
                 app:civ_border_width="1dp"
@@ -46,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="12dp"
-                android:text="ssafy_kim" />
+                tools:text="ssafy_kim" />
 
             <ImageView
                 android:id="@+id/img_article_menu"
@@ -93,9 +94,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:textSize="28dp"
-                    android:text="강릉 ~ 속초 여행"
+                    tools:text="강릉 ~ 속초 여행"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_article" />
 
@@ -106,8 +107,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="8dp"
-                    android:text="2022.07.16~2022.07.17"
+                    android:layout_marginTop="12dp"
+                    tools:text="2022.07.16~2022.07.17"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_title" />
 
@@ -115,7 +116,7 @@
                     android:id="@+id/fragment_article_map"
                     android:layout_width="360dp"
                     android:layout_height="240dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="32dp"
                     android:name="com.naver.maps.map.MapFragment"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="72dp"
                     android:text="여행경비"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_article_end" />
@@ -207,6 +208,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_article_expense"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_expense" />
@@ -218,21 +221,21 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
-                    android:text="이번 여행은......"
+                    android:layout_marginTop="72dp"
+                    android:text="이번 여행은..."
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycler_article_expense" />
 
                 <TextView
                     android:id="@+id/tv_article_content"
-                    style="@style/Body"
+                    style="@style/Term"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="28dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
-                    android:text="이번 여행은 어쩌구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구"
+                    android:layout_marginEnd="28dp"
+                    tools:text="이번 여행은 어쩌구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_content_title" />
@@ -243,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="72dp"
                     android:text="여행만족도"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_content" />
@@ -311,7 +314,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="1k" />
+                        android:text="0" />
 
                 </LinearLayout>
 
@@ -354,7 +357,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="8dp"
-                        android:text="1k" />
+                        android:text="0" />
 
                 </LinearLayout>
 

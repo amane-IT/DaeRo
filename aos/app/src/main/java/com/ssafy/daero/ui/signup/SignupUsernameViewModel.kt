@@ -19,8 +19,13 @@ class SignupUsernameViewModel : BaseViewModel() {
     val showProgress: LiveData<Boolean>
         get() = _showProgress
 
+    private val _isChecked = MutableLiveData<Boolean>()
+    val isChecked: LiveData<Boolean>
+        get() = _isChecked
+
     val responseState_nickname = MutableLiveData<Int>()
     val responseState_signup = MutableLiveData<Int>()
+
 
     fun verifyNickname(nickname: SignupNicknameRequestDto) {
         _showProgress.postValue(true)
@@ -35,7 +40,6 @@ class SignupUsernameViewModel : BaseViewModel() {
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("SignupUserNameVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState_nickname.postValue(FAIL)
                 })
@@ -54,10 +58,13 @@ class SignupUsernameViewModel : BaseViewModel() {
                         App.prefs.jwt = response.body()!!.jwt
                     }
                 }, { throwable ->
-                    Log.d("SignupUsernameVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState_signup.postValue(FAIL)
                 })
         )
+    }
+
+    fun checkOption(flag: Boolean){
+        _isChecked.postValue(flag)
     }
 }

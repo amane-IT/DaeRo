@@ -1,12 +1,24 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.article.ArticleWriteRequestDto
 import com.ssafy.daero.data.dto.common.PagingResponseDto
 import com.ssafy.daero.data.dto.trip.*
+import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
 import io.reactivex.rxjava3.core.Single
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
 interface TripApi {
+    /**
+     * 트립스탬프 상세 조회
+     * */
+    @GET("trips/trip-stamp/{trip_stamp_seq}")
+    fun getTripStampDetail(
+        @Path("trip_stamp_seq") tripStampSeq: Int
+    ): Single<Response<TripStampDetailResponseDto>>
+
     /**
      * 내 여정 조회
      */
@@ -60,8 +72,34 @@ interface TripApi {
     fun getTripInformation(@Path("trip_places_seq") placeSeq: Int): Single<Response<TripInformationResponseDto>>
 
     /**
+     * 다음 여행지 추천
+     * */
+    @GET("trips/recommend")
+    fun recommendNextPlace(
+        @Query("place-seq") placeSeq: Int,
+        @Query("time") time: Int,
+        @Query("transportation") transportation: String
+    ): Single<Response<NextPlaceRecommendResponseDto>>
+
+    /**
      * 인기있는 여행지
      */
     @GET("trips/popular")
     fun getPopularTrips(): Single<Response<List<TripPopularResponseDto>>>
+
+    /**
+     * 내 주변 여행지
+     */
+    @GET("trips/nearby")
+    fun getAroundTrips(@Query("place-seq") placeSeq: Int): Single<Response<List<TripPopularResponseDto>>>
+
+    /**
+     * 여행 마무리하기
+     */
+    @Multipart
+    @POST("trips")
+    fun postArticle(
+        @Part files: List<MultipartBody.Part>,
+        @Part("json") json: RequestBody
+    ): Single<Response<Unit>>
 }

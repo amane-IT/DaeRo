@@ -1,6 +1,7 @@
 package com.ssafy.daero.ui.adapter.sns
 
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +21,7 @@ class CommentAdapter(
     , listener: CommentListener
     ) : PagingDataAdapter<CommentItem, CommentAdapter.CommentViewHolder>(COMPARATOR) {
 
-    lateinit var onItemClickListener : (View, Int, Int, String) -> Unit
+    lateinit var onItemClickListener : (View, Int, Int, Int, String) -> Unit
     var mCallback = listener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentViewHolder {
@@ -59,9 +60,10 @@ class CommentAdapter(
             binding.recyclerCommentReComment.visibility=View.GONE
             Glide.with(binding.imgCommentItemUser)
                 .load(data.profile_url)
-                .placeholder(R.drawable.ic_back)
+                .override(200,200)
+                .placeholder(R.drawable.img_user)
                 .apply(RequestOptions().centerCrop())
-                .error(R.drawable.ic_back)
+                .error(R.drawable.img_user)
                 .into(binding.imgCommentItemUser)
 
              binding.tvCommentUser.text = data.nickname
@@ -76,7 +78,7 @@ class CommentAdapter(
             userSeq = data.user_seq
             modified = data.modified
         }
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit) {
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, Int, String) -> Unit) {
             binding.LinearCommentReComment.setOnClickListener {
                 var adapter: ReCommentAdapter = mCallback.reCommentSelect(articleSeq,replySeq!!,ReCommentAdapter(onItemClickListener))
                 binding.LinearCommentReComment.visibility = View.GONE
@@ -95,10 +97,10 @@ class CommentAdapter(
                 }, 500L)
             }
             binding.imgCommentMenu.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
+                onItemClickListener(it, replySeq!!, 1, userSeq!!, binding.tvCommentContent.text.toString())
             }
             binding.imgCommentItemUser.setOnClickListener {
-                onItemClickListener(it, userSeq!!, 2, "")
+                onItemClickListener(it, userSeq!!, 2, userSeq!!, "")
             }
             binding.tvCommentReCommentAdd.setOnClickListener {
                 mCallback.reCommentAdd(replySeq!!)

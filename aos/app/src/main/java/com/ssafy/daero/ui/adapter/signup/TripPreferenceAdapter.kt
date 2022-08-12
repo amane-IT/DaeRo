@@ -39,7 +39,7 @@ class TripPreferenceAdapter: RecyclerView.Adapter<TripPreferenceAdapter.ItemView
 
         fun bindOnItemClickListener(onItemClickListener: (View, Int) -> Unit) {
             binding.root.setOnClickListener{
-                onItemClickListener(it, binding.tripPreference!!.place_seq)
+                onItemClickListener(it, bindingAdapterPosition)
             }
         }
     }

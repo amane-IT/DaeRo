@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -26,10 +25,13 @@ class HomeViewModel : BaseViewModel() {
                 .subscribe({
                     _articles.postValue(it)
                 }, { throwable ->
-                    Log.d("HomeVM_DaeRo", throwable.toString())
                     articleState.postValue(FAIL)
                 }
                 )
         )
+    }
+
+    fun invalidatePageSource() {
+        snsRepository.invalidatePageSource()
     }
 }

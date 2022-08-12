@@ -1,14 +1,9 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.paging.PagingData
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.search.UserNameItem
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
 import com.ssafy.daero.data.entity.TripFollow
-import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
@@ -31,7 +26,6 @@ class TripFollowViewModel : BaseViewModel() {
                     TripFollowData = it
                     tripFollowState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
                     tripFollowState.postValue(FAIL)
                 })
         )
@@ -43,21 +37,36 @@ class TripFollowViewModel : BaseViewModel() {
                 .subscribe({
                     tripFollowState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
                     tripFollowState.postValue(FAIL)
                 })
         )
     }
 
-    fun getTripFollow(articleSeq: Int){
+    fun getTripFollow(articleSeq: Int) {
         addDisposable(
             snsRepository.getTripFollow(articleSeq)
-                .subscribe({response ->
+                .subscribe({ response ->
                     resultTripFollow = response.body()!!
                     responseState.postValue(SUCCESS)
-                }, {throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
+                }, { throwable ->
                     responseState.postValue(FAIL)
+                })
+        )
+    }
+
+    fun deleteAllTripRecord() {
+        addDisposable(
+            tripRepository.deleteAllTripStamps()
+                .subscribe({
+
+                }, { throwable ->
+                })
+        )
+        addDisposable(
+            tripRepository.deleteAllTripFollow()
+                .subscribe({
+
+                }, { throwable ->
                 })
         )
     }
