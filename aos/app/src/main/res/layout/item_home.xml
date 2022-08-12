@@ -134,12 +134,14 @@
                 <TextView
                     android:id="@+id/text_home_item_title"
                     style="@style/HeadSemiBoldWhite"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginBottom="4dp"
                     android:text="@{article.title}"
                     app:layout_constraintBottom_toTopOf="@id/text_home_item_date"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:text="강릉 ~ 속초 여행" />
 

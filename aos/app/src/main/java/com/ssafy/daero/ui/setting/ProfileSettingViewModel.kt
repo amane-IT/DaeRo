@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -39,9 +38,7 @@ class ProfileSettingViewModel : BaseViewModel() {
                     _userProfile.postValue(response.body())
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("ProfileSettingVM_DaeRo", throwable.toString())
                     if (throwable is HttpException) {
-                        Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
                     }
                     _showProgress.postValue(false)
                     getProfileState.postValue(FAIL)
@@ -91,9 +88,7 @@ class ProfileSettingViewModel : BaseViewModel() {
     }
 
     private val throwableBlock: (Throwable) -> Unit = { throwable ->
-        Log.d("ProfileSettingVM_DaeRo", throwable.toString())
         if (throwable is HttpException) {
-            Log.d("ProfileSettingVM_DaeRo", throwable.code().toString())
         }
         _showProgress.postValue(false)
         editState.postValue(FAIL)

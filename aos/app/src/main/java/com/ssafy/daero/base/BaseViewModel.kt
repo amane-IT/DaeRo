@@ -1,10 +1,3 @@
-/*
- * Created by Im-Tae
- *
- * Copyright (c) 2022. Im-Tae.
- * Last modified 22. 3. 16. 오후 5:11
- */
-
 package com.ssafy.daero.base
 
 import androidx.lifecycle.ViewModel

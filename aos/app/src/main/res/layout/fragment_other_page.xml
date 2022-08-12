@@ -83,10 +83,10 @@
 
         <ImageView
             android:id="@+id/image_otherPage_badge"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/ic_badge_example"
+            android:src="@drawable/stamp_normal"
             app:layout_constraintBottom_toBottomOf="@id/text_otherPage_name"
             app:layout_constraintStart_toEndOf="@id/text_otherPage_name"
             app:layout_constraintTop_toTopOf="@id/text_otherPage_name" />

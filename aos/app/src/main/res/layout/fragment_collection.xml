@@ -61,11 +61,13 @@
             tools:listitem="@layout/item_collection" />
 
         <TextView
-            style="@style/HeadBold"
+            android:id="@+id/text_collection_noContent"
+            style="@style/SubHead"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CollectionFragment"
-            android:visibility="gone"
+            android:text="내 컬렉션이 비어있습니다."
+            android:textColor="@color/gray"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

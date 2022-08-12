@@ -1,14 +1,12 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.repository.UserRepository
 
-class StampViewModel: BaseViewModel() {
-    private val TAG = "StampVM_DaeRo"
+class StampViewModel : BaseViewModel() {
     private val stampRepository = UserRepository.get()
 
     private val _stampCount = MutableLiveData<StampResponseDto>()
@@ -17,13 +15,12 @@ class StampViewModel: BaseViewModel() {
 
     var stampState = MutableLiveData<Int>()
 
-    fun getBadges(userSeq: Int){
+    fun getBadges(userSeq: Int) {
         addDisposable(
             stampRepository.getBadges(userSeq)
                 .subscribe({ response ->
                     _stampCount.postValue(response.body())
                 }, { throwable ->
-                    Log.d(TAG, "getBadges: $throwable")
                 })
         )
     }

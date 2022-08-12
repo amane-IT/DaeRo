@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.mypage
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -17,8 +16,8 @@ class FollowViewModel : BaseViewModel() {
 
     val responseState = MutableLiveData<Int>()
 
-    private val _follow = MutableLiveData< PagingData<FollowResponseDto>>()
-    val follow : LiveData<PagingData<FollowResponseDto>>
+    private val _follow = MutableLiveData<PagingData<FollowResponseDto>>()
+    val follow: LiveData<PagingData<FollowResponseDto>>
         get() = _follow
 
     fun follow(userSeq: Int) {
@@ -28,7 +27,6 @@ class FollowViewModel : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("FollowVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -41,7 +39,6 @@ class FollowViewModel : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("FollowVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -54,7 +51,6 @@ class FollowViewModel : BaseViewModel() {
                 .subscribe({
                     _follow.postValue(it)
                 }, { throwable ->
-                    Log.d("FollowerVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -66,7 +62,6 @@ class FollowViewModel : BaseViewModel() {
                 .subscribe({
                     _follow.postValue(it)
                 }, { throwable ->
-                    Log.d("FollowingVM_DaeRo", throwable.toString())
                 })
         )
     }

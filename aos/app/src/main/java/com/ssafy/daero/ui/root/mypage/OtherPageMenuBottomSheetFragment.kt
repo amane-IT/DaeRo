@@ -52,7 +52,6 @@ class OtherPageMenuBottomSheetFragment(
 
     private fun setOnClickListeners() {
         binding.tvOtherPageMenuReport.setOnClickListener {
-            //todo: 신고하기, album_seq
             ReportBottomSheetFragment(USER, userSeq, reportListener).show(
                 parentFragmentManager,
                 OTHER_PAGE_MENU_BOTTOM_SHEET

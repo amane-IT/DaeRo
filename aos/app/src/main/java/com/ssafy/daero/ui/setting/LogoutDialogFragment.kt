@@ -1,16 +1,16 @@
 package com.ssafy.daero.ui.setting
 
-import android.content.Context
 import android.graphics.Color
-import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.fragment.app.DialogFragment
-import com.ssafy.daero.R
 import com.ssafy.daero.databinding.DlgLogoutBinding
 
-class LogoutDialogFragment(val confirm : () -> Unit) : DialogFragment() {
+class LogoutDialogFragment(val confirm: () -> Unit) : DialogFragment() {
 
     private var _binding: DlgLogoutBinding? = null
     private val binding get() = _binding!!

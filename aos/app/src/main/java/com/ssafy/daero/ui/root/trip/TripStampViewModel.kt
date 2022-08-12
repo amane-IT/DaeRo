@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -28,7 +27,6 @@ class TripStampViewModel() : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripStampVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -40,7 +38,6 @@ class TripStampViewModel() : BaseViewModel() {
                 .subscribe({
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripStampVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -52,7 +49,6 @@ class TripStampViewModel() : BaseViewModel() {
                 .subscribe({
                     _tripStamp.postValue(it)
                 }, { throwable ->
-                    Log.d("TripStampVM_DaeRo", throwable.toString())
                     tripStampState.postValue(FAIL)
                 })
         )

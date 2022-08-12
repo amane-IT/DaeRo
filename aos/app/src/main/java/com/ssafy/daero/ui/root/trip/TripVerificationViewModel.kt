@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -16,7 +15,7 @@ class TripVerificationViewModel : BaseViewModel() {
     var articleTripStampData = listOf<TripStamp>()
 
     private val _tripStamps = MutableLiveData<List<TripStamp>>()
-    val tripStamps : LiveData<List<TripStamp>>
+    val tripStamps: LiveData<List<TripStamp>>
         get() = _tripStamps
 
     private val _tripInformation = MutableLiveData<TripInformationResponseDto>()
@@ -32,7 +31,6 @@ class TripVerificationViewModel : BaseViewModel() {
                 .subscribe({
                     _tripStamps.postValue(it)
                 }, { throwable ->
-                    Log.d("TravelingVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -51,7 +49,6 @@ class TripVerificationViewModel : BaseViewModel() {
                         )
                     },
                     { throwable ->
-                        Log.d("TripInfoVM_DaeRo", throwable.toString())
                         tripInformationState.postValue(FAIL)
                     }
                 )
@@ -63,8 +60,7 @@ class TripVerificationViewModel : BaseViewModel() {
             tripRepository.deleteAllTripStamps()
                 .subscribe({
 
-                }, { throwable->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
+                }, { throwable ->
                 })
         )
     }
@@ -75,7 +71,6 @@ class TripVerificationViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
         addDisposable(
@@ -83,7 +78,6 @@ class TripVerificationViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }

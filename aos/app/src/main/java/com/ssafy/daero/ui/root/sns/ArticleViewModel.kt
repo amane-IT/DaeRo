@@ -1,9 +1,8 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
-import com.ssafy.daero.data.dto.article.*
+import com.ssafy.daero.data.dto.article.ArticleResponseDto
 import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
@@ -22,17 +21,23 @@ class ArticleViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.article(articleSeq)
                 .subscribe({ response ->
-                    articleData = ArticleResponseDto(response.body()!!.user_seq,
-                        response.body()!!.nickname, response.body()!!.profile_url,
-                        response.body()!!.like_yn, response.body()!!.title, response.body()!!.expose,
-                        response.body()!!.trip_comment, response.body()!!.trip_expenses,
-                        response.body()!!.rating, response.body()!!.likes,
-                        response.body()!!.comments, response.body()!!.tags,
+                    articleData = ArticleResponseDto(
+                        response.body()!!.user_seq,
+                        response.body()!!.nickname,
+                        response.body()!!.profile_url,
+                        response.body()!!.like_yn,
+                        response.body()!!.title,
+                        response.body()!!.expose,
+                        response.body()!!.trip_comment,
+                        response.body()!!.trip_expenses,
+                        response.body()!!.rating,
+                        response.body()!!.likes,
+                        response.body()!!.comments,
+                        response.body()!!.tags,
                         response.body()!!.records
-                        )
+                    )
                     responseState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     responseState.postValue(FAIL)
                 })
         )
@@ -45,7 +50,6 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({
                     deleteState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     deleteState.postValue(FAIL)
                 })
         )
@@ -58,9 +62,8 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({
                     likeState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     likeState.postValue(FAIL)
-                    })
+                })
         )
     }
 
@@ -71,7 +74,6 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({
                     likeState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     likeState.postValue(FAIL)
                 })
         )
@@ -83,7 +85,6 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({
                     exposeState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     exposeState.postValue(FAIL)
                 })
         )
@@ -95,7 +96,6 @@ class ArticleViewModel : BaseViewModel() {
                 .subscribe({
                     exposeState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     exposeState.postValue(FAIL)
                 })
         )

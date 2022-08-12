@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -20,20 +19,19 @@ class ResetPasswordConfirmViewModel : BaseViewModel() {
 
     val responseState = MutableLiveData<Int>()
 
-    fun confirmPassword(passwordRequestDto: ResetPasswordConfirmRequestDto){
+    fun confirmPassword(passwordRequestDto: ResetPasswordConfirmRequestDto) {
         _showProgress.postValue(true)
 
         addDisposable(
             userRepository.confirmPassword(App.prefs.userSeq, passwordRequestDto)
                 .subscribe({ response ->
-                    if(response.body()!!.result == 'y'){
+                    if (response.body()!!.result == 'y') {
                         responseState.postValue(SUCCESS)
-                    } else{
+                    } else {
                         responseState.postValue(FAIL)
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("ResetPasswordVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     responseState.postValue(FAIL)
                 })

@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -55,7 +54,6 @@ class FindPasswordConfirmViewModel : BaseViewModel() {
                     }
                     _showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("FindPasswordConfirmVM_DaeRo", throwable.toString())
                     _showProgress.postValue(false)
                     confirmResponseState.postValue(FAIL)
                 })

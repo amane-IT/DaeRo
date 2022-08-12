@@ -2,7 +2,6 @@ package com.ssafy.daero.core.service
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -22,14 +21,11 @@ class FCMService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("FCMService_DaeRo", "onNewToken: 토큰 갱신: $token")
         App.prefs.ftoken = token
 
         if (App.prefs.userSeq != 0 && App.prefs.jwt != null) {
             UserRepository.get().updateFcmToken(App.prefs.userSeq, FCMTokenRequestDto(token))
-                .subscribe({}, { throwable ->
-                    Log.d("FCMService_DaeRo", throwable.toString())
-                })
+                .subscribe({}, { })
         }
     }
 
@@ -46,7 +42,7 @@ class FCMService : FirebaseMessagingService() {
 
             TripRepository.get().insertNotification(
                 Notification(title = it.title ?: "", content = it.body ?: "")
-            ).subscribe({}, { throwable -> Log.d("FCMService_DaeRo", throwable.toString()) })
+            ).subscribe({}, { })
 
 
             val pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)

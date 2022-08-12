@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.search
 
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -9,18 +8,18 @@ import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.application.App.Companion.keyword
 import com.ssafy.daero.base.BaseFragment
-import com.ssafy.daero.databinding.*
+import com.ssafy.daero.databinding.FragmentSearchContentMoreBinding
 import com.ssafy.daero.ui.adapter.search.SearchArticleMoreAdapter
 import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.root.sns.*
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
-import java.text.FieldPosition
 
-class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more), ArticleListener, ReportListener {
-    private val TAG = "SearchContentMore_DaeRo"
-    private val searchContentMoreViewModel : SearchContentMoreViewModel by viewModels()
+class SearchContentMoreFragment :
+    BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more),
+    ArticleListener, ReportListener {
+    private val searchContentMoreViewModel: SearchContentMoreViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
     private val blockUserViewModel: BlockUserViewModel by viewModels()
     private lateinit var searchArticleMoreAdapter: SearchArticleMoreAdapter
@@ -33,15 +32,15 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
         setOnClickListeners()
     }
 
-    private fun initView(){
+    private fun initView() {
         binding.toolbarTitle.text = "\"$keyword\" 검색 결과"
     }
 
-    private fun initData(){
+    private fun initData() {
         searchContentMoreViewModel.searchContentMore(keyword!!)
     }
 
-    private fun initAdapter(){
+    private fun initAdapter() {
         searchArticleMoreAdapter = SearchArticleMoreAdapter(
             onArticleClickListener,
             onUserClickListener,
@@ -54,20 +53,19 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
         binding.recyclerSearchContentMore.adapter = searchArticleMoreAdapter
     }
 
-    private fun observeData(){
-        searchContentMoreViewModel.resultContentSearch.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeData: 여기")
+    private fun observeData() {
+        searchContentMoreViewModel.resultContentSearch.observe(viewLifecycleOwner) {
             searchArticleMoreAdapter.submitData(lifecycle, it)
         }
 
-        searchContentMoreViewModel.responseState.observe(viewLifecycleOwner){ state ->
-            when(state){
+        searchContentMoreViewModel.responseState.observe(viewLifecycleOwner) { state ->
+            when (state) {
                 FAIL -> binding.textSearchContentMoreNoData.visibility = View.VISIBLE
             }
         }
 
-        articleViewModel.likeState.observe(viewLifecycleOwner){
-            when(it){
+        articleViewModel.likeState.observe(viewLifecycleOwner) {
+            when (it) {
                 SUCCESS -> {
                     articleViewModel.likeState.value = DEFAULT
                 }
@@ -78,7 +76,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
         }
     }
 
-    private fun setOnClickListeners(){
+    private fun setOnClickListeners() {
         binding.imgSearchContentMoreBack.setOnClickListener {
             requireActivity().onBackPressed()
         }
@@ -105,7 +103,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
     }
 
     private val onLikeClickListener: (Int, Boolean) -> Unit = { articleSeq, likeYn ->
-        when(likeYn){
+        when (likeYn) {
             true -> articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
             false -> articleViewModel.likeAdd(App.prefs.userSeq, articleSeq)
         }
@@ -117,17 +115,19 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
     }
 
     private val onMenuClickListener: (Int, Int, Int) -> Unit = { articleSeq, userSeq, position ->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,
-            this@SearchContentMoreFragment, this@SearchContentMoreFragment, position = position).show(
+        ArticleMenuBottomSheetFragment(
+            articleSeq, userSeq, 1,
+            this@SearchContentMoreFragment, this@SearchContentMoreFragment, position = position
+        ).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
     }
 
-    override fun articleDelete(articleSeq: Int){
+    override fun articleDelete(articleSeq: Int) {
         articleViewModel.articleDelete(articleSeq)
-        articleViewModel.responseState.observe(viewLifecycleOwner){
-            when(it){
+        articleViewModel.responseState.observe(viewLifecycleOwner) {
+            when (it) {
                 SUCCESS -> {
                     toast("해당 게시글을 삭제했습니다.")
                     searchContentMoreViewModel.searchContentMore(keyword!!)
@@ -141,7 +141,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
         }
     }
 
-    override fun blockArticle(articleSeq: Int,position: Int) {
+    override fun blockArticle(articleSeq: Int, position: Int) {
         blockUserViewModel.blockArticle(articleSeq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
@@ -160,11 +160,11 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
     }
 
     override fun setPublic() {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun articleOpen(articleSeq: Int) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
     }
 
     override fun articleClose(articleSeq: Int) {

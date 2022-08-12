@@ -1,12 +1,10 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.service.NoticeResponseDto
 import com.ssafy.daero.data.repository.ServiceRepository
-import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 
 class NoticeViewModel : BaseViewModel() {
@@ -24,7 +22,6 @@ class NoticeViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     _notices.postValue(response.body()!!)
                 }, { throwable ->
-                    Log.d("NoticeVM", throwable.toString())
                     noticeState.postValue(FAIL)
                 })
         )

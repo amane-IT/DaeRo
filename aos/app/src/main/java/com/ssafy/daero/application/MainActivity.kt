@@ -8,6 +8,7 @@ import com.ssafy.daero.ui.login.LoginFragment
 import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.ui.root.sns.ArticleEditDayFragment
 import com.ssafy.daero.ui.root.sns.ArticleWriteDayFragment
+import com.ssafy.daero.ui.signup.TripPreferenceFragment
 import com.ssafy.daero.utils.constant.FragmentType
 import com.ssafy.daero.utils.view.toast
 
@@ -31,7 +32,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         val curFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host)!!.childFragmentManager.fragments[0]
-        if (curFragment is RootFragment || curFragment is LoginFragment) {
+        if (curFragment is RootFragment || curFragment is LoginFragment || curFragment is TripPreferenceFragment) {
             val currentTime = System.currentTimeMillis()
             val elapsedTime = currentTime - backPressedTime
             backPressedTime = currentTime

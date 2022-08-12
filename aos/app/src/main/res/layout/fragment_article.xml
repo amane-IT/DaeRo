@@ -198,7 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="72dp"
                     android:text="여행경비"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/text_article_end" />
@@ -208,6 +208,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_article_expense"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_expense" />
@@ -219,7 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="72dp"
                     android:text="이번 여행은..."
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/recycler_article_expense" />
@@ -230,9 +232,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="24dp"
+                    android:layout_marginStart="28dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"
+                    android:layout_marginEnd="28dp"
                     tools:text="이번 여행은 어쩌구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -244,7 +246,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="72dp"
                     android:text="여행만족도"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_article_content" />

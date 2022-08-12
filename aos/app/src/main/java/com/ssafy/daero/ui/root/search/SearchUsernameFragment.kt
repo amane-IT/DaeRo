@@ -1,13 +1,10 @@
 package com.ssafy.daero.ui.root.search
 
-import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.ssafy.daero.R
 import com.ssafy.daero.base.BaseFragment
@@ -15,12 +12,8 @@ import com.ssafy.daero.databinding.FragmentSearchUsernameBinding
 import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.constant.USER_SEQ
 import com.ssafy.daero.utils.view.toast
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SearchUsernameFragment :
@@ -35,11 +28,10 @@ class SearchUsernameFragment :
     }
 
     private fun setOtherListeners() {
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
             searchUserNameAdapter.loadStateFlow.collect {
-                if(it.append is LoadState.NotLoading && it.append.endOfPaginationReached) {
-                    Log.d("LoadState_싸피", searchUserNameAdapter.itemCount.toString())
-                    if(searchUserNameAdapter.itemCount < 1) {
+                if (it.append is LoadState.NotLoading && it.append.endOfPaginationReached) {
+                    if (searchUserNameAdapter.itemCount < 1) {
                         binding.textSearchUserNameNoContent.visibility = View.VISIBLE
                         binding.recyclerSearchUserName.visibility = View.GONE
                     }

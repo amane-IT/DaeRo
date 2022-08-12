@@ -45,7 +45,7 @@
         <View
             android:id="@+id/view_article_expense_line"
             android:layout_width="1dp"
-            android:layout_height="14dp"
+            android:layout_height="16dp"
             android:layout_marginStart="20dp"
             android:background="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="원"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintTop_toTopOf="@id/editText_article_expense_content"
             app:layout_constraintBottom_toBottomOf="@+id/editText_article_expense_content"
             app:layout_constraintStart_toEndOf="@+id/editText_article_expense_content"/>

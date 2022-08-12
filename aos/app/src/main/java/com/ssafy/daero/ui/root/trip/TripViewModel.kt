@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -61,30 +60,10 @@ class TripViewModel : BaseViewModel() {
                     showProgress.postValue(FAIL)
                 },
                 { throwable ->
-                    Log.d("TripVM_DaeRo", throwable.toString())
                     showProgress.postValue(FAIL)
                     firstTripRecommendState.postValue(FAIL)
                 })
         )
-
-        /*
-        // 임시 코드, 2.5초 후에 placeSeq = 1 발행
-        delay.subscribe(
-            { response ->
-                // userSeq 저장
-                //_firstTripRecommendResponseDto.postValue(response.body())
-                _firstTripRecommendResponseDto.postValue(
-                    1
-                )
-                showProgress.postValue(FAIL)
-            },
-            { throwable ->
-                Log.d("TripVM_DaeRo", throwable.toString())
-                showProgress.postValue(FAIL)
-                firstTripRecommendState.postValue(FAIL)
-            })
-
-         */
     }
 
     fun getPopularTrips() {
@@ -93,7 +72,6 @@ class TripViewModel : BaseViewModel() {
                 .subscribe({
                     _popularTrip.postValue(it.body())
                 }, { throwable ->
-                    Log.d("TripVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -104,7 +82,6 @@ class TripViewModel : BaseViewModel() {
                 .subscribe({
                     _hotArticles.postValue(it.body())
                 }, { throwable ->
-                    Log.d("TripVM_DaeRo", throwable.toString())
                 })
         )
     }
