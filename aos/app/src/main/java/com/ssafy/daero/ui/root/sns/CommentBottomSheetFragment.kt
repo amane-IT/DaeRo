@@ -201,16 +201,16 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
 
     override fun blockAdd(userSeq: Int) {
         blockUserViewModel.blockAdd(userSeq)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
                     toast("해당 유저를 차단했습니다.")
                     commentAdapter.refresh()
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
                     toast("유저 차단을 실패했습니다.")
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }
@@ -223,14 +223,14 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
 
     override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockAdd(seq)
-        blockUserViewModel.responseState.observe(viewLifecycleOwner) {
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
                     commentAdapter.refresh()
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
-                    blockUserViewModel.responseState.value = DEFAULT
+                    blockUserViewModel.blockState.value = DEFAULT
                 }
             }
         }
