@@ -210,7 +210,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         this.regionTags = regionTags
         travelingViewModel.getFirstTripRecommend(
             FirstTripRecommendRequestDto(
-                categoryTags, regionTags
+                regionTags, categoryTags
             )
         )
     }
