@@ -129,7 +129,7 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기, album_seq
             dismiss()
-            ReportBottomSheetFragment(ARTICLE, articleSeq, reportListener).show(
+            ReportBottomSheetFragment(ARTICLE, articleSeq, reportListener, position).show(
                 parentFragmentManager,
                 REPORT_BOTTOM_SHEET
             )

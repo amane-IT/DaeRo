@@ -190,7 +190,7 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
         }
     }
 
-    override fun block(seq: Int) {
+    override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockAdd(seq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {

@@ -488,7 +488,7 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
         }
     }
 
-    override fun block(seq: Int) {
+    override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockArticle(seq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {

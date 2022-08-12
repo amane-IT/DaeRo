@@ -221,7 +221,7 @@ class CommentBottomSheetFragment(private val articleSeq: Int, private val commen
         _binding = null
     }
 
-    override fun block(seq: Int) {
+    override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockAdd(seq)
         blockUserViewModel.responseState.observe(viewLifecycleOwner) {
             when (it) {

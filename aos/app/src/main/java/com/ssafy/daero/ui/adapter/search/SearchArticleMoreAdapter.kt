@@ -20,7 +20,7 @@ class SearchArticleMoreAdapter(
     private val onCommentClickListener: (Int, Int) -> Unit, // 코멘트 클릭
     private val onLikeClickListener: (Int, Boolean) -> Unit, // 좋아요 버튼 클릭
     private val onLikeTextClickListener: (Int, Int) -> Unit, // 좋아요 텍스트 클릭
-    private val onMenuClickListener: (Int, Int) -> Unit // 더보기 클릭
+    private val onMenuClickListener: (Int, Int, Int) -> Unit // 더보기 클릭
 ): PagingDataAdapter<ArticleMoreItem, SearchArticleMoreAdapter.SearchArticleMoreViewHolder>(
     COMPARATOR
 ) {
@@ -119,9 +119,9 @@ class SearchArticleMoreAdapter(
             }
         }
 
-        fun bindOnMenuClickListener(onMenuClickListener: (Int, Int) -> Unit) {
+        fun bindOnMenuClickListener(onMenuClickListener: (Int, Int, Int) -> Unit) {
             binding.imageViewArticleMoreMenu.setOnClickListener {
-                onMenuClickListener(binding.articleMore?.article_seq ?: 0, binding.articleMore?.user_seq ?: 0)
+                onMenuClickListener(binding.articleMore?.article_seq ?: 0, binding.articleMore?.user_seq ?: 0, bindingAdapterPosition)
             }
         }
     }

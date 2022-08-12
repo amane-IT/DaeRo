@@ -102,9 +102,9 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
             .show(childFragmentManager, LIKE_BOTTOM_SHEET)
     }
 
-    private val onMenuClickListener: (Int, Int) -> Unit = { articleSeq, userSeq ->
+    private val onMenuClickListener: (Int, Int, Int) -> Unit = { articleSeq, userSeq, position ->
         ArticleMenuBottomSheetFragment(articleSeq, userSeq, 1,
-            this@SearchPlaceNameMoreFragment, this@SearchPlaceNameMoreFragment).show(
+            this@SearchPlaceNameMoreFragment, this@SearchPlaceNameMoreFragment, position = position).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
@@ -169,12 +169,13 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         }
     }
 
-    override fun block(seq: Int) {
+    override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockArticle(seq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
                     searchArticleMoreAdapter.refresh()
+                    binding.recyclerSearchPlaceMore.scrollToPosition(position)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {

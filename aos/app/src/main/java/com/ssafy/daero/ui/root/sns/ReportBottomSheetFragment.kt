@@ -13,7 +13,7 @@ import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class ReportBottomSheetFragment(val type: Int, val seq: Int, val reportListener: ReportListener) : BottomSheetDialogFragment() {
+class ReportBottomSheetFragment(val type: Int, val seq: Int, val reportListener: ReportListener, var position: Int = 0) : BottomSheetDialogFragment() {
     private var _binding: BottomsheetReportBinding? = null
     private val binding get() = _binding!!
 
@@ -22,7 +22,7 @@ class ReportBottomSheetFragment(val type: Int, val seq: Int, val reportListener:
     private var commentSeq: Int = 0
 
 
-    constructor(type: Int, seq: Int, reportListener: ReportListener, commentSeq:Int) : this(type, seq, reportListener) {
+    constructor(type: Int, seq: Int, reportListener: ReportListener, commentSeq:Int, position: Int) : this(type, seq, reportListener, position = position) {
         this.commentSeq = commentSeq
     }
 
@@ -68,7 +68,7 @@ class ReportBottomSheetFragment(val type: Int, val seq: Int, val reportListener:
             when (it) {
                 SUCCESS -> {
                     toast("신고가 완료되었습니다.")
-                    reportListener.block(seq)
+                    reportListener.block(seq, position)
                     reportViewModel.reportState.value = DEFAULT
                     dismiss()
                 }

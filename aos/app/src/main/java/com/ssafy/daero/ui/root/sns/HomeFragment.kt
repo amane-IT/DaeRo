@@ -54,6 +54,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
     }
 
     private fun observeData() {
+        viewLifecycleOwner.lifecycleScope.launchWhenCreated {
+            homeAdapter.loadStateFlow.collect { loadStates ->
+                binding.swipeRefresh.isRefreshing = loadStates.mediator?.refresh is LoadState.Loading
+            }
+        }
         homeViewModel.articleState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
@@ -189,14 +194,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         TODO("Not yet implemented")
     }
 
-    override fun block(seq: Int) {
+    override fun block(seq: Int, position: Int) {
         blockUserViewModel.blockArticle(seq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) { response ->
             when (response) {
                 SUCCESS -> {
-                    var idx = homeAdapter.itemCount
+                    homeViewModel.invalidatePageSource()
                     homeAdapter.refresh()
-                    binding.recyclerHome.scrollToPosition(idx)
+                    binding.recyclerHome.scrollToPosition(position)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {
