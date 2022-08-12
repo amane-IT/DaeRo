@@ -461,7 +461,8 @@
                `fcm_token`          as `fcmToken`,
                `password_reset_yn`  as `passwordResetYn`
         from `users`
-        where binary (`nickname`) like concat('%', #{nickname}, '%')
+        where `users_seq` != #{userSeq}
+          and binary (`nickname`) like concat('%', #{nickname}, '%')
           and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
         order by `users_seq` desc
         limit #{limit} offset #{offset}
