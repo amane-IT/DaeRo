@@ -8,6 +8,7 @@ import com.ssafy.daero.data.dto.article.ArticleWriteRequestDto
 import com.ssafy.daero.data.dto.article.ArticleWriteTripStampItem
 import com.ssafy.daero.data.dto.article.Expense
 import com.ssafy.daero.data.repository.TripRepository
+import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.time.toServerDate
@@ -109,9 +110,11 @@ class ArticleWriteViewModel : BaseViewModel() {
         )
     }
 
-    fun initArticleWriteRequest() {
+    fun finishWriteArticle() {
         articleWriteRequest = null
         tripStamps = listOf()
+        linearTripStamps = listOf()
+        expenses = mutableListOf()
         dayIndex = 0
     }
 
