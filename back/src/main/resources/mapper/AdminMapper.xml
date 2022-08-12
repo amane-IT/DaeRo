@@ -37,19 +37,21 @@
         FROM daero.reports
     </select>
 
-    <select id="selectReportList" parameterType="_int" resultMap="mappingReportDto">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY r.reports_seq ASC) AS row, reports_seq,
-                     reporter_users_seq,
-                     reported_users_seq,
-                     reported_at,
-                     content_seq,
-                     report_categories_seq,
-                     handled_yn,
-                     article_type
-              FROM daero.reports r) AS report
-        WHERE (#{page} -1)*10 &lt; report.row
-          AND report.row &lt; 1+(#{page}*10)
+    <select id="selectReportList" resultMap="mappingReportVo">
+        SELECT `r`.`reports_seq`,
+               `r`.`reporter_users_seq`,
+               `u1`.`nickname` as `reporter_nickname`,
+               `r`.`reported_users_seq`,
+               `u2`.`nickname` as `reported_nickname`,
+               `r`.`reported_at`,
+               `r`.`content_seq`,
+               `r`.`report_categories_seq`,
+               `r`.`handled_yn`,
+               `r`.`article_type`
+        FROM `reports` `r`
+                 join `users` `u1` on `u1`.`users_seq` = `r`.`reporter_users_seq`
+                 join `users` `u2` on `u2`.`users_seq` = `r`.`reported_users_seq`
+        limit #{limit} offset #{offset}
     </select>
 
     <update id="updateReportHandled" parameterType="_int">
@@ -358,15 +360,17 @@
         <result property="userEmail" column="user_email"/>
     </resultMap>
 
-    <resultMap id="mappingReportDto" type="com.ssafy.daero.admin.dto.ReportDto">
-        <result property="reportSeq" column="reports_seq" />
-        <result property="reporterSeq" column="reporter_users_seq" />
-        <result property="reportedSeq" column="reported_users_seq" />
-        <result property="reportedAt" column="reported_at" />
-        <result property="contentSeq" column="content_seq" />
-        <result property="reportCategorySeq" column="report_categories_seq" />
-        <result property="handledYn" column="handled_yn" />
-        <result property="articleType" column="article_type" />
+    <resultMap id="mappingReportVo" type="com.ssafy.daero.admin.vo.ReportVo">
+        <result property="reportSeq" column="reports_seq"/>
+        <result property="reporterSeq" column="reporter_users_seq"/>
+        <result property="reportedSeq" column="reported_users_seq"/>
+        <result property="reportedAt" column="reported_at"/>
+        <result property="contentSeq" column="content_seq"/>
+        <result property="reportCategorySeq" column="report_categories_seq"/>
+        <result property="handledYn" column="handled_yn"/>
+        <result property="articleType" column="article_type"/>
+        <result property="reporterNickname" column="reporter_nickname"/>
+        <result property="reportedNickname" column="reported_nickname"/>
     </resultMap>
 
     <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">

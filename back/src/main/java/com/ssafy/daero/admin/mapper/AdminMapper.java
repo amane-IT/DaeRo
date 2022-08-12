@@ -1,12 +1,8 @@
 package com.ssafy.daero.admin.mapper;
 
 
-import com.ssafy.daero.admin.dto.ReportDto;
-import com.ssafy.daero.admin.vo.AnswerVo;
-import com.ssafy.daero.admin.vo.FaqVo;
-import com.ssafy.daero.admin.vo.NoticeVo;
-import com.ssafy.daero.admin.vo.TripPlaceVo;
-import com.ssafy.daero.sns.vo.ArticleVo;
+import com.ssafy.daero.admin.vo.*;
+import com.ssafy.daero.sns.vo.ArticleListVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.user.dto.UserDto;
@@ -25,7 +21,7 @@ public interface AdminMapper {
 
     int selectReportCount();
 
-    ArrayList<ReportDto> selectReportList(int page);
+    ArrayList<ReportVo> selectReportList(@Param("limit") int limit, @Param("offset") int offset);
 
     int updateReportHandled(int reportSeq);
 

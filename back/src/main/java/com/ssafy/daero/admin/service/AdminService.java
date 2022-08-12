@@ -2,12 +2,8 @@ package com.ssafy.daero.admin.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.daero.admin.dto.ReportDto;
 import com.ssafy.daero.admin.mapper.AdminMapper;
-import com.ssafy.daero.admin.vo.AnswerVo;
-import com.ssafy.daero.admin.vo.FaqVo;
-import com.ssafy.daero.admin.vo.NoticeVo;
-import com.ssafy.daero.admin.vo.TripPlaceVo;
+import com.ssafy.daero.admin.vo.*;
 import com.ssafy.daero.sns.mapper.SnsMapper;
 import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
@@ -21,9 +17,11 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-
+@SuppressWarnings("FieldCanBeLocal")
 @Service
 public class AdminService {
+    private final int ARTICLE_PAGE_SIZE = 10;
+    private final int REPORT_PAGE_SIZE = 10;
     private final AdminMapper adminMapper;
     private final SnsMapper snsMapper;
     private final TripMapper tripMapper;
@@ -36,8 +34,7 @@ public class AdminService {
     }
 
     public Integer login(String code) {
-        Integer adminSeq = adminMapper.selectAdminByCode(code);
-        return adminSeq;
+        return adminMapper.selectAdminByCode(code);
     }
 
     public Map<String, Object> userList(int page) {
@@ -46,7 +43,7 @@ public class AdminService {
         if (page > totalPage) { return null; }
         ArrayList<UserDto> users = adminMapper.selectUserList(page);
 
-        Map<String, Object> result = new HashMap();
+        Map<String, Object> result = new HashMap<>();
         ArrayList<Map<String, Object>> userList = new ArrayList<>();
         Map<String, Object> user = new HashMap<>();
         for (UserDto uVo :
@@ -68,25 +65,27 @@ public class AdminService {
     }
 
     public Map<String, Object> reportList(int page) {
-        int totalPage = (int) Math.ceil(adminMapper.selectReportCount()/10.0);
+        int totalCount = adminMapper.selectReportCount();
+        int totalPage = (totalCount - 1) / REPORT_PAGE_SIZE + 1;
         if (totalPage == 0) { totalPage = 1; }
         if (page > totalPage) { return null; }
-        ArrayList<ReportDto> reports = adminMapper.selectReportList(page);
+        ArrayList<ReportVo> reports = adminMapper.selectReportList(REPORT_PAGE_SIZE, (page - 1) * REPORT_PAGE_SIZE);
 
         Map<String, Object> result = new HashMap<>();
         ArrayList<Map<String, Object>> reportList = new ArrayList<>();
         Map<String, Object> report = new HashMap<>();
 
-        for (ReportDto rDto :
-                reports) {
-            report.put("report_seq", rDto.getReportSeq());
-            report.put("report_categories_seq", rDto.getReportCategorySeq());
-            report.put("content_type", rDto.getArticleType());
-            report.put("handled_yn", rDto.getHandledYn());
-            report.put("reporter_user_seq", rDto.getReporterSeq());
-            report.put("reported_user_seq", rDto.getReportedSeq());
-            report.put("reported_at", rDto.getReportedAt());
-            report.put("content_seq", rDto.getContentSeq());
+        for (ReportVo reportVo : reports) {
+            report.put("report_seq", reportVo.getReportSeq());
+            report.put("report_categories_seq", reportVo.getReportCategorySeq());
+            report.put("content_type", reportVo.getArticleType());
+            report.put("handled_yn", reportVo.getHandledYn());
+            report.put("reporter_user_seq", reportVo.getReporterSeq());
+            report.put("reported_user_seq", reportVo.getReportedSeq());
+            report.put("reporter_user_nickname", reportVo.getReporterNickname());
+            report.put("reported_user_nickname", reportVo.getReportedNickname());
+            report.put("reported_at", reportVo.getReportedAt());
+            report.put("content_seq", reportVo.getContentSeq());
             reportList.add(report);
             report = new HashMap<>();
         }
@@ -98,8 +97,7 @@ public class AdminService {
 
     public boolean handleReport(int reportSeq) {
         int updated = adminMapper.updateReportHandled(reportSeq);
-        if (updated == 1) { return true; }
-        else { return false; }
+        return updated == 1;
     }
 
     public Map<String, Object> articleDetail(int articleSeq) throws JsonProcessingException {
