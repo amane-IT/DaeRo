@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -47,7 +46,6 @@ class TripNextViewModel : BaseViewModel() {
                 .subscribe({
                     _tripStamps.postValue(it)
                 }, { throwable ->
-                    Log.d("TripNextVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -58,7 +56,6 @@ class TripNextViewModel : BaseViewModel() {
                 .subscribe({
                     _aroundTrips.postValue(it.body())
                 }, { throwable ->
-                    Log.d("TripNextVM_DaeRo", throwable.toString())
                 })
         )
     }
@@ -76,7 +73,7 @@ class TripNextViewModel : BaseViewModel() {
                 transportation
             ).subscribe({ response ->
                 // place_seq 저장
-                if(response.body()!!.place_seq == 0) {
+                if (response.body()!!.place_seq == 0) {
                     nextTripRecommendState.postValue(EMPTY)
                 } else {
                     _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
@@ -84,7 +81,6 @@ class TripNextViewModel : BaseViewModel() {
                 }
                 showProgress.postValue(false)
             }, { throwable ->
-                Log.d("TripNextVM_DaeRo", throwable.toString())
                 showProgress.postValue(false)
                 nextTripRecommendState.postValue(FAIL)
             })
@@ -97,7 +93,6 @@ class TripNextViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
         addDisposable(
@@ -105,7 +100,6 @@ class TripNextViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }

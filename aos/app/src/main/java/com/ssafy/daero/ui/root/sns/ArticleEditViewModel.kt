@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.article.ArticleEditRequestDto
@@ -30,11 +29,9 @@ class ArticleEditViewModel : BaseViewModel() {
         addDisposable(
             snsRepository.article(articleSeq)
                 .subscribe({
-                    Log.d("ArticleEditVM_DaeRo", it.body().toString())
                     makeArticleEditRequest(it.body()!!)
                     articleState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("ArticleEditVM_DaeRo", throwable.toString())
                     articleState.postValue(FAIL)
                 })
         )
@@ -43,7 +40,6 @@ class ArticleEditViewModel : BaseViewModel() {
     fun editArticle() {
         showProgress.postValue(true)
         articleEditRequest?.tripExpenses = makeExpenseString()
-        Log.d("ArticleEditVM_DaeRo", articleEditRequest.toString())
 
         addDisposable(
             snsRepository.editArticle(editArticleSeq, articleEditRequest!!)
@@ -51,7 +47,6 @@ class ArticleEditViewModel : BaseViewModel() {
                     editState.postValue(SUCCESS)
                     showProgress.postValue(false)
                 }, { throwable ->
-                    Log.d("ArticleEditVM_DaeRo", throwable.toString())
                     editState.postValue(FAIL)
                     showProgress.postValue(false)
                 })

@@ -56,7 +56,7 @@
 
             <TextView
                 android:id="@+id/text_item_tripPreference_title"
-                style="@style/BodyWhite"
+                style="@style/BodySemiBoldWhite"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|start"

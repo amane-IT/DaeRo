@@ -71,7 +71,6 @@ class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.frag
                 (requireParentFragment() as RootFragment).changeTripState(TRIP_ING)
             }
 
-            // TODO: 여행 그만두기 기능
             buttonTripTripFollowStop.setOnClickListener {
                 TripCompleteBottomSheetFragment(finishTrip, doneTrip)
                     .show(childFragmentManager, TRIP_COMPLETE_BOTTOM_SHEET)

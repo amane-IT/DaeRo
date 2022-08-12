@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.signup
 
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,7 +12,6 @@ import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
-import kotlin.math.sign
 
 class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fragment_signup_email){
 
@@ -34,7 +32,6 @@ class SignupEmailFragment : BaseFragment<FragmentSignupEmailBinding>(R.layout.fr
             buttonSignupEmailVerification.setOnClickListener {
                 App.userId = editTextSignupEmailEmailId.text.toString()
                 signupEmailViewModel.verifyUserEmail()
-//                findNavController().navigate(R.id.action_signupEmailFragment_to_signupPasswordFragment)
             }
 
             imgSignupEmailBack.setOnClickListener {

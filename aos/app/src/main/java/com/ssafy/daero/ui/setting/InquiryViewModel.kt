@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.service.InquiryRequestDto
@@ -23,7 +22,6 @@ class InquiryViewModel : BaseViewModel() {
                     inquiryList = response.body()!!
                     inquiryState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("FaqVM", throwable.toString())
                     inquiryState.postValue(FAIL)
                 })
         )
@@ -35,7 +33,6 @@ class InquiryViewModel : BaseViewModel() {
                 .subscribe({
                     inquiryState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("commentSelectVM_DaeRo", throwable.toString())
                     inquiryState.postValue(FAIL)
                 })
         )

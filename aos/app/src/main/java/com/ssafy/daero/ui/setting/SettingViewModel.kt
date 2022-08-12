@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseViewModel
@@ -19,15 +18,8 @@ class SettingViewModel : BaseViewModel() {
         addDisposable(
             userRepository.withdrawal(App.prefs.userSeq)
                 .subscribe({
-//                        response ->
-//                    Log.d("탈퇴여부 체크", "withdrawal: ${response.body()}")
-//                    if (response.body()!!) {
-                        withdrawalState.postValue(SUCCESS)
-//                    } else {
-//                        withdrawalState.postValue(FAIL)
-//                    }
+                    withdrawalState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("SettingVM_DaeRo", throwable.toString())
                     withdrawalState.postValue(FAIL)
                 })
         )

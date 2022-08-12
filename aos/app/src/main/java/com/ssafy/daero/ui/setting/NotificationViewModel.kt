@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.setting
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
@@ -25,7 +24,6 @@ class NotificationViewModel : BaseViewModel() {
                 .subscribe({ response ->
                     _notifications.postValue(response)
                 }, { throwable ->
-                    Log.d("NoticeVM", throwable.toString())
                     notificationState.postValue(FAIL)
                 })
         )
@@ -37,7 +35,6 @@ class NotificationViewModel : BaseViewModel() {
                 .subscribe({
                     deleteState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("NoticeVM", throwable.toString())
                     deleteState.postValue(FAIL)
                 })
         )

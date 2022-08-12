@@ -18,7 +18,6 @@ import com.ssafy.daero.utils.constant.USER_SEQ
 import kotlinx.coroutines.launch
 
 class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.fragment_collection){
-    private val TAG = "CollectionFragment_DaeRo"
     private val collectionViewModel : CollectionViewModel by viewModels()
     private val articleViewModel: ArticleViewModel by viewModels()
 

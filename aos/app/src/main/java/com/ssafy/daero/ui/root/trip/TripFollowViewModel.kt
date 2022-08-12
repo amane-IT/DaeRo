@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.trip
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
@@ -27,7 +26,6 @@ class TripFollowViewModel : BaseViewModel() {
                     TripFollowData = it
                     tripFollowState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
                     tripFollowState.postValue(FAIL)
                 })
         )
@@ -39,20 +37,18 @@ class TripFollowViewModel : BaseViewModel() {
                 .subscribe({
                     tripFollowState.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
                     tripFollowState.postValue(FAIL)
                 })
         )
     }
 
-    fun getTripFollow(articleSeq: Int){
+    fun getTripFollow(articleSeq: Int) {
         addDisposable(
             snsRepository.getTripFollow(articleSeq)
-                .subscribe({response ->
+                .subscribe({ response ->
                     resultTripFollow = response.body()!!
                     responseState.postValue(SUCCESS)
-                }, {throwable ->
-                    Log.d("TripFollowVM_DaeRo", throwable.toString())
+                }, { throwable ->
                     responseState.postValue(FAIL)
                 })
         )
@@ -64,7 +60,6 @@ class TripFollowViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
         addDisposable(
@@ -72,7 +67,6 @@ class TripFollowViewModel : BaseViewModel() {
                 .subscribe({
 
                 }, { throwable ->
-                    Log.d("TripInfoVM_DaeRo", throwable.toString())
                 })
         )
     }

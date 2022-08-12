@@ -69,7 +69,6 @@ class SearchArticleMoreAdapter(
             }
         }
         fun bindOnCommentClickListener(onCommentClickListener: (Int, Int) -> Unit) {
-            // TODO: 코멘트 클릭 이벤트 추가
             binding.imageViewArticleMoreComment.setOnClickListener {
                 onCommentClickListener(
                     binding.articleMore?.article_seq ?: 0,

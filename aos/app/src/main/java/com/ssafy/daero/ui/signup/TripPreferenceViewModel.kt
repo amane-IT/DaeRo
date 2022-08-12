@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.signup
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ssafy.daero.application.App
@@ -23,7 +22,7 @@ class TripPreferenceViewModel : BaseViewModel() {
     val responseState_postPreference = MutableLiveData<Int>()
 
     private val _preferences = MutableLiveData<List<TripPreferenceResponseDto>>()
-    val preferences : LiveData<List<TripPreferenceResponseDto>>
+    val preferences: LiveData<List<TripPreferenceResponseDto>>
         get() = _preferences
 
     private val _count = MutableLiveData<Int>()
@@ -54,7 +53,7 @@ class TripPreferenceViewModel : BaseViewModel() {
         )
     }
 
-    fun postPreference(result: List<Int>){
+    fun postPreference(result: List<Int>) {
         _showProgress.postValue(true)
         addDisposable(
             tripPreferenceRepository.postPreference(App.prefs.userSeq, result)
@@ -62,11 +61,11 @@ class TripPreferenceViewModel : BaseViewModel() {
                     _showProgress.postValue(false)
                     responseState_postPreference.postValue(SUCCESS)
                 }, { throwable ->
-                    if(throwable is HttpException){
+                    if (throwable is HttpException) {
                         _showProgress.postValue(false)
-                        if(throwable.code() == 400) {
+                        if (throwable.code() == 400) {
                             responseState_postPreference.postValue(SUCCESS)
-                        } else{
+                        } else {
                             responseState_postPreference.postValue(FAIL)
                         }
                     }
@@ -74,7 +73,7 @@ class TripPreferenceViewModel : BaseViewModel() {
         )
     }
 
-    fun plusCount(){
+    fun plusCount() {
         _count.value = _count.value!!.plus(1)
     }
 
