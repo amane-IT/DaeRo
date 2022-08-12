@@ -223,7 +223,7 @@ public class SnsController {
         int userSeq = this.jwtService.getUserSeq(jwt);
         int totalPage = snsService.getTotalArticlePage(userSeq);
         if (page < 1) page = 1;
-        if (page > totalPage) page = totalPage;
+        if (page > totalPage) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         LinkedList<Map<String, Object>> result = this.snsService.articleList(userSeq, page);
         Map<String, Object> resultMap = new HashMap<>();
         resultMap.put("total_page", totalPage);
@@ -231,7 +231,6 @@ public class SnsController {
         resultMap.put("results", result);
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
-
 
     @GetMapping("/collection")
     public ResponseEntity<Map<String, Object>> collectionGet(@RequestHeader("jwt") String jwt, @RequestParam(defaultValue = "1") String page) {
@@ -252,7 +251,7 @@ public class SnsController {
         int totalPage;
         if (searchVo.getUser() != null) {
             totalPage = this.snsService.getSearchUserTotalPage(searchVo.getUser());
-            if (page > totalPage) page = totalPage;
+            if (page > totalPage) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             LinkedList<Map<String, Object>> searchResult = this.snsService.searchUser(searchVo.getUser(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
@@ -263,14 +262,14 @@ public class SnsController {
             resultMap.put("place", result.get("place"));
         } else if (searchVo.getContent() != null) {
             totalPage = this.snsService.getSearchContentTotalPage(searchVo.getContent());
-            if (page > totalPage) page = totalPage;
+            if (page > totalPage) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             LinkedList<Map<String, Object>> searchResult = this.snsService.searchContent(searchVo.getContent(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
             resultMap.put("results", searchResult);
         } else if (searchVo.getPlace() != null) {
             totalPage = this.snsService.getSearchPlaceTotalPage(searchVo.getPlace());
-            if (page > totalPage) page = totalPage;
+            if (page > totalPage) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             LinkedList<Map<String, Object>> searchResult = this.snsService.searchPlace(searchVo.getPlace(), page, userSeq);
             resultMap.put("total_page", totalPage);
             resultMap.put("page", page);
