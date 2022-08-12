@@ -28,6 +28,7 @@ public class ImageController {
         ImageVo imageVo = this.imageService.uploadFile(file);
         switch (imageVo.getResult()) {
             case SUCCESS:
+                System.out.println(imageVo.getDownloadUrl());
                 resultMap.put("image_url", imageVo.getDownloadUrl());
                 return new ResponseEntity<>(resultMap, HttpStatus.OK);
             case SERVER_ERROR:

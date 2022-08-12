@@ -66,5 +66,12 @@ public class JwtService {
         return userInfo;
     }
 
+    public int getUserSeq(String jwt) {
+        return Integer.parseInt(decodeJwt(jwt).get("user_seq"));
+    }
+
+    public String getUserEmail(String jwt) {
+        return decodeJwt(jwt).get("user_email");
+    }
 }
 

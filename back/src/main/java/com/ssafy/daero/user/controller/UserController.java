@@ -5,6 +5,7 @@ import com.ssafy.daero.user.service.JwtService;
 import com.ssafy.daero.user.service.UserService;
 import com.ssafy.daero.user.vo.LoginVo;
 import com.ssafy.daero.user.vo.SignupVo;
+import com.ssafy.daero.user.vo.UserVo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 @RestController
@@ -126,14 +128,24 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> loginPost(@RequestBody LoginVo loginVO) {
-        UserDto userDto = userService.login(loginVO);
+        UserVo userVo = userService.login(loginVO);
         Map<String, Object> response = new HashMap<>();
-        if (userDto != null) {
-            response.put("user_seq", userDto.getUserSeq());
-            response.put("user_nickname", userDto.getNickname());
-            String jwt = jwtService.create(userDto.getUserSeq(), loginVO.getId());
+        if (userVo == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+
+        if (userVo.getResult() == UserVo.UserVoResult.SUCCESS || userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
+            response.put("user_seq", userVo.getUserSeq());
+            response.put("user_nickname", userVo.getNickname());
+            String jwt = jwtService.create(userVo.getUserSeq(), loginVO.getId());
             response.put("jwt", jwt);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            if (userVo.getResult() == UserVo.UserVoResult.SUCCESS) {
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
+            }
+
+        } else if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -152,12 +164,18 @@ public class UserController {
         if (userSeq <= 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        UserDto userDto = userService.loginJwt(userSeq);
-        if (userDto == null) {
+        UserVo userVo = userService.loginJwt(userSeq);
+        if (userVo == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        if (userVo.getResult() == UserVo.UserVoResult.SUSPENDED_USER) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         resultMap.put("user_seq", userSeq);
-        resultMap.put("user_nickname", userDto.getNickname());
+        resultMap.put("user_nickname", userVo.getNickname());
+        if (userVo.getResult() == UserVo.UserVoResult.NO_FAVOR) {
+            return new ResponseEntity<>(resultMap, HttpStatus.ACCEPTED);
+        }
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
@@ -202,18 +220,45 @@ public class UserController {
     }
 
     @PutMapping("/{user_seq}/quit")
-    public ResponseEntity<String> leaveUser(@PathVariable int user_seq) {
+    public ResponseEntity<Boolean> leaveUser(@PathVariable int user_seq) {
         boolean res = userService.leaveUser(user_seq);
         if (res) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(true, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(false,HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/{user_seq}/preference")
+    public ResponseEntity<LinkedList<Map<String, Object>>> preferenceGet() {
+        LinkedList<Map<String, Object>> resultMap = this.userService.sendPreference();
+        return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @PostMapping("/{user_seq}/preference")
     public ResponseEntity<String> preferencePost(@PathVariable("user_seq") int userSeq, @RequestBody ArrayList<Integer> placeArray) {
-        userService.setPreference(userSeq, placeArray);
+        if (userService.setPreference(userSeq, placeArray)) {
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
+    @GetMapping("/{user_seq}/badges")
+    public ResponseEntity<Map<String, Object>> badgeGet(@PathVariable("user_seq") int userSeq) {
+        Map<String, Object> res = userService.badgeGet(userSeq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @PutMapping("/{user_seq}/fcm-token")
+    public ResponseEntity<String> updateFcmToken(@RequestHeader("jwt") String jwt, @PathVariable("user_seq") int userSeq, @RequestBody Map<String, String> req) {
+        Map<String, String> currentUser = jwtService.decodeJwt(jwt);
+        if (Integer.parseInt(currentUser.get("user_seq")) == userSeq) {
+            boolean res = userService.updateFcmToken(userSeq, req.get("token"));
+            if (res) { return new ResponseEntity<>(HttpStatus.OK); }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
 }

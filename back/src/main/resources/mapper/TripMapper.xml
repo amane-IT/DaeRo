@@ -3,6 +3,32 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.trip.mapper.TripMapper">
+    <insert id="insertArticle" parameterType="com.ssafy.daero.trip.vo.TripVo">
+        insert into `articles` (title, trips_seq, created_at, updated_at, open_yn, thumbnail_url)
+        values (#{title}, #{tripSeq}, #{createdAt}, #{createdAt}, #{expose}, #{thumbnailUrl})
+    </insert>
+
+    <insert id="insertTrip" parameterType="com.ssafy.daero.trip.vo.TripVo">
+        insert into `trips` (users_seq, trip_comment, trip_expenses, trip_rating)
+        VALUES (#{userSeq}, #{tripComment}, #{tripExpenses}, #{rating})
+        <selectKey keyProperty="tripSeq" resultType="_int">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <insert id="insertTripDay" parameterType="com.ssafy.daero.trip.vo.TripDayVo">
+        insert into `trip_days` (trip, date, day_comment)
+        VALUES (#{tripSeq}, #{datetime}, #{dayComment})
+        <selectKey keyProperty="tripDaySeq" resultType="_int">
+            select last_insert_id()
+        </selectKey>
+    </insert>
+
+    <insert id="insertTripStamp" parameterType="com.ssafy.daero.trip.vo.TripStampVo">
+        insert into trip_stamps (trip_seq, trip_days_seq, trip_places_seq, image_url, place_satisfaction_YN)
+        values (#{tripSeq}, #{tripDaySeq}, #{tripPlace}, #{url}, #{satisfaction});
+    </insert>
+
     <select id="selectByStampSeq" parameterType="_int" resultMap="mappingTripStampDto">
         SELECT *
         FROM trip_stamps
@@ -102,10 +128,10 @@
     </select>
 
     <select id="selectOtherAlbumListByUserSeq" resultMap="mappingAlbumVo">
-        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        SELECT album.title, album.articles_seq, album.thumbnail_url, album.open_yn, album.like_yn
         FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row,
                      a.title,
-                     a.trips_seq,
+                     a.articles_seq,
                      a.thumbnail_url,
                      a.open_yn,
                      exists(select *
@@ -122,10 +148,10 @@
     </select>
 
     <select id="selectMyAlbumListByUserSeq" resultMap="mappingAlbumVo">
-        SELECT album.title, album.trips_seq, album.thumbnail_url, album.open_yn, album.like_yn
+        SELECT album.title, album.articles_seq, album.thumbnail_url, album.open_yn, album.like_yn
         FROM (SELECT row_number() over (ORDER BY a.created_at DESC) AS row,
                      a.title,
-                     a.trips_seq,
+                     a.articles_seq,
                      a.thumbnail_url,
                      a.open_yn,
                      exists(select *
@@ -204,7 +230,7 @@
     </resultMap>
 
     <resultMap id="mappingAlbumVo" type="com.ssafy.daero.trip.vo.AlbumVo">
-        <result property="tripSeq" column="trips_seq"/>
+        <result property="articleSeq" column="articles_seq"/>
         <result property="imageUrl" column="thumbnail_url"/>
         <result property="title" column="title"/>
         <result property="expose" column="open_yn"/>

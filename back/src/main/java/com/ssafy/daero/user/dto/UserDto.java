@@ -3,6 +3,8 @@ package com.ssafy.daero.user.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Getter
 @Setter
 public class UserDto {
@@ -18,4 +20,5 @@ public class UserDto {
     private String createdAt;
     private char delYn;
     private String fcmToken;
+    private Date suspendedExpiry;
 }

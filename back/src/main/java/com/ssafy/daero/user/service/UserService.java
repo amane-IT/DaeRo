@@ -1,5 +1,6 @@
 package com.ssafy.daero.user.service;
 
+import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.vo.RecommendTagVo;
 import com.ssafy.daero.user.dto.EmailVerificationDto;
 import com.ssafy.daero.user.dto.PasswordResetDto;
@@ -9,6 +10,7 @@ import com.ssafy.daero.user.vo.ChangePasswordVo;
 import com.ssafy.daero.user.vo.LoginVo;
 import com.ssafy.daero.user.vo.SignupVo;
 import com.ssafy.daero.common.util.CryptoUtil;
+import com.ssafy.daero.user.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,14 +18,12 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class UserService {
-    private final String URL_PREFIX = "http://i7d110.p.ssafy.io/";
+    private final String URL_PREFIX = "http://i7d110.p.ssafy.io";
     private final String NO_REPLY = "no-reply@daero.com";
 
     private final UserMapper userMapper;
@@ -36,6 +36,10 @@ public class UserService {
     }
 
     public SignupVo signup(SignupVo signupVo) {
+        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        System.out.println(today);
+        signupVo.setCreatedAt(today);
+        System.out.println(signupVo.getCreatedAt());
         if (userMapper.updateUser(signupVo) != 1) {
             signupVo.setResult(SignupVo.SignupResult.NO_SUCH_USER);
             return signupVo;
@@ -50,19 +54,47 @@ public class UserService {
         return signupVo;
     }
 
-    public UserDto login(LoginVo loginVO) {
-        UserDto userDto = userMapper.selectById(loginVO.getId());
-        // 존재하는 유저고, 비밀번호도 맞고, 이용정지당한 유저가 아니고, 이메일 인증을 완료한 유저
-        if (userDto.getDelYn() == 'n' && Objects.equals(userDto.getPassword(), loginVO.getHashedPassword())
-                && userDto.getSuspendedYn() == 'n' && userDto.getEmailVerifiedYn() == 'y') {
-            return userDto;
+    public UserVo login(LoginVo loginVO) {
+        UserVo userVo = userMapper.selectById(loginVO.getId());
+        // 아이디가 존재하지 않는 유저일 경우
+        if (userVo == null) { return null; }
+        Date now = new Date();
+        // 탈퇴하지 않는 유저고, 비밀번호도 맞고, 이메일 인증을 완료한 유저
+        if (userVo.getDelYn() == 'n' && Objects.equals(userVo.getPassword(), loginVO.getHashedPassword())
+                && userVo.getEmailVerifiedYn() == 'y') {
+            // 정지당한 유저
+            if (userVo.getSuspendedYn() == 'y' && userVo.getSuspendedExpiry().after(now)) {
+                userVo.setResult(UserVo.UserVoResult.SUSPENDED_USER);
+            }
+            else if (userMapper.selectUserFavor(userVo.getUserSeq()) == 0) {
+                userVo.setResult(UserVo.UserVoResult.NO_FAVOR);
+            }
+            else {
+                // 정지 만료 기간이 지났거나 정지당하지 않은 유저
+                userVo.setResult(UserVo.UserVoResult.SUCCESS);
+            }
         } else {
-            return null;
+            // 비밀번호가 틀린 경우
+            userVo.setResult(UserVo.UserVoResult.FAILURE);
         }
+        return userVo;
     }
 
-    public UserDto loginJwt(int userSeq) {
-        return userMapper.selectByUserSeq(userSeq);
+    public UserVo loginJwt(int userSeq) {
+        UserVo userVo = userMapper.selectByUserSeq(userSeq);
+        Date now = new Date();
+        // 정지당한 유저
+        if (userVo.getSuspendedYn() == 'y' && userVo.getSuspendedExpiry().after(now)) {
+            userVo.setResult(UserVo.UserVoResult.SUSPENDED_USER);
+        }
+        else if (userMapper.selectUserFavor(userVo.getUserSeq()) == 0) {
+            userVo.setResult(UserVo.UserVoResult.NO_FAVOR);
+        }
+        else {
+            // 정지 만료 기간이 지났거나 정지당하지 않은 유저
+            userVo.setResult(UserVo.UserVoResult.SUCCESS);
+        }
+        return userVo;
     }
 
     public boolean findId(String email) {
@@ -193,7 +225,10 @@ public class UserService {
         return true;
     }
 
-    public void setPreference(int userSeq, ArrayList<Integer> placeArray) {
+    public boolean setPreference(int userSeq, ArrayList<Integer> placeArray) {
+        if (this.userMapper.selectPreferenceCountByUserSeq(userSeq) != 0) {
+            return false;
+        }
         ArrayList<Integer> tagArray = userMapper.selectPlaceTagAll();
         for (int tagSeq : tagArray) {
             userMapper.insertUserFavor(userSeq, tagSeq);
@@ -205,5 +240,46 @@ public class UserService {
                 userMapper.updateUserFavor(userSeq, tag);
             }
         }
+        return true;
+    }
+
+    public LinkedList<Map<String, Object>> sendPreference() {
+        ArrayList<TripPlaceDto> tripPlaceDtos = this.userMapper.selectPreferencePlace();
+        LinkedList<Map<String, Object>> result = new LinkedList<>();
+        for (TripPlaceDto tripPlaceDto : tripPlaceDtos) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("place_seq", tripPlaceDto.getTripPlaceSeq());
+            map.put("place_name", tripPlaceDto.getPlaceName());
+            map.put("image_url", tripPlaceDto.getImageUrl());
+            result.add(map);
+        }
+        return result;
+    }
+
+    public Map<String, Object> badgeGet(int userSeq) {
+        UserDto userDto = userMapper.selectByUserSeq(userSeq);
+        if (userDto == null) { return null; }
+        ArrayList<Map<String, Object>> badges = userMapper.selectBadgeByUserSeq(userSeq);
+        Map<String, Object> badgeList = new HashMap<>();
+        String[] regions = {"seoul", "incheon", "busan", "daegu", "gwangju", "jeonbuk", "daejeon", "chungbuk", "gangwon", "jeju"};
+        int cnt = 0;
+        int total = 0;
+        for(String region:regions) {
+            if (cnt < badges.size() && Objects.equals((String) badges.get(cnt).get("region_name"), region)) {
+                badgeList.put(region, badges.get(cnt).get("count"));
+                total += (int) badges.get(cnt).get("count");
+                cnt++;
+            }
+            else {
+                badgeList.put(region, 0);
+            }
+        }
+        badgeList.put("total", total);
+        return badgeList;
+    }
+
+    public boolean updateFcmToken(int userSeq, String token) {
+        int updated = this.userMapper.updateFcmToken(userSeq, token);
+        return updated == 1;
     }
 }

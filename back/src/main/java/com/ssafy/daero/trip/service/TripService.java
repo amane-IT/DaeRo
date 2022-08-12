@@ -1,16 +1,19 @@
 package com.ssafy.daero.trip.service;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ssafy.daero.trip.dto.*;
 import com.ssafy.daero.trip.mapper.TripMapper;
-import com.ssafy.daero.trip.vo.AlbumVo;
-import com.ssafy.daero.trip.vo.JourneyVo;
-import com.ssafy.daero.trip.vo.RecommendTagVo;
+import com.ssafy.daero.trip.vo.*;
 import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.dto.UserFavorDto;
 import com.ssafy.daero.user.mapper.UserMapper;
 import com.ssafy.daero.common.util.DistanceUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -21,6 +24,7 @@ public class TripService {
     private final int CAR_SPEED = 50;
     private final int WALK_SPEED = 2;
 
+    @Autowired
     public TripService(TripMapper tripMapper, UserMapper userMapper) {
         this.userMapper = userMapper;
         this.tripMapper = tripMapper;
@@ -61,8 +65,7 @@ public class TripService {
         if (who == 'n') {
             jList = tripMapper.selectOtherJourneyListByUserSeq(userSeq, startDate, endDate);
         }
-        else {
-            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
+        else {            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
         }
         if (jList.size() == 0) {
             journeyVo.setResult(JourneyVo.ProfileResult.NO_CONTENT);
@@ -115,7 +118,7 @@ public class TripService {
         for (AlbumVo aVo :
                 albumVos) {
             album.put("expose", aVo.getExpose());
-            album.put("trip_seq", aVo.getTripSeq());
+            album.put("trip_seq", aVo.getArticleSeq());
             album.put("image_url", aVo.getImageUrl());
             album.put("title", aVo.getTitle());
             if (aVo.getLikeYn() == 1) {
@@ -132,35 +135,27 @@ public class TripService {
         
     }
 
-    private int equalizeFavor(int userSeq) {
+    public int equalizeAndRandomTag(int userSeq) {
         // 태그별 점수 총합 구하기
         ArrayList<UserFavorDto> userFavorDtoArray = tripMapper.selectUserFavorByUserSeq(userSeq);
         int scoreSum = 0;
         for (UserFavorDto userFavorDto : userFavorDtoArray) {
             scoreSum += userFavorDto.getScore();
         }
-        // 총합이 200 미만이면 그냥 사용
-        if (scoreSum < 200) {
-            return scoreSum;
-        }
         // 총합이 200 이상이면 총합 100 수준으로 평준화
-        double ratio = scoreSum / 100.0;
-        for (UserFavorDto userFavorDto : userFavorDtoArray) {
-            int score = (int)(userFavorDto.getScore() / ratio);
-            userFavorDto.setScore(score);
+        if (scoreSum > 200) {
+            double ratio = scoreSum / 100.0;
+            for (UserFavorDto userFavorDto : userFavorDtoArray) {
+                int score = (int)(userFavorDto.getScore() / ratio);
+                userFavorDto.setScore(score);
+            }
+            // 평준화한 점수 DB에 갱신하고 총합 반환
+            scoreSum = 0;
+            for (UserFavorDto userFavorDto : userFavorDtoArray) {
+                tripMapper.updateUserFavor(userFavorDto);
+                scoreSum += userFavorDto.getScore();
+            }
         }
-        // 평준화한 점수 DB에 갱신하고 총합 반환
-        scoreSum = 0;
-        for (UserFavorDto userFavorDto : userFavorDtoArray) {
-            tripMapper.updateUserFavor(userFavorDto);
-            scoreSum += userFavorDto.getScore();
-        }
-        return scoreSum;
-    }
-
-    public int recommendByRandom(int userSeq) {
-        // 점수 평준화
-        int scoreSum = equalizeFavor(userSeq);
         // 현재 점수 목록 가져오기
         ArrayList<UserFavorDto> favors = tripMapper.selectUserFavorByUserSeq(userSeq);
         // 태그순 정렬해서 큐에 점수만큼 저장.
@@ -178,6 +173,12 @@ public class TripService {
             select -= favorQueue.poll();
             tag++;
         } while (select > 0 && !favorQueue.isEmpty());
+        return tag;
+    }
+
+    public int recommendByRandom(int userSeq) {
+        // 점수 평준화
+        int tag = equalizeAndRandomTag(userSeq);
         // 선택된 태그에서 여행지 검색
         ArrayList<RecommendTagVo> recommendPool = tripMapper.selectPlaceByTag(tag);
         int len = recommendPool.size();
@@ -245,6 +246,10 @@ public class TripService {
         return recommendPool.get(selected).getTripPlaceSeq();
     }
 
+    public String placeImage(int placeSeq) {
+        return this.tripMapper.selectPlaceByPlaceSeq(placeSeq).getImageUrl();
+    }
+
     public LinkedList<Map<String, Object>> nearbyPlace(int placeSeq) {
         final int NEARBY_DISTANCE = 10;
         // 현재 위치 가져오기
@@ -288,5 +293,61 @@ public class TripService {
             resultList.add(map);
         }
         return resultList;
+    }
+
+    public void writeArticle(TripVo tripVo, String[] urls) {
+        this.tripMapper.insertTrip(tripVo);
+        int tripSeq = tripVo.getTripSeq();
+        tripVo.setThumbnailUrl(urls[tripVo.getThumbnailIndex()]);
+        tripVo.setCreatedAt(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+        int imageIndex = 0;
+        for (TripDayVo tripDayVo : tripVo.getRecords()) {
+            tripDayVo.setTripSeq(tripSeq);
+            this.tripMapper.insertTripDay(tripDayVo);
+            int tripDaySeq = tripDayVo.getTripDaySeq();
+            for (TripStampVo tripStampVo : tripDayVo.getTripStamps()) {
+                tripStampVo.setTripSeq(tripSeq);
+                tripStampVo.setTripDaySeq(tripDaySeq);
+                tripStampVo.setUrl(urls[imageIndex]);
+                imageIndex++;
+                this.tripMapper.insertTripStamp(tripStampVo);
+            }
+        }
+        this.tripMapper.insertArticle(tripVo);
+    }
+
+    public TripVo writeJsonParser(String jsonString) {
+        JsonObject tripJson = JsonParser.parseString(jsonString).getAsJsonObject();
+        TripVo tripVo = new TripVo();
+        tripVo.setTitle(tripJson.get("title").getAsString());
+        tripVo.setTripComment(tripJson.get("tripComment").getAsString());
+        tripVo.setTripExpenses(tripJson.get("tripExpenses").getAsString());
+        tripVo.setRating(tripJson.get("rating").getAsInt());
+        tripVo.setExpose(tripJson.get("expose").getAsString());
+        tripVo.setThumbnailIndex(tripJson.get("thumbnailIndex").getAsInt());
+
+        JsonArray tripDayJsonArray = tripJson.get("records").getAsJsonArray();
+        LinkedList<TripDayVo> tripDayVos = new LinkedList<>();
+        for (int i = 0; i < tripDayJsonArray.size(); i++) {
+            JsonObject tripDay = tripDayJsonArray.get(i).getAsJsonObject();
+            TripDayVo tripDayVo = new TripDayVo();
+            tripDayVo.setDatetime(tripDay.get("datetime").getAsString());
+            tripDayVo.setDayComment(tripDay.get("dayComment").getAsString());
+
+            JsonArray tripStampJsonArray = tripDay.get("tripStamps").getAsJsonArray();
+            LinkedList<TripStampVo> tripStampVos = new LinkedList<>();
+            for (int j = 0; j < tripStampJsonArray.size(); j++) {
+                JsonObject tripStamp = tripStampJsonArray.get(j).getAsJsonObject();
+                TripStampVo tripStampVo = new TripStampVo();
+                tripStampVo.setSatisfaction(tripStamp.get("satisfaction").getAsString());
+                tripStampVo.setTripPlace(tripStamp.get("tripPlaceSeq").getAsInt());
+                tripStampVos.add(tripStampVo);
+            }
+            tripDayVo.setTripStamps(tripStampVos);
+            tripDayVos.add(tripDayVo);
+        }
+        tripVo.setRecords(tripDayVos);
+        System.out.println(tripVo.getRecords().size());
+        return tripVo;
     }
 }

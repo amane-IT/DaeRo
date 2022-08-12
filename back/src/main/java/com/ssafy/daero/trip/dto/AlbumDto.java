@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AlbumDto {
-    private int tripSeq;
+    private int articleSeq;
     private String imageUrl;
     private String title;
     private char expose;

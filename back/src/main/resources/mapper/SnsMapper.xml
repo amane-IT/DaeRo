@@ -3,24 +3,53 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ssafy.daero.sns.mapper.SnsMapper">
+    <insert id="insertBlock">
+        insert into `blocks` (`blocked_users_seq`, `blocker_users_seq`)
+        select #{userSeq}, #{blocker}
+        from dual
+        where not exists(select *
+                         from `blocks`
+                         where `blocked_users_seq` = #{userSeq}
+                           and `blocker_users_seq` = #{blocker})
+    </insert>
+
+    <insert id="insertHide">
+        insert into `hide` (article_seq, user_seq)
+        select #{articleSeq}, #{userSeq}
+        from dual
+        where not exists(select *
+                         from `hide`
+                         where `article_seq` = #{articleSeq}
+                           and `user_seq` = #{userSeq})
+    </insert>
+
     <select id="selectArticleAndTripInfoByArticleSeq" parameterType="_int" resultMap="mappingArticleVo">
-        SELECT a.trips_seq, a.title, (SELECT COUNT(*)
-                                     FROM daero.likes l
-                                     WHERE l.articles_seq=a.articles_seq
-                                    ) AS like_count, (SELECT COUNT(*)
-                                                      FROM daero.replies r
-                                                      WHERE r.articles_seq=a.articles_seq) AS reply_count, (SELECT t.users_seq
-                                                                                                            FROM daero.trips t
-                                                                                                            WHERE t.trips_seq=a.trips_seq) AS user_seq,
+        SELECT a.trips_seq,
+               a.title,
+               a.created_at,
+               (SELECT `like_count`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq = a.articles_seq) AS like_count,
+               (SELECT `open_yn`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq = a.articles_seq) AS open_yn,
+               (SELECT `reply_count`
+                FROM daero.v_users_trips_articles va
+                WHERE va.articles_seq = a.articles_seq) AS reply_count,
+               (SELECT t.users_seq
+                FROM daero.trips t
+                WHERE t.trips_seq = a.trips_seq)        AS user_seq,
                (SELECT t.trip_comment
                 FROM daero.trips t
-                WHERE t.trips_seq=a.trips_seq) AS trip_comment, (SELECT t.trip_expenses
-                                                                 FROM daero.trips t
-                                                                 WHERE t.trips_seq=a.trips_seq) AS trip_expenses, (SELECT t.trip_rating
-                                                                                                                   FROM daero.trips t
-                                                                                                                   WHERE t.trips_seq=a.trips_seq) AS trip_rating
+                WHERE t.trips_seq = a.trips_seq)        AS trip_comment,
+               (SELECT t.trip_expenses
+                FROM daero.trips t
+                WHERE t.trips_seq = a.trips_seq)        AS trip_expenses,
+               (SELECT t.trip_rating
+                FROM daero.trips t
+                WHERE t.trips_seq = a.trips_seq)        AS trip_rating
         FROM daero.articles a
-        WHERE articles_seq=#{articleSeq}
+        WHERE articles_seq = #{articleSeq}
     </select>
 
     <select id="selectStampAndDayInfoByTripSeq" parameterType="_int" resultMap="mappingStampVo">
@@ -28,19 +57,19 @@
         FROM daero.trip_days td
                  LEFT JOIN trip_stamps ts on td.trip_days_seq = ts.trip_days_seq
                  LEFT JOIN trip_places tp on ts.trip_places_seq = tp.trip_places_seq
-        WHERE td.trip=#{tripSeq}
+        WHERE td.trip = #{tripSeq}
     </select>
 
     <select id="selectUserByUserSeq" parameterType="_int" resultType="java.util.Map">
         SELECT u.nickname, u.profile_image_link
         FROM daero.users u
-        WHERE users_seq=#{userSeq}
+        WHERE users_seq = #{userSeq}
     </select>
 
     <select id="selectPlaceTagsByArticleSeq" parameterType="_int" resultType="_int">
         SELECT place_tag_seq
         FROM daero.article_tags
-        WHERE articles_seq=#{articleSeq}
+        WHERE articles_seq = #{articleSeq}
     </select>
 
     <select id="selectUserSeqByArticleSeq" parameterType="_int" resultType="java.lang.Integer">
@@ -48,100 +77,106 @@
         FROM daero.trips t
         WHERE t.trips_seq IN (SELECT a.trips_seq
                               FROM daero.articles a
-                              WHERE a.articles_seq=#{articleSeq}
-        )
+                              WHERE a.articles_seq = #{articleSeq})
     </select>
 
     <delete id="deleteArticleByArticleSeq" parameterType="_int">
-        DELETE FROM daero.articles WHERE articles_seq=#{articleSeq}
+        DELETE
+        FROM `a`,
+             `h`
+            using
+             `articles` as `a`
+                 left join `hide` `h` on `a`.`articles_seq` = `h`.`article_seq`
+        WHERE `a`.`articles_seq` = #{articleSeq}
     </delete>
 
-    <delete id="deleteReplyByArticleSeq" parameterType="_int">
-        DELETE FROM daero.replies WHERE articles_seq=#{articleSeq}
-    </delete>
-
-    <delete id="deleteArticleTagByArticleSeq" parameterType="_int">
-        DELETE FROM daero.article_tags WHERE articles_seq=#{articleSeq}
-    </delete>
-
-    <select id="selectReplyListByArticleSeq" resultMap="mappingReplyVo">
-        SELECT *
-        FROM (SELECT row_number() over (ORDER BY r.created_at ASC) AS row, replies_seq, users_seq, content, created_at, updated_at,
-                    (SELECT COUNT(*)
-                    FROM daero.replies
-                    WHERE rereply_parent=r.replies_seq) AS rereply_count,
-                    (SELECT u.nickname
-                    FROM daero.users u
-                    WHERE users_seq= r.users_seq) AS nickname,
-                    (SELECT u.profile_image_link
-                    FROM daero.users u
-                    WHERE users_seq= r.users_seq) AS profile_url
-            FROM daero.replies r
-            WHERE articles_seq = #{articleSeq} AND rereply_parent IS NULL) AS reply
-        WHERE (#{page}-1)*10 &lt; reply.row
-        AND reply.row &lt;(#{page}*10) + 1
+    <select id="selectReplyListByArticleSeq" resultType="com.ssafy.daero.sns.vo.ReplyVo">
+        SELECT `r`.`replies_seq`                          as `replySeq`,
+               `r`.`articles_seq`                         as `articleSeq`,
+               `r`.`users_seq`                            as `userSeq`,
+               `r`.`content`                              as `content`,
+               `r`.`created_at`                           as `createdAt`,
+               `r`.`updated_at`                           as `updatedAt`,
+               (select count(0)
+                from `replies`
+                where `rereply_parent` = `r`.replies_seq) as `rereplyCount`,
+               `r`.`rereply_parent`                       as `rereplyParent`,
+               `u`.`nickname`                             as `nickname`,
+               `u`.`profile_image_link`                   as `profileUrl`
+        from `replies` `r`
+                 left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
+        where `articles_seq` = #{articleSeq}
+          and `rereply_parent` is null
+          and `r`.`users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectUserSeqByReplySeq" parameterType="_int" resultType="java.lang.Integer">
         SELECT users_seq
         FROM daero.replies
-        WHERE replies_seq=#{replySeq}
+        WHERE replies_seq = #{replySeq}
     </select>
 
     <select id="selectArticleByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.articles
-        WHERE articles_seq=#{articleSeq}
+        WHERE articles_seq = #{articleSeq}
     </select>
 
     <insert id="insertReply">
         INSERT INTO daero.replies(articles_seq, users_seq, content, created_at, updated_at)
-        VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
+        VALUES (#{articleSeq}, #{userSeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'),
+                DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </insert>
 
     <update id="updateReplyByReplySeq">
-        UPDATE daero.replies SET content=#{content}, updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')  WHERE replies_seq=#{replySeq}
+        UPDATE daero.replies
+        SET content=#{content},
+            updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')
+        WHERE replies_seq = #{replySeq}
     </update>
 
     <delete id="deleteReplyByReplySeq" parameterType="_int">
-        DELETE FROM daero.replies WHERE replies_seq=#{replySeq} OR rereply_parent=#{replySeq}
+        DELETE
+        FROM daero.replies
+        WHERE replies_seq = #{replySeq}
+           OR rereply_parent = #{replySeq}
     </delete>
 
-    <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
-        SELECT *
-        FROM (SELECT row_number()                       over (ORDER BY r.created_at ASC) AS row, replies_seq,
-                     users_seq,
-                     content,
-                     created_at,
-                     updated_at,
-                     (SELECT u.nickname
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq) AS nickname,
-                     (SELECT u.profile_image_link
-                      FROM daero.users u
-                      WHERE users_seq = r.users_seq) AS profile_url
-              FROM daero.replies r
-              WHERE rereply_parent = #{replySeq}) AS reply
-        WHERE (#{page} - 1) * 10 &lt; reply.row
-          AND reply.row &lt; (#{page} * 10) + 1;
-
+    <select id="selectRereplyListByReplySeq" resultType="com.ssafy.daero.sns.vo.ReplyVo">
+        select `r`.`replies_seq`        as `replySeq`,
+               `r`.`articles_seq`       as `articleSeq`,
+               `r`.`users_seq`          as `userSeq`,
+               `r`.`content`            as `content`,
+               `r`.`created_at`         as `createdAt`,
+               `r`.`updated_at`         as `updatedAt`,
+               `r`.`rereply_parent`     as `rereplyParent`,
+               `u`.`nickname`           as `nickname`,
+               `u`.`profile_image_link` as `profileUrl`
+        from `replies` `r`
+                 left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
+        where `rereply_parent` = #{replySeq}
+          and `r`.`users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectReplyByReplySeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
-        WHERE replies_seq=#{replySeq}
+        WHERE replies_seq = #{replySeq}
     </select>
 
     <insert id="insertRereply">
         INSERT INTO daero.replies(articles_seq, users_seq, rereply_parent, content, created_at, updated_at)
-        VALUES (#{articleSeq}, #{userSeq}, #{replySeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'), DATE_FORMAT(now(), '%Y-%m-%d %T'))
+        VALUES (#{articleSeq}, #{userSeq}, #{replySeq}, #{content}, DATE_FORMAT(now(), '%Y-%m-%d %T'),
+                DATE_FORMAT(now(), '%Y-%m-%d %T'))
     </insert>
 
     <select id="selectArticleLikeByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.likes
-        WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
+        WHERE users_seq = #{userSeq}
+          AND articles_seq = #{articleSeq}
     </select>
 
     <insert id="insertLike">
@@ -150,43 +185,68 @@
     </insert>
 
     <delete id="deleteLike">
-        DELETE FROM daero.likes WHERE users_seq=#{userSeq} AND articles_seq=#{articleSeq}
+        DELETE
+        FROM daero.likes
+        WHERE users_seq = #{userSeq}
+          AND articles_seq = #{articleSeq}
+    </delete>
+
+    <delete id="deleteLikeByAuthor">
+        delete
+        from `likes`
+        where `users_seq` = #{userSeq}
+          and `articles_seq` in (select `articles_seq`
+                                 from `v_users_trips_articles` `v`
+                                 where `v`.`users_seq` = #{author})
     </delete>
 
     <select id="selectLikeUserListByArticleSeq" resultMap="mappingUserVo">
         SELECT *
-        FROM (SELECT row_number()                       over (ORDER BY nickname ASC) AS row,
-        users_seq, nickname, profile_image_link
-        FROM daero.users u
-        WHERE u.users_seq IN (SELECT l.users_seq
-        FROM daero.likes l
-        WHERE articles_seq=#{articleSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-                             AND user.row &lt; (#{page} * 10) + 1
+        FROM (SELECT row_number() over (ORDER BY nickname) AS row,
+                     users_seq,
+                     nickname,
+                     profile_image_link
+              FROM daero.users u
+              WHERE u.users_seq IN (SELECT l.users_seq
+                                    FROM daero.likes l
+                                    WHERE articles_seq = #{articleSeq})) AS user
+        limit #{limit} offset #{offset}
     </select>
 
     <insert id="insertReport">
-        INSERT INTO daero.reports(reporter_users_seq, reported_users_seq, reported_at, report_url, report_categories_seq, article_type)
-        VALUES (#{reporterUserSeq}, #{reportedUserSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'), #{articleSeq}, #{reportSeq}, #{type})
+        INSERT INTO daero.reports(reporter_users_seq, reported_users_seq, reported_at, content_seq,
+                                  report_categories_seq, article_type)
+        VALUES (#{reporterUserSeq}, #{reportedUserSeq}, DATE_FORMAT(now(), '%Y-%m-%d %T'), #{articleSeq}, #{reportSeq},
+                #{type})
     </insert>
 
     <select id="selectReportArticleByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
         WHERE reporter_users_seq = #{userSeq}
-          AND report_url = #{articleSeq};
+          AND content_seq = #{articleSeq}
     </select>
 
     <select id="selectReportReplyByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.reports
-        WHERE reporter_users_seq=#{userSeq} AND report_url=#{replySeq}
+        WHERE reporter_users_seq = #{userSeq}
+          AND content_seq = #{replySeq}
+    </select>
+
+    <select id="selectReportUserByUserSeq" resultType="_int">
+        SELECT COUNT(0)
+        FROM daero.reports
+        WHERE reporter_users_seq = #{currentUserSeq}
+          AND reported_users_seq = #{userSeq}
+          AND article_type = 'user'
     </select>
 
     <select id="selectFollowByUserSeq" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
-        WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
+        WHERE following_users_seq = #{followedUserSeq}
+          AND follower_users_seq = #{followerUserSeq}
     </select>
 
     <insert id="insertFollow">
@@ -195,109 +255,456 @@
     </insert>
 
     <delete id="deleteFollow">
-        DELETE FROM daero.follows WHERE following_users_seq=#{followedUserSeq} AND follower_users_seq=#{followerUserSeq}
+        DELETE
+        FROM daero.follows
+        WHERE following_users_seq = #{followedUserSeq}
+          AND follower_users_seq = #{followerUserSeq}
     </delete>
 
     <select id="selectFollowerByUserSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
-        WHERE following_users_seq=#{userSeq}
+        WHERE following_users_seq = #{userSeq}
+          and `following_users_seq` not in
+              (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
     </select>
 
     <select id="selectFollowingByUserSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.follows
-        WHERE follower_users_seq=#{userSeq}
+        WHERE follower_users_seq = #{userSeq}
     </select>
 
-    <select id="selectFollowerListByUserSeq" resultMap="mappingUserVo">
-        SELECT *
-        FROM
-        (SELECT row_number()                       over (ORDER BY nickname ASC) AS row, users_seq, nickname, profile_image_link
-        FROM daero.users
-        WHERE users_seq IN (SELECT follower_users_seq
-        FROM daero.follows
-        WHERE following_users_seq=#{userSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-                             AND user.row &lt; (#{page} * 10) + 1
+    <select id="selectFollowerListByFollowedUserSeq" resultType="com.ssafy.daero.sns.vo.UserVo">
+        select `users_seq`          as `userSeq`,
+               `nickname`           as `nickname`,
+               `profile_image_link` as `profileImageLink`,
+               if((select count(0)
+                   from `follows`
+                   where `following_users_seq` = `users_seq`
+                     and `follower_users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `followYn`
+        from `users` `u`
+                 left join `follows` `f` on `u`.`users_seq` = `f`.`follower_users_seq`
+        where `f`.`following_users_seq` = #{followed}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
-    <select id="selectFollowingListByUserSeq" resultMap="mappingUserVo">
-        SELECT *
-        FROM
-            (SELECT row_number()                       over (ORDER BY nickname ASC) AS row, users_seq, nickname, profile_image_link
-             FROM daero.users
-             WHERE users_seq IN (SELECT following_users_seq
-                                 FROM daero.follows
-                                 WHERE follower_users_seq=#{userSeq})) AS user
-        WHERE (#{page} - 1) * 10 &lt; user.row
-          AND user.row &lt; (#{page} * 10) + 1
+    <select id="selectFollowingListByFollowerUserSeq" resultType="com.ssafy.daero.sns.vo.UserVo">
+        select `users_seq`          as `userSeq`,
+               `nickname`           as `nickname`,
+               `profile_image_link` as `profileImageLink`,
+               if((select count(0)
+                   from `follows`
+                   where `following_users_seq` = `users_seq`
+                     and `follower_users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `followYn`
+        from `users` `u`
+                 left join `follows` `f` on `u`.`users_seq` = `f`.`following_users_seq`
+        where `f`.`follower_users_seq` = #{follower}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        limit #{limit} offset #{offset}
     </select>
 
     <select id="selectLikeCountByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.likes
-        WHERE articles_seq=#{articleSeq}
+        WHERE articles_seq = #{articleSeq}
     </select>
 
     <select id="selectReplyByArticleSeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
-        WHERE articles_seq=#{articleSeq} AND rereply_parent IS NULL
+        WHERE articles_seq = #{articleSeq}
+          AND rereply_parent IS NULL
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
     </select>
 
     <select id="selectRereplyByReplySeq" parameterType="_int" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.replies
-        WHERE rereply_parent=#{replySeq}
+        WHERE rereply_parent = #{replySeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
     </select>
 
+    <select id="selectArticleCount" parameterType="_int" resultType="_int">
+        select count(0)
+        from `v_users_trips_articles`
+        where `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleCountByFollowCreatedAt" resultType="_int">
+        select count(0)
+        from `v_users_trips_articles`
+        where `users_seq` in
+              (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+          and `created_at` > #{recent}
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleByFollowCreatedAt" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = v_users_trips_articles.articles_seq
+                     and `users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `likeYn`
+        from `v_users_trips_articles`
+        where `users_seq` in
+              (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+          and `created_at` > #{recent}
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleByNotFollow" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        <![CDATA[
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = v_users_trips_articles.articles_seq
+                     and `users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `likeYn`
+        from `v_users_trips_articles`
+        where (`users_seq` not in
+               (select `following_users_seq` from `daero`.`follows` where `follower_users_seq` = #{userSeq})
+            or `created_at` < #{recent})
+          and `open_yn` = 'y'
+          and `users_seq` != #{userSeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+        order by `created_at` desc
+        ]]>
+    </select>
+
+    <select id="selectCollectionCountByUserSeq" parameterType="_int" resultType="_int">
+        SELECT COUNT(0)
+        FROM daero.likes
+        WHERE `users_seq` = #{userSeq}
+    </select>
+
+    <select id="selectCollectionByUserSeq" resultType="java.util.Map">
+        SELECT collection.`nickname`,
+               collection.`user_seq`,
+               collection.`profile_url`,
+               collection.`thumbnail_url`,
+               collection.`title`,
+               collection.`article_seq`
+        FROM (SELECT row_number() over ()    AS row
+                   , va.`nickname`
+                   , va.`users_seq`          AS user_seq
+                   , va.`profile_image_link` AS profile_url
+                   , va.`thumbnail_url`
+                   , va.`title`
+                   , va.`articles_seq`       AS article_seq
+              FROM daero.v_users_trips_articles va
+              WHERE va.articles_seq IN (SELECT articles_seq
+                                        FROM daero.likes l
+                                        WHERE l.users_seq = #{userSeq})
+              ORDER BY row DESC) AS collection
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="selectUserCountByNickname" parameterType="String" resultType="_int">
+        select count(0)
+        from `users`
+        where binary (`nickname`) like concat('%', #{nickname}, '%')
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+    </select>
+
+    <select id="selectUserByNickname" resultType="com.ssafy.daero.user.dto.UserDto">
+        select `users_seq`          as `userSeq`,
+               `user_email`         as `userEmail`,
+               `password`           as `password`,
+               `nickname`           as `nickname`,
+               `email_verified_yn`  as `emailVerifiedYn`,
+               `suspended_yn`       as `suspendedYn`,
+               `profile_image_link` as `profileImageLink`,
+               `reported_count`     as `reportedCount`,
+               `created_at`         as `createdAt`,
+               `del_yn`             as `delYn`,
+               `fcm_token`          as `fcmToken`,
+               `password_reset_yn`  as `passwordResetYn`
+        from `users`
+        where `users_seq` != #{userSeq}
+          and binary (`nickname`) like concat('%', #{nickname}, '%')
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+        order by `users_seq` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleCountByContent" parameterType="String" resultType="_int">
+        select distinct count(0)
+        from `articles` as `a`
+                 left join `trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`
+                 left join `trip_days` `d` on `d`.trip = `t`.`trips_seq`
+        where (binary (`a`.`title`) like concat('%', #{content}, '%')
+            or binary (`t`.`trip_comment`) like concat('%', #{content}, '%')
+            or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select distinct `a`.`articles_seq`       as `articleSeq`,
+                        `a`.`nickname`           as `nickname`,
+                        `a`.`users_seq`          as `userSeq`,
+                        `a`.`trips_seq`          as `tripSeq`,
+                        `a`.`profile_image_link` as `profileUrl`,
+                        `a`.`created_at`         as `createdAt`,
+                        `a`.`thumbnail_url`      as `thumbnailUrl`,
+                        `a`.`trip_comment`       as `description`,
+                        `a`.`title`              as `title`,
+                        `a`.`start_date`         as `startDate`,
+                        `a`.`end_date`           as `endDate`,
+                        `a`.`like_count`         as `likeCount`,
+                        `a`.`reply_count`        as `replyCount`,
+                        if((select count(0)
+                            from `likes`
+                            where `articles_seq` = `a`.`articles_seq`
+                              and `users_seq` = #{userSeq}) = 0,
+                           'n', 'y')             as `likeYn`
+        from `v_users_trips_articles` `a`
+                 left join `trip_days` `d` on `d`.`trip` = `a`.`trips_seq`
+        where (binary (`a`.`title`) like concat('%', #{content}, '%')
+            or binary (`a`.`trip_comment`) like concat('%', #{content}, '%')
+            or binary (`d`.`day_comment`) like concat('%', #{content}, '%'))
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectArticleCountByPlace" parameterType="String" resultType="_int">
+        select distinct count(0)
+        from `v_users_trips_articles` as `v`
+                 left join `trip_stamps` `s` on `v`.`trips_seq` = `s`.`trip_seq`
+                 left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
+        where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleByPlace" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select distinct `a`.`articles_seq`       as `articleSeq`,
+                        `a`.`nickname`           as `nickname`,
+                        `a`.`users_seq`          as `userSeq`,
+                        `a`.`trips_seq`          as `tripSeq`,
+                        `a`.`profile_image_link` as `profileUrl`,
+                        `a`.`created_at`         as `createdAt`,
+                        `a`.`thumbnail_url`      as `thumbnailUrl`,
+                        `a`.`trip_comment`       as `description`,
+                        `a`.`title`              as `title`,
+                        `a`.`start_date`         as `startDate`,
+                        `a`.`end_date`           as `endDate`,
+                        `a`.`like_count`         as `likeCount`,
+                        `a`.`reply_count`        as `replyCount`,
+                        if((select count(0)
+                            from `likes`
+                            where `articles_seq` = `a`.`articles_seq`
+                              and `users_seq` = #{userSeq}) = 0,
+                           'n', 'y')             as `likeYn`
+        from `v_users_trips_articles` as `a`
+                 left join `trip_stamps` `s` on `a`.`trips_seq` = `s`.`trip_seq`
+                 left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
+        where binary (`p`.`place_name`) like concat('%', #{placeName}, '%')
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+          and `articles_seq` not in (select `article_seq` from `hide` where `user_seq` = #{userSeq})
+        order by `created_at` desc
+        limit #{limit} offset #{offset}
+    </select>
+
+    <select id="selectTripPlacesByArticle" parameterType="_int" resultType="com.ssafy.daero.trip.dto.TripPlaceDto">
+        select `tp`.`trip_places_seq` as `tripPlaceSeq`,
+               `tp`.`place_name`      as `placeName`,
+               `tp`.`address`         as `address`,
+               `tp`.`latitude`        as `latitude`,
+               `tp`.`longitude`       as `longitude`,
+               `tp`.`description`     as `description`,
+               `tp`.`region_seq`      as `regionSeq`,
+               `tp`.`image_url`       as `imageUrl`
+        from `articles` `a`
+                 left join `trip_stamps` `ts` on `a`.`trips_seq` = `ts`.`trip_seq`
+                 left join `trip_places` `tp` on `ts`.`trip_places_seq` = `tp`.`trip_places_seq`
+        where `a`.`articles_seq` = #{articleSeq}
+    </select>
+
+    <select id="selectBlockedUserByBlocker" parameterType="_int" resultType="com.ssafy.daero.user.dto.UserDto">
+        select `b`.`blocked_users_seq`  as `userSeq`,
+               `u`.`user_email`         as `userEmail`,
+               `u`.`password`           as `password`,
+               `u`.`nickname`           as `nickname`,
+               `u`.`email_verified_yn`  as `emailVerifiedYn`,
+               `u`.`suspended_yn`       as `suspendedYn`,
+               `u`.`profile_image_link` as `profileImageLink`,
+               `u`.`reported_count`     as `reportedCount`,
+               `u`.`created_at`         as `createdAt`,
+               `u`.`del_yn`             as `delYn`,
+               `u`.`fcm_token`          as `fcmToken`,
+               `u`.`password_reset_yn`  as `passwordResetYn`
+        from `blocks` `b`
+                 left join `users` `u` on `u`.`users_seq` = `b`.`blocked_users_seq`
+        where blocker_users_seq = #{userSeq}
+    </select>
+
+    <select id="selectArticleCountByArticleSeqUserSeq" resultType="_int">
+        select count(0)
+        from v_users_trips_articles
+        where users_seq = #{userSeq}
+          and articles_seq = #{articleSeq}
+          and `users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
+    </select>
+
+    <select id="selectArticleByLike" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
+        select `articles_seq`       as `articleSeq`,
+               `nickname`           as `nickname`,
+               `users_seq`          as `userSeq`,
+               `trips_seq`          as `tripSeq`,
+               `profile_image_link` as `profileUrl`,
+               `created_at`         as `createdAt`,
+               `thumbnail_url`      as `thumbnailUrl`,
+               `trip_comment`       as `description`,
+               `title`              as `title`,
+               `start_date`         as `startDate`,
+               `end_date`           as `endDate`,
+               `like_count`         as `likeCount`,
+               `reply_count`        as `replyCount`,
+               if((select count(0)
+                   from `likes`
+                   where `articles_seq` = v_users_trips_articles.articles_seq
+                     and `users_seq` = #{userSeq}) = 0,
+                  'n', 'y')         as `likeYn`
+        from `v_users_trips_articles`
+        order by `like_count` desc
+        limit 6
+    </select>
+
+    <delete id="deleteBlock">
+        delete
+        from blocks
+        where blocked_users_seq = #{userSeq}
+          and blocker_users_seq = #{blocker}
+    </delete>
+
+    <update id="updateArticle">
+        update articles a, trips t
+        set a.`title`=#{title},
+            t.`trip_comment`=#{tripComment},
+            t.`trip_expenses`=#{tripExpenses},
+            t.`trip_rating`=#{rating},
+            a.open_yn=#{expose},
+            a.updated_at=DATE_FORMAT(now(), '%Y-%m-%d %T')
+        where a.articles_seq = #{articleSeq}
+          and t.trips_seq = a.trips_seq
+    </update>
+
+    <select id="selectTripSeqByArticleSeq" parameterType="_int" resultType="_int">
+        select trips_seq
+        from daero.articles
+        where articles_seq = #{articleSeq}
+    </select>
+
+    <update id="updateDayComment">
+        <![CDATA[
+        update daero.trip_days t
+        set t.`day_comment`=#{dayComment}
+        where t.`trip_days_seq` in (select trip_days_seq
+                                    from (SELECT row_number() over () AS row, trip_days_seq
+                                          from daero.trip_days
+                                          where trip = #{tripSeq}) as td
+                                    where td.row = #{rowNum})
+        ]]>
+    </update>
+
+    <update id="updateArticleOpen">
+        update articles
+        set open_yn = #{openYn}
+        where articles_seq = #{articleSeq}
+    </update>
+
     <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
-        <result property="tripSeq" column="trips_seq" />
-        <result property="userSeq" column="user_seq" />
-        <result property="title" column="title" />
-        <result property="tripComment" column="trip_comment" />
-        <result property="tripExpenses" column="trip_expenses" />
-        <result property="rating" column="trip_rating" />
-        <result property="likes" column="like_count" />
-        <result property="comments" column="reply_count" />
+        <result property="tripSeq" column="trips_seq"/>
+        <result property="userSeq" column="user_seq"/>
+        <result property="title" column="title"/>
+        <result property="tripComment" column="trip_comment"/>
+        <result property="tripExpenses" column="trip_expenses"/>
+        <result property="rating" column="trip_rating"/>
+        <result property="likes" column="like_count"/>
+        <result property="comments" column="reply_count"/>
+        <result property="openYn" column="open_yn"/>
+        <result property="createdAt" column="created_at"/>
     </resultMap>
 
     <resultMap id="mappingStampVo" type="com.ssafy.daero.sns.vo.StampVo">
-        <result property="imageUrl" column="image_url" />
+        <result property="imageUrl" column="image_url"/>
         <result property="tripDaySeq" column="trip_days_seq"/>
-        <result property="tripStampSeq" column="trip_stamps_seq" />
-        <result property="latitude" column="latitude" />
-        <result property="longitude" column="longitude" />
-        <result property="datetime" column="date" />
-        <result property="dayComment" column="day_comment" />
+        <result property="tripStampSeq" column="trip_stamps_seq"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="datetime" column="date"/>
+        <result property="dayComment" column="day_comment"/>
     </resultMap>
 
     <resultMap id="mappingReplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
-        <result property="replySeq" column="replies_seq" />
-        <result property="userSeq" column="users_seq" />
-        <result property="content" column="content" />
-        <result property="createdAt" column="created_at" />
-        <result property="updatedAt" column="updated_at" />
-        <result property="rereplyCount" column="rereply_count" />
-        <result property="nickname" column="nickname" />
-        <result property="profileUrl" column="profile_url" />
+        <result property="replySeq" column="replies_seq"/>
+        <result property="userSeq" column="users_seq"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="rereplyCount" column="rereply_count"/>
+        <result property="nickname" column="nickname"/>
+        <result property="profileUrl" column="profile_url"/>
     </resultMap>
 
     <resultMap id="mappingRereplyVo" type="com.ssafy.daero.sns.vo.ReplyVo">
-        <result property="replySeq" column="replies_seq" />
-        <result property="userSeq" column="users_seq" />
-        <result property="content" column="content" />
-        <result property="createdAt" column="created_at" />
-        <result property="updatedAt" column="updated_at" />
-        <result property="nickname" column="nickname" />
-        <result property="profileUrl" column="profile_url" />
+        <result property="replySeq" column="replies_seq"/>
+        <result property="userSeq" column="users_seq"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="nickname" column="nickname"/>
+        <result property="profileUrl" column="profile_url"/>
     </resultMap>
 
     <resultMap id="mappingUserVo" type="com.ssafy.daero.sns.vo.UserVo">
-        <result property="profileImageLink" column="profile_image_link" />
-        <result property="nickname" column="nickname" />
-        <result property="userSeq" column="users_seq" />
+        <result property="profileImageLink" column="profile_image_link"/>
+        <result property="nickname" column="nickname"/>
+        <result property="userSeq" column="users_seq"/>
     </resultMap>
 
 </mapper>

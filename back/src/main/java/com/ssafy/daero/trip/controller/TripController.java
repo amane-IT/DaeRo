@@ -1,11 +1,14 @@
 package com.ssafy.daero.trip.controller;
 
-
+import com.ssafy.daero.image.service.ImageService;
+import com.ssafy.daero.image.vo.ImageVo;
 import com.ssafy.daero.trip.service.TripService;
+import com.ssafy.daero.trip.vo.TripVo;
 import com.ssafy.daero.user.service.JwtService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -14,10 +17,12 @@ import java.util.*;
 public class TripController {
     private final TripService tripService;
     private final JwtService jwtService;
+    private final ImageService imageService;
 
-    public TripController(TripService tripService, JwtService jwtService) {
+    public TripController(TripService tripService, JwtService jwtService, ImageService imageService) {
         this.tripService = tripService;
         this.jwtService = jwtService;
+        this.imageService = imageService;
     }
 
 
@@ -71,8 +76,8 @@ public class TripController {
     }
 
     @PostMapping("/recommend")
-    public ResponseEntity<Map<String, Integer>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody(required=false) Map<String, ArrayList<Integer>> req) {
-        Map<String, Integer> resultMap = new HashMap<>();
+    public ResponseEntity<Map<String, Object>> recommendPost(@RequestHeader("jwt") String jwt, @RequestBody(required=false) Map<String, ArrayList<Integer>> req) {
+        Map<String, Object> resultMap = new HashMap<>();
         int tripPlaceSeq;
         // 태그로 검색한 경우
         if (req != null && (req.get("regions") != null && req.get("tags") != null) &&
@@ -87,6 +92,7 @@ public class TripController {
             // 검색된 결과가 없으면 404 Not Found
             if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             resultMap.put("place_seq", tripPlaceSeq);
+            resultMap.put("image_url", this.tripService.placeImage(tripPlaceSeq));
             return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }
         int userSeq = Integer.parseInt(jwtService.decodeJwt(jwt).get("user_seq"));
@@ -94,20 +100,22 @@ public class TripController {
         // 검색된 결과가 없으면 404 Not Found
         if (tripPlaceSeq == 0) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         resultMap.put("place_seq", tripPlaceSeq);
+        resultMap.put("image_url", this.tripService.placeImage(tripPlaceSeq));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
     @GetMapping("/recommend")
-    public ResponseEntity<Map<String, Integer>> recommendGet(
+    public ResponseEntity<Map<String, Object>> recommendGet(
             @RequestParam("place-seq") int tripPlaceSeq,
             @RequestParam("time") int time,
             @RequestParam("transportation") String transportation) {
         int placeSeq = this.tripService.recommendNextPlace(tripPlaceSeq, time, transportation);
+        Map<String, Object> resultMap = new HashMap<>();
         if (placeSeq == 0) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(resultMap, HttpStatus.OK);
         }
-        Map<String, Integer> resultMap = new HashMap<>();
         resultMap.put("place_seq", placeSeq);
+        resultMap.put("image_url", this.tripService.placeImage(placeSeq));
         return new ResponseEntity<>(resultMap, HttpStatus.OK);
     }
 
@@ -139,5 +147,44 @@ public class TripController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(resultList, HttpStatus.OK);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Map<String, Object>> finishTrip(@RequestHeader("jwt") String jwt,
+                                                          @RequestParam("json") String jsonString,
+                                                          @RequestParam ArrayList<MultipartFile> files) {
+        System.out.println(jsonString);
+
+        int fileNum = files.size();
+        String[] urls = new String[fileNum];
+
+        TripVo tripVo;
+        try {
+            tripVo = this.tripService.writeJsonParser(jsonString);
+        } catch (Exception e) {
+            System.out.println("ERROR : Parsing error");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        System.out.println("files 크기" + files.size());
+        System.out.println("제목 : " + tripVo.getTitle());
+
+        for (int i = 0; i < fileNum; i++) {
+            ImageVo imageVo = this.imageService.uploadFile(files.get(i));
+            if (imageVo.getResult() != ImageVo.ImageResult.SUCCESS) {
+
+                System.out.println("ERROR : " + i + "번째 사진 업로드 실패");
+                System.out.println("ERROR TYPE : " + imageVo.getResult());
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+            urls[i] = imageVo.getDownloadUrl();
+        }
+        tripVo.setUserSeq(this.jwtService.getUserSeq(jwt));
+        try {
+            this.tripService.writeArticle(tripVo, urls);
+        } catch (Exception e) {
+            System.out.println("ERROR : DB 에러");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

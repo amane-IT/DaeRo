@@ -129,6 +129,25 @@
         where `trip_places_seq` = #{placeSeq}
     </select>
 
+    <select id="selectPreferencePlace" resultType="com.ssafy.daero.trip.dto.TripPlaceDto" parameterType="_int">
+        select `trip_places_seq` as `tripPlaceSeq`,
+               `place_name`      as `placeName`,
+               `address`         as `address`,
+               `latitude`        as `latitude`,
+               `longitude`       as `longitude`,
+               `description`     as `description`,
+               `region_seq`      as `regionSeq`,
+               `image_url`       as `imageUrl`
+        from `daero`.`trip_places`
+        where `trip_places_seq` in (select `place_seq` from `preference_places`)
+    </select>
+
+    <select id="selectPreferenceCountByUserSeq" parameterType="_int" resultType="_int">
+        select count(0)
+        from `user_favor`
+        where `users_seq` = #{userSeq}
+    </select>
+
     <update id="updateProfile">
         UPDATE users
         SET `nickname`=#{nickname},
@@ -173,7 +192,29 @@
           and `tag_seq` = #{tagSeq};
     </update>
 
-    <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
+    <select id="selectBadgeByUserSeq" parameterType="_int" resultType="java.util.Map">
+        select (select region_name
+                from region_tags t
+                where t.`region_seq` = a.`region_seq`) as region_name,
+               `count`
+        from user_achievements a
+        where `users_seq` = #{userSeq}
+        order by `region_seq`
+    </select>
+
+    <update id="updateFcmToken">
+        update daero.`users`
+        set daero.users.`fcm_token` = #{token}
+        where daero.users.`users_seq` = #{userSeq}
+    </update>
+
+    <select id="selectUserFavor" parameterType="_int" resultType="_int">
+        select COUNT(0)
+        from daero.user_favor
+        where users_seq = #{userSeq}
+    </select>
+
+    <resultMap id="mappingUserDto" type="com.ssafy.daero.user.vo.UserVo">
         <result property="userSeq" column="users_seq"/>
         <result property="userEmail" column="user_email"/>
         <result property="password" column="password"/>
@@ -186,5 +227,6 @@
         <result property="delYn" column="del_yn"/>
         <result property="fcmToken" column="fcm_token"/>
         <result property="passwordFindYn" column="password_find_yn"/>
+        <result property="suspendedExpiry" column="suspended_expiry"/>
     </resultMap>
 </mapper>
