@@ -82,25 +82,29 @@
 
     <delete id="deleteArticleByArticleSeq" parameterType="_int">
         DELETE
-        FROM daero.articles
-        WHERE articles_seq = #{articleSeq}
+        FROM `a`,
+             `h`
+            using
+             `articles` as `a`
+                 left join `hide` `h` on `a`.`articles_seq` = `h`.`article_seq`
+        WHERE `a`.`articles_seq` = #{articleSeq}
     </delete>
 
     <select id="selectReplyListByArticleSeq" resultType="com.ssafy.daero.sns.vo.ReplyVo">
-        SELECT `r`.`replies_seq`    as `replySeq`,
-               `r`.`articles_seq`   as `articleSeq`,
-               `r`.`users_seq`      as `userSeq`,
-               `r`.`content`        as `content`,
-               `r`.`created_at`     as `createdAt`,
-               `r`.`updated_at`     as `updatedAt`,
+        SELECT `r`.`replies_seq`                          as `replySeq`,
+               `r`.`articles_seq`                         as `articleSeq`,
+               `r`.`users_seq`                            as `userSeq`,
+               `r`.`content`                              as `content`,
+               `r`.`created_at`                           as `createdAt`,
+               `r`.`updated_at`                           as `updatedAt`,
                (select count(0)
                 from `replies`
-                where `rereply_parent` = `r`.replies_seq)  as `rereplyCount`,
-               `r`.`rereply_parent` as `rereplyParent`,
-               `u`.`nickname` as `nickname`,
-               `u`.`profile_image_link` as `profileUrl`
+                where `rereply_parent` = `r`.replies_seq) as `rereplyCount`,
+               `r`.`rereply_parent`                       as `rereplyParent`,
+               `u`.`nickname`                             as `nickname`,
+               `u`.`profile_image_link`                   as `profileUrl`
         from `replies` `r`
-            left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
+                 left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
         where `articles_seq` = #{articleSeq}
           and `rereply_parent` is null
           and `r`.`users_seq` not in (select `blocked_users_seq` from `blocks` where `blocker_users_seq` = #{userSeq})
@@ -139,15 +143,15 @@
            OR rereply_parent = #{replySeq}
     </delete>
 
-    <select id="selectRereplyListByReplySeq" resultMap="mappingRereplyVo">
-        select `r`.`replies_seq`    as `replySeq`,
-               `r`.`articles_seq`   as `articleSeq`,
-               `r`.`users_seq`      as `userSeq`,
-               `r`.`content`        as `content`,
-               `r`.`created_at`     as `createdAt`,
-               `r`.`updated_at`     as `updatedAt`,
-               `r`.`rereply_parent` as `rereplyParent`,
-               `u`.`nickname` as `nickname`,
+    <select id="selectRereplyListByReplySeq" resultType="com.ssafy.daero.sns.vo.ReplyVo">
+        select `r`.`replies_seq`        as `replySeq`,
+               `r`.`articles_seq`       as `articleSeq`,
+               `r`.`users_seq`          as `userSeq`,
+               `r`.`content`            as `content`,
+               `r`.`created_at`         as `createdAt`,
+               `r`.`updated_at`         as `updatedAt`,
+               `r`.`rereply_parent`     as `rereplyParent`,
+               `u`.`nickname`           as `nickname`,
                `u`.`profile_image_link` as `profileUrl`
         from `replies` `r`
                  left join `users` `u` on `u`.`users_seq` = `r`.`users_seq`
@@ -476,24 +480,24 @@
     </select>
 
     <select id="selectArticleByContent" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
-        select `a`.`articles_seq`       as `articleSeq`,
-               `a`.`nickname`           as `nickname`,
-               `a`.`users_seq`          as `userSeq`,
-               `a`.`trips_seq`          as `tripSeq`,
-               `a`.`profile_image_link` as `profileUrl`,
-               `a`.`created_at`         as `createdAt`,
-               `a`.`thumbnail_url`      as `thumbnailUrl`,
-               `a`.`trip_comment`       as `description`,
-               `a`.`title`              as `title`,
-               `a`.`start_date`         as `startDate`,
-               `a`.`end_date`           as `endDate`,
-               `a`.`like_count`         as `likeCount`,
-               `a`.`reply_count`        as `replyCount`,
-               if((select count(0)
-                   from `likes`
-                   where `articles_seq` = `a`.`articles_seq`
-                     and `users_seq` = #{userSeq}) = 0,
-                  'n', 'y')             as `likeYn`
+        select distinct `a`.`articles_seq`       as `articleSeq`,
+                        `a`.`nickname`           as `nickname`,
+                        `a`.`users_seq`          as `userSeq`,
+                        `a`.`trips_seq`          as `tripSeq`,
+                        `a`.`profile_image_link` as `profileUrl`,
+                        `a`.`created_at`         as `createdAt`,
+                        `a`.`thumbnail_url`      as `thumbnailUrl`,
+                        `a`.`trip_comment`       as `description`,
+                        `a`.`title`              as `title`,
+                        `a`.`start_date`         as `startDate`,
+                        `a`.`end_date`           as `endDate`,
+                        `a`.`like_count`         as `likeCount`,
+                        `a`.`reply_count`        as `replyCount`,
+                        if((select count(0)
+                            from `likes`
+                            where `articles_seq` = `a`.`articles_seq`
+                              and `users_seq` = #{userSeq}) = 0,
+                           'n', 'y')             as `likeYn`
         from `v_users_trips_articles` `a`
                  left join `trip_days` `d` on `d`.`trip` = `a`.`trips_seq`
         where (binary (`a`.`title`) like concat('%', #{content}, '%')
@@ -506,7 +510,7 @@
     </select>
 
     <select id="selectArticleCountByPlace" parameterType="String" resultType="_int">
-        select count(0)
+        select distinct count(0)
         from `v_users_trips_articles` as `v`
                  left join `trip_stamps` `s` on `v`.`trips_seq` = `s`.`trip_seq`
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`
@@ -516,24 +520,24 @@
     </select>
 
     <select id="selectArticleByPlace" resultType="com.ssafy.daero.sns.vo.ArticleListVo">
-        select `a`.`articles_seq`       as `articleSeq`,
-               `a`.`nickname`           as `nickname`,
-               `a`.`users_seq`          as `userSeq`,
-               `a`.`trips_seq`          as `tripSeq`,
-               `a`.`profile_image_link` as `profileUrl`,
-               `a`.`created_at`         as `createdAt`,
-               `a`.`thumbnail_url`      as `thumbnailUrl`,
-               `a`.`trip_comment`       as `description`,
-               `a`.`title`              as `title`,
-               `a`.`start_date`         as `startDate`,
-               `a`.`end_date`           as `endDate`,
-               `a`.`like_count`         as `likeCount`,
-               `a`.`reply_count`        as `replyCount`,
-               if((select count(0)
-                   from `likes`
-                   where `articles_seq` = `a`.`articles_seq`
-                     and `users_seq` = #{userSeq}) = 0,
-                  'n', 'y')             as `likeYn`
+        select distinct `a`.`articles_seq`       as `articleSeq`,
+                        `a`.`nickname`           as `nickname`,
+                        `a`.`users_seq`          as `userSeq`,
+                        `a`.`trips_seq`          as `tripSeq`,
+                        `a`.`profile_image_link` as `profileUrl`,
+                        `a`.`created_at`         as `createdAt`,
+                        `a`.`thumbnail_url`      as `thumbnailUrl`,
+                        `a`.`trip_comment`       as `description`,
+                        `a`.`title`              as `title`,
+                        `a`.`start_date`         as `startDate`,
+                        `a`.`end_date`           as `endDate`,
+                        `a`.`like_count`         as `likeCount`,
+                        `a`.`reply_count`        as `replyCount`,
+                        if((select count(0)
+                            from `likes`
+                            where `articles_seq` = `a`.`articles_seq`
+                              and `users_seq` = #{userSeq}) = 0,
+                           'n', 'y')             as `likeYn`
         from `v_users_trips_articles` as `a`
                  left join `trip_stamps` `s` on `a`.`trips_seq` = `s`.`trip_seq`
                  left join `trip_places` `p` on `s`.`trip_places_seq` = `p`.`trip_places_seq`

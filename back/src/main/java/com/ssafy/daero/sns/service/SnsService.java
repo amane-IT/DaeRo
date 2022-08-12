@@ -126,7 +126,7 @@ public class SnsService {
             reply.put("created_at", replyVo.getCreatedAt());
             reply.put("content", replyVo.getContent());
             reply.put("rereply_count", replyVo.getRereplyCount());
-            reply.put("modified", replyVo.getCreatedAt().equals(replyVo.getUpdatedAt()) ? 'y' : 'n');
+            reply.put("modified", replyVo.getCreatedAt().equals(replyVo.getUpdatedAt()) ? 'n' : 'y');
             replyList.add(reply);
         }
         return replyList;
