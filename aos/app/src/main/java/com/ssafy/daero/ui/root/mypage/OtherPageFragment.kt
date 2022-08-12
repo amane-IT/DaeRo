@@ -1,23 +1,26 @@
 package com.ssafy.daero.ui.root.mypage
 
+import android.view.View
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayoutMediator
 import com.ssafy.daero.R
+import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.data.dto.user.UserProfileResponseDto
 import com.ssafy.daero.databinding.FragmentOtherPageBinding
 import com.ssafy.daero.ui.adapter.mypage.OtherPageViewPagerAdapter
-import com.ssafy.daero.utils.constant.DEFAULT
-import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
-import com.ssafy.daero.utils.constant.USER_SEQ
+import com.ssafy.daero.ui.root.sns.ArticleMenuBottomSheetFragment
+import com.ssafy.daero.ui.setting.BlockUserViewModel
+import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
 
-class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragment_other_page) {
+class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragment_other_page), OtherPageListener, ReportListener {
     private val otherPageViewModel: OtherPageViewModel by viewModels()
+    private val blockUserViewModel: BlockUserViewModel by viewModels()
     private val tabTitleArray = arrayOf("기록", "여정")
     var userSeq = 0
     private var followState = false
@@ -40,6 +43,11 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
         TabLayoutMediator(binding.tabOtherPage, binding.viewPagerOtherPage) { tab, position ->
             tab.text = tabTitleArray[position]
         }.attach()
+
+        if(userSeq == App.prefs.userSeq) {
+            binding.buttonOtherPageFollow.visibility = View.GONE
+            binding.imgOtherPageMenu.visibility = View.GONE
+        }
     }
 
     private fun observeData() {
@@ -98,6 +106,23 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
                 otherPageViewModel.follow(userSeq)
             }
         }
+        binding.imgOtherPageBack.setOnClickListener {
+            requireActivity().onBackPressed()
+        }
+        binding.imageOtherPageBadge.setOnClickListener {
+            findNavController().navigate(R.id.action_otherPageFragment_to_stampFragment,
+            bundleOf(USER_SEQ to userSeq))
+        }
+        binding.imgOtherPageMenu.setOnClickListener {
+            OtherPageMenuBottomSheetFragment(
+                userSeq,
+                this@OtherPageFragment,
+                this@OtherPageFragment
+            ).show(
+                childFragmentManager,
+                OTHER_PAGE_MENU_BOTTOM_SHEET
+            )
+        }
     }
 
     private fun getUserProfile() {
@@ -114,22 +139,10 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
                 followState = true
                 buttonOtherPageFollow.text = "언팔로우"
                 buttonOtherPageFollow.setBackgroundResource(R.drawable.button_unfollow)
-//                buttonOtherPageFollow.setBackgroundColor(
-//                    requireContext().resources.getColor(
-//                        R.color.gray,
-//                        requireActivity().theme
-//                    )
-//                )
             } else {
                 followState = false
                 buttonOtherPageFollow.text = "팔로우"
                 buttonOtherPageFollow.setBackgroundResource(R.drawable.button_follow)
-//                buttonOtherPageFollow.setBackgroundColor(
-//                    requireContext().resources.getColor(
-//                        R.color.primaryColor,
-//                        requireActivity().theme
-//                    )
-//                )
             }
         }
 
@@ -148,4 +161,38 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
     fun enableSlide() {
         binding.viewPagerOtherPage.isUserInputEnabled = true
     }
+
+    override fun blockAdd(userSeq: Int) {
+        blockUserViewModel.blockAdd(userSeq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    toast("해당 유저를 차단했습니다.")
+                    requireActivity().onBackPressed()
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+            }
+        }
+    }
+
+    override fun block(seq: Int, position: Int) {
+        blockUserViewModel.blockAdd(seq)
+        blockUserViewModel.blockState.observe(viewLifecycleOwner) {
+            when (it) {
+                SUCCESS -> {
+                    requireActivity().onBackPressed()
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+                FAIL -> {
+                    toast("유저 차단을 실패했습니다.")
+                    blockUserViewModel.blockState.value = DEFAULT
+                }
+            }
+        }
+    }
+
 }

@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.FirebaseMessaging
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
@@ -36,19 +35,15 @@ class App : Application() {
         // FCM 토큰 받아오기
         FirebaseMessaging.getInstance().token.addOnCompleteListener {
             if (!it.isSuccessful) {
-                Log.d("Application_DaeRo", "onCreate: FCM 토큰 얻기 실패", it.exception)
                 return@addOnCompleteListener
             }
             // 새로운 FCM 등록 토큰을 얻음
-            Log.d("Application_DaeRo", "onCreate: 새로운 등록 토큰: ${it.result}")
             prefs.ftoken = it.result
             createNotificationChannel("daero", "daero")
 
             if (prefs.userSeq != 0 && prefs.jwt != null) {
                 UserRepository.get().updateFcmToken(prefs.userSeq, FCMTokenRequestDto(it.result))
-                    .subscribe({}, { throwable ->
-                        Log.d("Application_DaeRo", throwable.toString())
-                    })
+                    .subscribe({}, { })
             }
         }
     }
@@ -68,9 +63,9 @@ class App : Application() {
     companion object {
         lateinit var userId: String
         lateinit var password: String
-        var userName: String = ""
-        var userSeq: Int = 0
-        var keyword = ""
+        var isDone = false
+        var isEdit = false
+        var keyword: String? = null
 
         lateinit var prefs: PreferenceUtil
     }

@@ -4,18 +4,10 @@
     package="com.ssafy.daero">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature
-        android:name="android.permission.CAMERA"
-        android:required="false" />
-
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
     <application
         android:name=".application.App"
@@ -32,6 +24,7 @@
         <activity
             android:name=".application.MainActivity"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

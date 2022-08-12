@@ -1,45 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="tripStamp"
-            type="com.ssafy.daero.data.dto.article.TripStamp" />
+            type="com.ssafy.daero.ui.root.sns.TripStampDto" />
+
+        <import type="android.view.View" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        >
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/img_article_tripStamp"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/imagebutton_regular"
-            app:imageUrl="@{tripStamp.image_url}"
-            android:clipToOutline="true"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_item_writeThumbnail_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="6dp"
+            android:layout_marginVertical="6dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:scaleType="fitCenter" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_article_user"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center_vertical"
-            android:layout_margin="8dp"
-            android:src="@color/transparent"
-            app:civ_border_color="@color/gray"
-            app:civ_border_overlay="true"
-            app:civ_border_width="1dp"
-            app:layout_constraintEnd_toEndOf="@id/img_article_tripStamp"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            <ImageView
+                android:id="@+id/image_item_writeThumbnail_img"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:scaleType="centerCrop"
+                app:smallImageUrl="@{tripStamp.imageUrl}"
+                tools:src="@drawable/img_my_page_album" />
+
+            <View
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:background="@{ tripStamp.isThumbnail ? @drawable/overlay_gradient_login : @drawable/overlay_gradient_my_page_album}" />
+
+            <TextView
+                android:id="@+id/text_item_writeThumbnail_title"
+                style="@style/BodyWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|start"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{tripStamp.placeName}"
+                tools:text="강릉 여행" />
+
+            <View
+                android:id="@+id/view_item_writeThumbnail_check"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="end|top"
+                android:layout_margin="8dp"
+                android:background="@{ tripStamp.isThumbnail ? @drawable/circle_check : @drawable/circle_uncheck}" />
+
+        </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

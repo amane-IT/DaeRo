@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -9,11 +10,12 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_article_write"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="56dp"
             app:contentInsetStart="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:id="@+id/img_article_write_back"
                 android:layout_width="32dp"
@@ -28,7 +30,7 @@
 
             <TextView
                 android:id="@+id/tv_article_write_user"
-                style="@style/SubHeadBold"
+                style="@style/HeadBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -38,7 +40,6 @@
         </com.google.android.material.appbar.MaterialToolbar>
 
         <View
-            android:id="@+id/view_article"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/lightGray"
@@ -46,78 +47,158 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar_article_write" />
 
-        <TextView
-            android:id="@+id/text_article_write_thumbnail"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
-            android:text="썸네일 선택"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar_article_write" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_article_write_thumbnail_tripStamp"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/text_article_write_thumbnail" />
-
-
-        <TextView
-            android:id="@+id/tv_article_write_content"
-            style="@style/HeadBold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
-            android:text="내용"
-            android:textColor="@color/primaryTextColor"
-            android:textSize="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recycler_article_write_thumbnail_tripStamp" />
-
-        <EditText
-            android:id="@+id/editText_comment_addComment"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:layout_marginVertical="24dp"
-            android:layout_marginHorizontal="12dp"
-            android:inputType="textMultiLine"
-            android:hint="내용 작성하기..."
-            android:maxLines="8"
-            android:textColorHint="@color/gray"
-            style="@style/Body"
-            android:scrollHorizontally="false"
-            android:background="@drawable/edittext_comment"
-            android:imeOptions="actionDone"
-            app:layout_constraintTop_toBottomOf="@id/tv_article_write_content"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/button_article_write"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_article_write">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/text_article_write_thumbnail"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="썸네일 선택"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_article_write_thumbnail_tripStamp"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="12dp"
+                    android:clipToPadding="false"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_article_write_thumbnail"
+                    tools:listitem="@layout/item_article_write_thumbnail" />
+
+                <TextView
+                    android:id="@+id/text_articleWrite_expose"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="공개여부"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/recycler_article_write_thumbnail_tripStamp" />
+
+                <Switch
+                    android:id="@+id/switch_articleWrite_expose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:checked="true"
+                    android:scaleX="1.5"
+                    android:scaleY="1.5"
+                    app:layout_constraintBottom_toBottomOf="@id/text_articleWrite_expose"
+                    app:layout_constraintStart_toEndOf="@id/text_articleWrite_expose"
+                    app:layout_constraintTop_toTopOf="@id/text_articleWrite_expose" />
+
+                <TextView
+                    android:id="@+id/text_articleWrite_title"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="제목"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_articleWrite_expose" />
+
+                <EditText
+                    android:id="@+id/editText_articleWrite_title"
+                    style="@style/ArticleWrite"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/edittext_comment"
+                    android:gravity="start"
+                    android:hint="내용 작성하기..."
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:scrollHorizontally="false"
+                    android:textColorHint="@color/gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/text_articleWrite_title" />
+
+                <TextView
+                    android:id="@+id/tv_article_write_content"
+                    style="@style/HeadBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="24dp"
+                    android:text="내용"
+                    android:textColor="@color/primaryTextColor"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/editText_articleWrite_title" />
+
+                <EditText
+                    android:id="@+id/editText_comment_addComment"
+                    style="@style/ArticleWrite"
+                    android:layout_width="0dp"
+                    android:layout_height="250dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/edittext_comment"
+                    android:gravity="start"
+                    android:hint="내용 작성하기..."
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:padding="8dp"
+                    android:scrollHorizontally="false"
+                    android:textColorHint="@color/gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_article_write_content" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <Button
             android:id="@+id/button_article_write"
+            style="@style/BodyWhite"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="16dp"
-            android:text="작성완료"
             android:background="@drawable/button_regular"
-            style="@style/BodyWhite"
+            android:text="작성완료"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/progressBar_articleWriting_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="invisible"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

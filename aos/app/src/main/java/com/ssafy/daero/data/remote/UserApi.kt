@@ -1,13 +1,12 @@
 package com.ssafy.daero.data.remote
 
+import com.ssafy.daero.data.dto.badge.StampResponseDto
 import com.ssafy.daero.data.dto.login.*
+import com.ssafy.daero.data.dto.resetPassword.ResetPasswordConfirmRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordRequestDto
 import com.ssafy.daero.data.dto.resetPassword.ResetPasswordResponseDto
 import com.ssafy.daero.data.dto.signup.*
-import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
-import com.ssafy.daero.data.dto.user.ImageUploadResponseDto
-import com.ssafy.daero.data.dto.user.ProfileEditRequestDto
-import com.ssafy.daero.data.dto.user.UserProfileResponseDto
+import com.ssafy.daero.data.dto.user.*
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Single
 import okhttp3.MultipartBody
@@ -79,19 +78,19 @@ interface UserApi {
     /**
      * 이메일 인증 요청
      */
-    @POST("/users/email")
+    @POST("users/email")
     fun verifyEmail(@Body signupEmailRequestDto: SignupEmailRequestDto): Single<Response<SignupEmailResponseDto>>
 
     /**
      * 이메일 인증 여부
      */
-    @GET("/users/{user_seq}/verified")
+    @GET("users/{user_seq}/verified")
     fun verifyUserEmail(@Path("user_seq") user_seq: Int): Single<Response<VerifyUserEmailResponseDto>>
 
     /**
      * 닉네임 중복 검사
      */
-    @POST("/users/nickname")
+    @POST("users/nickname")
     fun verifyNickname(@Body signupNicknameRequestDto: SignupNicknameRequestDto): Single<Response<SignupNicknameResponseDto>>
 
     /**
@@ -113,7 +112,7 @@ interface UserApi {
     fun postPreference(
         @Path("user_seq") userSeq: Int,
         @Body preferenceList: List<Int>
-    ): Single<Void>
+    ): Completable
 
     /**
      * 비밀번호 확인 요청
@@ -121,7 +120,7 @@ interface UserApi {
     @POST("users/{user_seq}/password")
     fun confirmPassword(
         @Path("user_seq") userSeq: Int,
-        @Body resetPasswordRequestDto: ResetPasswordRequestDto
+        @Body resetPasswordConfirmRequestDto: ResetPasswordConfirmRequestDto
     ): Single<Response<ResetPasswordResponseDto>>
 
     /**
@@ -137,7 +136,8 @@ interface UserApi {
      * 회원 탈퇴
      */
     @PUT("users/{user_seq}/quit")
-    fun withdrawal(@Path("user_seq") userSeq: Int): Single<Response<Boolean>>
+    fun withdrawal(@Path("user_seq") userSeq: Int): Completable
+//            Single<Response<Boolean>>
 
     /**
      * FCM Token 전송
@@ -147,4 +147,12 @@ interface UserApi {
         @Path("user_seq") userSeq: Int,
         @Body fcmTokenRequestDto: FCMTokenRequestDto
     ): Completable
+
+    /**
+     * 배지 관리
+     * */
+    @GET("users/{user_seq}/badges")
+    fun getBadges(
+        @Path("user_seq") userSeq: Int
+    ): Single<Response<StampResponseDto>>
 }

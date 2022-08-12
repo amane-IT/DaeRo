@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.root.sns
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -15,7 +14,7 @@ class LikeViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
 
     private val _likeUsers = MutableLiveData<PagingData<LikeItem>>()
-    val likeUsers : LiveData<PagingData<LikeItem>>
+    val likeUsers: LiveData<PagingData<LikeItem>>
         get() = _likeUsers
 
     val likeUsersState = MutableLiveData<Int>()
@@ -27,7 +26,6 @@ class LikeViewModel : BaseViewModel() {
                 .subscribe({ it ->
                     _likeUsers.postValue(it)
                 }, { throwable ->
-                    Log.d("ArticleVM_DaeRo", throwable.toString())
                     likeUsersState.postValue(FAIL)
                 })
         )

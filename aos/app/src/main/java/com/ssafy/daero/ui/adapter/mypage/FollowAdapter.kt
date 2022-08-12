@@ -78,8 +78,8 @@ class FollowAdapter(listener: FollowListener
         private fun editFollow(){
             if(followYn==true){
                 binding.buttonFollow.setBackgroundResource(R.drawable.button_unfollow)
-                binding.buttonFollow.text = "팔로잉"
-                binding.buttonFollow.setTextColor(Color.GRAY)
+                binding.buttonFollow.text = "언팔로우"
+                binding.buttonFollow.setTextColor(Color.WHITE)
             }else{
                 binding.buttonFollow.setBackgroundResource(R.drawable.button_follow)
                 binding.buttonFollow.text = "팔로우"

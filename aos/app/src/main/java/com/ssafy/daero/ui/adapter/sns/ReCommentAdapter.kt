@@ -12,7 +12,7 @@ import com.ssafy.daero.R
 import com.ssafy.daero.data.dto.article.ReCommentItem
 import com.ssafy.daero.databinding.ItemReCommentBinding
 
-class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
+class ReCommentAdapter(onItemClickListener : (View, Int, Int, Int, String) -> Unit) :
     PagingDataAdapter<ReCommentItem, ReCommentAdapter.ReCommentViewHolder>
         (COMPARATOR) {
 
@@ -46,9 +46,10 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
         fun bind(data: ReCommentItem) {
             Glide.with(binding.imgReCommentUser)
                 .load(data.profile_url)
-                .placeholder(R.drawable.ic_back)
+                .override(200,200)
+                .placeholder(R.drawable.img_user)
                 .apply(RequestOptions().centerCrop())
-                .error(R.drawable.ic_back)
+                .error(R.drawable.img_user)
                 .into(binding.imgReCommentUser)
 
             binding.tvCommentUser.text = data.nickname
@@ -59,12 +60,12 @@ class ReCommentAdapter(onItemClickListener : (View, Int, Int, String) -> Unit) :
             modified = data.modified
         }
 
-        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, String) -> Unit ) {
+        fun bindOnItemClickListener(onItemClickListener: (View, Int, Int, Int, String) -> Unit ) {
             binding.imgReCommentMenu.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 1, binding.tvCommentContent.text.toString())
+                onItemClickListener(it, replySeq!!, 1, userSeq!!, binding.tvCommentContent.text.toString())
             }
             binding.imgReCommentUser.setOnClickListener {
-                onItemClickListener(it, replySeq!!, 2, "")
+                onItemClickListener(it, replySeq!!, 2, userSeq!!, "")
             }
         }
     }

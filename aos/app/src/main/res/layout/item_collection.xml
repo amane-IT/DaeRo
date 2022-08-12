@@ -12,15 +12,14 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="6dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_item_MyPageAlbum_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginVertical="8dp"
             app:cardCornerRadius="8dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,50 +33,51 @@
 
                 <ImageView
                     android:id="@+id/image_itemCollection_img"
-                    android:layout_width="176dp"
-                    android:layout_height="176dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:scaleType="centerCrop"
-                    app:imageUrl="@{collection.thumbnail_url}"
-                    tools:src="@drawable/img_my_page_album"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:thumbnailImageUrl="@{collection.thumbnail_url}"
+                    tools:src="@drawable/img_my_page_album" />
 
                 <View
-                    android:layout_width="176dp"
-                    android:layout_height="176dp"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
                     android:background="@drawable/overlay_gradient_my_page_album"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/image_itemCollection_userImg"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
-                    tools:src="@drawable/ic_kakao"
-                    android:scaleType="centerCrop"
                     android:layout_marginStart="8dp"
                     android:layout_marginBottom="8dp"
-                    app:roundImg="@{collection.profile_url}"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:scaleType="centerCrop"
+                    app:circleImageUrl="@{collection.profile_url}"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/text_itemCollection_title"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:src="@drawable/ic_kakao" />
 
                 <TextView
                     android:id="@+id/text_itemCollection_title"
-                    style="@style/SubHeadWhite"
-                    android:layout_width="wrap_content"
+                    style="@style/BodySemiBoldWhite"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="10dp"
                     android:text="@{collection.title}"
-                    tools:text="강릉 여행"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/image_itemCollection_like"
                     app:layout_constraintStart_toEndOf="@id/image_itemCollection_userImg"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    tools:text="강릉 여행" />
 
                 <ImageView
                     android:id="@+id/image_itemCollection_like"
@@ -87,8 +87,8 @@
                     android:layout_marginBottom="12dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_like_full"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -11,7 +11,8 @@ import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentLoginBinding
 import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
+import com.ssafy.daero.utils.constant.TRIP_BEFORE
+import com.ssafy.daero.utils.file.deleteCache
 import com.ssafy.daero.utils.view.setStatusBarOrigin
 import com.ssafy.daero.utils.view.setStatusBarTransparent
 
@@ -25,8 +26,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         jwtLogin()
     }
 
+    private fun showPermissionGuide() {
+        PermissionDialogFragment().show(childFragmentManager, "dlg_permission")
+    }
+
     private fun initViews() {
         binding.textLoginSignup.paintFlags = Paint.UNDERLINE_TEXT_FLAG;
+
+        if (!App.prefs.isPermissionGuideCheck) {
+            showPermissionGuide()
+        }
     }
 
     private fun setOnClickListeners() {
@@ -35,10 +44,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
         }
         binding.textLoginSignup.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_signupEmailFragment)
-        }
-        // 임시로 카카오 버튼 클릭시 RootFragment로 이동
-        binding.imageLoginKakao.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_rootFragment)
         }
     }
 
@@ -49,16 +54,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     }
 
     private fun observeData() {
-        loginViewModel.responseState.observe(viewLifecycleOwner) {
-            when(it) {
-                SUCCESS -> {
+        loginViewModel.responseState.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                200 -> {
                     findNavController().navigate(R.id.action_loginFragment_to_rootFragment)
                     loginViewModel.responseState.value = DEFAULT
                 }
+                202 -> {
+                    findNavController().navigate(R.id.action_loginFragment_to_tripPreferenceFragment)
+                    loginViewModel.responseState.value = DEFAULT
+                }
+                403 -> {
+                    showForbiddenDialog()
+                    loginViewModel.responseState.value = DEFAULT
+                }
+
                 FAIL -> {
                     // jwt 토큰, user_seq 삭제
-                    App.prefs.jwt = null
-                    App.prefs.userSeq = 0
+                    deleteAllInformation()
                     loginViewModel.responseState.value = DEFAULT
                 }
             }
@@ -84,5 +97,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login
     override fun onStop() {
         super.onStop()
         setStatusBarOrigin()
+    }
+
+    private fun deleteAllInformation() {
+        // 캐시 디렉토리 전체 삭제
+        deleteCache(requireContext())
+
+        // Room 에 저장되어있는 TripStamp, TripFollow 전체 삭제
+        loginViewModel.deleteAllTripRecord()
+
+        // Prefs 초기화
+        App.prefs.initUser()
+        App.prefs.initTrip()
+        App.prefs.tripState = TRIP_BEFORE
+    }
+
+    private fun showForbiddenDialog() {
+        ForbiddenDialogFragment().show(childFragmentManager, "WITHDRAWAL_DIALOG")
     }
 }

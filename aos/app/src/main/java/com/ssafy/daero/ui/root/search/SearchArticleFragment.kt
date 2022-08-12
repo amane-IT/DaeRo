@@ -1,35 +1,38 @@
 package com.ssafy.daero.ui.root.search
 
-import android.util.Log
+import android.graphics.Paint
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.ssafy.daero.R
-import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
 import com.ssafy.daero.databinding.FragmentSearchArticleBinding
 import com.ssafy.daero.ui.adapter.search.SearchArticleAdapter
-import com.ssafy.daero.ui.adapter.search.SearchUserNameAdapter
+import com.ssafy.daero.utils.constant.ARTICLE_SEQ
+import com.ssafy.daero.utils.constant.DEFAULT
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.pagingUser
-import com.ssafy.daero.utils.searchedArticleContent
-import com.ssafy.daero.utils.searchedArticlePlace
-import com.ssafy.daero.utils.view.toast
+import com.ssafy.daero.utils.constant.SUCCESS
 
-class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layout.fragment_search_article){
-    private val TAG = "SearchArticleFragment_DaeRo"
-    private val searchViewModel : SearchViewModel by viewModels({ requireParentFragment() })
+class SearchArticleFragment :
+    BaseFragment<FragmentSearchArticleBinding>(R.layout.fragment_search_article) {
+    private val searchViewModel: SearchViewModel by viewModels({ requireParentFragment() })
     private lateinit var searchArticleContentAdapter: SearchArticleAdapter
     private lateinit var searchArticlePlaceAdapter: SearchArticleAdapter
 
     override fun init() {
+        initView()
         initAdapter()
         observeData()
         setOnClickListeners()
     }
 
-    private fun initAdapter(){
+    private fun initView() {
+        binding.textSearchArticlePlaceMoreData.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.textSearchArticleContentMoreData.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+    }
+
+    private fun initAdapter() {
         // 내용 검색
         searchArticleContentAdapter = SearchArticleAdapter().apply {
             onItemClickListener = searchArticleItemClickListener
@@ -43,52 +46,74 @@ class SearchArticleFragment : BaseFragment<FragmentSearchArticleBinding>(R.layou
         binding.recyclerSearchArticlePlace.adapter = searchArticlePlaceAdapter
     }
 
-    private fun observeData(){
+    private fun observeData() {
+        searchViewModel.resultArticleSearch.observe(viewLifecycleOwner) {
+            binding.scrollSearchArticle.visibility = View.VISIBLE
+            if (it.place.isEmpty()) {
+                binding.recyclerSearchArticlePlace.visibility = View.GONE
+                binding.textSearchArticlePlace.visibility = View.GONE
+                binding.textSearchArticlePlaceMoreData.visibility = View.GONE
+            } else {
+                binding.textSearchArticleNoContent.visibility = View.GONE
+                binding.recyclerSearchArticlePlace.visibility = View.VISIBLE
+                binding.textSearchArticlePlace.visibility = View.VISIBLE
+                binding.textSearchArticlePlaceMoreData.visibility = View.VISIBLE
+                searchArticlePlaceAdapter.apply {
+                    resultList = it.place
+                    notifyDataSetChanged()
+                }
+            }
 
-        // TODO: 게시글 API 연결하면 변경하기
-        searchViewModel.responseState_articles.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeData: 여기")
-            searchArticlePlaceAdapter.resultList = searchedArticlePlace
-            searchArticleContentAdapter.resultList = searchedArticleContent
-            searchArticleContentAdapter.notifyDataSetChanged()
-            searchArticlePlaceAdapter.notifyDataSetChanged()
+            if (it.content.isEmpty()) {
+                binding.recyclerSearchArticleContent.visibility = View.GONE
+                binding.textSearchArticleContent.visibility = View.GONE
+                binding.textSearchArticleContentMoreData.visibility = View.GONE
+            } else {
+                binding.textSearchArticleNoContent.visibility = View.GONE
+                binding.recyclerSearchArticleContent.visibility = View.VISIBLE
+                binding.textSearchArticleContent.visibility = View.VISIBLE
+                binding.textSearchArticleContentMoreData.visibility = View.VISIBLE
+                searchArticleContentAdapter.apply {
+                    resultList = it.content
+                    notifyDataSetChanged()
+                }
+            }
         }
 
-//        searchViewModel.resultArticleSearch.observe(viewLifecycleOwner){
-//            Log.d(TAG, "observeData: 여기")
-//            searchArticleContentAdapter.resultList = it.content
-//            searchArticlePlaceAdapter.resultList = it.place
-//            searchArticleContentAdapter.notifyDataSetChanged()
-//            searchArticlePlaceAdapter.notifyDataSetChanged()
-//        }
-
-        searchViewModel.responseState_userName.observe(viewLifecycleOwner){ state ->
-            when(state){
-                FAIL -> binding.textSearchUserNoData.visibility = View.VISIBLE
+        searchViewModel.responseState_articles.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                FAIL -> {
+                    binding.scrollSearchArticle.visibility = View.GONE
+                    binding.textSearchArticleNoContent.visibility = View.VISIBLE
+                    searchViewModel.responseState_articles.value = DEFAULT
+                }
+                SUCCESS -> {
+                    binding.scrollSearchArticle.visibility = View.VISIBLE
+                    binding.textSearchArticleNoContent.visibility = View.GONE
+                    searchViewModel.responseState_articles.value = DEFAULT
+                }
             }
         }
     }
 
-    private fun setOnClickListeners(){
+    private fun setOnClickListeners() {
         binding.apply {
             textSearchArticleContentMoreData.setOnClickListener {
-                if(App.keyword != "")
-                    findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
-                else
-                    toast("검색 결과가 없습니다.")
+                findNavController().navigate(R.id.action_rootFragment_to_searchContentMoreFragment)
             }
 
             textSearchArticlePlaceMoreData.setOnClickListener {
-                if(App.keyword != "")
-                    findNavController().navigate(R.id.action_rootFragment_to_searchPlaceNameMoreFragment)
-                else
-                    toast("검색 결과가 없습니다.")
+                findNavController().navigate(R.id.action_rootFragment_to_searchPlaceNameMoreFragment)
             }
         }
     }
 
     private val searchArticleItemClickListener: (
-        View, Int) -> Unit = { _, article_seq ->
-
+        View, Int
+    ) -> Unit = { _, article_seq ->
+        findNavController().navigate(
+            R.id.action_rootFragment_to_articleFragment,
+            bundleOf(ARTICLE_SEQ to article_seq)
+        )
     }
 }

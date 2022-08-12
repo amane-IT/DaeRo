@@ -9,17 +9,16 @@ import android.widget.ArrayAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
-import com.ssafy.daero.base.BaseFragment
+import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentTripNextBottomSheetBinding
-import com.ssafy.daero.utils.view.expandFullHeight
 
-
-class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
+class TripNextBottomSheetFragment(private val applyOptions: (Int, String) -> Unit) :
+    BottomSheetDialogFragment() {
     private var _binding: FragmentTripNextBottomSheetBinding? = null
     private val binding get() = _binding!!
 
-    private var time = 0
-    private var transportation = ""
+    private var time = 30
+    private var transportation = "walk"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,13 +35,16 @@ class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
         initView()
         expandFullHeight()
         setOnClickListeners()
-        setOnItemSelectedListener()
-        setOnCheckedChangeListener()
+        setOtherListeners()
     }
 
-    private fun initView(){
+    private fun initView() {
         binding.apply {
-            spinnerTripNextBottomTime.adapter = ArrayAdapter.createFromResource(requireContext(), R.array.spinner_time_list, android.R.layout.simple_spinner_dropdown_item)
+            spinnerTripNextBottomTime.adapter = ArrayAdapter.createFromResource(
+                requireContext(),
+                R.array.spinner_time_list,
+                android.R.layout.simple_spinner_dropdown_item
+            )
         }
     }
 
@@ -56,41 +58,37 @@ class TripNextBottomSheetFragment : BottomSheetDialogFragment() {
     private fun setOnClickListeners() {
         binding.apply {
             buttonTripNextBottomRecommend.setOnClickListener {
-                // TODO: 다음 여행지 추천
+                applyOptions(time, transportation)
+                dismiss()
             }
         }
     }
 
-    private fun setOnItemSelectedListener(){
+    private fun setOtherListeners() {
         binding.spinnerTripNextBottomTime.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) { }
-
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(
                     parent: AdapterView<*>?,
                     view: View?,
                     position: Int,
                     id: Long
                 ) {
-                    when (position) {
+                    time = when (position) {
                         // TODO: 이동시간 리스트 재설정하기
-                        0 -> time = 30
-                        1 -> time = 60
-                        2 -> time = 90
-                        3 -> time = 120
-                        4 -> time = 180
-                        else -> time = 0
+                        0 -> 30
+                        1 -> 60
+                        2 -> 90
+                        3 -> 120
+                        4 -> 180
+                        else -> 30
                     }
                 }
             }
-    }
-
-    private fun setOnCheckedChangeListener() {
-        binding.radioGroupTripNextBottom.setOnCheckedChangeListener { radioGroup, checkedId ->
-            when(checkedId){
-                // TODO: tranportation 타입에 맞춰서 변경하기
-                R.id.radioButton_tripNextBottm_walk -> transportation = "도보"
-                R.id.radioButton_tripNextBottm_byCar -> transportation = "차량"
+        binding.radioGroupTripNextBottom.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.radioButton_tripNextBottm_walk -> transportation = "walk"
+                R.id.radioButton_tripNextBottm_byCar -> transportation = "car"
             }
         }
     }

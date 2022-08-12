@@ -11,7 +11,8 @@ class ArticleDataSource(private val snsApi: SnsApi) :
     RxPagingSource<Int, ArticleHomeItem>() {
     override fun getRefreshKey(state: PagingState<Int, ArticleHomeItem>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestItemToPosition(anchorPosition)?.article_seq
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
@@ -23,7 +24,7 @@ class ArticleDataSource(private val snsApi: SnsApi) :
                 LoadResult.Page(
                     data = it.results,
                     prevKey = if (page == 1) null else page - 1,
-                    nextKey = if (page == it.total_page) null else page + 1
+                        nextKey = if (page >= it.total_page) null else page + 1
                 ) as LoadResult<Int, ArticleHomeItem>
             }
             .onErrorReturn {

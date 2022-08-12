@@ -8,6 +8,8 @@ import com.ssafy.daero.data.dto.search.ArticleMoreItem
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto
 import com.ssafy.daero.data.dto.trip.MyJourneyResponseDto
 import com.ssafy.daero.data.dto.trip.TripFollowSelectResponseDto
+import com.ssafy.daero.data.dto.trip.TripHotResponseDto
+import com.ssafy.daero.data.dto.trip.TripPopularResponseDto
 import com.ssafy.daero.data.dto.user.FollowResponseDto
 import com.ssafy.daero.data.dto.user.UserBlockResponseDto
 import io.reactivex.rxjava3.core.Completable
@@ -28,6 +30,14 @@ interface SnsApi {
      */
     @GET("sns/article/{article_seq}")
     fun article(@Path("article_seq") articleSeq: Int): Single<Response<ArticleResponseDto>>
+
+    /**
+     * 게시글 삭제
+     */
+    @DELETE("sns/article/{article_seq}")
+    fun articleDelete(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
 
     /**
      * 댓글 조회
@@ -115,6 +125,15 @@ interface SnsApi {
     ): Completable
 
     /**
+     * 유저 신고하기
+     */
+    @POST("sns/user/{user_seq}/report")
+    fun reportUser(
+        @Path("user_seq") userSeq: Int,
+        @Body reportRequest: ReportRequestDto
+    ): Completable
+
+    /**
      * 댓글 신고하기
      */
     @POST("sns/reply/{reply_seq}/report")
@@ -162,7 +181,7 @@ interface SnsApi {
      * */
     @GET("sns/search")
     fun searchUserName(
-        @Query("user_nickname") userNickname: String,
+        @Query("user") userNickname: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<UserNameItem>>
 
@@ -188,7 +207,7 @@ interface SnsApi {
      * */
     @GET("sns/search")
     fun searchPlaceMore(
-        @Query("place-name") place_name: String,
+        @Query("place") place: String,
         @Query("page") page: Int
     ): Single<PagingResponseDto<ArticleMoreItem>>
 
@@ -203,10 +222,18 @@ interface SnsApi {
     /**
      * 컬렉션 목록
      **/
-    @GET("sns/collections")
+    @GET("sns/collection")
     fun getCollections(
         @Query("page") page: Int
     ): Single<PagingResponseDto<CollectionItem>>
+
+    /**
+     * 게시물 숨기기
+     */
+    @POST("sns/article/{article_seq}/hide")
+    fun blockArticle(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
 
     /**
      * 차단하기
@@ -227,8 +254,34 @@ interface SnsApi {
     /**
      * 차단 목록
      */
-    @GET("sns/users/{user_seq}/block")
-    fun getBlockUser(
-        @Path("user_seq") userSeq: Int
-    ): Single<Response<List<UserBlockResponseDto>>>
+    @GET("sns/users/block")
+    fun getBlockUser(): Single<Response<List<UserBlockResponseDto>>>
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/article/{article_seq}/public/close")
+    fun articleClose(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
+
+    /**
+     * 댓글 수정
+     */
+    @PUT("sns/article/{article_seq}/public/open")
+    fun articleOpen(
+        @Path("article_seq") articleSeq: Int
+    ): Completable
+
+    /**
+     * 핫한 여행기
+     */
+    @GET("sns/article/popular")
+    fun getHotArticles() : Single<Response<List<TripHotResponseDto>>>
+
+    /**
+     * 게시글 수정
+     */
+    @PUT("sns/article/{article_seq}")
+    fun editArticle(@Path("article_seq") articleSeq: Int, @Body articleEditRequestDto: ArticleEditRequestDto) : Single<Response<Unit>>
 }

@@ -30,6 +30,7 @@
                 android:text="수정" />
 
             <View
+                android:id="@+id/view_modify"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -44,6 +45,7 @@
                 android:text="삭제" />
 
             <View
+                android:id="@+id/view_delete"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
@@ -59,6 +61,7 @@
                 android:text="신고하기" />
 
             <View
+                android:id="@+id/view_report"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/lightGray" />
