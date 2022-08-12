@@ -468,7 +468,7 @@
     </select>
 
     <select id="selectArticleCountByContent" parameterType="String" resultType="_int">
-        select count(0)
+        select distinct count(0)
         from `articles` as `a`
                  left join `trips` `t` on `t`.`trips_seq` = `a`.`trips_seq`
                  left join `trip_days` `d` on `d`.trip = `t`.`trips_seq`
