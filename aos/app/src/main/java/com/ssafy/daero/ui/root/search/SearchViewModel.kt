@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.paging.rxjava3.cachedIn
 import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.dto.search.SearchArticleResponseDto

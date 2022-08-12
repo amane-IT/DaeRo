@@ -19,6 +19,7 @@ const val TRIP_STAMP_ID = "trip_stamp_id"
  */
 const val ARTICLE = 90
 const val COMMENT = 91
+const val USER = 92
 
 
 /**

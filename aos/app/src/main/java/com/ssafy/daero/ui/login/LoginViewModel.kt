@@ -8,7 +8,6 @@ import com.ssafy.daero.base.BaseViewModel
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.data.repository.UserRepository
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 import retrofit2.HttpException
 
 class LoginViewModel : BaseViewModel() {

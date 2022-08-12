@@ -12,6 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.databinding.FragmentArticleMenuBottomSheetBinding
+import com.ssafy.daero.ui.root.mypage.ReportListener
 import com.ssafy.daero.ui.root.trip.TripFollowBottomSheetFragment
 import com.ssafy.daero.utils.constant.ARTICLE
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
@@ -23,10 +24,13 @@ class ArticleMenuBottomSheetFragment(
     var userSeq: Int,
     var fragmentSeq: Int,
     var listener: ArticleListener,
+    var reportListener: ReportListener,
     var expose: Char = 'y',
+    var position: Int = 0
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
+
 
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
@@ -63,8 +67,6 @@ class ArticleMenuBottomSheetFragment(
         if (userSeq == App.prefs.userSeq) {
             binding.tvArticleMenuTripFollow.visibility = View.GONE
             binding.viewArticleMenuTripFollow.visibility = View.GONE
-            binding.tvArticleMenuHide.visibility = View.GONE
-            binding.viewArticleMenuHide.visibility = View.GONE
             binding.tvArticleMenuReport.visibility = View.GONE
             binding.viewArticleMenuReport.visibility = View.GONE
             binding.tvArticleMenuBlock.visibility = View.GONE
@@ -127,14 +129,14 @@ class ArticleMenuBottomSheetFragment(
         binding.tvArticleMenuReport.setOnClickListener {
             //todo: 신고하기, album_seq
             dismiss()
-            ReportBottomSheetFragment(ARTICLE, articleSeq).show(
+            ReportBottomSheetFragment(ARTICLE, articleSeq, reportListener).show(
                 parentFragmentManager,
                 REPORT_BOTTOM_SHEET
             )
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기
-            listener.blockAdd(userSeq)
+            listener.blockArticle(articleSeq, position)
             dismiss()
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {
@@ -147,10 +149,6 @@ class ArticleMenuBottomSheetFragment(
                 listener.articleOpen(articleSeq)
             }
             dismiss()
-        }
-        binding.tvArticleMenuHide.setOnClickListener {
-            //숨기기
-
         }
         binding.tvArticleMenuCancel.setOnClickListener {
             dismiss()

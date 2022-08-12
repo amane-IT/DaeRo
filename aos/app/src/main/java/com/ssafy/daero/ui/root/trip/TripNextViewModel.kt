@@ -10,7 +10,6 @@ import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.EMPTY
 import com.ssafy.daero.utils.constant.FAIL
-import com.ssafy.daero.utils.constant.SUCCESS
 
 class TripNextViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()

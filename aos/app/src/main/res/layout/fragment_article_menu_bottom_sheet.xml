@@ -96,21 +96,6 @@
                 android:background="@color/lightGray" />
 
             <TextView
-                android:id="@+id/tv_article_menu_hide"
-                style="@style/SubHeadSemiBold"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="12dp"
-                android:gravity="center"
-                android:text="숨기기" />
-
-            <View
-                android:id="@+id/view_article_menu_hide"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/lightGray" />
-
-            <TextView
                 android:id="@+id/tv_article_menu_report"
                 style="@style/SubHeadSemiBold"
                 android:layout_width="match_parent"

@@ -34,10 +34,10 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(R.layout.fragment_sea
         binding.imageViewSearchSearchIcon.setOnClickListener {
             val keyword = binding.editTextSearchSearchBar.text.toString()
 
-            if (keyword.isBlank()) {
-                toast("검색어를 한 글자 이상 입력해주세요")
-                return@setOnClickListener
-            }
+//            if (keyword.isBlank()) {
+//                toast("검색어를 한 글자 이상 입력해주세요")
+//                return@setOnClickListener
+//            }
 
             searchViewModel.searchUserName(keyword)
             searchViewModel.searchArticle(keyword)

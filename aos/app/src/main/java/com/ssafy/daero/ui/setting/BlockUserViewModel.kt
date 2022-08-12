@@ -53,4 +53,16 @@ class BlockUserViewModel : BaseViewModel() {
         )
     }
 
+    fun blockArticle(articleSeq: Int) {
+        addDisposable(
+            snsRepository.blockArticle(articleSeq)
+                .subscribe({
+                    blockState.postValue(SUCCESS)
+                }, { throwable ->
+                    Log.d("ArticleVM_DaeRo", throwable.toString())
+                    blockState.postValue(FAIL)
+                })
+        )
+    }
+
 }
