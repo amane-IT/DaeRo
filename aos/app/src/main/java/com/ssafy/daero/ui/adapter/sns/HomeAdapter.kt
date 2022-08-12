@@ -21,7 +21,7 @@ class HomeAdapter(
     private val onLikeClickListener: (Int, Boolean) -> Unit,     // 좋아요 버튼 클릭
     private val onLikesClickListener: (Int, Int) -> Unit,    // 좋아요 갯수 클릭 (좋아요 리스트 보여주기)
     private val onCommentClickListener: (Int, Int) -> Unit,  // 댓글 버튼 클릭 (댓글 리스트 보여주기)
-    private val onMoreClickListener: (Int, Int) -> Unit,     // 더보기 버튼 클릭
+    private val onMoreClickListener: (Int, Int, Int) -> Unit,     // 더보기 버튼 클릭
     private val onArticleClickListener: (Int) -> Unit,  // 게시글 클릭 (게시글 상세로 이동)
     private val onUserClickListener: (Int) -> Unit,     // 유저 클릭
     private val context: Context,
@@ -117,9 +117,9 @@ class HomeAdapter(
             }
         }
 
-        fun bindMoreClickListener(onMoreClickListener: (Int, Int) -> Unit) {
+        fun bindMoreClickListener(onMoreClickListener: (Int, Int, Int) -> Unit) {
             binding.imageHomeItemMenu.setOnClickListener {
-                onMoreClickListener(binding.article?.article_seq ?: 0, binding.article?.user_seq ?: 0)
+                onMoreClickListener(binding.article?.article_seq ?: 0, binding.article?.user_seq ?: 0, bindingAdapterPosition)
             }
         }
 

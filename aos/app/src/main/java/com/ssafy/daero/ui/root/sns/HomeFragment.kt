@@ -113,8 +113,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
     }
 
     // 더보기 버튼 클릭
-    private val onMoreClickListener: (Int, Int) -> Unit = { articleSeq, userSeq->
-        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,this@HomeFragment, this@HomeFragment).show(
+    private val onMoreClickListener: (Int, Int, Int) -> Unit = { articleSeq, userSeq, position->
+        ArticleMenuBottomSheetFragment(articleSeq, userSeq,1,
+            this@HomeFragment, this@HomeFragment, position = position).show(
             childFragmentManager,
             ARTICLE_MENU_BOTTOM_SHEET
         )
@@ -157,16 +158,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(R.layout.fragment_home), 
         }
     }
 
-    override fun blockArticle(articleSeq: Int) {
+    override fun blockArticle(articleSeq: Int, position: Int) {
         blockUserViewModel.blockArticle(articleSeq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
                 SUCCESS -> {
                     toast("해당 여행기록을 차단했습니다.")
                     homeViewModel.invalidatePageSource()
-                    var idx = homeAdapter.itemCount
                     homeAdapter.refresh()
-                    binding.recyclerHome.scrollToPosition(idx)
+                    binding.recyclerHome.scrollToPosition(position)
                     blockUserViewModel.blockState.value = DEFAULT
                 }
                 FAIL -> {

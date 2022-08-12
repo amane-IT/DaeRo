@@ -16,6 +16,7 @@ import com.ssafy.daero.ui.root.sns.*
 import com.ssafy.daero.ui.setting.BlockUserViewModel
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.view.toast
+import java.text.FieldPosition
 
 class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>(R.layout.fragment_search_content_more), ArticleListener, ReportListener {
     private val TAG = "SearchContentMore_DaeRo"
@@ -139,7 +140,7 @@ class SearchContentMoreFragment : BaseFragment<FragmentSearchContentMoreBinding>
         }
     }
 
-    override fun blockArticle(articleSeq: Int) {
+    override fun blockArticle(articleSeq: Int,position: Int) {
         blockUserViewModel.blockArticle(articleSeq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {

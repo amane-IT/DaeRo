@@ -25,10 +25,12 @@ class ArticleMenuBottomSheetFragment(
     var fragmentSeq: Int,
     var listener: ArticleListener,
     var reportListener: ReportListener,
-    var expose: Char = 'y'
+    var expose: Char = 'y',
+    var position: Int = 0
 ) : BottomSheetDialogFragment() {
 
     private lateinit var binding: FragmentArticleMenuBottomSheetBinding
+
 
 
     override fun onCreate(@Nullable savedInstanceState: Bundle?) {
@@ -134,7 +136,7 @@ class ArticleMenuBottomSheetFragment(
         }
         binding.tvArticleMenuBlock.setOnClickListener {
             //차단하기
-            listener.blockArticle(articleSeq)
+            listener.blockArticle(articleSeq, position)
             dismiss()
         }
         binding.tvArticleMenuTripGoPublic.setOnClickListener {

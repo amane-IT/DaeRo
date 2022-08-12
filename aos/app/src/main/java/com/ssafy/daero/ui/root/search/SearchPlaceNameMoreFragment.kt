@@ -127,7 +127,7 @@ class SearchPlaceNameMoreFragment : BaseFragment<FragmentSearchPlaceNameMoreBind
         }
     }
 
-    override fun blockArticle(articleSeq: Int) {
+    override fun blockArticle(articleSeq: Int,position: Int) {
         blockUserViewModel.blockArticle(articleSeq)
         blockUserViewModel.blockState.observe(viewLifecycleOwner) {
             when (it) {
