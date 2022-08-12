@@ -23,7 +23,6 @@ import com.ssafy.daero.ui.adapter.TripUntilNowAdapter
 import com.ssafy.daero.ui.root.RootFragment
 import com.ssafy.daero.utils.constant.*
 import com.ssafy.daero.utils.file.deleteCache
-import com.ssafy.daero.utils.popularTripPlaces
 import com.ssafy.daero.utils.view.toast
 
 class TripFollowFragment : BaseFragment<FragmentTripFollowBinding>(R.layout.fragment_trip_follow) {

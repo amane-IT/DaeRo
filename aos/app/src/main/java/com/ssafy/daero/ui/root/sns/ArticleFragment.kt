@@ -141,7 +141,6 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             )
         }
         binding.imgArticleLike.setOnClickListener {
-            // todo articleSeq
             if (likeYn == true) {
                 articleViewModel.likeDelete(App.prefs.userSeq, articleSeq)
                 if (binding.tvArticleLike.text.toString().toInt() > 0) {
@@ -157,7 +156,6 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             likeSetting()
         }
         binding.LinearArticleLike.setOnClickListener {
-            //todo: 좋아요 리스트 페이지: 좋아요 누른 인원, article_seq 번들로 전달
             LikeBottomSheetFragment(
                 articleSeq,
                 articleViewModel.articleData.likes,
@@ -165,21 +163,18 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
             ).show(childFragmentManager, LIKE_BOTTOM_SHEET)
         }
         binding.LinearArticleComment.setOnClickListener {
-            //todo 댓글 리스트 페이지: 댓글수, article_seq 번들로 전달
             CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments, userProfileClickListener).show(
                 childFragmentManager,
                 COMMENT_BOTTOM_SHEET
             )
         }
         binding.LinearArticleCommentImg.setOnClickListener {
-            //todo 댓글, article_seq 번들로 전달
             CommentBottomSheetFragment(articleSeq, articleViewModel.articleData.comments, userProfileClickListener).show(
                 childFragmentManager,
                 COMMENT_BOTTOM_SHEET
             )
         }
         binding.imgArticleMenu.setOnClickListener {
-            // todo: articleSeq 넘기기
             ArticleMenuBottomSheetFragment(
                 articleSeq,
                 articleViewModel.articleData.user_seq,
@@ -298,9 +293,10 @@ class ArticleFragment : BaseFragment<FragmentArticleBinding>(R.layout.fragment_a
     private fun bindImage() {
         Glide.with(binding.imgArticleUser)
             .load(articleViewModel.articleData.profile_url)
-            .placeholder(R.drawable.ic_back)
+            .override(200,200)
+            .placeholder(R.drawable.img_user)
             .apply(RequestOptions().centerCrop())
-            .error(R.drawable.ic_back)
+            .error(R.drawable.img_user)
             .into(binding.imgArticleUser)
     }
 

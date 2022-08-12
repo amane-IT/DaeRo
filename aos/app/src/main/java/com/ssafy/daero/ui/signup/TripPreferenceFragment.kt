@@ -1,6 +1,5 @@
 package com.ssafy.daero.ui.signup
 
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -16,7 +15,8 @@ import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
 import com.ssafy.daero.utils.view.toast
 
-class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.layout.fragment_trip_preference){
+class TripPreferenceFragment :
+    BaseFragment<FragmentTripPreferenceBinding>(R.layout.fragment_trip_preference) {
 
     private lateinit var tripPreferenceAdapter: TripPreferenceAdapter
     private val tripPreferenceViewModel: TripPreferenceViewModel by viewModels()
@@ -26,54 +26,60 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
 
     override fun init() {
         initView()
+        initAdatper()
         setOnClickListener()
         observeData()
+        getPreferences()
     }
 
-    private fun initView(){
-        binding.buttonTripPreferenceStart.isEnabled = false
-
-        tripPreferenceAdapter = TripPreferenceAdapter().apply {
-            onItemClickListener = tripPreferenceItemClickListener
-        }
-
-        binding.recyclerTripPreferenceImageList.adapter = tripPreferenceAdapter
-
+    private fun getPreferences() {
         tripPreferenceViewModel.getPreferences()
     }
 
-    private fun setOnClickListener(){
+    private fun initView() {
+        binding.buttonTripPreferenceStart.isEnabled = false
+    }
+
+    private fun initAdatper() {
+        tripPreferenceAdapter = TripPreferenceAdapter().apply {
+            onItemClickListener = tripPreferenceItemClickListener
+        }
+        binding.recyclerTripPreferenceImageList.adapter = tripPreferenceAdapter
+    }
+
+    private fun setOnClickListener() {
         binding.apply {
             buttonTripPreferenceStart.setOnClickListener {
-                if(result.size == 5){
+                if (result.size == 5) {
                     var requestList = result.toList()
                     requestList = requestList.sorted()
-                    Log.d("Trip", "setOnClickListener: ${requestList.toString()}")
                     tripPreferenceViewModel.postPreference(requestList)
                 }
             }
         }
     }
 
-    private fun observeData(){
-        tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner){
+    private fun observeData() {
+        tripPreferenceViewModel.showProgress.observe(viewLifecycleOwner) {
             binding.progressBarTripPreferenceLoading.isVisible = it
         }
 
-        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner){ state ->
-            when(state){
-                SUCCESS -> {
-                    tripPreferenceAdapter.dataList = tripPreferenceViewModel.preferenceList
-                }
-
+        tripPreferenceViewModel.responseState_getPreference.observe(viewLifecycleOwner) { state ->
+            when (state) {
                 FAIL -> {
                     toast("이미지 로딩에 실패했습니다.")
+                    tripPreferenceViewModel.responseState_getPreference.value = DEFAULT
                 }
             }
         }
 
+        tripPreferenceViewModel.preferences.observe(viewLifecycleOwner) {
+            tripPreferenceAdapter.dataList = it
+            tripPreferenceAdapter.notifyDataSetChanged()
+        }
+
         tripPreferenceViewModel.responseState_postPreference.observe(viewLifecycleOwner) { state ->
-            when(state) {
+            when (state) {
                 SUCCESS -> {
                     jwtLogin()
                     findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
@@ -85,14 +91,14 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
 
         }
 
-        tripPreferenceViewModel.count.observe(viewLifecycleOwner){
+        tripPreferenceViewModel.count.observe(viewLifecycleOwner) {
             binding.textTripPreferenceCount.text = "$it / 5"
         }
 
         tripPreferenceAdapter.notifyDataSetChanged()
 
         loginViewModel.responseState.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 SUCCESS -> {
                     findNavController().navigate(R.id.action_tripPreference_to_rootFragment)
                     loginViewModel.responseState.value = DEFAULT
@@ -112,12 +118,10 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
         }
     }
 
-    private val tripPreferenceItemClickListener : (View, Int) -> Unit = { _, idx ->
+    private val tripPreferenceItemClickListener: (View, Int) -> Unit = { _, idx ->
 
-        if(tripPreferenceViewModel.count.value!! < 5){
-            Log.d("TAG", ": $idx")
-            Log.d("TAG", ": ${tripPreferenceAdapter.dataList[idx].place_seq}")
-            if(tripPreferenceAdapter.dataList[idx].isSelected){
+        if (tripPreferenceViewModel.count.value!! < 5) {
+            if (tripPreferenceAdapter.dataList[idx].isSelected) {
                 tripPreferenceAdapter.dataList[idx].isSelected = false
                 tripPreferenceViewModel.minusCount()
                 result.remove(tripPreferenceAdapter.dataList[idx].place_seq)
@@ -125,11 +129,11 @@ class TripPreferenceFragment : BaseFragment<FragmentTripPreferenceBinding>(R.lay
                 tripPreferenceAdapter.dataList[idx].isSelected = true
                 tripPreferenceViewModel.plusCount()
                 result.add(tripPreferenceAdapter.dataList[idx].place_seq)
-                if(tripPreferenceViewModel.count.value!! == 5)
+                if (tripPreferenceViewModel.count.value!! == 5)
                     binding.buttonTripPreferenceStart.isEnabled = true
             }
         } else {
-            if(tripPreferenceAdapter.dataList[idx].isSelected) {
+            if (tripPreferenceAdapter.dataList[idx].isSelected) {
                 tripPreferenceAdapter.dataList[idx].isSelected = false
                 tripPreferenceViewModel.minusCount()
                 result.remove(tripPreferenceAdapter.dataList[idx].place_seq)

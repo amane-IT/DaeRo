@@ -1,9 +1,12 @@
 package com.ssafy.daero.ui.root.collection
 
 import android.util.Log
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.ssafy.daero.R
 import com.ssafy.daero.application.App
 import com.ssafy.daero.base.BaseFragment
@@ -12,6 +15,7 @@ import com.ssafy.daero.ui.adapter.sns.CollectionAdapter
 import com.ssafy.daero.ui.root.sns.ArticleViewModel
 import com.ssafy.daero.utils.constant.ARTICLE_SEQ
 import com.ssafy.daero.utils.constant.USER_SEQ
+import kotlinx.coroutines.launch
 
 class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.fragment_collection){
     private val TAG = "CollectionFragment_DaeRo"
@@ -25,6 +29,7 @@ class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.frag
         initAdapter()
         observeData()
         setOnClickListeners()
+        setOtherListeners()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -50,7 +55,7 @@ class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.frag
 
     private fun observeData(){
         collectionViewModel.collections.observe(viewLifecycleOwner){
-            Log.d(TAG, "observeData: $it")
+            binding.textCollectionNoContent.visibility = View.GONE
             collectionAdapter.submitData(lifecycle, it)
         }
     }
@@ -60,6 +65,18 @@ class CollectionFragment : BaseFragment<FragmentCollectionBinding>(R.layout.frag
         binding.apply {
             imageCollectionNotification.setOnClickListener {
                 findNavController().navigate(R.id.action_rootFragment_to_notificationFragment)
+            }
+        }
+    }
+
+    private fun setOtherListeners() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            collectionAdapter.loadStateFlow.collect {
+                if(it.append is LoadState.NotLoading && it.append.endOfPaginationReached) {
+                    if(collectionAdapter.itemCount < 1) {
+                        binding.textCollectionNoContent.visibility = View.VISIBLE
+                    }
+                }
             }
         }
     }

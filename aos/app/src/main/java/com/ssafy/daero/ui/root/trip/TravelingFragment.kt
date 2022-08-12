@@ -118,6 +118,10 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
         }
+        // 관리자 계정만 임시 인증 버튼 활성화
+        if(App.prefs.userSeq == 1) {
+            binding.buttonTravelingTemporary.visibility = View.VISIBLE
+        }
     }
 
     private fun initAdapter() {

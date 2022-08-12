@@ -46,6 +46,7 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
 
         if(userSeq == App.prefs.userSeq) {
             binding.buttonOtherPageFollow.visibility = View.GONE
+            binding.imgOtherPageMenu.visibility = View.GONE
         }
     }
 

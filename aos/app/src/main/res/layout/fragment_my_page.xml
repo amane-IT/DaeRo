@@ -69,10 +69,10 @@
 
         <ImageView
             android:id="@+id/image_myPage_badge"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginStart="12dp"
-            android:src="@drawable/ic_badge_example"
+            android:src="@drawable/stamp_normal"
             app:layout_constraintBottom_toBottomOf="@id/text_myPage_name"
             app:layout_constraintStart_toEndOf="@id/text_myPage_name"
             app:layout_constraintTop_toTopOf="@id/text_myPage_name" />

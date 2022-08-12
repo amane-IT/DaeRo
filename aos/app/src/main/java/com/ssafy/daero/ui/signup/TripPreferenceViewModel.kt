@@ -22,7 +22,9 @@ class TripPreferenceViewModel : BaseViewModel() {
     val responseState_getPreference = MutableLiveData<Int>()
     val responseState_postPreference = MutableLiveData<Int>()
 
-    var preferenceList: List<TripPreferenceResponseDto> = emptyList()
+    private val _preferences = MutableLiveData<List<TripPreferenceResponseDto>>()
+    val preferences : LiveData<List<TripPreferenceResponseDto>>
+        get() = _preferences
 
     private val _count = MutableLiveData<Int>()
     val count: LiveData<Int>
@@ -39,15 +41,12 @@ class TripPreferenceViewModel : BaseViewModel() {
             tripPreferenceRepository.getPreference()
                 .subscribe({ response ->
                     if (response.body()!!.isNotEmpty()) {
-                        responseState_getPreference.postValue(SUCCESS)
-                        preferenceList = response.body()!!
-
+                        _preferences.postValue(response.body())
                     } else {
                         responseState_getPreference.postValue(FAIL)
                     }
                     _showProgress.postValue(false)
                     _count.postValue(0)
-                    Log.d("TripPreferenceVM", "plusCount: $count")
                 }, { throwable ->
                     _showProgress.postValue(false)
                     responseState_getPreference.postValue(FAIL)
@@ -57,17 +56,14 @@ class TripPreferenceViewModel : BaseViewModel() {
 
     fun postPreference(result: List<Int>){
         _showProgress.postValue(true)
-        Log.d("TripPreferenceViewModel", "postPreference: ${App.prefs.userSeq}")
         addDisposable(
             tripPreferenceRepository.postPreference(App.prefs.userSeq, result)
                 .subscribe({
                     _showProgress.postValue(false)
                     responseState_postPreference.postValue(SUCCESS)
                 }, { throwable ->
-                    Log.d("TripPreferenceVM_DaeRo", throwable.toString())
                     if(throwable is HttpException){
                         _showProgress.postValue(false)
-                        Log.d("TripPreferenceVM_DaeRo", throwable.code().toString())
                         if(throwable.code() == 400) {
                             responseState_postPreference.postValue(SUCCESS)
                         } else{
@@ -80,11 +76,9 @@ class TripPreferenceViewModel : BaseViewModel() {
 
     fun plusCount(){
         _count.value = _count.value!!.plus(1)
-        Log.d("TripPreferenceVM", "plusCount: ${_count.value}")
     }
 
     fun minusCount() {
         _count.value = _count.value?.minus(1)
-        Log.d("TripPreferenceVM", "minusCount: ${_count.value}")
     }
 }
