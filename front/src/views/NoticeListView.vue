@@ -2,17 +2,27 @@
   <div>
     <h2>공지사항</h2>
 		<div>
-    <b-table id="noticetable" small :fields="fields" :items="noticeList" responsive="sm">
+    <b-table id="noticetable" stacked small :fields="fields" :items="noticeList" responsive="sm">
 
       <template #cell(index)="data">
         {{ data.index + 1 }}
       </template>
 
       <template #cell(title)="data">
-        {{ data.item.title }}
+        <details>
+          <summary>{{ data.item.title }}</summary>
+          <p>{{ data.item.content }}</p>
+        </details>
+      </template>
+      <template #cell(admin_seq)="data">
+        {{ data.item.admin_seq }}
+      </template>
+      <template #cell(created_at)="data">
+        {{ data.item.created_at }}
       </template>
     </b-table>
 		</div>
+
 		<!-- <b-pagination
       v-model="page"
       :total-rows="rows"
@@ -42,7 +52,7 @@ export default {
           'index',
           { key: 'title', label: '제목' },
           { key: 'admin_seq', label: '작성자' },
-          { key: 'created_at', label: '작성일자'}
+          { key: 'created_at', label: '작성일자'},
         ],
 			rows: 5,
 		}
@@ -51,11 +61,10 @@ export default {
 			...mapGetters(['noticeList', 'totalPage', 'currentPage'])
 	},
 	methods: {
-			...mapActions(['getNoticeList']),
-			handlePage() {
-				this.getNoticeList(this.page)
-    }
-
+    ...mapActions(['getNoticeList']),
+    handlePage() {
+      this.getNoticeList(this.page)
+    },
 	},
 	created() {
 			this.getNoticeList(this.page)
@@ -64,5 +73,25 @@ export default {
 </script>
 
 <style>
+.answer {
+    display: none;
+    padding-bottom: 30px;
+  }
+.question {
+  font-size: 19px;
+  padding: 30px 0;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+summary {
+  list-style: none;
+}
+summary::-webkit-details-marker {
+  display: none;
+}
 
 </style>
