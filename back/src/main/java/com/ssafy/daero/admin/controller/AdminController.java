@@ -42,6 +42,13 @@ public class AdminController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/user/{user_seq}")
+    public ResponseEntity<Map<String, Object>> userList(@PathVariable("user_seq") int userSeq) {
+        Map<String, Object> res = adminService.userDetail(userSeq);
+        if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
     @GetMapping("/report")
     public ResponseEntity<Map<String, Object>> reportList(@RequestParam(required = false, defaultValue = "1") String page) {
         Map<String, Object> res = adminService.reportList(Integer.parseInt(page));
