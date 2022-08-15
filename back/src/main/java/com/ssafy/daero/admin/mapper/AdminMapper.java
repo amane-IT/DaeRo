@@ -81,7 +81,7 @@ public interface AdminMapper {
 
     int selectNoticeCount();
 
-    ArrayList<Map<String, Object>> selectNoticeList(int page);
+    ArrayList<Map<String, Object>> selectNoticeList(int limit, int offset);
 
     int insertNotice(NoticeVo noticeVo);
 

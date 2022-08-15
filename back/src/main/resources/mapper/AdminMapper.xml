@@ -342,22 +342,21 @@
     </delete>
 
     <select id="selectNoticeCount" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.notice
     </select>
 
     <select id="selectNoticeList" parameterType="_int" resultType="java.util.Map">
-        SELECT noti.`notice_seq`, noti.`title`, noti.`content`, noti.`created_at`, noti.`admin_seq`
-        FROM (SELECT row_number() over (ORDER BY n.notice_seq) AS row,
-                     n.`notice_seq`,
-                     n.`title`,
-                     n.`content`,
-                     n.`created_at`,
-                     n.`admin_seq`
-
-              FROM daero.notice n) AS noti
-        WHERE (#{page} - 1) * 10 &lt; noti.row
-          AND noti.row &lt; 1 + (#{page} * 10)
+        SELECT `n`.`notice_seq`,
+               `n`.`admin_seq`,
+               `n`.`title`,
+               `n`.`content`,
+               `n`.`created_at`,
+               `n`.`updated_at`,
+               `a`.`admin_name`
+        FROM `notice` `n`
+                 join `admin` `a` on `a`.`admin_seq` = `n`.`admin_seq`
+        limit #{limit} offset #{offset}
     </select>
 
     <insert id="insertNotice" parameterType="com.ssafy.daero.admin.vo.NoticeVo">

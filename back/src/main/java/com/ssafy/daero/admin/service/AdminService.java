@@ -23,6 +23,7 @@ import java.util.*;
 public class AdminService {
     private final int ARTICLE_PAGE_SIZE = 10;
     private final int REPORT_PAGE_SIZE = 10;
+    private final int NOTICE_PAGE_SIZE = 10;
     private final AdminMapper adminMapper;
     private final SnsMapper snsMapper;
     private final TripMapper tripMapper;
@@ -428,10 +429,10 @@ public class AdminService {
     }
 
     public Map<String, Object> noticeList(int page) {
-        int totalPage = (int) Math.ceil(adminMapper.selectNoticeCount()/10.0);
+        int totalPage = (adminMapper.selectNoticeCount() - 1) / NOTICE_PAGE_SIZE + 1;
         if (totalPage == 0) { totalPage = 1; }
         if (page > totalPage) { return null; }
-        ArrayList<Map<String, Object>> results = adminMapper.selectNoticeList(page);
+        ArrayList<Map<String, Object>> results = adminMapper.selectNoticeList(NOTICE_PAGE_SIZE, (page - 1) * NOTICE_PAGE_SIZE);
 
         Map<String, Object> noticeList = new HashMap<>();
         noticeList.put("total_page", totalPage);
