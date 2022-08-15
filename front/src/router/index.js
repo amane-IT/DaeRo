@@ -12,6 +12,7 @@ import PlaceDetailView from '@/views/PlaceDetailView'
 import ReportListView from '@/views/ReportListView'
 import InquiryListView from '@/views/InquiryListView'
 import InquiryDetailView from '@/views/InquiryDetailView'
+import NoticeListView from '@/views/NoticeListView'
 
 Vue.use(VueRouter)
 
@@ -70,6 +71,11 @@ const routes = [
     path: '/inquiry/:inquirySeq',
     name: 'inquiryDetail',
     component: InquiryDetailView
+  },
+  {
+    path: '/notice',
+    name: 'noticeList',
+    component: NoticeListView
   }
 ]
 
