@@ -6,10 +6,28 @@ export default ({
   state: {
     placeList: [],
     place: {},
+    tags: [
+      '',
+      '바다',
+      '산',
+      '강',
+      '수목원',
+      '역사',
+      '공원',
+      '전망대',
+      '체험',
+      '먹거리',
+      '거리',
+      '박물관',
+      '불교',
+      '성당',
+      '교회'
+    ]
   },
   getters: {
     placeList: state => state.placeList,
     place: state => state.place,
+    tags: state => state.tags,
   },
   mutations: {
     SET_PLACE_LIST: (state, placeList) => state.placeList = placeList,
