@@ -52,8 +52,8 @@ export default {
       fields: [
         { key: 'content_type', label: '카테고리'},
         { key: 'report_categories_seq', label: '신고유형' },
-        { key: 'reporter_user_seq', label: '신고인'},
-        { key: 'reported_user_seq', label: '피신고인'},
+        { key: 'reporter_user_nickname', label: '신고인'},
+        { key: 'reported_user_nickname', label: '피신고인'},
         { key: 'reported_at', label: '신고일자' },
         { key: 'detail', label: '상세' },
         { key: 'handled_yn', label: '처리여부'},
