@@ -134,7 +134,7 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
             textOtherPageName.text = userProfile.nickname
             textOtherPageFollower.text = userProfile.follower.toString()
             textOtherPageFollowing.text = userProfile.following.toString()
-            textOtherPageTitle.text = userProfile.nickname
+            textOtherPageTitle.text = "${userProfile.nickname}님의 여행일지"
             if (userProfile.followYn == 'y') {
                 followState = true
                 buttonOtherPageFollow.text = "언팔로우"
