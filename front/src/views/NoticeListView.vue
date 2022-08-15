@@ -73,20 +73,6 @@ export default {
 </script>
 
 <style>
-.answer {
-    display: none;
-    padding-bottom: 30px;
-  }
-.question {
-  font-size: 19px;
-  padding: 30px 0;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
 summary {
   list-style: none;
 }
