@@ -197,9 +197,9 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         tripViewModel.firstTripRecommendState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
-                    toast("여행지 추천을 받는데 실패했습니다.")
                     bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
                     tripViewModel.firstTripRecommendState.value = DEFAULT
+                    toast("여행지 추천을 받는데 실패했습니다.")
                 }
             }
         }
@@ -234,7 +234,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private fun showProgressDialog() {
         loadingDialog.show(
-            requireActivity().supportFragmentManager,
+            childFragmentManager,
             loadingDialog.tag
         )
     }
