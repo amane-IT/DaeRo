@@ -9,7 +9,7 @@
       </template>
 
       <template #cell(name)="data">
-        <b><router-link class="link" id="router" :to="{ name: 'placeDetail', params: { articleSeq: data.item.trip_place_seq } }">{{ data.item.place_name }}</router-link></b>
+        <b><router-link class="link" id="router" :to="{ name: 'placeDetail', params: { placeSeq: data.item.trip_place_seq } }">{{ data.item.place_name }}</router-link></b>
       </template>
 
       <template #cell(address)="data">
