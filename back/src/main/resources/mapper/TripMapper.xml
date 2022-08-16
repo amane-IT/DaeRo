@@ -222,7 +222,7 @@
     </resultMap>
 
     <resultMap id="mappingJourneyVo" type="com.ssafy.daero.trip.vo.JourneyVo">
-        <result property="tripSeq" column="trips_seq"/>
+        <result property="tripSeq" column="trip_seq"/>
         <result property="createdAt" column="created_at"/>
         <result property="tripStampSeq" column="trip_stamps_seq"/>
         <result property="latitude" column="latitude"/>
