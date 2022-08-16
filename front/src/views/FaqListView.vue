@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
     <h2>FAQ</h2>
     <br>
 		<div>

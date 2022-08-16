@@ -19,7 +19,6 @@ img {
   height: 500px;
 }
 #card {
-  margin: 1rem;
   display: inline-block;
   padding: 5px 5px;
   margin-right: 5px;

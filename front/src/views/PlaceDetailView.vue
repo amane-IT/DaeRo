@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
     <v-container>
       <v-row>
         <v-col cols="3">장소명</v-col>
@@ -28,11 +28,12 @@
       </v-row>
       <v-row>
         <v-col cols="3">이미지 경로</v-col>
-        <v-col cols="9">{{ place.image_url }}</v-col>
+        <v-col cols="6">{{ place.image_url }}</v-col>
+        <!-- <v-col cols="9"><img :src="place.image_url" alt="place"></v-col> -->
       </v-row>
       <v-row>
         <v-col cols="3">설명</v-col>
-        <v-col cols="9">{{ place.description }}</v-col>
+        <v-col cols="6">{{ place.description }}</v-col>
       </v-row>
     </v-container>
   </div>
@@ -60,6 +61,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+img {
+  width: 300px;
+}
 </style>

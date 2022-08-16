@@ -1,10 +1,13 @@
 <template>
   <v-app>
-    <v-container class="d-flex flex-row">
-      <side-bar v-if="isChecked"></side-bar>
-      <v-main>
-        <router-view/>
-      </v-main>
+    <v-container>
+      <v-row>
+        <side-bar v-if="isChecked"></side-bar>
+        <v-main class="body">
+          <router-view/>
+        </v-main>
+      </v-row>
+
     </v-container>
   </v-app>
 </template>
@@ -30,7 +33,7 @@ export default {
 
 <style>
   .body {
-    padding: 5rem 10rem;
+    margin: 5px 300px 5px 300px;
   }
   .link {
     text-decoration: none;
