@@ -23,7 +23,7 @@ import java.util.*;
 
 @Service
 public class UserService {
-    private final String URL_PREFIX = "http://i7d110.p.ssafy.io";
+    private final String URL_PREFIX = "https://i7d110.p.ssafy.io/api";
     private final String NO_REPLY = "no-reply@daero.com";
 
     private final UserMapper userMapper;
