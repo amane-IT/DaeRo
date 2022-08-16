@@ -27,14 +27,6 @@
     </b-table>
     </div>
 
-    <!-- <b-pagination
-      v-model="page"
-      :total-rows="rows"
-      :per-page="currentPage"
-      aria-controls="usertable"
-			@input="handlePage"
-    ></b-pagination> -->
-
 		<v-pagination
 			v-model="page"
 			@input="handlePage"
@@ -52,7 +44,6 @@ export default {
   data() {
     return {
       page: 1,
-      rows: 5,
       fields: [
           { key: 'index', label: '사용자 번호'},
           { key: 'email', label: '이메일' },

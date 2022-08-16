@@ -10,7 +10,7 @@
 
       <li><router-link class="link" id="router" :to="{ name: 'inquiryList' }">1:1 문의</router-link></li>
       <li><router-link class="link" id="router" :to="{ name: 'noticeList' }">공지사항</router-link></li>
-      <li>FAQ</li>
+      <li><router-link class="link" id="router" :to="{ name: 'faqList' }">FAQ</router-link></li>
     </ul>
   </div>
 </template>

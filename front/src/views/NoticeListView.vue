@@ -24,14 +24,6 @@
     </b-table>
 		</div>
 
-		<!-- <b-pagination
-      v-model="page"
-      :total-rows="rows"
-      :per-page="currentPage"
-      aria-controls="articletable"
-			@input="handlePage"
-    ></b-pagination> -->
-
 		<v-pagination
 			v-model="page"
 			@input="handlePage"
@@ -55,7 +47,6 @@ export default {
           { key: 'admin_seq', label: '작성자' },
           { key: 'created_at', label: '작성일자'},
         ],
-			rows: 5,
 		}
 	},
 	computed: {
@@ -73,7 +64,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 summary {
   list-style: none;
 }

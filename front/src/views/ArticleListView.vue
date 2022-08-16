@@ -22,13 +22,6 @@
       </template>
     </b-table>
 		</div>
-		<!-- <b-pagination
-      v-model="page"
-      :total-rows="rows"
-      :per-page="currentPage"
-      aria-controls="articletable"
-			@input="handlePage"
-    ></b-pagination> -->
 
 		<v-pagination
 			v-model="page"
@@ -54,7 +47,6 @@ export default {
           { key: 'nickname', label: '작성자' },
           { key: 'createdAt', label: '작성일자'}
         ],
-			rows: 5,
 		}
 	},
 	computed: {

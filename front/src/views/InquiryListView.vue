@@ -12,13 +12,6 @@
     </b-table>
     </div>
 
-    <!-- <b-pagination
-      v-model="page"
-      :total-rows="rows"
-      aria-controls="placetable"
-			@input="handlePage"
-    ></b-pagination> -->
-
 		<v-pagination
 			v-model="page"
 			@input="handlePage"
