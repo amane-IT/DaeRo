@@ -196,8 +196,10 @@ public class UserService {
     }
 
     public boolean verifyEmail(String userEmail) throws MessagingException {
-        if (userMapper.insertUser(userEmail) == 0) {
-            return false;
+        if (this.userMapper.selectUserByUserEmail(userEmail) == null) {
+            if (userMapper.insertUser(userEmail) == 0) {
+                return false;
+            }
         }
         UserDto userDto = userMapper.selectUserByUserEmail(userEmail);
         if (userDto == null) {
