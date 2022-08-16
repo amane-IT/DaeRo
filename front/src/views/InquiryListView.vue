@@ -1,6 +1,7 @@
 <template>
-	<div>
+	<div class="body">
 		<h2>1:1 문의</h2>
+		<br>
 		<div>
     <b-table id="placetable" small :fields="fields" :items="inquiryList" responsive="sm">
 

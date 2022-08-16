@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="body">
 		<h2>신고</h2>
+    <br>
     <div>
     <b-table id="reporttable" small :fields="fields" :items="reportList" responsive="sm">
       <template #cell(detail)="data">
@@ -11,8 +12,7 @@
           <b><router-link class="link" id="router" :to="{ name: 'replyDetail', params: { replySeq: data.item.content_seq } }">상세보기</router-link></b>
         </div>
         <div v-else>
-          유저 디테일 뷰
-          <!-- <b><router-link class="link" id="router" :to="{ name: 'userDetail', params: { userSeq: data.item.reported_user_seq } }">상세보기</router-link></b> -->
+          <b><router-link class="link" id="router" :to="{ name: 'userDetail', params: { userSeq: data.item.reported_user_seq } }">상세보기</router-link></b>
         </div>
       </template>
       <template #cell(handled_yn)="data">

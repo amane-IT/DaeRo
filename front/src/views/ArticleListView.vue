@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="body">
 		<h2>게시글</h2>
+		<br>
 		<div>
     <b-table id="articletable" small :fields="fields" :items="articleList" responsive="sm">
 

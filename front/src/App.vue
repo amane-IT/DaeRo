@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <nav-bar></nav-bar>
-    <v-main class="body">
+    <v-main>
       <router-view/>
     </v-main>
   </v-app>
@@ -23,5 +23,8 @@ export default {
 <style>
   .body {
     margin: 5rem 17rem;
+  }
+  .link {
+    text-decoration: none;
   }
 </style>
