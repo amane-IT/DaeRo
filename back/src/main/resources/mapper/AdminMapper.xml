@@ -386,6 +386,18 @@
         WHERE `users_seq` = #{userSeq}
     </update>
 
+    <select id="selectArticleListByUserSeq" parameterType="_int" resultMap="mappingArticleVo">
+        select `articles_seq`, `title`, `created_at`
+        from daero.`v_users_trips_articles`
+        where `users_seq`=#{userSeq}
+    </select>
+
+    <select id="selectReplyListByUserSeq" parameterType="_int" resultMap="mappingReplyVo">
+        select `replies_seq`, `articles_seq`, `content`, `created_at`
+        from daero.`replies`
+        where `users_seq`=#{userSeq}
+    </select>
+
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url"/>
         <result property="nickname" column="nickname"/>
@@ -421,5 +433,11 @@
         <result property="tripPlaceSeq" column="trip_places_seq"/>
         <result property="placeName" column="place_name"/>
         <result property="address" column="address"/>
+    </resultMap>
+
+    <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
+        <result property="articleSeq" column="articles_seq" />
+        <result property="title" column="title" />
+        <result property="createdAt" column="created_at" />
     </resultMap>
 </mapper>

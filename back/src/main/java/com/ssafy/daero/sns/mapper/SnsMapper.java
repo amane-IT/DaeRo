@@ -64,7 +64,8 @@ public interface SnsMapper {
     int deleteLikeByAuthor(@Param("author") int author, @Param("userSeq") int userSeq);
 
     ArrayList<UserVo> selectLikeUserListByArticleSeq(@Param("articleSeq") int articleSeq,
-                                                     @Param("page") int page);
+                                                     @Param("limit") int limit,
+                                                     @Param("offset") int offset);
 
     int insertReport(@Param("articleSeq") int articleSeq, @Param("reporterUserSeq") int reporterUserSeq, @Param("reportedUserSeq") int reportedUserSeq, @Param("reportSeq") int reportSeq, @Param("type") String type);
 

@@ -5,14 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.daero.admin.mapper.AdminMapper;
 import com.ssafy.daero.admin.vo.*;
 import com.ssafy.daero.sns.mapper.SnsMapper;
-import com.ssafy.daero.sns.vo.ArticleListVo;
-import com.ssafy.daero.sns.vo.ArticleVo;
-import com.ssafy.daero.sns.vo.ReplyVo;
-import com.ssafy.daero.sns.vo.StampVo;
+import com.ssafy.daero.sns.vo.*;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.trip.mapper.TripMapper;
 import com.ssafy.daero.user.dto.UserDto;
 import com.ssafy.daero.user.mapper.UserMapper;
+import com.ssafy.daero.user.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -64,6 +62,39 @@ public class AdminService {
         result.put("page", page);
         result.put("results", userList);
         return result;
+    }
+
+    public Map<String, Object> userDetail(int userSeq) {
+        // user 정보
+        UserVo userVo = userMapper.selectByUserSeq(userSeq);
+        // 작성한 게시글
+        ArrayList<ArticleVo> articleVos = adminMapper.selectArticleListByUserSeq(userSeq);
+        // 작성한 댓글
+        ArrayList<ReplyVo> replyVos = adminMapper.selectReplyListByUserSeq(userSeq);
+        Map<String, Object> userDetail = new HashMap<>();
+        userDetail.put("nickname", userVo.getNickname());
+        userDetail.put("profile_url", userVo.getProfileImageLink());
+        userDetail.put("badge_count", userMapper.selectAllBadgeById(userSeq));
+        ArrayList<Map<String, Object>> articles = new ArrayList<>();
+        Map<String, Object> article = new HashMap<>();
+        for(ArticleVo articleVo: articleVos) {
+            article.put("title", articleVo.getTitle());
+            article.put("createdAt", articleVo.getCreatedAt());
+            articles.add(article);
+            article = new HashMap<>();
+        }
+        ArrayList<Map<String, Object>> replies = new ArrayList<>();
+        Map<String, Object> reply = new HashMap<>();
+        for(ReplyVo replyVo: replyVos) {
+            reply.put("article_seq", replyVo.getArticleSeq());
+            reply.put("reply_seq", replyVo.getReplySeq());
+            reply.put("content", replyVo.getContent());
+            replies.add(reply);
+            reply = new HashMap<>();
+        }
+        userDetail.put("articles", articles);
+        userDetail.put("replies", replies);
+        return userDetail;
     }
 
     public Map<String, Object> reportList(int page) {
