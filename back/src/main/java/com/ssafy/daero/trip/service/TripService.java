@@ -43,33 +43,23 @@ public class TripService {
     }
 
 
-    public ArrayList<ArrayList> journeyList(int userSeq, char who, String startDate, String endDate) {
+    public ArrayList<ArrayList<Map<String, Object>>> journeyList(int userSeq, char who, String startDate, String endDate) {
         UserDto userDto = userMapper.selectByUserSeq(userSeq);
         JourneyVo journeyVo = new JourneyVo();
         ArrayList<JourneyVo> jList = new ArrayList<>();
-        ArrayList<ArrayList> journeyList = new ArrayList<>();  // 결과 배열
-        if (userDto == null) {
-            journeyVo.setResult(JourneyVo.ProfileResult.NO_SUCH_USER);
-            jList.add(journeyVo);
-            journeyList.add(jList);
-            return journeyList;
+        ArrayList<ArrayList<Map<String, Object>>> journeyList = new ArrayList<>();  // 결과 배열
+        if (userDto == null || userDto.getDelYn() == 'y') {
+            return null;
         }
-        if (userDto.getDelYn() == 'y') {
-            journeyVo.setResult(JourneyVo.ProfileResult.DELETED);
-            journeyList.add(jList);
-            return journeyList;
-        }
-
         if (Objects.equals(startDate, "null")) { startDate = "1500-01-01"; }
         if (Objects.equals(endDate, "null")) { endDate = "2500-12-31"; }
         if (who == 'n') {
             jList = tripMapper.selectOtherJourneyListByUserSeq(userSeq, startDate, endDate);
         }
-        else {            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
+        else {
+            jList = tripMapper.selectMyJourneyListByUserSeq(userSeq, startDate, endDate);
         }
         if (jList.size() == 0) {
-            journeyVo.setResult(JourneyVo.ProfileResult.NO_CONTENT);
-            journeyList.add(jList);
             return journeyList;
         }
         int currentTripSeq = jList.get(0).getTripSeq();
@@ -97,7 +87,7 @@ public class TripService {
     public Map<String, Object> albumList(int userSeq, String page, char who) {
         UserDto userDto = userMapper.selectByUserSeq(userSeq);
         AlbumVo albumVo = new AlbumVo();
-        if (userDto == null | userDto.getDelYn() == 'y') {
+        if (userDto == null || userDto.getDelYn() == 'y') {
             return null;
         }
         int totalPage = (int) Math.ceil((tripMapper.selectAlbumCountByUserSeq(userSeq))/10.0);
