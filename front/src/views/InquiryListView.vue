@@ -1,5 +1,5 @@
 <template>
-	<div class="body">
+	<div>
 		<h2>1:1 문의</h2>
 		<br>
 		<div>
