@@ -28,6 +28,16 @@
 			</v-row>
 		</v-container>
 		<v-container>
+			<swiper ref="filterSwiper" class="middle" :options="swiperOption" role="tablist">
+          <swiper-slide role="tab">
+            <image-card
+              v-for="(record, idx) in article.records" :key="idx" :record="record"
+            >
+            </image-card>
+          </swiper-slide>
+        </swiper>
+		</v-container>
+		<v-container>
 			<day-card
 			v-for="(day, idx) in article.records" :key="idx" :day="day" :idx="idx">
 			</day-card>
@@ -74,12 +84,15 @@
 import dayCard from '@/components/ArticleDetail/DayCard.vue'
 import expensesCard from '@/components/ArticleDetail/ExpensesCard.vue'
 import replyList from '@/components/ArticleDetail/ReplyList.vue'
+import imageCard from '@/components/ArticleDetail/ImageCard.vue'
+// import { Swiper, SwiperSlide } from 'swiper/vue'
+// import 'swiper/css'
 
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'articleDetailView',
-	components: { dayCard, expensesCard, replyList },
+	components: { dayCard, expensesCard, replyList, imageCard},
 	data() {
     return {
       articleSeq: this.$route.params.articleSeq,
@@ -99,6 +112,6 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 
 </style>
