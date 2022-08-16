@@ -37,7 +37,6 @@ export default {
   data () {
     return {
       credentials: {
-        username: '',
         code: '',
       }
     }
@@ -64,6 +63,7 @@ img {
 .inputbox {
   height: 2rem;
   width: 15rem;
+  padding: 1rem;
   border-radius: 10px;
   background: #F3F3F3;
 }

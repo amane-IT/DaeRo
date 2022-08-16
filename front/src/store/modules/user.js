@@ -26,9 +26,10 @@ export default ({
         method: 'post',
         data: credentials
       })
-      .then(res =>{
+      .then(res => {
         this.$session.set('user_no', res.data.user)
         // commit('SET_SESSION', this.$session.get('user_no'))
+        router.push({ name: 'articleList' })
         })
       .catch(err => {
         console.error(err.response.data)
