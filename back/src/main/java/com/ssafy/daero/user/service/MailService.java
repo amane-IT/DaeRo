@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailService {
-
+    private final int[] REGION_CODES = {};
     private final MailMapper mailMapper;
 
     @Autowired
@@ -25,6 +25,7 @@ public class MailService {
                 || this.mailMapper.updateUserEmailVerificationKeyExpired(emailVerificationDto.getEmailVerificationSeq()) != 1) {
             return false;
         }
+        this.mailMapper.insertUserAchievement(emailVerificationDto.getUserSeq(), REGION_CODES);
         return true;
     }
 
@@ -33,10 +34,7 @@ public class MailService {
         if (passwordResetDto == null) {
             return false;
         }
-        if (this.mailMapper.updatePasswordResetCompleted(passwordResetDto.getPasswordResetSeq()) != 1
-                || this.mailMapper.updatePasswordResetKeyExpired(passwordResetDto.getPasswordResetSeq()) != 1) {
-            return false;
-        }
-        return true;
+        return this.mailMapper.updatePasswordResetCompleted(passwordResetDto.getPasswordResetSeq()) == 1
+                && this.mailMapper.updatePasswordResetKeyExpired(passwordResetDto.getPasswordResetSeq()) == 1;
     }
 }

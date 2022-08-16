@@ -311,6 +311,7 @@ public class TripService {
                 tripStampVo.setUrl(urls[imageIndex]);
                 imageIndex++;
                 this.tripMapper.insertTripStamp(tripStampVo);
+                this.tripMapper.updateAchievementByPlace(tripVo.getUserSeq(), tripStampVo.getTripPlace());
             }
         }
         this.tripMapper.insertArticle(tripVo);

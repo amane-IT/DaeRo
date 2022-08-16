@@ -165,8 +165,6 @@ public class TripController {
             System.out.println("ERROR : Parsing error");
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        System.out.println("files 크기" + files.size());
-        System.out.println("제목 : " + tripVo.getTitle());
 
         for (int i = 0; i < fileNum; i++) {
             ImageVo imageVo = this.imageService.uploadFile(files.get(i));
