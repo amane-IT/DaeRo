@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container class="d-flex">
+    <v-container class="d-flex flex-row">
       <side-bar v-if="isChecked"></side-bar>
       <v-main>
         <router-view/>
@@ -30,7 +30,7 @@ export default {
 
 <style>
   .body {
-    margin: 5rem 10rem;
+    padding: 5rem 10rem;
   }
   .link {
     text-decoration: none;

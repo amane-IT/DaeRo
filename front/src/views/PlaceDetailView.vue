@@ -46,15 +46,6 @@ export default {
   data() {
     return {
       placeSeq: this.$route.params.placeSeq,
-			// fields: [
-      //     { key: 'place_name', label: '장소명' },
-      //     { key: 'address', label: '주소' },
-      //     { key: 'latitude', label: '위도'},
-      //     { key: 'longitude', label: '경도'},
-      //     { key: 'tags', label: '태그 목록'},
-      //     { key: 'image_url', label: '이미지 경로'},
-      //     { key: 'description', label: '설명'},
-      //   ],
     }
   },
 	computed: {
