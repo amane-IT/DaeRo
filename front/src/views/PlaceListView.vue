@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="body">
     <h2>여행지</h2>
+    <br>
     <div>
     <b-table id="placetable" small :fields="fields" :items="placeList" responsive="sm">
 

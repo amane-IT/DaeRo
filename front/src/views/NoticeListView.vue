@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="body">
     <h2>공지사항</h2>
+    <br>
 		<div>
     <b-table id="noticetable" stacked small :fields="fields" :items="noticeList" responsive="sm">
 
