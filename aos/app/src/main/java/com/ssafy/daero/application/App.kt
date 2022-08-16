@@ -7,6 +7,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.FirebaseMessaging
+import com.kakao.sdk.common.KakaoSdk
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.data.repository.SnsRepository
@@ -20,6 +21,8 @@ class App : Application() {
         super.onCreate()
         initRepository()
         initFCMMessageAccept()
+
+        KakaoSdk.init(this, "1e255b1b25b5f7018b193713906bc430")
     }
 
     private fun initRepository() {
