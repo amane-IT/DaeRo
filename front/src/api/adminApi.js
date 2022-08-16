@@ -6,6 +6,7 @@ export default {
     admin: {
         login: () => HOST + ADMIN + 'login',
         userInfo: () => HOST + ADMIN + 'users',
+        userDetail: userSeq => HOST + ADMIN + `user/${userSeq}`,
         userSearch: () => HOST + ADMIN + 'users/search',
         reportList: () => HOST + ADMIN + 'report',
         handledReport: reportSeq => HOST + ADMIN + `report/${reportSeq}`,
