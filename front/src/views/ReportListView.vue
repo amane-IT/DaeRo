@@ -4,6 +4,9 @@
     <br>
     <div>
     <b-table id="reporttable" small :fields="fields" :items="reportList" responsive="sm">
+      <template #cell(report_categories_seq)="data">
+        {{ reportType[data.item.report_categories_seq] }}
+      </template>
       <template #cell(detail)="data">
         <div v-if="data.item.content_type === 'article'">
           <b><router-link class="link" id="router" :to="{ name: 'articleDetail', params: { articleSeq: data.item.content_seq } }">상세보기</router-link></b>
@@ -25,12 +28,6 @@
       </template>
     </b-table>
     </div>
-    <!-- <b-pagination
-      v-model="page"
-      :total-rows="rows"
-      aria-controls="placetable"
-			@input="handlePage"
-    ></b-pagination> -->
 
 		<v-pagination
 			v-model="page"
@@ -58,11 +55,10 @@ export default {
         { key: 'detail', label: '상세' },
         { key: 'handled_yn', label: '처리여부'},
         ],
-        types: [] // 신고 유형 저장
       }
 	},
 	computed: {
-    ...mapGetters(['reportList', 'totalPage', 'currentPage'])
+    ...mapGetters(['reportList', 'totalPage', 'currentPage', 'reportType'])
 	},
 	methods: {
     ...mapActions(['getReportList', 'handledReport']),
