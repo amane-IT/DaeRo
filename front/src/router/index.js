@@ -14,6 +14,7 @@ import InquiryListView from '@/views/InquiryListView'
 import InquiryDetailView from '@/views/InquiryDetailView'
 import NoticeListView from '@/views/NoticeListView'
 import UserDetailView from '@/views/UserDetailView'
+import FaqListView from '@/views/FaqListView'
 
 Vue.use(VueRouter)
 
@@ -82,6 +83,11 @@ const routes = [
     path: '/notice',
     name: 'noticeList',
     component: NoticeListView
+  },
+  {
+    path: '/faq',
+    name: 'faqList',
+    component: FaqListView
   }
 ]
 
