@@ -192,6 +192,13 @@
         where `region_seq` = #{regionSeq}
     </select>
 
+    <insert id="updateAchievementByPlace" parameterType="_int">
+        update `user_achievements`
+        set `count` = `count` + 1
+        where users_seq = #{userSeq}
+          and region_seq = (select trip_places.region_seq from trip_places where trip_places_seq = #{placeSeq})
+    </insert>
+
     <select id="selectUserFavorByUserSeq" parameterType="_int" resultType="com.ssafy.daero.user.dto.UserFavorDto">
         select `users_seq` as `userSeq`,
                `score`     as `tagSeq`,
