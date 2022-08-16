@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
     <v-container>
       <v-row>
         <v-col cols="2"><img :src="user.profile_url" alt="profile_img"></v-col>

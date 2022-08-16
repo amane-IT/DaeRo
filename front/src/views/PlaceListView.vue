@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
     <h2>여행지</h2>
     <br>
     <div>

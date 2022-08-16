@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
 		<h2>유저</h2>
     <br>
     <div>

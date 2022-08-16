@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
 		<h2>신고</h2>
     <br>
     <div>

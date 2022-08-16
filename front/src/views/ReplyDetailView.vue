@@ -1,5 +1,5 @@
 <template>
-  <div class="body">
+  <div>
     <h2>댓글</h2>
     <v-container>
       <v-row>

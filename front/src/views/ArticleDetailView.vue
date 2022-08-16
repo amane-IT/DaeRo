@@ -1,25 +1,25 @@
 <template>
-  <div class="body">
+  <div>
 		<v-container>
 			<v-row>
-				<v-col cols="3">
+				<v-col cols="2">
 					게시글 제목
 				</v-col>
-				<v-col cols="3">{{ article.title }}</v-col>
+				<v-col cols="2">{{ article.title }}</v-col>
 			</v-row>
 		</v-container>		
 		<v-container>
 			<v-row>
-				<v-col cols="3">
+				<v-col cols="2">
 				작성자 
 			</v-col>
-			<v-col cols="3">
+			<v-col cols="2">
 				{{ article.nickname }}
 			</v-col>
-			<v-col cols="2">
+			<v-col cols="1">
 				작성일자
 			</v-col>
-			<v-col cols="3">
+			<v-col cols="2">
 				{{ article.created_at }}
 			</v-col>
 			<form @submit.prevent="deleteArticle(article.article_seq)" class="col-1">
@@ -28,7 +28,7 @@
 			</v-row>
 		</v-container>
 		<v-container>
-			<div>
+			<div id="imageSwiper">
 				<swiper ref="filterSwiper" :options="swiperOption" role="tablist">
 					<swiper-slide role="tab">
 						<image-card v-for="(image, idx) in images" :key="idx" :image="image">
@@ -60,16 +60,16 @@
 		</v-container>
 		<v-container>
 			<v-row>
-				<h5 class="col-2">평점 {{ article.rating }}</h5>
-				<h5 class="col-2">댓글 {{ article.comments }}</h5>
-				<h5 class="col-2">좋아요  {{ article.likes }}</h5>
+				<h5 class="col-1">평점 {{ article.rating }}</h5>
+				<h5 class="col-1">댓글 {{ article.comments }}</h5>
+				<h5 class="col-1">좋아요  {{ article.likes }}</h5>
 			</v-row>
 		</v-container>
 		<v-container>
 			<v-row>
-				<v-col cols="2">댓글 작성자</v-col>
-				<v-col cols="6">내용</v-col>
-				<v-col cols="3">작성일자</v-col>
+				<v-col cols="1">댓글 작성자</v-col>
+				<v-col cols="5">내용</v-col>
+				<v-col cols="2">작성일자</v-col>
 				<v-col cols="1"></v-col>
 			</v-row>
 			<reply-list
@@ -121,11 +121,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#imageSwiper {
+  white-space:nowrap; 
+  overflow-x: hidden; 
+  text-align:center;
+  padding: 3vh 2vw 0 0;
+	margin: 0 2vw 0 0;
+}
+
 .swiper-container {
   .swiper-wrapper {
     .swiper-slide {
-      width: auto; // auto 값을 지정해야 슬라이드의 width값이 텍스트 길이 기준으로 바뀜
-      min-width: 56px; // min-width를 지정하지 않을 경우 텍스트가 1개 내지는 2개가 들어갈 때 탭 모양이 상이할 수 있으므로 넣어준다.
+      width: auto;
+      min-width: 56px; 
       padding: 0px 14px;
       font-size: 14px;
       line-height: 36px;
@@ -138,5 +146,8 @@ export default {
       cursor: pointer;
     }
   }
+}
+.swiper-container{
+	margin: 0 50px 0 0;
 }
 </style>

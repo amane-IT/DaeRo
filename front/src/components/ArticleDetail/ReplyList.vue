@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="2">{{ reply.nickname }}</v-col>
-      <v-col cols="6">{{ reply.content }}</v-col>
-      <v-col cols="3">{{ reply.created_at }}</v-col>
+      <v-col cols="1">{{ reply.nickname }}</v-col>
+      <v-col cols="5">{{ reply.content }}</v-col>
+      <v-col cols="2">{{ reply.created_at }}</v-col>
       <v-col cols="1">
         <form @submit.prevent="deleteReply(reply.reply_seq)">
           <v-btn><button>삭제</button></v-btn>
