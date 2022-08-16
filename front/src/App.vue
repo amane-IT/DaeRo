@@ -1,29 +1,30 @@
 <template>
   <v-app>
     <v-container class="d-flex">
-      <side-bar></side-bar>
+      <side-bar v-if="isChecked"></side-bar>
       <v-main>
         <router-view/>
       </v-main>
     </v-container>
-    <!-- <nav-bar></nav-bar> -->
-    <!-- <v-main>
-      <router-view/>
-    </v-main> -->
   </v-app>
 </template>
 
 <script>
-// import NavBar from '@/components/NavBar.vue'
 import SideBar from '@/components/SideBar.vue'
 
 export default {
   name: 'App',
   components: { SideBar },
-
   data: () => ({
-    //
+    isChecked: true
   }),
+  mounted() {
+    switch(document.location.pathname){
+      case '/':
+        this.isChecked = false;
+        break;
+    }   
+  }
 };
 </script>
 

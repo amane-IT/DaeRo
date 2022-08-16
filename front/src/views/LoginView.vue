@@ -13,7 +13,7 @@
               <input class="inputbox" v-model="credentials.code" type="password" id="code" required />
             </div>
             <br>
-            <account-error-list v-if="authError"></account-error-list>
+            <!-- <account-error-list v-if="authError"></account-error-list> -->
             <div>
               <button class="button">로그인</button>
             </div>
@@ -26,14 +26,14 @@
 </template>
 
 <script>
-import AccountErrorList from '@/components/AccountErrorList.vue'
-import { mapActions, mapGetters } from 'vuex'
+// import AccountErrorList from '@/components/AccountErrorList.vue'
+import { mapActions } from 'vuex'
 
 export default {
     name: 'LoginView',
-    components: {
-    AccountErrorList,
-  },
+  //   components: {
+  //   AccountErrorList,
+  // },
   data () {
     return {
       credentials: {
@@ -42,9 +42,9 @@ export default {
       }
     }
   },
-  computed: {
-    ...mapGetters(['authError'])
-  },
+  // computed: {
+  //   ...mapGetters(['authError'])
+  // },
   methods: {
     ...mapActions(['login'])
   },
