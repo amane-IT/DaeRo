@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="body">
 		<h2>유저</h2>
+    <br>
     <div>
     <b-table id="usertable" small :fields="fields" :items="userList" responsive="sm">
 
@@ -13,7 +14,7 @@
       </template>
 
       <template #cell(nickname)="data">
-        {{ data.item.nickname }}
+        <b><router-link class="link" id="router" :to="{ name: 'userDetail', params: { userSeq: data.item.user_seq } }">{{ data.item.nickname }}</router-link></b>
       </template>
 
       <template #cell(report)="data">
@@ -22,12 +23,6 @@
 
       <template #cell(regDate)="data">
         {{ data.item.reg_date }}
-      </template>
-
-      <template #cell()="data">
-        <form @submit.prevent="suspendUser(data.item.user_seq)">
-          <v-btn><button>이용 정지</button></v-btn>
-        </form>
       </template>
     </b-table>
     </div>

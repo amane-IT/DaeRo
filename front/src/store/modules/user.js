@@ -7,30 +7,33 @@ export default ({
     session: localStorage.getItem('session') || '',
     authError: null,
     userList: [],
+    user: {},
   },
   getters: {
     session: state => state.authError,
     userList: state => state.userList,
+    user: state => state.user,
   },
   mutations: {
     SET_SESSION: (state, session) => state.session = session,
     SET_USER_LIST: (state, userList) => state.userList = userList,
+    SET_USER: (state, user) => state.user = user,
   },
   actions: {
     login({ commit }, credentials) {
       axios({
-          url: adminApi.admin.login(),
-          method: 'post',
-          data: credentials
+        url: adminApi.admin.login(),
+        method: 'post',
+        data: credentials
       })
-          .then(res =>{
-              this.$session.set('user_no', res.data.user)
-              // commit('SET_SESSION', this.$session.get('user_no'))
-           })
-          .catch(err => {
-              console.error(err.response.data)
-              commit('SET_AUTH_ERROR', err.response.data)
-          })
+      .then(res =>{
+        this.$session.set('user_no', res.data.user)
+        // commit('SET_SESSION', this.$session.get('user_no'))
+        })
+      .catch(err => {
+        console.error(err.response.data)
+        commit('SET_AUTH_ERROR', err.response.data)
+      })
     },
     getUserList({ commit }, page) {
       axios({
@@ -54,6 +57,17 @@ export default ({
         router.push({ name: 'userList' })
       })
       .catch(err => err.response.data)
-    }
+    },
+    getUserDetail({ commit }, userSeq) {
+      axios({
+        url: adminApi.admin.userDetail(userSeq),
+        method: 'get'
+      })
+      .then(res => {
+        console.log(res)
+        commit('SET_USER', res.data)
+      })
+      .catch(err => console.log(err.response.data))
+    },
   }
 })

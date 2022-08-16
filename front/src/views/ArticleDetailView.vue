@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
 		<v-container>
 			<v-row>
 				<v-col cols="3">

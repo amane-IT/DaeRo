@@ -13,6 +13,7 @@ import ReportListView from '@/views/ReportListView'
 import InquiryListView from '@/views/InquiryListView'
 import InquiryDetailView from '@/views/InquiryDetailView'
 import NoticeListView from '@/views/NoticeListView'
+import UserDetailView from '@/views/UserDetailView'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const routes = [
     path: '/users',
     name: 'userList',
     component: UserListView
+  },
+  {
+    path: '/user/:userSeq',
+    name: 'userDetail',
+    component: UserDetailView
   },
   {
     path: '/places',
