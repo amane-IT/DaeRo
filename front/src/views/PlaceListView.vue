@@ -24,6 +24,7 @@
 			v-model="page"
 			@input="handlePage"
 			:length="totalPage"
+      total-visible="7"
 		></v-pagination>
   </div>
 </template>

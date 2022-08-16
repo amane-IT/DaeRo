@@ -11,6 +11,7 @@ export default ({
     replyList: [],
     reply: {},
     userList: [],
+    images: [],
   },
   getters: {
     totalPage: state => state.totalPage,
@@ -19,6 +20,7 @@ export default ({
     article: state => state.article,
     replyList: state => state.replyList,
     reply: state => state.reply,
+    images: state => state.images,
   },
   mutations: {
     SET_TOTAL_PAGE: (state, page) => state.totalPage = page,
@@ -27,6 +29,7 @@ export default ({
     SET_ARTICLE: (state, article) => state.article = article,
     SET_REPLY_LIST: (state, replyList) => state.replyList = replyList,
     SET_REPLY : (state, reply) => state.reply = reply,
+    SET_IMAGES: (state, images) => state.images = images,
   },
   actions: {
     getArticleList({ commit }, page) {
@@ -43,13 +46,20 @@ export default ({
             console.error(err.response)
         })
     },
-    getArticleDetail({ commit }, articleSeq) {
+    getArticleDetail({ commit, getters }, articleSeq) {
       axios({
         url: adminApi.admin.articleDetail(articleSeq),
         method: 'get'
       })
       .then(res => {
         commit('SET_ARTICLE', res.data)
+        var imageList = []
+        getters.article.records.forEach(record => {
+          record.trip_stamps.forEach(stamp => {
+            imageList.push(stamp.image_url)
+          })
+        })
+        commit('SET_IMAGES', imageList)
       })
       .catch(err => console.log(err.response.data))
     },
