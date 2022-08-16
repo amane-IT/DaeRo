@@ -28,14 +28,14 @@
 			</v-row>
 		</v-container>
 		<v-container>
-			<swiper ref="filterSwiper" class="middle" :options="swiperOption" role="tablist">
-          <swiper-slide role="tab">
-            <image-card
-              v-for="(record, idx) in article.records" :key="idx" :record="record"
-            >
-            </image-card>
-          </swiper-slide>
-        </swiper>
+			<div>
+				<swiper ref="filterSwiper" :options="swiperOption" role="tablist">
+					<swiper-slide role="tab">
+						<image-card v-for="(image, idx) in images" :key="idx" :image="image">
+						</image-card>
+					</swiper-slide>
+				</swiper>
+			</div>
 		</v-container>
 		<v-container>
 			<day-card
@@ -85,24 +85,32 @@ import dayCard from '@/components/ArticleDetail/DayCard.vue'
 import expensesCard from '@/components/ArticleDetail/ExpensesCard.vue'
 import replyList from '@/components/ArticleDetail/ReplyList.vue'
 import imageCard from '@/components/ArticleDetail/ImageCard.vue'
-// import { Swiper, SwiperSlide } from 'swiper/vue'
-// import 'swiper/css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
 
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'articleDetailView',
-	components: { dayCard, expensesCard, replyList, imageCard},
+	components: { dayCard, expensesCard, replyList, imageCard, swiper, swiperSlide },
 	data() {
     return {
       articleSeq: this.$route.params.articleSeq,
+			swiperOption: {
+				slidesPerView: 'auto',
+				spaceBetween: 10, // swiper-slide 사이의 간격 지정
+				slidesOffsetBefore: 10, // slidesOffsetBefore는 첫번째 슬라이드의 시작점에 대한 변경할 때 사용
+				slidesOffsetAfter: 100, // slidesOffsetAfter는 마지막 슬라이드 시작점 + 마지막 슬라이드 너비에 해당하는 위치의 변경이 필요할 때 사용
+				freeMode: true, // freeMode를 사용시 스크롤하는 느낌으로 구현 가능
+				centerInsufficientSlides: true, // 컨텐츠의 수량에 따라 중앙정렬 여부를 결정함
+      },
     }
   },
 	computed: {
-		...mapGetters(['article', 'replyList'])
+		...mapGetters(['article', 'replyList', 'images'])
 	},
 	methods: {
-		...mapActions(['getArticleDetail', 'getReplyList', 'deleteArticle'])
+		...mapActions(['getArticleDetail', 'getReplyList', 'deleteArticle']),
 	},
 	created () {
 		this.getArticleDetail(this.articleSeq)
@@ -113,5 +121,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.swiper-container {
+  .swiper-wrapper {
+    .swiper-slide {
+      width: auto; // auto 값을 지정해야 슬라이드의 width값이 텍스트 길이 기준으로 바뀜
+      min-width: 56px; // min-width를 지정하지 않을 경우 텍스트가 1개 내지는 2개가 들어갈 때 탭 모양이 상이할 수 있으므로 넣어준다.
+      padding: 0px 14px;
+      font-size: 14px;
+      line-height: 36px;
+      text-align: center;
+      color: #84868c;
+      border: 0;
+      border-radius: 18px;
+      background: #dbcfb000;
+      appearance: none;
+      cursor: pointer;
+    }
+  }
+}
 </style>
