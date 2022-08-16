@@ -87,7 +87,7 @@ public class TripService {
     public Map<String, Object> albumList(int userSeq, String page, char who) {
         UserDto userDto = userMapper.selectByUserSeq(userSeq);
         AlbumVo albumVo = new AlbumVo();
-        if (userDto == null | userDto.getDelYn() == 'y') {
+        if (userDto == null || userDto.getDelYn() == 'y') {
             return null;
         }
         int totalPage = (int) Math.ceil((tripMapper.selectAlbumCountByUserSeq(userSeq))/10.0);
