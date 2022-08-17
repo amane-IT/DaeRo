@@ -21,6 +21,7 @@ class FollowerFragment : BaseFragment<FragmentFollowerBinding>(R.layout.fragment
 
     private val followViewModel: FollowViewModel by viewModels({ requireParentFragment() })
     private lateinit var followAdapter: FollowAdapter
+    var userSeq = 0
 
     private val followItemClickListener: (View, Int) -> Unit = { _, userSeq ->
         findNavController().navigate(
@@ -30,9 +31,14 @@ class FollowerFragment : BaseFragment<FragmentFollowerBinding>(R.layout.fragment
     }
 
     override fun init() {
+        initData()
         initViews()
         observeData()
         setOnClickListeners()
+    }
+
+    private fun initData() {
+        userSeq = arguments?.getInt(USER_SEQ, 0) ?: 0
     }
 
     private fun initViews(){

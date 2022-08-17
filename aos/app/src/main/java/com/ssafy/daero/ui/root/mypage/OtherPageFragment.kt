@@ -94,10 +94,12 @@ class OtherPageFragment : BaseFragment<FragmentOtherPageBinding>(R.layout.fragme
 
     private fun setOnClickListeners() {
         binding.textOtherPageLabelFollower.setOnClickListener {
-            findNavController().navigate(R.id.action_otherPageFragment_to_followerFragment)
+            findNavController().navigate(R.id.action_otherPageFragment_to_followerFragment, bundleOf(
+                USER_SEQ to userSeq))
         }
         binding.textOtherPageLabelFollowing.setOnClickListener {
-            findNavController().navigate(R.id.action_otherPageFragment_to_followingFragment)
+            findNavController().navigate(R.id.action_otherPageFragment_to_followingFragment, bundleOf(
+                USER_SEQ to userSeq))
         }
         binding.buttonOtherPageFollow.setOnClickListener {
             if (followState) {
