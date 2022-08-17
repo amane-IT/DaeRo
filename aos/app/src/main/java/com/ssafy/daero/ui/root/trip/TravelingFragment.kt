@@ -47,7 +47,9 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private val travelingViewModel: TravelingViewModel by viewModels()
 
+    private lateinit var loadingDialog: LoadingDialogFragment
     private lateinit var verificationDialogFragment: VerificationDialogFragment
+
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
     private var isFragmentShow = true
     private var placeSeq = 0
@@ -57,7 +59,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private lateinit var mSensorManager: SensorManager
     private lateinit var mAccelerometer: Sensor
     private val SHAKE_THRESHOLD_GRAVITY = 2.7f
-    private val SHAKE_SKIP_TIME = 500
+    private val SHAKE_SKIP_TIME = 300
     private var mShakeTime: Long = 0
     private var shakeCount = 5
     private var mShakeCount = 1
@@ -125,6 +127,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private fun initView() {
         verificationDialogFragment = VerificationDialogFragment.newInstance()
+        loadingDialog = LoadingDialogFragment.newInstance()
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
         if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
@@ -143,10 +146,17 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun observeData() {
+        travelingViewModel.showProgress.observe(viewLifecycleOwner) {
+            if(it) {
+                showLoadingDialog()
+            } else {
+                hideLoadingDialog()
+            }
+        }
         travelingViewModel.tripInformationState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
-                    toast("여행지 정보를 불러오는데 실패했습니다.")
+                    //toast("여행지 정보를 불러오는데 실패했습니다.")
                     travelingViewModel.tripInformationState.value = DEFAULT
                 }
             }
@@ -200,7 +210,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         travelingViewModel.imageUrl.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
-                Glide.with(requireContext()).load(it)
+                Glide.with(requireContext()).load(it).preload()
                 travelingViewModel.imageUrl.value = ""
             }
         }
@@ -214,7 +224,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         if (placeSeq > 0) {
             travelingViewModel.getTripInformation(placeSeq)
         } else {
-            toast("여행지 정보를 불러오는데 실패했습니다.")
+            //toast("여행지 정보를 불러오는데 실패했습니다.")
         }
     }
 
@@ -316,15 +326,19 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun findDirectionByNaverMap() {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
-            ).apply {
-                `package` = "com.nhn.android.nmap"
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        )
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
+                ).apply {
+                    `package` = "com.nhn.android.nmap"
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            )
+        } catch (e: Exception) {
+            toast("네이버 지도가 설치되어 있지 않습니다.")
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -445,6 +459,19 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         distance = 2 * radius * asin(squareRoot);
 
         return distance;
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show(
+            childFragmentManager,
+            loadingDialog.tag
+        )
+    }
+
+    private fun hideLoadingDialog() {
+        if (loadingDialog.isAdded) {
+            loadingDialog.dismissAllowingStateLoss()
+        }
     }
 
     private fun showProgressDialog() {

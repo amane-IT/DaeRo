@@ -2,7 +2,6 @@ package com.ssafy.daero.ui.root.trip
 
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -22,6 +21,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     private val tripNextViewModel: TripNextViewModel by viewModels()
     private lateinit var tripNearByAdapter: TripNearByAdapter
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
+    private lateinit var loadingDialog: LoadingDialogFragment
 
     override fun init() {
         setTripState()
@@ -39,6 +39,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
     }
 
     private fun initView() {
+        loadingDialog = LoadingDialogFragment.newInstance()
         binding.textTripNextTitle1.text = "${App.prefs.nickname}님"
     }
 
@@ -95,7 +96,7 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
         }
     }
 
-    private val finishTrip : () -> Unit = {
+    private val finishTrip: () -> Unit = {
         // 게시글 작성 상태로 변경
         App.prefs.isPosting = true
 
@@ -145,7 +146,11 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             }
         }
         tripNextViewModel.showProgress.observe(viewLifecycleOwner) {
-            binding.progressBarTripNextLoading.isVisible = it
+            if (it) {
+                showProgressDialog()
+            } else {
+                hideProgressDialog()
+            }
         }
         tripNextViewModel.nextTripRecommendResponseDto.observe(viewLifecycleOwner) { placeSeq ->
             if (placeSeq > 0) {
@@ -170,10 +175,23 @@ class TripNextFragment : BaseFragment<FragmentTripNextBinding>(R.layout.fragment
             }
         }
         tripNextViewModel.imageUrl.observe(viewLifecycleOwner) {
-            if(it.isNotBlank()) {
-                Glide.with(requireContext()).load(it)
+            if (it.isNotBlank()) {
+                Glide.with(requireContext()).load(it).preload()
                 tripNextViewModel.imageUrl.value = ""
             }
+        }
+    }
+
+    private fun showProgressDialog() {
+        loadingDialog.show(
+            childFragmentManager,
+            loadingDialog.tag
+        )
+    }
+
+    private fun hideProgressDialog() {
+        if (loadingDialog.isAdded) {
+            loadingDialog.dismissAllowingStateLoss()
         }
     }
 }
