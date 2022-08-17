@@ -1,9 +1,9 @@
-<h2 align="center">
-  최소한의 선택으로 떠나는 여행,
+<h2>
+  <center> 최소한의 선택으로 떠나는 여행,
   <br>
   정해진 루트에서 벗어나 당신만의 여행루트를
   <br>
-  "DaeRo"와 함께 만들어 보세요!
+  "DaeRo"와 함께 만들어 보세요! </center>
   <br/>
 </h2>
 
@@ -176,8 +176,8 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 
 ### ✔ SNS 화면
 <br>
+<img src="https://user-images.githubusercontent.com/48676089/185018107-ae2f52cf-45b4-491d-b1ea-1c0293ad9de2.gif" width=360 height=640>
 
-![sns](https://user-images.githubusercontent.com/48676089/185018107-ae2f52cf-45b4-491d-b1ea-1c0293ad9de2.gif)
 
 <br>
 
