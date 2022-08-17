@@ -1,12 +1,23 @@
-<h2 style="text-align:center">
-  최소한의 선택으로 떠나는 여행,
-  <br>
-  정해진 루트에서 벗어나 당신만의 여행루트를
-  <br>
-  "DaeRo"와 함께 만들어 보세요!
-  <br/>
-</h2>
+# DaeRo : 내맘대로, 발 닿는 대로 여행
 
+<br>
+<p align=center>
+<img src="https://user-images.githubusercontent.com/48676089/185039598-3abaebd8-0162-4dec-9e04-b67b585e2fec.png" width=30% >
+</p>
+
+<br>
+<br>
+
+>
+><h2 style="text-align:center">
+>  최소한의 선택으로 떠나는 여행,
+>  <br>
+>  정해진 루트에서 벗어나 당신만의 여행루트를
+>  <br>
+>  "DaeRo"와 함께 만들어 보세요!
+>  <br/>
+></h2>
+> 
 <br>
 <br>
 
@@ -160,11 +171,11 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 
 ### ✔ 협업환경
 
-<img src="https://img.shields.io/badge/Jira-Atlassian-0052CC?style=plastic&logo=Jira">
-<img src="https://img.shields.io/badge/Gitlab-1.7.10-FC6D26?style=plastic&logo=Gitlab">
-<img src="https://img.shields.io/badge/notion-2.0.29-black?style=plastic&logo=notion">
-<img src="https://img.shields.io/badge/mattermost--0058CC?style=plastic&logo=mattermost">
-<img src="https://img.shields.io/badge/ERD Cloud--0058CC?style=plastic&logo=ERD Cloud">
+<img src="https://img.shields.io/badge/Project Manage-Jira-0052CC?style=plastic&logo=Jira">
+<img src="https://img.shields.io/badge/Source Code Manage-Gitlab-FC6D26?style=plastic&logo=Gitlab">
+<img src="https://img.shields.io/badge/Document Manage-notion-black?style=plastic&logo=notion">
+<img src="https://img.shields.io/badge/Communication Tool-Mattermost-0058CC?style=plastic&logo=mattermost">
+<img src="https://img.shields.io/badge/DB Manage-ERD Cloud-0058CC?style=plastic&logo=ERD Cloud">
 
 <br>
 
@@ -186,3 +197,14 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 
 ### ✔ 회원가입
 <img src="https://user-images.githubusercontent.com/48676089/185037320-c3b6b1d4-8149-4563-bcb6-142bcdcab706.gif" width=40%>
+
+
+---
+<br>
+
+## 👥 팀원 소개
+### TEAM DAERO
+||||||
+|:---:|:---:|:---:|:---:|:---:|
+|한상우|김기한|이주은|이호승|이주영|
+|AOS 개발자<br>(팀장)|AOS 개발자<br>앱 배포 담당|AOS 개발자<br>문서 담당|백엔드 개발자<br>(부팀장)|백엔드 개발자<br>프론트도 담당|
