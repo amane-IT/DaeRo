@@ -2,7 +2,9 @@
   <div>
     <v-container class="login">
       <v-row>
-        <v-col cols="6"><img src="https://images.unsplash.com/photo-1606759163253-094133091882?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80" alt=""></v-col>
+        <v-col cols="6">
+          <img src="https://images.unsplash.com/photo-1606759163253-094133091882?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80" alt="">
+          </v-col>
         <v-col cols="6" class="d-flex flex-column justify-content-center text-center align-items-center">
           <h1>DaeRo</h1>
           <h3>내 맘대로, 발 닿는 대로 여행</h3>

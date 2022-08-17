@@ -42,7 +42,7 @@
 			v-for="(day, idx) in article.records" :key="idx" :day="day" :idx="idx">
 			</day-card>
 		</v-container>
-		<v-container>
+		<v-container v-if="article.trip_expenses != ''">
 			<h5>여행 경비</h5>
 			<v-container>
 				<expenses-card
@@ -55,19 +55,15 @@
 			<p>{{ article.trip_comment }}</p>
 		</v-container>
 		<v-container>
-			<h5>태그</h5>
-			
-		</v-container>
-		<v-container>
 			<v-row>
 				<h5 class="col-1">평점 {{ article.rating }}</h5>
 				<h5 class="col-1">댓글 {{ article.comments }}</h5>
-				<h5 class="col-1">좋아요  {{ article.likes }}</h5>
+				<h5 class="col-2">좋아요  {{ article.likes }}</h5>
 			</v-row>
 		</v-container>
 		<v-container>
 			<v-row>
-				<v-col cols="1">댓글 작성자</v-col>
+				<v-col cols="2">댓글 작성자</v-col>
 				<v-col cols="5">내용</v-col>
 				<v-col cols="2">작성일자</v-col>
 				<v-col cols="1"></v-col>
@@ -100,7 +96,7 @@ export default {
 				slidesPerView: 'auto',
 				spaceBetween: 10, // swiper-slide 사이의 간격 지정
 				slidesOffsetBefore: 10, // slidesOffsetBefore는 첫번째 슬라이드의 시작점에 대한 변경할 때 사용
-				slidesOffsetAfter: 100, // slidesOffsetAfter는 마지막 슬라이드 시작점 + 마지막 슬라이드 너비에 해당하는 위치의 변경이 필요할 때 사용
+				slidesOffsetAfter: 200, // slidesOffsetAfter는 마지막 슬라이드 시작점 + 마지막 슬라이드 너비에 해당하는 위치의 변경이 필요할 때 사용
 				freeMode: true, // freeMode를 사용시 스크롤하는 느낌으로 구현 가능
 				centerInsufficientSlides: true, // 컨텐츠의 수량에 따라 중앙정렬 여부를 결정함
       },
