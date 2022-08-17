@@ -49,7 +49,7 @@ class FollowingFragment : BaseFragment<FragmentFollowingBinding>(R.layout.fragme
             adapter = followAdapter
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         }
-        followViewModel.following(App.prefs.userSeq)
+        followViewModel.following(userSeq)
     }
 
     private fun observeData(){
