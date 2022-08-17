@@ -3,7 +3,7 @@
 		<h2>1:1 문의</h2>
 		<br>
 		<div>
-    <b-table id="placetable" small :fields="fields" :items="inquiryList" responsive="sm">
+    <b-table id="inquirytable" small :fields="fields" :items="inquiryList" responsive="sm lg">
 
       <template #cell(title)="data">
         <b><router-link class="link" id="router" :to="{ name: 'inquiryDetail', params: { inquirySeq: data.item.inquiry_seq } }">{{ data.item.title }}</router-link></b>

@@ -15,6 +15,7 @@ import InquiryDetailView from '@/views/InquiryDetailView'
 import NoticeListView from '@/views/NoticeListView'
 import UserDetailView from '@/views/UserDetailView'
 import FaqListView from '@/views/FaqListView'
+import PlaceNew from '@/views/PlaceNewView'
 
 Vue.use(VueRouter)
 
@@ -88,7 +89,12 @@ const routes = [
     path: '/faq',
     name: 'faqList',
     component: FaqListView
-  }
+  },
+  {
+    path: '/place/new',
+    name: 'placeNew',
+    component: PlaceNew
+  },
 ]
 
 const router = new VueRouter({
