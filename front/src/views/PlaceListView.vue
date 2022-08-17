@@ -1,8 +1,9 @@
 <template>
   <div>
     <h2>여행지</h2>
+    <router-link class="link" id="router" :to="{ name: 'placeNew' }"><v-btn><button>추가하기</button></v-btn></router-link>
     <br>
-    <div>
+    <div class="mt-5">
     <b-table id="placetable" small :fields="fields" :items="placeList" responsive="sm">
 
       <template #cell(index)="data">

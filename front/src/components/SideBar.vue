@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .sideBar {
-  margin: 100px 0;
+  margin: 100px 0 0 0;
 }
 ul {
   list-style-type: none;

@@ -3,7 +3,15 @@
     <v-container>
       <v-row>
         <v-col cols="3">장소명</v-col>
-        <v-col cols="9">{{ place.place_name }}</v-col>
+        <v-col cols="7">{{ place.place_name }}</v-col>
+        <v-col cols="1">
+          <form @submit.prevent="updatePlace(place.place_seq)">
+          <v-btn><button>수정</button></v-btn>
+        </form></v-col>
+        <v-col cols="1">
+          <form @submit.prevent="deletePlace(place.place_seq)">
+          <v-btn><button>삭제</button></v-btn>
+        </form></v-col>
       </v-row>
       <v-row>
         <v-col cols="3">주소</v-col>
