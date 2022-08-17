@@ -2,7 +2,7 @@
 
 <br>
 <p align=center>
-<img src="https://user-images.githubusercontent.com/48676089/185039598-3abaebd8-0162-4dec-9e04-b67b585e2fec.png" width=30% >
+<img src="https://user-images.githubusercontent.com/48676089/185039598-3abaebd8-0162-4dec-9e04-b67b585e2fec.png" width=10% >
 </p>
 
 <br>
@@ -98,6 +98,8 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 
 ### ✔ 기능 명세서
 <a href="https://secret-twine-9b7.notion.site/662787597c18463eaab2298d8ab23e29?v=5a8955b853744ba59707ee17cdb53cee" > 기능 명세서 바로가기</a>
+<br>
+
 ![기능 명세서](https://user-images.githubusercontent.com/48676089/184919318-603a2671-fc5b-4ebc-b99d-2c59692d8e09.gif)
 
 
