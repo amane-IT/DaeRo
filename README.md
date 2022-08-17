@@ -7,7 +7,6 @@
   <br/>
 </h2>
 
-
 <br>
 <br>
 
@@ -23,7 +22,11 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 
 여행 컨텐츠를 보시면서 한 번쯤은 **나도 여행가고 싶다**는 생각을 해보신 적 있지 않으신가요? 그런데 막상 가려고 하면 어디로 갈지 결정하기 어렵지 않으신가요?
 
-저희가 대신 결정해 드리겠습니다!
+<br>
+
+<h3> 😎 <i>저희가 대신 결정해 드리겠습니다!</i> 😎</h3>
+
+<br>
 
 **DaeRo**는 **사용자 맞춤형 랜덤 국내 여행지 추천 및 기록 서비스**입니다. **DaeRo**와 함께 여러분들만의 여행 일지를 주변사람들과 공유해 보세요!
 
@@ -116,6 +119,7 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 |TedPermission|안드로이드 권한 관리 라이브러리|
 |JWT|클라이언드와 서버, 서비스와 서비스 사이의 통신 시 권한 인가를 위해 사용하는 토큰|
 |CanHub/Android-Image-Cropper|이미지 편집 라이브러리|
+|Kakao API|카카오톡 공유 및 소셜로그인 라이브러리|
 
 
 <br>
@@ -130,7 +134,7 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 <img src="https://img.shields.io/badge/AWS-EC2-FF9900?style=plastic&logo=amazon ec2">
 <img src="https://img.shields.io/badge/Ubuntu--E95420?style=plastic&logo=Ubuntu">
 <img src="https://img.shields.io/badge/Tomcat-9.0-F8DC75?style=plastic&logo=apachetomcat">
-<img src="https://img.shields.io/badge/nginx-1.7.10-009639?style=plastic&logo=java">
+<img src="https://img.shields.io/badge/nginx-1.7.10-009639?style=plastic&logo=nginx">
 <img src="https://img.shields.io/badge/mariaDB-10.6.8-003545?style=plastic&logo=mariaDB">
 <img src="https://img.shields.io/badge/springboot-2.7.1-009639?style=plastic&logo=springboot">
 
@@ -169,16 +173,16 @@ SSAFY 7기 2학기 공통프로젝트 - DaeRo
 ## 💙 실행 화면
 ### ✔ 여행 화면
 <br>
-
-![여행 화면](https://user-images.githubusercontent.com/48676089/185016879-4adf1fc6-5808-485c-898a-5535dc383cd1.gif)
+<img src="https://user-images.githubusercontent.com/48676089/185016879-4adf1fc6-5808-485c-898a-5535dc383cd1.gif" width=40% >
 
 <br>
 
 ### ✔ SNS 화면
 <br>
-<img src="https://user-images.githubusercontent.com/48676089/185018107-ae2f52cf-45b4-491d-b1ea-1c0293ad9de2.gif" width=360 height=640>
 
+<img src="https://user-images.githubusercontent.com/48676089/185018107-ae2f52cf-45b4-491d-b1ea-1c0293ad9de2.gif" width=40%>
 
 <br>
 
 ### ✔ 회원가입
+<img src="https://user-images.githubusercontent.com/48676089/185037320-c3b6b1d4-8149-4563-bcb6-142bcdcab706.gif" width=40%>
