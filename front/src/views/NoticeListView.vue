@@ -2,6 +2,7 @@
   <div>
     <h2>공지사항</h2>
     <br>
+    <v-btn class="my-3"><button>추가</button></v-btn>
 		<div>
     <b-table id="noticetable" stacked small :fields="fields" :items="noticeList" responsive="sm">
 

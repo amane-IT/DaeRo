@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn depressed
-        color="white"
+        color="blue"
         outlined
         id="v-btn"
       >
@@ -11,18 +11,34 @@
       >
         mdi-arrow-left
       </v-icon>
-      <router-link class="white--text" v-if="action=='CREATE'" id="router" :to="{ name: 'placeList' }">목록</router-link>
-      <router-link class="white--text" v-else id="router" :to="{ name: 'placeDetail', params: { placeSeq: placeSeq } }">BACK</router-link>
+      <router-link class="blue--text" v-if="action=='CREATE'" id="router" :to="{ name: 'placeList' }">목록</router-link>
+      <router-link class="blue--text" v-else id="router" :to="{ name: 'placeDetail', params: { placeSeq: placeSeq } }">BACK</router-link>
     </v-btn>
     
     <div class="placeform">
       <form @submit.prevent="onSubmit">
         <div>
-          <label for="title">제목</label>
+          <label for="title">여행지명</label>
           <input class="inputbox" v-model="newPlace.name" type="text" id="title" required>
         </div>
-        <div class="d-flex ms-8">
-          <label for="content">내용</label>
+        <div>
+          <label for="title">주소</label>
+          <input class="inputbox" v-model="newPlace.address" type="text" id="title" required>
+        </div>
+        <div>
+          <label for="title">위도</label>
+          <input class="inputbox" v-model="newPlace.latitude" type="text" id="title" required>
+        </div>
+        <div>
+          <label for="title">경도</label>
+          <input class="inputbox" v-model="newPlace.longitude" type="text" id="title" required>
+        </div>
+        <div>
+          <label for="title">이미지경로</label>
+          <input class="inputbox" v-model="newPlace.imageUrl" type="text" id="title" required>
+        </div>
+        <div>
+          <label for="content">설명</label>
           <textarea class="inputbox" v-model="newPlace.description" type="text" id="content" required></textarea>
         </div>
         <div>
@@ -75,17 +91,14 @@ export default {
 
 <style scoped>
 .placeform {
-  background-color: #fff9e9;
   color: #545775;
-  height: 70vh;
-  padding: 5vh;
   margin: 5vh;
 }
 .inputbox {
   color: #545775;
 }
 #title {
-  width: 80vw;
+  width: 50vw;
   margin: 2vh;
 }
 
@@ -109,5 +122,8 @@ export default {
   display: flex;
   margin-left: 40px;
   justify-content: flex-start;
+}
+.inputbox {
+  width: 100px;
 }
 </style>

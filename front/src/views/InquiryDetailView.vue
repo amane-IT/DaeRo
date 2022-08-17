@@ -6,8 +6,11 @@
         <v-col cols="2">
           제목
         </v-col>
-        <v-col cols="8">
+        <v-col cols="6">
           {{ inquiry.title }}
+        </v-col>
+        <v-col cols="2">
+          <router-link v-if="!inquiry.answer" class="link" id="router" :to="{ name: 'placeUpdate' }"><v-btn><button>답변하기</button></v-btn></router-link>
         </v-col>
       </v-row>
       <hr>
