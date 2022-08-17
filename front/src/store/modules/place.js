@@ -1,6 +1,7 @@
 // import router from '@/router'
 import axios from 'axios'
 import adminApi from '@/api/adminApi'
+import router from '@/router'
 
 export default ({
   state: {
@@ -55,6 +56,21 @@ export default ({
             commit('SET_PLACE', res.data)
         })
         .catch(err => console.log(err.response.data))
+    },
+    createPlace({ commit }, place) {
+      axios({
+        url: adminApi.admin.createPlace(),
+        method: 'post',
+        data: place
+      })
+      .then((res) => {
+        commit('SET_PLACE', res.data)
+        router.push({
+          name: 'placeDetail',
+          params: { placeSeq: res
+          }
+        })
+      })
     }
   }
 })

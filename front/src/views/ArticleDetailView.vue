@@ -56,8 +56,8 @@
 		</v-container>
 		<v-container>
 			<v-row>
-				<h5 class="col-1">평점 {{ article.rating }}</h5>
-				<h5 class="col-1">댓글 {{ article.comments }}</h5>
+				<h5 class="col-2">평점 {{ article.rating }}</h5>
+				<h5 class="col-2">댓글 {{ article.comments }}</h5>
 				<h5 class="col-2">좋아요  {{ article.likes }}</h5>
 			</v-row>
 		</v-container>
