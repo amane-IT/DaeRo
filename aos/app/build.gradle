@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'kotlinx-serialization'
+    id "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId "com.ssafy.daero"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
