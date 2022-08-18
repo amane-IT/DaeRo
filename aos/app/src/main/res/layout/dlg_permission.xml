@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_backgound">
+
+    <TextView
+        android:id="@+id/text_dlg_permission_title"
+        style="@style/HeadBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:text="앱 접근 권한 안내"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_description"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="서비스 이용을 위해 접근 권환을 확인해주세요"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_title" />
+
+    <View
+        android:id="@+id/view_dlg_permission_divider1"
+        android:layout_width="360dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_description" />
+
+    <ImageView
+        android:id="@+id/image_dlg_permission_location"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_location"
+        app:layout_constraintStart_toStartOf="@id/view_dlg_permission_divider1"
+        app:layout_constraintTop_toBottomOf="@id/view_dlg_permission_divider1" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_location"
+        style="@style/SubHeadBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="위치"
+        app:layout_constraintBottom_toTopOf="@id/text_dlg_permission_locationDescription"
+        app:layout_constraintStart_toEndOf="@id/image_dlg_permission_location"
+        app:layout_constraintTop_toTopOf="@id/image_dlg_permission_location" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_locationSelect"
+        style="@style/SubHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="(선택)"
+        app:layout_constraintBottom_toBottomOf="@id/text_dlg_permission_location"
+        app:layout_constraintStart_toEndOf="@id/text_dlg_permission_location"
+        app:layout_constraintTop_toTopOf="@id/text_dlg_permission_location" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_locationDescription"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="여행지 인증을 위한 위치 정보 확인"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/image_dlg_permission_location"
+        app:layout_constraintStart_toEndOf="@id/image_dlg_permission_location"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_locationSelect" />
+
+    <ImageView
+        android:id="@+id/image_dlg_permission_vibrate"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:src="@drawable/ic_vibrate"
+        app:layout_constraintStart_toStartOf="@id/view_dlg_permission_divider1"
+        app:layout_constraintTop_toBottomOf="@id/image_dlg_permission_location" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_vibrate"
+        style="@style/SubHeadBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="진동"
+        app:layout_constraintBottom_toTopOf="@id/text_dlg_permission_vibrateDescription"
+        app:layout_constraintStart_toEndOf="@id/image_dlg_permission_vibrate"
+        app:layout_constraintTop_toTopOf="@id/image_dlg_permission_vibrate" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_vibrateSelect"
+        style="@style/SubHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="(선택)"
+        app:layout_constraintBottom_toBottomOf="@id/text_dlg_permission_vibrate"
+        app:layout_constraintStart_toEndOf="@id/text_dlg_permission_vibrate"
+        app:layout_constraintTop_toTopOf="@id/text_dlg_permission_vibrate" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_vibrateDescription"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="여행지 인증을 완료했을때 진동 알림"
+        android:textColor="@color/gray"
+        app:layout_constraintBottom_toBottomOf="@id/image_dlg_permission_vibrate"
+        app:layout_constraintStart_toEndOf="@id/image_dlg_permission_vibrate"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_vibrateSelect" />
+
+    <View
+        android:id="@+id/view_dlg_permission_divider2"
+        android:layout_width="360dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/image_dlg_permission_vibrate" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_additionalDescription1"
+        style="@style/Term"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="24dp"
+        android:text="· 여행하기 관련 서비스 제공을 위해 위 권한을 사용하고 있으며, 서비스 이용에 필요한 항목만 접근하고 있습니다."
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintStart_toStartOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintTop_toBottomOf="@id/view_dlg_permission_divider2" />
+
+    <TextView
+        android:id="@+id/text_dlg_permission_additionalDescription2"
+        style="@style/Term"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="· 선택 접근 권한은 해당 기능을 사용할 때 허용이 필요하며, 비 허용시에도 해당 기능 외 서비스 이용이 가능합니다."
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintStart_toStartOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_additionalDescription1" />
+
+    <Button
+        android:id="@+id/button_dlg_permission_confirm"
+        style="@style/BodyWhite"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_regular"
+        android:text="확인"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintStart_toStartOf="@id/view_dlg_permission_divider2"
+        app:layout_constraintTop_toBottomOf="@id/text_dlg_permission_additionalDescription2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

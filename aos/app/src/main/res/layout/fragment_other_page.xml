@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_otherPage"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_otherPage_back"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_back"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/text_otherPage_title"
+                style="@style/HeadBold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="48dp"
+                tools:text="김싸피님의 여행일지" />
+
+            <ImageView
+                android:id="@+id/img_otherPage_menu"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginEnd="12dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_menu"
+                app:tint="@color/black" />
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_otherPage" />
+
+        <ImageView
+            android:id="@+id/image_otherPage_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/img_user"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_otherPage" />
+
+        <TextView
+            android:id="@+id/text_otherPage_name"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:paddingStart="6dp"
+            app:layout_constraintBottom_toTopOf="@id/text_otherPage_label_follower"
+            app:layout_constraintStart_toEndOf="@id/image_otherPage_profile"
+            app:layout_constraintTop_toTopOf="@id/image_otherPage_profile"
+            tools:text="김싸피님" />
+
+        <ImageView
+            android:id="@+id/image_otherPage_badge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/stamp_normal"
+            app:layout_constraintBottom_toBottomOf="@id/text_otherPage_name"
+            app:layout_constraintStart_toEndOf="@id/text_otherPage_name"
+            app:layout_constraintTop_toTopOf="@id/text_otherPage_name" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_otherPage_follow"
+            style="@style/BodyWhite"
+            android:background="@drawable/button_regular"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="24dp"
+            android:text="팔로우"
+            android:padding="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/text_otherPage_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/text_otherPage_name" />
+
+        <TextView
+            android:id="@+id/text_otherPage_follower"
+            style="@style/SubHeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@id/text_otherPage_label_follower"
+            app:layout_constraintEnd_toEndOf="@id/text_otherPage_label_follower"
+            app:layout_constraintTop_toTopOf="@id/text_otherPage_label_follower"
+            tools:text="258" />
+
+        <TextView
+            android:id="@+id/text_otherPage_label_follower"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:padding="8dp"
+            android:paddingEnd="48dp"
+            android:text="팔로워"
+            app:layout_constraintBottom_toBottomOf="@id/image_otherPage_profile"
+            app:layout_constraintStart_toStartOf="@id/text_otherPage_name"
+            app:layout_constraintTop_toBottomOf="@id/text_otherPage_name" />
+
+        <TextView
+            android:id="@+id/text_otherPage_following"
+            style="@style/SubHeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@id/text_otherPage_label_following"
+            app:layout_constraintEnd_toEndOf="@id/text_otherPage_label_following"
+            app:layout_constraintTop_toTopOf="@id/text_otherPage_label_following"
+            tools:text="258" />
+
+        <TextView
+            android:id="@+id/text_otherPage_label_following"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:padding="8dp"
+            android:paddingEnd="48dp"
+            android:text="팔로잉"
+            app:layout_constraintBottom_toBottomOf="@id/text_otherPage_label_follower"
+            app:layout_constraintStart_toEndOf="@id/text_otherPage_label_follower"
+            app:layout_constraintTop_toTopOf="@id/text_otherPage_label_follower" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_otherPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_otherPage_profile" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager_otherPage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab_otherPage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

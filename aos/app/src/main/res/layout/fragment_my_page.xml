@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_myPage"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                style="@style/HeadBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:text="내 여행 일지" />
+
+            <ImageView
+                android:id="@+id/image_myPage_setting"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical|end"
+                android:layout_marginEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_setting"
+                app:tint="@color/primaryDarkColor" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/lightGray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_myPage" />
+
+        <ImageView
+            android:id="@+id/image_myPage_profile"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/img_user"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar_myPage" />
+
+        <TextView
+            android:id="@+id/text_myPage_name"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:paddingStart="6dp"
+            app:layout_constraintBottom_toTopOf="@id/text_myPage_label_follower"
+            app:layout_constraintStart_toEndOf="@id/image_myPage_profile"
+            app:layout_constraintTop_toTopOf="@id/image_myPage_profile"
+            tools:text="김싸피님" />
+
+        <ImageView
+            android:id="@+id/image_myPage_badge"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/stamp_normal"
+            app:layout_constraintBottom_toBottomOf="@id/text_myPage_name"
+            app:layout_constraintStart_toEndOf="@id/text_myPage_name"
+            app:layout_constraintTop_toTopOf="@id/text_myPage_name" />
+
+        <TextView
+            android:id="@+id/text_myPage_follower"
+            style="@style/SubHeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@id/text_myPage_label_follower"
+            app:layout_constraintEnd_toEndOf="@id/text_myPage_label_follower"
+            app:layout_constraintTop_toTopOf="@id/text_myPage_label_follower"
+            tools:text="258" />
+
+        <TextView
+            android:id="@+id/text_myPage_label_follower"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:paddingEnd="48dp"
+            android:text="팔로워"
+            app:layout_constraintBottom_toBottomOf="@id/image_myPage_profile"
+            app:layout_constraintStart_toStartOf="@id/text_myPage_name"
+            app:layout_constraintTop_toBottomOf="@id/text_myPage_name" />
+
+        <TextView
+            android:id="@+id/text_myPage_following"
+            style="@style/SubHeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="0"
+            app:layout_constraintBottom_toBottomOf="@id/text_myPage_label_following"
+            app:layout_constraintEnd_toEndOf="@id/text_myPage_label_following"
+            app:layout_constraintTop_toTopOf="@id/text_myPage_label_following"
+            tools:text="258" />
+
+        <TextView
+            android:id="@+id/text_myPage_label_following"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:padding="8dp"
+            android:paddingEnd="48dp"
+            android:text="팔로잉"
+            app:layout_constraintBottom_toBottomOf="@id/text_myPage_label_follower"
+            app:layout_constraintStart_toEndOf="@id/text_myPage_label_follower"
+            app:layout_constraintTop_toTopOf="@id/text_myPage_label_follower" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_myPage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/image_myPage_profile" />
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager_myPage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tab_myPage" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="6dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/img_comment_item_user"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_vertical"
+        android:layout_margin="12dp"
+        android:layout_marginStart="16dp"
+        android:src="@drawable/img_user"
+        app:civ_border_color="@color/white"
+        app:civ_border_overlay="true"
+        app:civ_border_width="1dp"
+        app:civ_circle_background_color="@color/lightGray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_comment_user"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:text="ssafy_kim"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/img_comment_item_user"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_comment_create_at"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:text="1일"
+        android:textColor="@color/gray"
+        android:textSize="12dp"
+  app:layout_constraintStart_toEndOf="@id/img_comment_item_user"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_content" />
+
+    <TextView
+        android:id="@+id/tv_comment_reCommentAdd"
+        style="@style/Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="답글달기"
+        android:textColor="@color/gray"
+        android:textSize="12dp"
+        app:layout_constraintStart_toEndOf="@id/tv_comment_create_at"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_content" />
+
+    <TextView
+        android:id="@+id/tv_comment_content"
+        style="@style/Term"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:text="이번 여행은 어쩌구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구 저쩌구구"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_comment_item_user"
+        app:layout_constraintTop_toBottomOf="@id/img_comment_item_user" />
+
+    <LinearLayout
+        android:id="@+id/Linear_comment_reComment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="12dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_create_at">
+
+        <View
+            android:id="@+id/view_comment"
+            android:layout_width="30dp"
+            android:layout_height="0.7dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginVertical="12dp"
+            android:layout_marginStart="58dp"
+            android:background="@color/gray" />
+
+        <TextView
+            android:id="@+id/tv_comment_count"
+            style="@style/Body"
+            android:fontFamily="@font/notosanskr_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:textSize="12sp"
+            android:layout_marginStart="12dp"
+            android:text="답글 1개 더보기"
+            android:textColor="@color/gray"
+            app:layout_constraintStart_toEndOf="@id/img_comment_user"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_comment_reComment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="8dp"
+        android:layout_marginStart="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_create_at" />
+
+    <ProgressBar
+        android:id="@+id/progressBar_comment_loading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="120dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_comment_create_at" />
+
+    <ImageView
+        android:id="@+id/img_comment_menu"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_gravity="center_vertical|right"
+        android:layout_marginEnd="12dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="3dp"
+        android:src="@drawable/ic_menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/img_comment_item_user"
+        app:tint="@color/black" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "313853541438",
+    "project_id": "daero-a6032",
+    "storage_bucket": "daero-a6032.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:313853541438:android:6b0cc7ae5563bf3ef2656f",
+        "android_client_info": {
+          "package_name": "com.ssafy.daero"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "313853541438-q3h8lhj9n1nt1nu10b657f045vehcn7a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ssafy.daero",
+            "certificate_hash": "381710c1125891f81e1a67f794ff8d01f2ac828e"
+          }
+        },
+        {
+          "client_id": "313853541438-ebl0iegp97532bv14nf85vbnptnuvag0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqsb27JrcutpJKQkzA67xjBca80lgA_8Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "313853541438-ebl0iegp97532bv14nf85vbnptnuvag0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

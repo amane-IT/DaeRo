@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/dlg_bottomsheet">
+
+        <TextView
+            android:id="@+id/text_tripStamp_title"
+            style="@style/HeadBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="트립스탬프 만들기"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_tripStamp_camera"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginVertical="32dp"
+            android:layout_marginEnd="50dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toTopOf="@id/text_tripStamp_camera"
+            app:layout_constraintEnd_toStartOf="@id/image_tripStamp_gallery"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_title" />
+
+        <View
+            android:id="@+id/view_tripStamp_devide_line"
+            android:layout_width="1dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="32dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_tripStamp_title" />
+
+        <TextView
+            android:id="@+id/text_tripStamp_camera"
+            style="@style/SubHead"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="사진 촬영"
+            app:layout_constraintEnd_toEndOf="@id/image_tripStamp_camera"
+            app:layout_constraintStart_toStartOf="@id/image_tripStamp_camera"
+            app:layout_constraintTop_toBottomOf="@id/image_tripStamp_camera" />
+
+        <ImageView
+            android:id="@+id/image_tripStamp_gallery"
+            android:layout_width="78dp"
+            android:layout_height="78dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_gallery"
+            app:layout_constraintBottom_toBottomOf="@id/image_tripStamp_camera"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_tripStamp_camera"
+            app:layout_constraintTop_toTopOf="@id/image_tripStamp_camera" />
+
+        <TextView
+            android:id="@+id/text_tripStamp_gallery"
+            style="@style/SubHead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="갤러리에서 선택"
+            app:layout_constraintEnd_toEndOf="@id/image_tripStamp_gallery"
+            app:layout_constraintStart_toStartOf="@id/image_tripStamp_gallery"
+            app:layout_constraintTop_toBottomOf="@id/image_tripStamp_gallery" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
