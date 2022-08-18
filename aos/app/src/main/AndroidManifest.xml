@@ -28,8 +28,14 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <!-- "kakao{YOUR_NATIVE_APP_KEY}://kakaolink" 형식의 앱 실행 스킴을 설정하는데 사용 -->
+<!--                <data android:host="kakaolink"-->
+<!--                    android:scheme="kakao1e255b1b25b5f7018b193713906bc430" />-->
+                <data android:host="kakaolink"
+                    android:scheme="kakao${KAKAO_APP_KEY}" />
             </intent-filter>
         </activity>
 
@@ -44,7 +50,16 @@
 
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="m4enprqgf4" />
+            android:value="${NAVER_MAP_CLIENT_ID}" />
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="${KAKAO_APP_KEY}" />
+
     </application>
+
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
 
 </manifest>

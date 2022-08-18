@@ -9,6 +9,8 @@ import com.ssafy.daero.data.entity.TripStamp
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.EMPTY
 import com.ssafy.daero.utils.constant.FAIL
+import io.reactivex.rxjava3.core.Single
+import java.util.concurrent.TimeUnit
 
 class TripNextViewModel : BaseViewModel() {
     private val tripRepository = TripRepository.get()
@@ -21,16 +23,7 @@ class TripNextViewModel : BaseViewModel() {
 
     val imageUrl = MutableLiveData<String>()
 
-    private val _tripList = MutableLiveData<List<TripStamp>>()
-    val tripList: LiveData<List<TripStamp>>
-        get() = _tripList
-
-    private val _nearByPlaces = MutableLiveData<List<TripPopularResponseDto>>()
-    val nearByPlaces: LiveData<List<TripPopularResponseDto>>
-        get() = _nearByPlaces
-
     var nextTripRecommendState = MutableLiveData<Int>()
-    var tripListState = MutableLiveData<Int>()
 
     private val _tripStamps = MutableLiveData<List<TripStamp>>()
     val tripStamps: LiveData<List<TripStamp>>
@@ -55,7 +48,7 @@ class TripNextViewModel : BaseViewModel() {
             tripRepository.getAroundTrips(placeSeq)
                 .subscribe({
                     _aroundTrips.postValue(it.body())
-                }, { throwable ->
+                }, { _ ->
                 })
         )
     }
@@ -71,16 +64,19 @@ class TripNextViewModel : BaseViewModel() {
                 App.prefs.curPlaceSeq,
                 time,
                 transportation
-            ).subscribe({ response ->
-                // place_seq 저장
-                if (response.body()!!.place_seq == 0) {
-                    nextTripRecommendState.postValue(EMPTY)
-                } else {
-                    _nextTripRecommendResponseDto.postValue(response.body()!!.place_seq)
+            ).flatMap { response ->
+                if(response.body()!!.place_seq > 0) {
                     imageUrl.postValue(response.body()!!.image_url)
                 }
+                Single.just(response.body()!!.place_seq).delay(1000, TimeUnit.MILLISECONDS)
+            }.subscribe( {
+                if(it > 0) {
+                    _nextTripRecommendResponseDto.postValue(it)
+                } else {
+                    nextTripRecommendState.postValue(EMPTY)
+                }
                 showProgress.postValue(false)
-            }, { throwable ->
+            }, {
                 showProgress.postValue(false)
                 nextTripRecommendState.postValue(FAIL)
             })
@@ -91,7 +87,6 @@ class TripNextViewModel : BaseViewModel() {
         addDisposable(
             tripRepository.deleteAllTripStamps()
                 .subscribe({
-
                 }, { throwable ->
                 })
         )

@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'kotlinx-serialization'
+    id "com.google.android.libraries.mapsplatform.secrets-gradle-plugin"
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         applicationId "com.ssafy.daero"
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -139,4 +140,10 @@ dependencies {
 
     // Kotlin Serialization
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0-RC"
+
+    // kakaoAPI
+    implementation "com.kakao.sdk:v2-all:2.11.0" // 전체 모듈 설치, 2.11.0 버전부터 지원
+    implementation "com.kakao.sdk:v2-user:2.11.0" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.11.0" // 친구, 메시지(카카오톡)
+    implementation "com.kakao.sdk:v2-share:2.11.0" // 메시지(카카오톡 공유)
 }

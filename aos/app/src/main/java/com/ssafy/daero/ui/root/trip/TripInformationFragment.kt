@@ -22,6 +22,7 @@ import com.ssafy.daero.utils.view.toast
 class TripInformationFragment :
     BaseFragment<FragmentTripInformationBinding>(R.layout.fragment_trip_information) {
     private val tripInformationViewModel: TripInformationViewModel by viewModels()
+    private lateinit var loadingDialog: LoadingDialogFragment
 
     // 여행지 정보 seq
     private var placeSeq = 0
@@ -62,11 +63,16 @@ class TripInformationFragment :
         if (!isRecommend) {
             binding.buttonTripInformationReRecommend.text = "돌아가기"
         }
+        loadingDialog = LoadingDialogFragment.newInstance()
     }
 
     private fun observeData() {
         tripInformationViewModel.showProgress.observe(viewLifecycleOwner) {
-            binding.progressBarTripInformationLoading.isVisible = it
+            if(it) {
+                showProgressDialog()
+            } else {
+                hideProgressDialog()
+            }
         }
         tripInformationViewModel.tripInformationState.observe(viewLifecycleOwner) {
             when (it) {
@@ -87,7 +93,7 @@ class TripInformationFragment :
         }
         tripInformationViewModel.imageUrl.observe(viewLifecycleOwner) {
             if(it.isNotBlank()) {
-                Glide.with(requireContext()).load(it)
+                Glide.with(requireContext()).load(it).preload()
                 tripInformationViewModel.imageUrl.value = ""
             }
         }
@@ -159,6 +165,19 @@ class TripInformationFragment :
 
     private fun setStatusBarOrigin() {
         requireActivity().setStatusBarOrigin()
+    }
+
+    private fun showProgressDialog() {
+        loadingDialog.show(
+            childFragmentManager,
+            loadingDialog.tag
+        )
+    }
+
+    private fun hideProgressDialog() {
+        if (loadingDialog.isAdded) {
+            loadingDialog.dismissAllowingStateLoss()
+        }
     }
 
     override fun onStart() {

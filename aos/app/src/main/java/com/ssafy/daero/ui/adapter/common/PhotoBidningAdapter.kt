@@ -19,6 +19,16 @@ fun loadImage(view: ImageView, url: String?) {
         .into(view)
 }
 
+@BindingAdapter("imageFullUrl")
+fun loadFullImage(view: ImageView, url: String?) {
+    Glide.with(view)
+        .load(url)
+        .placeholder(R.drawable.placeholder_trip_album)
+        .apply(RequestOptions().centerCrop())
+        .error(R.drawable.placeholder_trip_album)
+        .into(view)
+}
+
 @BindingAdapter("roundImg")
 fun loadPreference(view: ImageView, url: String?) {
     Glide.with(view)
