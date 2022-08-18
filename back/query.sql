@@ -155,16 +155,6 @@ CREATE TABLE `place_tags`
     constraint unique (`tag`)
 );
 
-CREATE TABLE `article_tags`
-(
-    `article_tags_seq` int auto_increment,
-    `articles_seq`     int     NOT NULL,
-    `place_tag_seq`    tinyint NOT NULL,
-    constraint primary key (`article_tags_seq`),
-    constraint foreign key (`articles_seq`) references `articles` (`articles_seq`)
-        on delete cascade on update cascade
-);
-
 CREATE TABLE `tag_trip_places`
 (
     `tag_trip_places_seq` int auto_increment,

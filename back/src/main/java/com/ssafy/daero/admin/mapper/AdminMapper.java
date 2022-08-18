@@ -3,6 +3,7 @@ package com.ssafy.daero.admin.mapper;
 
 import com.ssafy.daero.admin.vo.*;
 import com.ssafy.daero.sns.vo.ArticleListVo;
+import com.ssafy.daero.sns.vo.ArticleVo;
 import com.ssafy.daero.sns.vo.ReplyVo;
 import com.ssafy.daero.trip.dto.TripPlaceDto;
 import com.ssafy.daero.user.dto.UserDto;
@@ -81,7 +82,7 @@ public interface AdminMapper {
 
     int selectNoticeCount();
 
-    ArrayList<Map<String, Object>> selectNoticeList(int page);
+    ArrayList<Map<String, Object>> selectNoticeList(int limit, int offset);
 
     int insertNotice(NoticeVo noticeVo);
 
@@ -90,5 +91,9 @@ public interface AdminMapper {
     int deleteNotice(int noticeSeq);
 
     int updateUserSuspension(@Param("userSeq") int userSeq, @Param("date") String date);
+
+    ArrayList<ArticleVo> selectArticleListByUserSeq(int userSeq);
+
+    ArrayList<ReplyVo> selectReplyListByUserSeq(int userSeq);
 
 }
