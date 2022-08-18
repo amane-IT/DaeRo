@@ -35,6 +35,11 @@ import com.ssafy.daero.utils.permission.checkPermission
 import com.ssafy.daero.utils.permission.requestPermission
 import com.ssafy.daero.utils.tag.TagCollection
 import com.ssafy.daero.utils.view.toast
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import retrofit2.HttpException
+import java.util.concurrent.TimeUnit
 import kotlin.math.*
 
 class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragment_traveling),
@@ -42,7 +47,11 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
 
     private val travelingViewModel: TravelingViewModel by viewModels()
 
+    private lateinit var loadingDialog: LoadingDialogFragment
+    private lateinit var verificationDialogFragment: VerificationDialogFragment
+
     private lateinit var tripUntilNowAdapter: TripUntilNowAdapter
+    private var isFragmentShow = true
     private var placeSeq = 0
     private var address = ""
     private var longitude: Double = 0.0
@@ -50,7 +59,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     private lateinit var mSensorManager: SensorManager
     private lateinit var mAccelerometer: Sensor
     private val SHAKE_THRESHOLD_GRAVITY = 2.7f
-    private val SHAKE_SKIP_TIME = 500
+    private val SHAKE_SKIP_TIME = 300
     private var mShakeTime: Long = 0
     private var shakeCount = 5
     private var mShakeCount = 1
@@ -66,6 +75,11 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             R.id.action_rootFragment_to_tripStampFragment,
             bundleOf(TRIP_STAMP_ID to tripStampId, IS_TRIP_STAMP_UPDATE to true)
         )
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        isFragmentShow = !hidden
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,6 +126,8 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun initView() {
+        verificationDialogFragment = VerificationDialogFragment.newInstance()
+        loadingDialog = LoadingDialogFragment.newInstance()
         binding.textTravelingUsername.text = "${App.prefs.nickname}님"
         if (App.prefs.isFollow) {
             binding.buttonTravelingNext.visibility = View.GONE
@@ -130,10 +146,17 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun observeData() {
+        travelingViewModel.showProgress.observe(viewLifecycleOwner) {
+            if(it) {
+                showLoadingDialog()
+            } else {
+                hideLoadingDialog()
+            }
+        }
         travelingViewModel.tripInformationState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
-                    toast("여행지 정보를 불러오는데 실패했습니다.")
+                    //toast("여행지 정보를 불러오는데 실패했습니다.")
                     travelingViewModel.tripInformationState.value = DEFAULT
                 }
             }
@@ -187,7 +210,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         }
         travelingViewModel.imageUrl.observe(viewLifecycleOwner) {
             if (it.isNotBlank()) {
-                Glide.with(requireContext()).load(it)
+                Glide.with(requireContext()).load(it).preload()
                 travelingViewModel.imageUrl.value = ""
             }
         }
@@ -201,7 +224,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         if (placeSeq > 0) {
             travelingViewModel.getTripInformation(placeSeq)
         } else {
-            toast("여행지 정보를 불러오는데 실패했습니다.")
+            //toast("여행지 정보를 불러오는데 실패했습니다.")
         }
     }
 
@@ -210,7 +233,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         this.regionTags = regionTags
         travelingViewModel.getFirstTripRecommend(
             FirstTripRecommendRequestDto(
-                categoryTags, regionTags
+                regionTags, categoryTags
             )
         )
     }
@@ -245,9 +268,17 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         binding.buttonTravelingTemporary.setOnClickListener {
             // todo: 임시 인증 버튼, 관리자 계정에만 보임
 
-            // 인증 완료한 시각 기록
-            App.prefs.verificationTime = System.currentTimeMillis()
-            (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
+            // 1.5초 동안 인증 애니메이션 보여주기
+            showProgressDialog()
+            vibrator.vibrate(VibrationEffect.createOneShot(1000, 100))
+            Completable.complete().delay(1500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    hideProgressDialog()
+                    App.prefs.verificationTime = System.currentTimeMillis()
+                    (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
+                }
         }
         binding.buttonTravelingStop.setOnClickListener {
             // 이전 여행기록이 없다면
@@ -295,18 +326,24 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
     }
 
     private fun findDirectionByNaverMap() {
-        startActivity(
-            Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
-            ).apply {
-                `package` = "com.nhn.android.nmap"
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-        )
+        try {
+            startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("navermaps://?menu=location&pinType=place&lat=$latitude&lng=$longitude&title=$address")
+                ).apply {
+                    `package` = "com.nhn.android.nmap"
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
+            )
+        } catch (e: Exception) {
+            toast("네이버 지도가 설치되어 있지 않습니다.")
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
+        if(!isFragmentShow) return
+
         if (event!!.sensor.type == Sensor.TYPE_ACCELEROMETER) {
             var axisX = event.values[0]
             var axisY = event.values[1]
@@ -326,6 +363,7 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
                 }
                 mShakeTime = currentTime
                 shakeCount -= mShakeCount
+                vibrator.vibrate(VibrationEffect.createOneShot(100, 100))
                 binding.tvTravelingVerificationCount.text = shakeCount.toString()
                 if (shakeCount < 1) {
                     shakeCount = 5
@@ -378,8 +416,19 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
             longitude
         )
         if (distance <= 10.0) {
-            App.prefs.verificationTime = System.currentTimeMillis()
-            (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
+            // 인증 완료
+
+            // 1.5초 동안 인증 애니메이션 보여주기
+            showProgressDialog()
+            vibrator.vibrate(VibrationEffect.createOneShot(1000, 100))
+            Completable.complete().delay(1500, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    hideProgressDialog()
+                    App.prefs.verificationTime = System.currentTimeMillis()
+                    (requireParentFragment() as RootFragment).changeTripState(TRIP_VERIFICATION)
+                }
         } else {
             toast("거리가 부족합니다.\n여행지에 도착 후 다시 인증해주세요.")
             vibrator.vibrate(VibrationEffect.createOneShot(150, 100))
@@ -410,5 +459,31 @@ class TravelingFragment : BaseFragment<FragmentTravelingBinding>(R.layout.fragme
         distance = 2 * radius * asin(squareRoot);
 
         return distance;
+    }
+
+    private fun showLoadingDialog() {
+        loadingDialog.show(
+            childFragmentManager,
+            loadingDialog.tag
+        )
+    }
+
+    private fun hideLoadingDialog() {
+        if (loadingDialog.isAdded) {
+            loadingDialog.dismissAllowingStateLoss()
+        }
+    }
+
+    private fun showProgressDialog() {
+        verificationDialogFragment.show(
+            childFragmentManager,
+            verificationDialogFragment.tag
+        )
+    }
+
+    private fun hideProgressDialog() {
+        if (verificationDialogFragment.isAdded) {
+            verificationDialogFragment.dismissAllowingStateLoss()
+        }
     }
 }

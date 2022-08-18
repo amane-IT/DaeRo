@@ -31,11 +31,12 @@
             <TextView
                 android:id="@+id/text_otherPage_title"
                 style="@style/HeadBold"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="16dp"
-                tools:text="김싸피님" />
+                android:layout_marginEnd="48dp"
+                tools:text="김싸피님의 여행일지" />
 
             <ImageView
                 android:id="@+id/img_otherPage_menu"

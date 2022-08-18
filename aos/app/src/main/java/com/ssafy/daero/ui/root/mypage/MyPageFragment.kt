@@ -57,10 +57,12 @@ class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_
             findNavController().navigate(R.id.action_rootFragment_to_profileSettingFragment)
         }
         binding.textMyPageLabelFollower.setOnClickListener {
-            findNavController().navigate(R.id.action_rootFragment_to_followerFragment)
+            findNavController().navigate(R.id.action_rootFragment_to_followerFragment, bundleOf(
+                USER_SEQ to App.prefs.userSeq))
         }
         binding.textMyPageLabelFollowing.setOnClickListener {
-            findNavController().navigate(R.id.action_rootFragment_to_followingFragment)
+            findNavController().navigate(R.id.action_rootFragment_to_followingFragment, bundleOf(
+                USER_SEQ to App.prefs.userSeq))
         }
         binding.imageMyPageBadge.setOnClickListener {
             findNavController().navigate(

@@ -28,7 +28,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     private lateinit var tripPopularAdapter: TripPopularAdapter
     private lateinit var tripHotAdapter: TripHotAdapter
 
-    lateinit var loadingDialog: LoadingDialogFragment
+    private lateinit var loadingDialog: LoadingDialogFragment
     private lateinit var bottomSheet: BottomSheetBehavior<CardView>
     private var cornerRadius: Float = 0f
     private var originPeekHeight: Int = 0
@@ -89,8 +89,11 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
     }
 
     private val hotArticleClickListener: (View, Int) -> Unit = { _, articleSeq ->
-        findNavController().navigate(R.id.action_rootFragment_to_articleFragment, bundleOf(
-            ARTICLE_SEQ to articleSeq))
+        findNavController().navigate(
+            R.id.action_rootFragment_to_articleFragment, bundleOf(
+                ARTICLE_SEQ to articleSeq
+            )
+        )
     }
 
     private fun setOnClickListeners() {
@@ -112,7 +115,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         binding.chipGroupTripTags.removeAllViews()
 
         // 태그가 비어있다면
-        if(categoryTags.isEmpty() && regionTags.isEmpty()) {
+        if (categoryTags.isEmpty() && regionTags.isEmpty()) {
             bottomSheet.peekHeight = originPeekHeight
             binding.chipGroupTripTags.visibility = View.GONE
         } else {
@@ -123,7 +126,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
                         setTextAppearanceResource(R.style.ChipText)
                         setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
                         setChipBackgroundColorResource(R.color.selector_chip_color)
-                        text = com.ssafy.daero.utils.tag.categoryTags[it-1].tag
+                        text = com.ssafy.daero.utils.tag.categoryTags[it - 1].tag
                     }
                 )
             }
@@ -133,7 +136,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
                         setTextAppearanceResource(R.style.ChipText)
                         setTextColor(resources.getColorStateList(R.color.selector_chip_color_text))
                         setChipBackgroundColorResource(R.color.selector_chip_color)
-                        text = com.ssafy.daero.utils.tag.regionTags[it-1].tag
+                        text = com.ssafy.daero.utils.tag.regionTags[it - 1].tag
                     }
                 )
             }
@@ -152,7 +155,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
                 BottomSheetBehavior.STATE_EXPANDED -> {
                     tripViewModel.getFirstTripRecommend(
                         FirstTripRecommendRequestDto(
-                            categoryTags, regionTags
+                            regionTags, categoryTags
                         )
                     )
                 }
@@ -197,19 +200,26 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
         tripViewModel.firstTripRecommendState.observe(viewLifecycleOwner) {
             when (it) {
                 FAIL -> {
-                    toast("여행지 추천을 받는데 실패했습니다.")
                     bottomSheet.state = BottomSheetBehavior.STATE_COLLAPSED
                     tripViewModel.firstTripRecommendState.value = DEFAULT
+                    toast("여행지 추천을 받는데 실패했습니다.")
                 }
             }
         }
-        tripViewModel.firstTripRecommendResponseDto.observe(viewLifecycleOwner, tripInformationObserver)
+        tripViewModel.firstTripRecommendResponseDto.observe(
+            viewLifecycleOwner,
+            tripInformationObserver
+        )
+        tripViewModel.imageUrl.observe(viewLifecycleOwner) {
+            if(it.isNotBlank()) {
+                Glide.with(requireContext()).load(it).preload()
+                tripViewModel.imageUrl.value = ""
+            }
+        }
     }
 
-    private val tripInformationObserver = { recommend : FirstTripRecommendResponseDto ->
-        if(recommend.place_seq > 0) {
-            Glide.with(requireContext()).load(recommend.image_url)
-
+    private val tripInformationObserver = { recommend: FirstTripRecommendResponseDto ->
+        if (recommend.place_seq > 0) {
             val bundle = Bundle().apply {
                 putInt(PLACE_SEQ, recommend.place_seq)
                 putParcelable(TAG_COLLECTION, TagCollection(categoryTags, regionTags))
@@ -234,7 +244,7 @@ class TripFragment : BaseFragment<FragmentTripBinding>(R.layout.fragment_trip) {
 
     private fun showProgressDialog() {
         loadingDialog.show(
-            requireActivity().supportFragmentManager,
+            childFragmentManager,
             loadingDialog.tag
         )
     }

@@ -11,10 +11,7 @@ import com.ssafy.daero.data.repository.SnsRepository
 import com.ssafy.daero.data.repository.TripRepository
 import com.ssafy.daero.utils.constant.FAIL
 import com.ssafy.daero.utils.constant.SUCCESS
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.functions.BiFunction
-import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 class TripViewModel : BaseViewModel() {
@@ -22,6 +19,7 @@ class TripViewModel : BaseViewModel() {
     private val snsRepository = SnsRepository.get()
 
     val showProgress = MutableLiveData<Int>()
+    val imageUrl = MutableLiveData<String>()
 
     private val _firstTripRecommendResponseDto = MutableLiveData<FirstTripRecommendResponseDto>()
     val firstTripRecommendResponseDto: LiveData<FirstTripRecommendResponseDto>
@@ -41,28 +39,22 @@ class TripViewModel : BaseViewModel() {
     fun getFirstTripRecommend(firstTripRecommendRequestDto: FirstTripRecommendRequestDto) {
         showProgress.postValue(SUCCESS)
 
-        // 1초 딜레이
-        val delay =
-            Single.just(1).delay(1000, TimeUnit.MILLISECONDS).subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-
-        // 서버 결과, 1초 경과 모두 끝나야 응답 받기
         addDisposable(
-            Single.zip(
-                delay,
-                tripRepository.getFirstTripRecommend(firstTripRecommendRequestDto),
-                BiFunction { _, response ->
-                    response
-                }).subscribe(
-                { response ->
-                    // userSeq 저장
-                    _firstTripRecommendResponseDto.postValue(response.body())
-                    showProgress.postValue(FAIL)
-                },
-                { throwable ->
-                    showProgress.postValue(FAIL)
-                    firstTripRecommendState.postValue(FAIL)
-                })
+            tripRepository.getFirstTripRecommend(firstTripRecommendRequestDto)
+                .flatMap { response ->
+                    imageUrl.postValue(response.body()!!.image_url)
+                    Single.just(response).delay(1000, TimeUnit.MILLISECONDS)
+                }.subscribe(
+                    { response ->
+                        // userSeq 저장
+                        _firstTripRecommendResponseDto.postValue(response.body())
+                        showProgress.postValue(FAIL)
+                    },
+                    { throwable ->
+                        showProgress.postValue(FAIL)
+                        firstTripRecommendState.postValue(FAIL)
+                    }
+                )
         )
     }
 
@@ -71,7 +63,7 @@ class TripViewModel : BaseViewModel() {
             tripRepository.getPopularTrips()
                 .subscribe({
                     _popularTrip.postValue(it.body())
-                }, { throwable ->
+                }, { _ ->
                 })
         )
     }
@@ -81,7 +73,7 @@ class TripViewModel : BaseViewModel() {
             snsRepository.getHotArticles()
                 .subscribe({
                     _hotArticles.postValue(it.body())
-                }, { throwable ->
+                }, { _ ->
                 })
         )
     }
