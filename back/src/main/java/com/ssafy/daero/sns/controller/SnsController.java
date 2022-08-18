@@ -133,7 +133,7 @@ public class SnsController {
     }
 
     @GetMapping("/article/{article_seq}/likes")
-    public ResponseEntity<Map<String, Object>> likeUserList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") String page){
+    public ResponseEntity<Map<String, Object>> likeUserList(@PathVariable int article_seq, @RequestParam(defaultValue = "1") int page){
         Map<String, Object> res = snsService.likeUserList(article_seq, page);
         if (res == null) { return new ResponseEntity<>(HttpStatus.BAD_REQUEST); }
         else { return new ResponseEntity<>(res, HttpStatus.OK); }

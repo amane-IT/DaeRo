@@ -57,5 +57,7 @@ public interface TripMapper {
 
     ArrayList<UserFavorDto> selectUserFavorByUserSeq(int userSeq);
 
+    int updateAchievementByPlace(@Param("userSeq") int userSeq, @Param("placeSeq") int placeSeq);
+
     int updateUserFavor(UserFavorDto userFavorDto);
 }

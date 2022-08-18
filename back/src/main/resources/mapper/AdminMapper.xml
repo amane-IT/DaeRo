@@ -342,22 +342,21 @@
     </delete>
 
     <select id="selectNoticeCount" resultType="_int">
-        SELECT COUNT(*)
+        SELECT COUNT(0)
         FROM daero.notice
     </select>
 
     <select id="selectNoticeList" parameterType="_int" resultType="java.util.Map">
-        SELECT noti.`notice_seq`, noti.`title`, noti.`content`, noti.`created_at`, noti.`admin_seq`
-        FROM (SELECT row_number() over (ORDER BY n.notice_seq) AS row,
-                     n.`notice_seq`,
-                     n.`title`,
-                     n.`content`,
-                     n.`created_at`,
-                     n.`admin_seq`
-
-              FROM daero.notice n) AS noti
-        WHERE (#{page} - 1) * 10 &lt; noti.row
-          AND noti.row &lt; 1 + (#{page} * 10)
+        SELECT `n`.`notice_seq`,
+               `n`.`admin_seq`,
+               `n`.`title`,
+               `n`.`content`,
+               `n`.`created_at`,
+               `n`.`updated_at`,
+               `a`.`admin_name`
+        FROM `notice` `n`
+                 join `admin` `a` on `a`.`admin_seq` = `n`.`admin_seq`
+        limit #{limit} offset #{offset}
     </select>
 
     <insert id="insertNotice" parameterType="com.ssafy.daero.admin.vo.NoticeVo">
@@ -386,6 +385,18 @@
             `suspended_expiry`=#{date}
         WHERE `users_seq` = #{userSeq}
     </update>
+
+    <select id="selectArticleListByUserSeq" parameterType="_int" resultMap="mappingArticleVo">
+        select `articles_seq`, `title`, `created_at`
+        from daero.`v_users_trips_articles`
+        where `users_seq`=#{userSeq}
+    </select>
+
+    <select id="selectReplyListByUserSeq" parameterType="_int" resultMap="mappingReplyVo">
+        select `replies_seq`, `articles_seq`, `content`, `created_at`
+        from daero.`replies`
+        where `users_seq`=#{userSeq}
+    </select>
 
     <resultMap id="mappingUserDto" type="com.ssafy.daero.user.dto.UserDto">
         <result property="profileImageLink" column="profile_image_url"/>
@@ -416,11 +427,18 @@
         <result property="userSeq" column="users_seq"/>
         <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
+        <result property="articleSeq" column="articles_seq" />
     </resultMap>
 
     <resultMap id="mappingTripPlaceDto" type="com.ssafy.daero.trip.dto.TripPlaceDto">
         <result property="tripPlaceSeq" column="trip_places_seq"/>
         <result property="placeName" column="place_name"/>
         <result property="address" column="address"/>
+    </resultMap>
+
+    <resultMap id="mappingArticleVo" type="com.ssafy.daero.sns.vo.ArticleVo">
+        <result property="articleSeq" column="articles_seq" />
+        <result property="title" column="title" />
+        <result property="createdAt" column="created_at" />
     </resultMap>
 </mapper>

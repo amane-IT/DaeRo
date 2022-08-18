@@ -23,7 +23,7 @@ import java.util.*;
 
 @Service
 public class UserService {
-    private final String URL_PREFIX = "http://i7d110.p.ssafy.io";
+    private final String URL_PREFIX = "https://i7d110.p.ssafy.io/api";
     private final String NO_REPLY = "no-reply@daero.com";
 
     private final UserMapper userMapper;
@@ -196,8 +196,10 @@ public class UserService {
     }
 
     public boolean verifyEmail(String userEmail) throws MessagingException {
-        if (userMapper.insertUser(userEmail) == 0) {
-            return false;
+        if (this.userMapper.selectUserByUserEmail(userEmail) == null) {
+            if (userMapper.insertUser(userEmail) == 0) {
+                return false;
+            }
         }
         UserDto userDto = userMapper.selectUserByUserEmail(userEmail);
         if (userDto == null) {
