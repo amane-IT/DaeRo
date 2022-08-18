@@ -5,9 +5,13 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
+import com.ssafy.daero.BuildConfig
 import com.ssafy.daero.data.dto.user.FCMTokenRequestDto
 import com.ssafy.daero.data.repository.ServiceRepository
 import com.ssafy.daero.data.repository.SnsRepository
@@ -22,7 +26,7 @@ class App : Application() {
         initRepository()
         initFCMMessageAccept()
 
-        KakaoSdk.init(this, "1e255b1b25b5f7018b193713906bc430")
+        KakaoSdk.init(this, BuildConfig.KAKAO_APP_KEY)
     }
 
     private fun initRepository() {
